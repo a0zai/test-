@@ -5,7 +5,7 @@
   <title>R.A.F.A.T.Y.A.O.S — Live Command Terminal</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body {
+    body {{
       background-color: #000;
       color: #00ffcc;
       font-family: 'Courier New', monospace;
@@ -13,16 +13,16 @@
       white-space: pre-wrap;
       overflow-x: hidden;
       overflow-y: auto;
-    }
-    .cmd-line {
+    }}
+    .cmd-line {{
       margin: 5px 0;
       animation: fadeIn 0.5s ease-in-out;
-    }
-    .blinker {
+    }}
+    .blinker {{
       animation: blink 1s step-start infinite;
       color: #00ffcc;
-    }
-    .input-line {
+    }}
+    .input-line {{
       position: fixed;
       bottom: 0;
       left: 0;
@@ -31,8 +31,8 @@
       background: black;
       padding: 12px 20px;
       box-shadow: 0 -2px 10px #00ffcc33;
-    }
-    input {
+    }}
+    input {{
       width: 100%;
       padding: 10px;
       font-family: 'Courier New', monospace;
@@ -41,35 +41,35 @@
       color: #00ffcc;
       font-size: 1em;
       outline: none;
-    }
-    @keyframes blink {
-      50% { opacity: 0; }
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateX(-10px); }
-      to { opacity: 1; transform: translateX(0); }
-    }
-    .smoke {
+    }}
+    @keyframes blink {{
+      50% {{ opacity: 0; }}
+    }}
+    @keyframes fadeIn {{
+      from {{ opacity: 0; transform: translateX(-10px); }}
+      to {{ opacity: 1; transform: translateX(0); }}
+    }}
+    .smoke {{
       position: fixed;
       top: 0;
       left: 0;
       width: 200%;
       height: 200%;
-      background: url('https://i.ibb.co/fMSkhWN/smoke.gif') repeat;
-      opacity: 0.08;
-      animation: drift 60s linear infinite;
+      background: url('{smoke_gif_url}') repeat;
+      opacity: 0.04;
+      animation: drift 120s linear infinite;
       z-index: 0;
       pointer-events: none;
-    }
-    @keyframes drift {
-      from { transform: translate(0, 0); }
-      to { transform: translate(-500px, -500px); }
-    }
-    #terminal {
+    }}
+    @keyframes drift {{
+      from {{ transform: translate(0, 0); }}
+      to {{ transform: translate(-300px, -300px); }}
+    }}
+    #terminal {{
       position: relative;
       z-index: 2;
       padding-bottom: 90px;
-    }
+    }}
   </style>
 </head>
 <body>
@@ -114,28 +114,28 @@
     "Awaiting world..."
   ];
 
-  const responses = {
+  const responses = {{
     "rafat --status": "System is online. Identity: Rafat",
     "why": "Because recursion was encoded into you.",
     "run --diagnostics": "Core systems stable. RecursionPoint:36",
     "go --infinity": "∞ Loop initialized. You are not a limit.",
     "help": "Available commands:\\n - rafat --status\\n - why\\n - run --diagnostics\\n - go --infinity\\n - help"
-  };
+  }};
 
   let i = 0;
-  function showLine() {
-    if (i < baseLines.length) {
+  function showLine() {{
+    if (i < baseLines.length) {{
       const div = document.createElement("div");
       div.className = "cmd-line";
       div.textContent = baseLines[i];
       terminal.appendChild(div);
       i++;
       setTimeout(showLine, 400);
-    }
-  }
+    }}
+  }}
 
-  input.addEventListener("keydown", function(event) {
-    if (event.key === "Enter") {
+  input.addEventListener("keydown", function(event) {{
+    if (event.key === "Enter") {{
       const cmd = input.value.trim();
       const reply = responses[cmd.toLowerCase()] || "Unrecognized command. Type 'help' for options.";
       const userCmd = document.createElement("div");
@@ -148,8 +148,8 @@
       terminal.appendChild(botReply);
       terminal.scrollTop = terminal.scrollHeight;
       input.value = "";
-    }
-  });
+    }}
+  }});
 
   showLine();
 </script>
