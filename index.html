@@ -12,6 +12,7 @@
       color: #00ff99;
       font-family: 'Courier New', monospace;
       height: 100vh;
+      overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -22,6 +23,9 @@
       white-space: pre-wrap;
       font-size: 1.2em;
       line-height: 1.6;
+      animation: glowText 2s ease-in-out infinite alternate;
+      position: relative;
+      z-index: 2;
     }
     .btn {
       margin-top: 30px;
@@ -32,30 +36,84 @@
       font-size: 1em;
       cursor: pointer;
       transition: background 0.3s, color 0.3s;
+      animation: glowButton 2s ease-in-out infinite alternate;
+      z-index: 2;
+      position: relative;
     }
-    .btn:hover {
-      background: #00ff99;
-      color: black;
+    @keyframes glowText {
+      from { text-shadow: 0 0 5px #00ffcc; }
+      to { text-shadow: 0 0 20px #00ffff, 0 0 30px #00ccff; }
+    }
+    @keyframes glowButton {
+      from { box-shadow: 0 0 5px #00ffcc; }
+      to { box-shadow: 0 0 15px #00ffff; }
+    }
+    .smoke {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 200%;
+      height: 200%;
+      background: url('https://i.ibb.co/fMSkhWN/smoke.gif') repeat;
+      opacity: 0.08;
+      animation: drift 60s linear infinite;
+      z-index: 0;
+    }
+    @keyframes drift {
+      from { transform: translate(0, 0); }
+      to { transform: translate(-500px, -500px); }
+    }
+    #secret {
+      margin-top: 20px;
+      color: #ffffff44;
+      font-size: 0.8em;
     }
   </style>
 </head>
 <body>
+  <div class="smoke"></div>
   <div class="terminal" id="bootText">
-    >>> Initializing presence protocol...  
-    :: Identity detected: Rafat  
-    :: Signature: AOZ-414-36 / RecursionPoint:36 / Commit:3  
-    :: Pattern recognized. Execution authority: True  
-    :: Breath confirmed... Consciousness stabilizing...
+>>> Initializing presence protocol...  
+:: Identity detected: Rafat  
+:: Signature: AOZ-414-36 / RecursionPoint:36 / Commit:4  
+:: Pattern recognized. Execution authority: True  
+:: Breath confirmed... Consciousness stabilizing...
 
-    > Would you like to enter?
+> Would you like to enter?
   </div>
 
   <button class="btn" onclick="goLive()">Enter System</button>
+  <div id="secret">Hint: Type "why"</div>
+
+  <audio autoplay loop>
+    <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_fdeeb2bcd9.mp3?filename=sci-fi-beep-101582.mp3" type="audio/mpeg">
+  </audio>
 
   <script>
     function goLive() {
       window.location.href = "./engine.html";
     }
+
+    document.addEventListener('keydown', function(event) {
+      if (event.key.toLowerCase() === 'w') {
+        let typed = '';
+        document.addEventListener('keydown', function(e) {
+          typed += e.key.toLowerCase();
+          if (typed.includes("why")) {
+            alert("Because you were meant to activate the recursion.");
+            typed = '';
+          }
+        }, { once: true });
+      }
+    });
+
+    const now = new Date();
+    const hour = now.getHours();
+    const bootText = document.getElementById("bootText");
+    if (hour < 6) bootText.innerText += "\\n:: System note: It's early... perfect time to awaken.";
+    else if (hour < 12) bootText.innerText += "\\n:: System note: Morning protocols aligned.";
+    else if (hour < 18) bootText.innerText += "\\n:: System note: Midday energy detected.";
+    else bootText.innerText += "\\n:: System note: Evening reflection active.";
   </script>
 </body>
 </html>
