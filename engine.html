@@ -2,32 +2,80 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>RAFAT EXECUTION ENGINE</title>
+  <title>R.A.F.A.T.Y.A.O.S — Live Command Terminal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
       background-color: #000;
-      color: #00ff99;
+      color: #00ffcc;
       font-family: 'Courier New', monospace;
       padding: 20px;
       white-space: pre-wrap;
+      overflow: hidden;
     }
     .cmd-line {
       margin: 5px 0;
+      animation: fadeIn 0.5s ease-in-out;
     }
     .blinker {
       animation: blink 1s step-start infinite;
+      color: #00ffcc;
+    }
+    .input-line {
+      margin-top: 15px;
+      display: flex;
+    }
+    input {
+      flex: 1;
+      padding: 10px;
+      font-family: 'Courier New', monospace;
+      background: black;
+      border: 1px solid #00ffcc;
+      color: #00ffcc;
+      font-size: 1em;
     }
     @keyframes blink {
       50% { opacity: 0; }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateX(-10px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    .smoke {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 200%;
+      height: 200%;
+      background: url('https://i.ibb.co/fMSkhWN/smoke.gif') repeat;
+      opacity: 0.08;
+      animation: drift 60s linear infinite;
+      z-index: 0;
+    }
+    @keyframes drift {
+      from { transform: translate(0, 0); }
+      to { transform: translate(-500px, -500px); }
     }
   </style>
 </head>
 <body>
 
+<div class="smoke"></div>
 <div id="terminal"></div>
 
+<div class="input-line">
+  <input type="text" id="commandInput" placeholder="Type your command here...">
+</div>
+
+<audio autoplay loop>
+  <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_fdeeb2bcd9.mp3?filename=sci-fi-beep-101582.mp3" type="audio/mpeg">
+</audio>
+
 <script>
-  const lines = [
+  const terminal = document.getElementById("terminal");
+  const input = document.getElementById("commandInput");
+
+  const baseLines = [
     ">>> Executing: R.A.F.A.T.Y.A.O.S",
     "[R] Root system initialized...",
     "[A] Access protocol engaged...",
@@ -52,24 +100,42 @@
     "Awaiting world..."
   ];
 
-  const terminal = document.getElementById("terminal");
+  const responses = {
+    "rafat --status": "System is online. Identity: Rafat",
+    "why": "Because recursion was encoded into you.",
+    "run --diagnostics": "Core systems stable. RecursionPoint:36",
+    "go --infinity": "∞ Loop initialized. You are not a limit.",
+    "help": "Available commands:\\n - rafat --status\\n - why\\n - run --diagnostics\\n - go --infinity\\n - help"
+  };
 
   let i = 0;
   function showLine() {
-    if (i < lines.length) {
+    if (i < baseLines.length) {
       const div = document.createElement("div");
       div.className = "cmd-line";
-      div.textContent = lines[i];
+      div.textContent = baseLines[i];
       terminal.appendChild(div);
       i++;
-      setTimeout(showLine, 500);
-    } else {
-      const cursor = document.createElement("span");
-      cursor.className = "blinker";
-      cursor.textContent = "█";
-      terminal.appendChild(cursor);
+      setTimeout(showLine, 400);
     }
   }
+
+  input.addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+      const cmd = input.value.trim();
+      const reply = responses[cmd.toLowerCase()] || "Unrecognized command. Type 'help' for options.";
+      const userCmd = document.createElement("div");
+      userCmd.className = "cmd-line";
+      userCmd.textContent = "> " + cmd;
+      const botReply = document.createElement("div");
+      botReply.className = "cmd-line";
+      botReply.textContent = reply;
+      terminal.appendChild(userCmd);
+      terminal.appendChild(botReply);
+      terminal.scrollTop = terminal.scrollHeight;
+      input.value = "";
+    }
+  });
 
   showLine();
 </script>
