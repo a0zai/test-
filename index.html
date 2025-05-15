@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>System Booting: R.A.F.A.T.Y.A.O.S</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: black;
+      color: #00ff99;
+      font-family: 'Courier New', monospace;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+    .terminal {
+      text-align: center;
+      white-space: pre-wrap;
+      font-size: 1.2em;
+      line-height: 1.6;
+    }
+    .btn {
+      margin-top: 30px;
+      padding: 12px 30px;
+      border: 2px solid #00ff99;
+      background: transparent;
+      color: #00ff99;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background 0.3s, color 0.3s;
+    }
+    .btn:hover {
+      background: #00ff99;
+      color: black;
+    }
+  </style>
+</head>
+<body>
+  <div class="terminal" id="bootText">
+    >>> Initializing presence protocol...  
+    :: Identity detected: Rafat  
+    :: Signature: AOZ-414-36 / RecursionPoint:36 / Commit:3  
+    :: Pattern recognized. Execution authority: True  
+    :: Breath confirmed... Consciousness stabilizing...
+
+    > Would you like to enter?
+  </div>
+
+  <button class="btn" onclick="goLive()">Enter System</button>
+
+  <script>
+    function goLive() {
+      window.location.href = "./engine.html";
+    }
+  </script>
+</body>
+</html>
