@@ -182,6 +182,12 @@ const mathMapping = {
 
   function interpretInput(input) {
     const result = [];
+    words.forEach((word) => {
+    const mapped = grammarMapping[word] || mathMapping[word];
+    if (mapped) {
+      result.push(word + " → " + mapped);
+    }
+  });
     const clean = input.toUpperCase().replace(/[^A-Z0-9]/g, '').split('');
     clean.forEach((char, i) => {
       let letter = char;
@@ -193,11 +199,8 @@ const mathMapping = {
         result.push("[" + char + "]");
       }
     });
-         const words = input.split(/\\s+/);
-  const results = words.map(word => grammarMapping[word] || mathMapping[word] || word);
     return result.join(" | ");
   }
-
   function typeReply(text, element) {
     let i = 0;
     element.textContent = "";
