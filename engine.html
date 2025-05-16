@@ -1,7 +1,3 @@
-from pathlib import Path
-
-# Rewriting the full HTML content after code execution state reset
-full_html_code = """
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -102,9 +98,34 @@ full_html_code = """
   const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
   const exampleCommands = {
-    A: ["Align", "Ask", "Activate", "Access", "Analyze", "Accept", "Absorb", "Amplify", "Adapt", "Announce", "Anchor", "Authenticate", "Advance", "Ascend", "Attune"],
-    B: ["Begin", "Break", "Build", "Bind", "Bounce", "Balance", "Blink", "Burn", "Bridge", "Broadcast", "Block", "Bloom", "Breathe", "Blend", "Boost"]
-  };
+    "A": ["Align", "Ask", "Activate", "Access", "Analyze", "Accept", "Absorb", "Amplify", "Adapt", "Announce", "Anchor", "Authenticate", "Advance", "Ascend", "Attune"],
+    "B": ["Begin", "Break", "Build", "Bind", "Bounce", "Balance", "Blink", "Burn", "Bridge", "Broadcast", "Block", "Bloom", "Breathe", "Blend", "Boost"],
+    "C": ["Connect", "Compare", "Create", "Calibrate", "Clarify", "Compress", "Control", "Confirm", "Charge", "Contain", "Configure", "Compile", "Capture", "Cleanse", "Converge"],
+    "D": ["Decode", "Detect", "Define", "Derive", "Divide", "Deploy", "Direct", "Distill", "Debug", "Design", "Delay", "Disrupt", "Disarm", "Disclose", "Dream"],
+    "E": ["Engage", "Encode", "Evaluate", "Expand", "Emit", "Enhance", "Equalize", "Execute", "Expose", "Elevate", "Extract", "Edit", "Echo", "Empower", "Evolve"],
+    "F": ["Focus", "Filter", "Form", "Flow", "Fuse", "Finalize", "Fragment", "Feed", "Forecast", "Fortify", "Frame", "Flash", "Fold", "Force", "Fulfill"],
+    "G": ["Generate", "Guide", "Ground", "Group", "Guard", "Glow", "Grip", "Grant", "Gather", "Glitch", "Grow", "Gaze", "Gravitate", "Glue", "Glorify"],
+    "H": ["Hear", "Hold", "Highlight", "Harmonize", "Host", "Heal", "Halt", "Hunt", "Hover", "Hack", "Hint", "Hash", "Hatch", "Hide", "Honor"],
+    "I": ["Ignite", "Identify", "Integrate", "Interact", "Illuminate", "Inject", "Induce", "Invert", "Inherit", "Inform", "Initiate", "Input", "Influence", "Interpret", "Inspire"],
+    "J": ["Jump", "Join", "Jolt", "Judge", "Jam", "Justify", "Juggle", "Journey", "Jerk", "Jettison", "Jazz", "Jail", "Jinx", "Juxtapose", "Juice"],
+    "K": ["Know", "Keep", "Kick", "Knock", "Key", "Kill", "Kindle", "Kneel", "Knit", "Kickstart", "Knockout", "Keepalive", "Keystream", "Kite", "Knowmerge"],
+    "L": ["Listen", "Link", "Loop", "Learn", "Load", "Lock", "Light", "Lift", "Lead", "Launch", "Layer", "Levitate", "Limit", "Latch", "Love"],
+    "M": ["Map", "Match", "Merge", "Mark", "Move", "Mirror", "Monitor", "Modulate", "Magnetize", "Multiply", "Morph", "Measure", "Mergepoint", "Memorize", "Manifest"],
+    "N": ["Navigate", "Name", "Notice", "Nullify", "Normalize", "Network", "Nest", "Nourish", "Nominate", "Negotiate", "Note", "Neutralize", "Nudge", "Navigateback", "Notarize"],
+    "O": ["Open", "Observe", "Organize", "Optimize", "Output", "Override", "Orbit", "Outline", "Offer", "Operate", "Offset", "Obey", "Overload", "Oversee", "Originate"],
+    "P": ["Ping", "Process", "Parse", "Project", "Protect", "Pulse", "Persist", "Patch", "Prioritize", "Play", "Predict", "Pause", "Push", "Plant", "Purify"],
+    "Q": ["Query", "Queue", "Quantify", "Quiet", "Quicken", "Qualify", "Quench", "Quote", "Quiver", "Question", "Quantize", "Quarantine", "Quell", "Quasar", "Queryloop"],
+    "R": ["Root", "Reflect", "Run", "Respond", "Recall", "Reboot", "Reinforce", "Rotate", "Rewrite", "Radiate", "Remember", "Recursify", "Resonate", "Reconstruct", "Realign"],
+    "S": ["Scan", "Signal", "Shift", "Stabilize", "Store", "Silence", "Stream", "Synchronize", "Structure", "Simplify", "Shield", "Share", "Syncopate", "Strobe", "Sustain"],
+    "T": ["Transmit", "Translate", "Trace", "Tune", "Trigger", "Transcend", "Tilt", "Tap", "Test", "Transform", "Time", "Touch", "Terminate", "Travel", "Thrive"],
+    "U": ["Unlock", "Update", "Upload", "Unify", "Understand", "Unfold", "Utilize", "Undo", "Uncover", "Upgrade", "Unleash", "Uphold", "Unwind", "Unmute", "Uploadkey"],
+    "V": ["Validate", "Visualize", "Vibrate", "Verify", "Venture", "Vault", "Vary", "Vectorize", "Vocalize", "Volatilize", "Vote", "Vanish", "Veil", "View", "Vortex"],
+    "W": ["Wake", "Write", "Weave", "Warp", "Watch", "Whisper", "Wander", "Warn", "Weigh", "Wrap", "Wipe", "Widen", "Wind", "Wield", "Wonder"],
+    "X": ["Xtract", "Xpress", "Xpand", "Xpose", "Xchange", "Xcite", "Xact", "Xclude", "Xplore", "Xlink", "Xform", "Xray", "Xecute", "Xmute", "Xalign"],
+    "Y": ["Yield", "Yearn", "Yoke", "Yell", "Yank", "Yawn", "Yokeout", "Yonder", "Y-Axis", "Yelllow", "Yelp", "Yieldpoint", "Yshift", "Ytrace", "Ysing"],
+    "Z": ["Zero", "Zip", "Zoom", "Zig", "Zone", "Zink", "Zap", "Zeal", "Zenith", "Zether", "Z-Lock", "Z-Ring", "Z-Fold", "Z-Flow", "Z-Rafat"]
+}
+
 
   letters.split('').forEach((letter, idx) => {
     const base = baseCodeStart + idx;
@@ -171,7 +192,6 @@ full_html_code = """
       setTimeout(showLine, 300);
     }
   }
-
   showLine();
 </script>
 
