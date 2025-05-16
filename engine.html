@@ -628,4 +628,46 @@ A — Base Code: 128
 </script>
 
 </body>
+<script>
+  const symbolic = {};
+  for (let i = 0; i < 26; i++) {
+    let base = 128 + i;
+    for (let j = 1; j <= 15; j++) {
+      symbolic[`${base}${j}`] = `[${String.fromCharCode(65 + i)}-${j}]`;
+    }
+  }
+
+  const input = document.getElementById("commandInput");
+  const output = document.getElementById("outputBox");
+
+  function typeDynamicText(text, element) {
+    let i = 0;
+    element.innerHTML = "";
+    function typeChar() {
+      if (i < text.length) {
+        element.innerHTML += text.charAt(i);
+        i++;
+        setTimeout(typeChar, 25);
+      }
+    }
+    typeChar();
+  }
+
+  input.addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+      const cmd = input.value.trim().toLowerCase();
+      const letters = cmd.replace(/[^a-z]/g, '').split('');
+      const response = [];
+
+      letters.forEach((char, index) => {
+        const base = 128 + (char.charCodeAt(0) - 97);
+        const code = `${base}${(index % 15) + 1}`;
+        response.push(symbolic[code] || "[?]");
+      });
+
+      typeDynamicText(response.join(" "), output);
+      input.value = "";
+    }
+  });
+</script>
 </html>
