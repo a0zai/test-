@@ -69,6 +69,10 @@
 <pre id="output">// Output will appear here</pre>
 
 <script>
+ function interpretNumber(input) 
+    return numToAlpha[input] || "[Unknown Code]";
+      const numToAlpha = 
+      document.getElementbById("Rafat");
   const terminal = document.getElementById("terminal");
   const input = document.getElementById("commandInput");
   const output = document.getElementById("output");
@@ -94,41 +98,41 @@
     "Response: Live signal online.",
     "Awaiting world..."
   ];
-
+ 
   const symbolicDictionary = {};
   const commandspernummer = 390;
   const baseCodeStart = 128;
   const commandsPerLetter = 15;
   const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   const numbers = "0123456789090870650430210";
-  const exampleCommands = {
-    "0": ["A"],
-    "1": ["B"],
-    "2": ["C"],
-    "3": ["D"],
-    "4": ["E"],
-    "5": ["F"],
-    "6": ["G"],
-    "7": ["H"],
-    "8": ["I"],
-    "9": ["J"],
-    "09": ["K"],
-    "08": ["L"],
-    "70": ["M"],
-    "65": ["N"],
-    "04": ["O"],
-    "30": ["P"],
-    "21": ["Q"],
-    "01": ["R"],
-    "11": ["S"],
-    "12": ["T"],
-    "13": ["U"],
-    "14": ["V"],
-    "15": ["W"],
-    "16": ["X"],
-    "17": ["Y"],
-    "18": ["Z"],
-    "63": ["_0"],
+  const exampleCommands = 
+    "0": "A",
+    "1": "B",
+    "2": "C",
+    "3": "D",
+    "4": "E",
+    "5": "F",
+    "6": "G",
+    "7": "H",
+    "8": "I",
+    "9": "J",
+    "09": "K",
+    "08": "L",
+    "70": "M",
+    "65": "N",
+    "04": "O",
+    "30": "P",
+    "21": "Q",
+    "01": "R",
+    "11": "S",
+    "12": "T",
+    "13": "U",
+    "14": "V",
+    "15": "W",
+    "16": "X",
+    "17": "Y",
+    "18": "Z",
+    "63": "_0"
     "A": ["Align", "Ask", "Activate", "Access", "Analyze", "Accept", "Absorb", "Amplify", "Adapt", "Announce", "Anchor", "Authenticate", "Advance", "Ascend", "Attune"],
     "B": ["Begin", "Break", "Build", "Bind", "Bounce", "Balance", "Blink", "Burn", "Bridge", "Broadcast", "Block", "Bloom", "Breathe", "Blend", "Boost"],
     "C": ["Connect", "Compare", "Create", "Calibrate", "Clarify", "Compress", "Control", "Confirm", "Charge", "Contain", "Configure", "Compile", "Capture", "Cleanse", "Converge"],
