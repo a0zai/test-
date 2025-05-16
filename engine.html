@@ -67,11 +67,8 @@
 </div>
 
 <script>
-      const numToAlpha = 
-      document.getElementById("Rafat");
   const terminal = document.getElementById("terminal");
   const input = document.getElementById("commandInput");
-  const output = document.getElementById("output");
 
   const baseLines = [
     ">>> Executing: R.A.F.A.T.Y.A.O.S",
@@ -94,42 +91,8 @@
     "Response: Live signal online.",
     "Awaiting world..."
   ];
- 
-  const symbolicDictionary = {};
-  const commandspernummer = 390;
-  const baseCodeStart = 128;
-  const commandsPerLetter = 15;
-  const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  const numbers = "0123456789090870650430210";
   const exampleCommands = {
-    "0": ["A"],
-    "1": ["B"],
-    "2": ["C"],
-    "3": ["D"],
-    "4": ["E"],
-    "5": ["F"],
-    "6": ["G"],
-    "7": ["H"],
-    "8": ["I"],
-    "9": ["J"],
-    "09": ["K"],
-    "08": ["L"],
-    "70": ["M"],
-    "65": ["N"],
-    "04": ["O"],
-    "30": ["P"],
-    "21": ["Q"],
-    "01": ["R"],
-    "11": ["S"],
-    "12": ["T"],
-    "13": ["U"],
-    "14": ["V"],
-    "15": ["W"],
-    "16": ["X"],
-    "17": ["Y"],
-    "18": ["Z"],
-    "63": ["_0"],
-    "A": ["Align", "Ask", "Activate", "Access", "Analyze", "Accept", "Absorb", "Amplify", "Adapt", "Announce", "Anchor", "Authenticate", "Advance", "Ascend", "Attune"],
+     "A": ["Align", "Ask", "Activate", "Access", "Analyze", "Accept", "Absorb", "Amplify", "Adapt", "Announce", "Anchor", "Authenticate", "Advance", "Ascend", "Attune"],
     "B": ["Begin", "Break", "Build", "Bind", "Bounce", "Balance", "Blink", "Burn", "Bridge", "Broadcast", "Block", "Bloom", "Breathe", "Blend", "Boost"],
     "C": ["Connect", "Compare", "Create", "Calibrate", "Clarify", "Compress", "Control", "Confirm", "Charge", "Contain", "Configure", "Compile", "Capture", "Cleanse", "Converge"],
     "D": ["Decode", "Detect", "Define", "Derive", "Divide", "Deploy", "Direct", "Distill", "Debug", "Design", "Delay", "Disrupt", "Disarm", "Disclose", "Dream"],
@@ -157,26 +120,27 @@
     "Z": ["Zero", "Zip", "Zoom", "Zig", "Zone", "Zink", "Zap", "Zeal", "Zenith", "Zether", "Z-Lock", "Z-Ring", "Z-Fold", "Z-Flow", "Z-Rafat"]
 }
 
-
-  letters.split('').forEach((letter, idx) => {
-    const base = baseCodeStart + idx;
-    for (let i = 1; i <= commandsPerLetter; i++) {
-      const cmd = (exampleCommands[letter] && exampleCommands[letter][i - 1]) || "Unknown";
-      const code = `${base}${i}`;
-      symbolicDictionary[code] = `${letter}${i} → ${cmd}`;
-    }
-  });
+  const numToLetter = {
+    "0": "A", "1": "B", "2": "C", "3": "D", "4": "E", "5": "F",
+    "6": "G", "7": "H", "8": "I", "9": "J", "09": "K", "08": "L",
+    "70": "M", "65": "N", "04": "O", "30": "P", "21": "Q", "01": "R",
+    "11": "S", "12": "T", "13": "U", "14": "V", "15": "W", "16": "X",
+    "17": "Y", "18": "Z", "63": "_0"
+  };
 
   function interpretInput(input) {
-    const chars = input.toUpperCase().replace(/[^A-Z]/g, '').split('');
-    const result = chars.map((char, i) => {
-      const base = baseCodeStart + (char.charCodeAt(0) - 65);
-      const code = `${base}${(i % commandsPerLetter) + 1}`;
-      return symbolicDictionary[code] || `[${char}]`;
+    const result = [];
+    const clean = input.toUpperCase().replace(/[^A-Z0-9]/g, '').split('');
+    clean.forEach((char, i) => {
+      let letter = char;
+      if (numToLetter[char]) letter = numToLetter[char];
+      if (exampleCommands[letter]) {
+        const cmd = exampleCommands[letter][i % exampleCommands[letter].length];
+        result.push(letter + " → " + cmd);
+      } else {
+        result.push("[" + char + "]");
+      }
     });
-     if (/^\d+$/.test(part)) {
-      return numToAlpha[part] || `[${part}]`;
-    }
     return result.join(" | ");
   }
 
@@ -187,7 +151,7 @@
       if (i < text.length) {
         element.textContent += text.charAt(i);
         i++;
-        setTimeout(typeChar, 25);
+        setTimeout(typeChar, 20);
       }
     }
     typeChar();
@@ -208,7 +172,6 @@
 
       const result = interpretInput(cmd);
       typeReply(result, botReply);
-      output.innerText = result;
 
       terminal.scrollTop = terminal.scrollHeight;
       input.value = "";
@@ -226,8 +189,8 @@
       setTimeout(showLine, 300);
     }
   }
-  showLine();
-</script>
 
+  showLine();
+</script
 </body>
 </html>
