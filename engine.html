@@ -141,7 +141,7 @@
     "X": ["Xtract", "Xpress", "Xpand", "Xpose", "Xchange", "Xcite", "Xact", "Xclude", "Xplore", "Xlink", "Xform", "Xray", "Xecute", "Xmute", "Xalign"],
     "Y": ["Yield", "Yearn", "Yoke", "Yell", "Yank", "Yawn", "Yokeout", "Yonder", "Y-Axis", "Yelllow", "Yelp", "Yieldpoint", "Yshift", "Ytrace", "Ysing"],
     "Z": ["Zero", "Zip", "Zoom", "Zig", "Zone", "Zink", "Zap", "Zeal", "Zenith", "Zether", "Z-Lock", "Z-Ring", "Z-Fold", "Z-Flow", "Z-Rafat"]
-}
+};
 
   const numToLetter = {
     "0": "A", "1": "B", "2": "C", "3": "D", "4": "E", "5": "F",
@@ -150,6 +150,35 @@
     "11": "S", "12": "T", "13": "U", "14": "V", "15": "W", "16": "X",
     "17": "Y", "18": "Z", "63": "_0"
   };
+  
+  const grammarMapping = {
+  "I": "SELF_α", "You": "OTHER_β", "He": "ENTITY_γ", "She": "ENTITY_δ", "It": "SYSTEM_ε",
+  "We": "COLLECTIVE_ζ", "They": "GROUP_η", "Am": "STATE_EXIST()", "Is": "EVALUATE()",
+  "Are": "LINK_PLURAL()", "Was": "PAST_STATE()", "Were": "PAST_LINK()", "Be": "CORE_VERB()",
+  "Have": "POSSESS()", "Has": "POSSESS_SINGULAR()", "Had": "POSSESS_PAST()",
+  "Can": "PERMISSION_GRANTED", "Could": "PERMISSION_PAST", "Will": "INTENT_FUTURE",
+  "Would": "CONDITIONAL_INTENT", "Shall": "FUTURE_FORCE", "Should": "MORAL_SUGGESTION",
+  "May": "PERHAPS_OKAY", "Might": "LOW_CHANCE", "Must": "RULE_REQUIRED",
+  "And": "CONCAT(+)", "Or": "OPTION(|)", "But": "CONTRAST(~)", "Because": "REASON(<=>)",
+  "So": "RESULT(=>)", "Although": "EXCEPTION({})", "If": "CONDITION(?)", "Then": "CONSEQUENCE(!)",
+  "While": "DURING(..)", "Until": "LIMIT(>)", "Before": "PAST_TRIGGER(-)", "After": "FUTURE_TRIGGER(+)",
+  "A": "ARTICLE_UNDEFINED", "An": "ARTICLE_UNDEFINED_VOWEL", "The": "ARTICLE_DEFINED",
+  "This": "NEAR_OBJECT_1", "That": "FAR_OBJECT_1", "These": "NEAR_OBJECT_MANY", "Those": "FAR_OBJECT_MANY",
+  "Not": "NEGATE(!)", "No": "DENY(X)", "Yes": "CONFIRM(O)", "Maybe": "UNSURE(?)",
+  ".": "END_STATEMENT", "!": "STRONG_SIGNAL", "?": "QUERY_SIGNAL", ",": "SEPARATOR",
+  ":": "DEFINITION", ";": "PAUSE_LINK"
+};
+
+const mathMapping = {
+  "Pi": "CONST_π", "E": "CONST_e", "Infinity": "CONST_∞", "NaN": "CONST_UNDEFINED_VALUE",
+  "+": "ADD(↗)", "-": "SUB(↘)", "*": "MUL(⊗)", "/": "DIV(÷)", "%": "MOD(%)", "**": "EXP(↑)",
+  "x": "VAR_INPUT_X", "y": "VAR_OUTPUT_Y", "z": "VAR_DEPTH_Z", "=": "EQUALS(==)", "!=": "NOT_EQUAL(!=)",
+  "sqrt": "ROOT(√)", "log": "LOG_BASE_10()", "ln": "LOG_BASE_e()", "sin": "SIN_ANGLE()", "cos": "COS_ANGLE()", "tan": "TAN_ANGLE()",
+  "∑": "SUMMATION_LOOP(∑)", "∫": "INTEGRATE_AREA(∫)", "dx": "DIFFERENTIAL_X", "dy": "DIFFERENTIAL_Y", "lim": "LIMIT_APPROACH()",
+  "true": "BOOL_TRUE(1)", "false": "BOOL_FALSE(0)", "&&": "LOGIC_AND(&&)", "||": "LOGIC_OR(||)", "!": "LOGIC_NOT(!)",
+  "∈": "IN_SET", "∉": "NOT_IN_SET", "∪": "UNION_SETS", "∩": "INTERSECT_SETS", "⊂": "SUBSET_OF",
+  "⊆": "SUBSET_EQUAL", "⊄": "NOT_SUBSET", "t": "TIME_AXIS", "dt": "DELTA_TIME", "f(t)": "FUNCTION_OVER_TIME"
+};
 
   function interpretInput(input) {
     const result = [];
@@ -164,6 +193,8 @@
         result.push("[" + char + "]");
       }
     });
+         const words = input.split(/\\s+/);
+  const results = words.map(word => grammarMapping[word] || mathMapping[word] || word);
     return result.join(" | ");
   }
 
