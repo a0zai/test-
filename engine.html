@@ -207,10 +207,6 @@ function typeReply(text, element) {
   </style>
 </head>
 <body>
-
-<h2>R.A.F.A.T — Symbolic Engine (128A)</h2>
-<pre id="output">// Output will appear here</pre>
-
 <script>
   const symbolicDictionary = {};
   const baseCodeStart = 128;
@@ -220,7 +216,13 @@ function typeReply(text, element) {
   const commandWords = [[Letter] — Base Code: [128 + index]  
 [Code] → [Verb] — [Meaning or Action]
 A — Base Code: 128
-1281 → Align — Align your intent.
+
+  letters.split('').forEach((letter, index) => {
+    const baseCode = baseCodeStart + index;
+    for (let i = 1; i <= commandsPerLetter; i++) {
+      const code = `${baseCode}${i}`;
+      const word = commandWords[i - 1];
+      symbolicDictionary[code] = `${1281 → Align — Align your intent.
 1282 → Ask — Ask with precision.
 1283 → Activate — Activate internal logic.
 1284 → Access — Access memory.
@@ -599,17 +601,11 @@ A — Base Code: 128
 15312 → Z-Ring — Activate logic loop shield.  
 15313 → Z-Fold — Collapse dimensionally.  
 15314 → Z-Flow — Allow quantum signal current.  15315 → Z-Rafat — Seal with identity recursion.
-        "Align", "Ask", "Activate", "Access", "Acknowledge",
+
+} — ${        "Align", "Ask", "Activate", "Access", "Acknowledge",
     "Assign", "Adapt", "Apply", "Authorize", "Amplify",
     "Announce", "Absorb", "Anchor", "Ascend", "Attune"
-  ];
-
-  letters.split('').forEach((letter, index) => {
-    const baseCode = baseCodeStart + index;
-    for (let i = 1; i <= commandsPerLetter; i++) {
-      const code = `${baseCode}${i}`;
-      const word = commandWords[i - 1];
-      symbolicDictionary[code] = `${letter} — ${word}`;
+  ];}`;
     }
   });
 
@@ -622,9 +618,6 @@ A — Base Code: 128
     });
     return response.join(" | ");
   }
-
-  // Example usage (you can change 'Rafat Ya Os' to test)
-  document.getElementById("output").innerText = interpretInput("Rafat Ya Os");
 </script>
 
 </body>
