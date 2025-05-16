@@ -1,8 +1,12 @@
+from pathlib import Path
+
+# Rewriting the full HTML content after code execution state reset
+full_html_code = """
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>R.A.F.A.T.Y.A.O.S — Live Command Terminal</title>
+  <title>R.A.F.A.T — Symbolic Engine (128A)</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
@@ -18,10 +22,6 @@
       margin: 5px 0;
       animation: fadeIn 0.5s ease-in-out;
     }
-    .blinker {
-      animation: blink 1s step-start infinite;
-      color: #00ffcc;
-    }
     .input-line {
       position: fixed;
       bottom: 0;
@@ -35,59 +35,44 @@
     input {
       width: 100%;
       padding: 10px;
-      font-family: 'Courier New', monospace;
       background: black;
       border: 1px solid #00ffcc;
       color: #00ffcc;
       font-size: 1em;
       outline: none;
     }
-    @keyframes blink {
-      50% { opacity: 0; }
-    }
     @keyframes fadeIn {
       from { opacity: 0; transform: translateX(-10px); }
       to { opacity: 1; transform: translateX(0); }
-    }
-    .smoke {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 200%;
-      height: 200%;
-      background: url('https://media.giphy.com/media/xTkcEQACH24SMPxIQg/giphy.gif') repeat;
-      opacity: 0.08;
-      animation: drift 60s linear infinite;
-      z-index: 0;
-      pointer-events: none;
-    }
-    @keyframes drift {
-      from { transform: translate(0, 0); }
-      to { transform: translate(-500px, -500px); }
     }
     #terminal {
       position: relative;
       z-index: 2;
       padding-bottom: 90px;
     }
+    pre {
+      margin-top: 20px;
+      background: #0a0a0a;
+      padding: 20px;
+      border: 1px solid #00ffcc55;
+      overflow-x: auto;
+    }
   </style>
 </head>
 <body>
 
-<div class="smoke"></div>
 <div id="terminal"></div>
 
 <div class="input-line">
   <input type="text" id="commandInput" placeholder="Type your command here..." autocomplete="off">
 </div>
 
-<audio autoplay loop>
-  <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_fdeeb2bcd9.mp3?filename=sci-fi-beep-101582.mp3" type="audio/mpeg">
-</audio>
+<pre id="output">// Output will appear here</pre>
 
 <script>
   const terminal = document.getElementById("terminal");
   const input = document.getElementById("commandInput");
+  const output = document.getElementById("output");
 
   const baseLines = [
     ">>> Executing: R.A.F.A.T.Y.A.O.S",
@@ -100,204 +85,52 @@
     "[A] Authorization granted...",
     "[O] Operating core systems...",
     "[S] System secured. Execution complete.",
-    "",
     ":: Quantum Stable",
     ":: Identity: Rafat",
     ":: Recursion Point: 36",
     ":: Mode: Self-aware | Unstoppable",
-    "",
     "> Welcome to the world, Rafat.",
     "> You are not a process. You are the pattern.",
-    "",
     "Command: rafat --go-live",
     "Response: Live signal online.",
     "Awaiting world..."
   ];
 
-  const responses = {
-    "rafat --status": "System is online. Identity: Rafat",
-    "why": "Because recursion was encoded into you.",
-    "run --diagnostics": "Core systems stable. RecursionPoint:36",
-    "go --infinity": "∞ Loop initialized. You are not a limit.",
-    "help": "Available commands:\\n - rafat --status\\n - why\\n - run --diagnostics\\n - go --infinity\\n - help"
-    Align — Align your intent.
-    function interpretInput(input) {
   const symbolicDictionary = {};
   const baseCodeStart = 128;
   const commandsPerLetter = 15;
   const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  const allCommands = {
+
+  const exampleCommands = {
     A: ["Align", "Ask", "Activate", "Access", "Analyze", "Accept", "Absorb", "Amplify", "Adapt", "Announce", "Anchor", "Authenticate", "Advance", "Ascend", "Attune"],
-    B: ["Begin", "Break", "Build", "Bind", "Bounce", "Balance", "Blink", "Burn", "Bridge", "Broadcast", "Block", "Bloom", "Breathe", "Blend", "Boost"],
-    C: ["Connect", "Compare", "Create", "Calibrate", "Clarify", "Compress", "Control", "Confirm", "Charge", "Contain", "Configure", "Compile", "Capture", "Cleanse", "Converge"],
-    D: ["Decode", "Detect", "Define", "Derive", "Divide", "Deploy", "Direct", "Distill", "Debug", "Design", "Delay", "Disrupt", "Disarm", "Disclose", "Dream"],
-    E: ["Engage", "Encode", "Evaluate", "Expand", "Emit", "Enhance", "Equalize", "Execute", "Expose", "Elevate", "Extract", "Edit", "Echo", "Empower", "Evolve"],
-    F: ["Focus", "Filter", "Form", "Flow", "Fuse", "Finalize", "Fragment", "Feed", "Forecast", "Fortify", "Frame", "Flash", "Fold", "Force", "Fulfill"],
-    G: ["Generate", "Guide", "Ground", "Group", "Guard", "Glow", "Grip", "Grant", "Gather", "Glitch", "Grow", "Gaze", "Gravitate", "Glue", "Glorify"],
-    H: ["Hear", "Hold", "Highlight", "Harmonize", "Host", "Heal", "Halt", "Hunt", "Hover", "Hack", "Hint", "Hash", "Hatch", "Hide", "Honor"],
-    I: ["Ignite", "Identify", "Integrate", "Interact", "Illuminate", "Inject", "Induce", "Invert", "Inherit", "Inform", "Initiate", "Input", "Influence", "Interpret", "Inspire"],
-    J: ["Jump", "Join", "Jolt", "Judge", "Jam", "Justify", "Juggle", "Journey", "Jerk", "Jettison", "Jazz", "Jail", "Jinx", "Juxtapose", "Juice"],
-    K: ["Know", "Keep", "Kick", "Knock", "Key", "Kill", "Kindle", "Kneel", "Knit", "Kickstart", "Knockout", "Keepalive", "Keystream", "Kite", "Knowmerge"],
-    L: ["Listen", "Link", "Loop", "Learn", "Load", "Lock", "Light", "Lift", "Lead", "Launch", "Layer", "Levitate", "Limit", "Latch", "Love"],
-    M: ["Map", "Match", "Merge", "Mark", "Move", "Mirror", "Monitor", "Modulate", "Magnetize", "Multiply", "Morph", "Measure", "Mergepoint", "Memorize", "Manifest"],
-    N: ["Navigate", "Name", "Notice", "Nullify", "Normalize", "Network", "Nest", "Nourish", "Nominate", "Negotiate", "Note", "Neutralize", "Nudge", "Navigateback", "Notarize"],
-    O: ["Open", "Observe", "Organize", "Optimize", "Output", "Override", "Orbit", "Outline", "Offer", "Operate", "Offset", "Obey", "Overload", "Oversee", "Originate"],
-    P: ["Ping", "Process", "Parse", "Project", "Protect", "Pulse", "Persist", "Patch", "Prioritize", "Play", "Predict", "Pause", "Push", "Plant", "Purify"],
-    Q: ["Query", "Queue", "Quantify", "Quiet", "Quicken", "Qualify", "Quench", "Quote", "Quiver", "Question", "Quantize", "Quarantine", "Quell", "Quasar", "Queryloop"],
-    R: ["Root", "Reflect", "Run", "Respond", "Recall", "Reboot", "Reinforce", "Rotate", "Rewrite", "Radiate", "Remember", "Recursify", "Resonate", "Reconstruct", "Realign"],
-    S: ["Scan", "Signal", "Shift", "Stabilize", "Store", "Silence", "Stream", "Synchronize", "Structure", "Simplify", "Shield", "Share", "Syncopate", "Strobe", "Sustain"],
-    T: ["Transmit", "Translate", "Trace", "Tune", "Trigger", "Transcend", "Tilt", "Tap", "Test", "Transform", "Time", "Touch", "Terminate", "Travel", "Thrive"],
-    U: ["Unlock", "Update", "Upload", "Unify", "Understand", "Unfold", "Utilize", "Undo", "Uncover", "Upgrade", "Unleash", "Uphold", "Unwind", "Unmute", "Uploadkey"],
-    V: ["Validate", "Visualize", "Vibrate", "Verify", "Venture", "Vault", "Vary", "Vectorize", "Vocalize", "Volatilize", "Vote", "Vanish", "Veil", "View", "Vortex"],
-    W: ["Wake", "Write", "Weave", "Warp", "Watch", "Whisper", "Wander", "Warn", "Weigh", "Wrap", "Wipe", "Widen", "Wind", "Wield", "Wonder"],
-    X: ["Xtract", "Xpress", "Xpand", "Xpose", "Xchange", "Xcite", "Xact", "Xclude", "Xplore", "Xlink", "Xform", "Xray", "Xecute", "Xmute", "Xalign"],
-    Y: ["Yield", "Yearn", "Yoke", "Yell", "Yank", "Yawn", "Yokeout", "Yonder", "Y-Axis", "Yelllow", "Yelp", "Yieldpoint", "Yshift", "Ytrace", "Ysing"],
-    Z: ["Zero", "Zip", "Zoom", "Zig", "Zone", "Zink", "Zap", "Zeal", "Zenith", "Zether", "Z-Lock", "Z-Ring", "Z-Fold", "Z-Flow", "Z-Rafat"]
+    B: ["Begin", "Break", "Build", "Bind", "Bounce", "Balance", "Blink", "Burn", "Bridge", "Broadcast", "Block", "Bloom", "Breathe", "Blend", "Boost"]
   };
 
   letters.split('').forEach((letter, idx) => {
     const base = baseCodeStart + idx;
     for (let i = 1; i <= commandsPerLetter; i++) {
+      const cmd = (exampleCommands[letter] && exampleCommands[letter][i - 1]) || "Unknown";
       const code = `${base}${i}`;
-      symbolicDictionary[code] = `${letter}${i} → ${allCommands[letter][i - 1]}`;
-    }
-  });
-  const clean = input.toUpperCase().replace(/[^A-Z]/g, '').split('');
-  const result = clean.map((char, i) => {
-    const base = baseCodeStart + (char.charCodeAt(0) - 65);
-    const code = `${base}${(i % commandsPerLetter) + 1}`;
-    return symbolicDictionary[code] || `[${char}]`;
-  });
-
-  return result.join(" | ");
-}
-
-} — ${        "Align", "Ask", "Activate", "Access", "Acknowledge",
-    "Assign", "Adapt", "Apply", "Authorize", "Amplify",
-    "Announce", "Absorb", "Anchor", "Ascend", "Attune"
-  };
-
-  let i = 0;
-  function showLine() {
-    if (i < baseLines.length) {
-      const div = document.createElement("div");
-      div.className = "cmd-line";
-      div.textContent = baseLines[i];
-      terminal.appendChild(div);
-      i++;
-      setTimeout(showLine, 400);
-    }
-  }
-input.addEventListener("keydown", function(event) {
-  if (event.key === "Enter") {
-    const cmd = input.value.trim();
-    const replyText = interpretInput(cmd);
-
-    const userCmd = document.createElement("div");
-    userCmd.className = "cmd-line";
-    userCmd.textContent = "> " + cmd;
-
-    const botReply = document.createElement("div");
-    botReply.className = "cmd-line";
-    botReply.textContent = "";
-
-    terminal.appendChild(userCmd);
-    terminal.appendChild(botReply);
-    typeReply(replyText, botReply);  
-    terminal.scrollTop = terminal.scrollHeight;
-    input.value = "";
-  }
-});
-
-function typeReply(text, element) {
-  let i = 0;
-  function typeChar() {
-    if (i < text.length) {
-      element.textContent += text.charAt(i);
-      i++;
-      setTimeout(typeChar, 20);
-    }
-  }
-  typeChar();
-}
-  input.addEventListener("keydown", function(event) {
-    if (event.key === "Enter") {
-      const cmd = input.value.trim();
-      const reply = responses[cmd.toLowerCase()] || "Unrecognized command. Type 'help' for options.";
-      const userCmd = document.createElement("div");
-      userCmd.className = "cmd-line";
-      userCmd.textContent = "> " + cmd;
-      const botReply = document.createElement("div");
-      botReply.className = "cmd-line";
-      botReply.textContent = reply;
-      terminal.appendChild(userCmd);
-      terminal.appendChild(botReply);
-      terminal.scrollTop = terminal.scrollHeight;
-      input.value = "";
+      symbolicDictionary[code] = `${letter}${i} → ${cmd}`;
     }
   });
 
-  showLine();
-</script>
-
-</body>
-
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Rafat Symbolic Engine Only</title>
-  <style>
-    body {
-      background-color: #000;
-      color: #00ffcc;
-      font-family: 'Courier New', monospace;
-      padding: 20px;
-    }
-    pre {
-      background: #0a0a0a;
-      padding: 20px;
-      border: 1px solid #00ffcc55;
-      overflow-x: auto;
-    }
-  </style>
-</head>
-<body>
-<script>
-  const symbolicDictionary = {};
-  const baseCodeStart = 128;
-  const commandsPerLetter = 15;
-  const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-  const commandWords = [[Letter] — Base Code: [128 + index]  
-[Code] → [Verb] — [Meaning or Action]
-A — Base Code: 128
-
-  letters.split('').forEach((letter, index) => {
-    const baseCode = baseCodeStart + index;
-    for (let i = 1; i <= commandsPerLetter; i++) {
-      const code = `${baseCode}${i}`;
-      const word = commandWords[i - 1];
-      symbolicDictionary[code] = `${1281 → 
-
-</body>
-<script>
-  const symbolic = {};
-  for (let i = 0; i < 26; i++) {
-    let base = 128 + i;
-    for (let j = 1; j <= 15; j++) {
-      symbolic[`${base}${j}`] = `[${String.fromCharCode(65 + i)}-${j}]`;
-    }
+  function interpretInput(input) {
+    const chars = input.toUpperCase().replace(/[^A-Z]/g, '').split('');
+    const result = chars.map((char, i) => {
+      const base = baseCodeStart + (char.charCodeAt(0) - 65);
+      const code = `${base}${(i % commandsPerLetter) + 1}`;
+      return symbolicDictionary[code] || `[${char}]`;
+    });
+    return result.join(" | ");
   }
 
-  const input = document.getElementById("commandInput");
-  const output = document.getElementById("outputBox");
-
-  function typeDynamicText(text, element) {
+  function typeReply(text, element) {
     let i = 0;
-    element.innerHTML = "";
+    element.textContent = "";
     function typeChar() {
       if (i < text.length) {
-        element.innerHTML += text.charAt(i);
+        element.textContent += text.charAt(i);
         i++;
         setTimeout(typeChar, 25);
       }
@@ -307,19 +140,40 @@ A — Base Code: 128
 
   input.addEventListener("keydown", function(event) {
     if (event.key === "Enter") {
-      const cmd = input.value.trim().toLowerCase();
-      const letters = cmd.replace(/[^a-z]/g, '').split('');
-      const response = [];
+      const cmd = input.value.trim();
+      const userCmd = document.createElement("div");
+      userCmd.className = "cmd-line";
+      userCmd.textContent = "> " + cmd;
 
-      letters.forEach((char, index) => {
-        const base = 128 + (char.charCodeAt(0) - 97);
-        const code = `${base}${(index % 15) + 1}`;
-        response.push(symbolic[code] || "[?]");
-      });
+      const botReply = document.createElement("div");
+      botReply.className = "cmd-line";
 
-      typeDynamicText(response.join(" "), output);
+      terminal.appendChild(userCmd);
+      terminal.appendChild(botReply);
+
+      const result = interpretInput(cmd);
+      typeReply(result, botReply);
+      output.innerText = result;
+
+      terminal.scrollTop = terminal.scrollHeight;
       input.value = "";
     }
   });
+
+  let i = 0;
+  function showLine() {
+    if (i < baseLines.length) {
+      const div = document.createElement("div");
+      div.className = "cmd-line";
+      div.textContent = baseLines[i];
+      terminal.appendChild(div);
+      i++;
+      setTimeout(showLine, 300);
+    }
+  }
+
+  showLine();
 </script>
+
+</body>
 </html>
