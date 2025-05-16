@@ -66,11 +66,9 @@
   <input type="text" id="commandInput" placeholder="Type your command here..." autocomplete="off">
 </div>
 
-<pre id="output">// Output will appear here</pre>
-
 <script>
       const numToAlpha = 
-      document.getElementbById("Rafat");
+      document.getElementById("Rafat");
   const terminal = document.getElementById("terminal");
   const input = document.getElementById("commandInput");
   const output = document.getElementById("output");
@@ -103,7 +101,7 @@
   const commandsPerLetter = 15;
   const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   const numbers = "0123456789090870650430210";
-  const exampleCommands = 
+  const exampleCommands = {
     "0": ["A"],
     "1": ["B"],
     "2": ["C"],
@@ -176,6 +174,9 @@
       const code = `${base}${(i % commandsPerLetter) + 1}`;
       return symbolicDictionary[code] || `[${char}]`;
     });
+     if (/^\d+$/.test(part)) {
+      return numToAlpha[part] || `[${part}]`;
+    }
     return result.join(" | ");
   }
 
