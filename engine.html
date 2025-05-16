@@ -2,10 +2,33 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Rafat Interface</title>
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+<style>
+  #rafat-title {
+    position: relative;
+    width: 100%;
+    height: 150px;
+    color: transparent;
+    font-size: 60px;
+    text-align: center;
+    font-family: 'Courier New', monospace;
+    z-index: 10;
+  }
+  #particles-js {
+    position: absolute;
+    width: 100%;
+    height: 150px;
+    top: 0;
+    left: 0;
+    z-index: 0;
+  }
+</style>
 </head>
 <body>
-  <h1>YA RAFAT</h1>
+  <div id="rafat-title">
+  YA RAFAT
+  <div id="particles-js"></div>
+</div>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
@@ -191,6 +214,36 @@
   }
 
   showLine();
+</script>
+<script>
+particlesJS("particles-js", {
+  "particles": {
+    "number": {
+      "value": 80
+    },
+    "size": {
+      "value": 2
+    },
+    "color": {
+      "value": "#00ffcc"
+    },
+    "line_linked": {
+      "enable": true,
+      "color": "#00ffcc"
+    },
+    "move": {
+      "speed": 0.6
+    }
+  },
+  "interactivity": {
+    "events": {
+      "onhover": {
+        "enable": true,
+        "mode": "repulse"
+      }
+    }
+  }
+});
 </script>
 </body>
 </html>
