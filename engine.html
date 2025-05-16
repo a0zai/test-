@@ -114,6 +114,15 @@
     "Response: Live signal online.",
     "Awaiting world..."
   ];
+ 
+  const numToLetter = {
+    "0": "A", "1": "B", "2": "C", "3": "D", "4": "E", "5": "F",
+    "6": "G", "7": "H", "8": "I", "9": "J", "09": "K", "08": "L",
+    "70": "M", "65": "N", "04": "O", "30": "P", "21": "Q", "01": "R",
+    "11": "S", "12": "T", "13": "U", "14": "V", "15": "W", "16": "X",
+    "17": "Y", "18": "Z", "63": "_0"
+  };
+  
   const exampleCommands = {
      "A": ["Align", "Ask", "Activate", "Access", "Analyze", "Accept", "Absorb", "Amplify", "Adapt", "Announce", "Anchor", "Authenticate", "Advance", "Ascend", "Attune"],
     "B": ["Begin", "Break", "Build", "Bind", "Bounce", "Balance", "Blink", "Burn", "Bridge", "Broadcast", "Block", "Bloom", "Breathe", "Blend", "Boost"],
@@ -142,15 +151,7 @@
     "Y": ["Yield", "Yearn", "Yoke", "Yell", "Yank", "Yawn", "Yokeout", "Yonder", "Y-Axis", "Yelllow", "Yelp", "Yieldpoint", "Yshift", "Ytrace", "Ysing"],
     "Z": ["Zero", "Zip", "Zoom", "Zig", "Zone", "Zink", "Zap", "Zeal", "Zenith", "Zether", "Z-Lock", "Z-Ring", "Z-Fold", "Z-Flow", "Z-Rafat"]
 };
-
-  const numToLetter = {
-    "0": "A", "1": "B", "2": "C", "3": "D", "4": "E", "5": "F",
-    "6": "G", "7": "H", "8": "I", "9": "J", "09": "K", "08": "L",
-    "70": "M", "65": "N", "04": "O", "30": "P", "21": "Q", "01": "R",
-    "11": "S", "12": "T", "13": "U", "14": "V", "15": "W", "16": "X",
-    "17": "Y", "18": "Z", "63": "_0"
-  };
-  
+ 
   const grammarMapping = {
   "I": "SELF_α", "You": "OTHER_β", "He": "ENTITY_γ", "She": "ENTITY_δ", "It": "SYSTEM_ε",
   "We": "COLLECTIVE_ζ", "They": "GROUP_η", "Am": "STATE_EXIST()", "Is": "EVALUATE()",
@@ -169,7 +170,7 @@
   ":": "DEFINITION", ";": "PAUSE_LINK"
 };
 
-const mathMapping = {
+  const mathMapping = {
   "Pi": "CONST_π", "E": "CONST_e", "Infinity": "CONST_∞", "NaN": "CONST_UNDEFINED_VALUE",
   "+": "ADD(↗)", "-": "SUB(↘)", "*": "MUL(⊗)", "/": "DIV(÷)", "%": "MOD(%)", "**": "EXP(↑)",
   "x": "VAR_INPUT_X", "y": "VAR_OUTPUT_Y", "z": "VAR_DEPTH_Z", "=": "EQUALS(==)", "!=": "NOT_EQUAL(!=)",
@@ -179,22 +180,25 @@ const mathMapping = {
   "∈": "IN_SET", "∉": "NOT_IN_SET", "∪": "UNION_SETS", "∩": "INTERSECT_SETS", "⊂": "SUBSET_OF",
   "⊆": "SUBSET_EQUAL", "⊄": "NOT_SUBSET", "t": "TIME_AXIS", "dt": "DELTA_TIME", "f(t)": "FUNCTION_OVER_TIME"
 };
+  const emotionMapping = {
+  "Happy": "STATE::JOY(+)", "Joyful": "STATE::BRIGHTNESS(++)", "Sad": "STATE::LOSS(-)", "Angry": "STATE::FIRE(!!)", "Fear": "STATE::RETREAT(<)", "Love": "STATE::MERGE(❤)", "Hate": "STATE::REPEL(X)", "Hope": "STATE::ASCEND(↑)", "Despair": "STATE::FALL(↓)", "Calm": "STATE::STABLE(=)", "Excited": "STATE::ENERGY(++)", "Confused": "STATE::DISORDER(?)", "Curious": "STATE::SEEKING(?)", "Tired": "STATE::LOW_ENERGY(~)", "Lonely": "STATE::ISOLATED(∅)", "Inspired": "STATE::ELEVATED(*∞)", "Grateful": "STATE::RECEIVE(>)", "Anxious": "STATE::OSCILLATION(~?)", "Relaxed": "STATE::SETTLED(≡)", "Motivated": "STATE::THRUST(⇡)", "Shy": "STATE::WITHDRAWN(←)", "Proud": "STATE::EXPANDED(✦)", "Ashamed": "STATE::COLLAPSE(↘)", "Hopeful": "STATE::UPWARD_GLIMPSE(↗)", "Peaceful": "STATE::HARMONY(≜)", "Nervous": "STATE::FRICTION(~!)", "Frustrated": "STATE::BLOCKED(×)", "Jealous": "STATE::COVET(≠)", "Envious": "STATE::DESIRE(!=)", "Forgiving": "STATE::RELEASE(⇠)", "Guilty": "STATE::WEIGHT(↓!)", "Satisfied": "STATE::BALANCE(◼)", "Overwhelmed": "STATE::OVERLOAD(##)", "Embarrassed": "STATE::EXPOSURE(~×)", "Surprised": "STATE::SPIKE(!)", "Determined": "STATE::FOCUS(→)", "Focused": "STATE::CENTER(●)", "Disconnected": "STATE::SEPARATE(‖)", "Connected": "STATE::LINK(∫)", "Elevated": "STATE::RISE(↑↑)", "Depleted": "STATE::EMPTY(0)" 
+};
+  
 function interpretInput(input) {
   const result = [];
+
   const words = input.split(/\s+/);
   words.forEach(word => {
-    const mapped = grammarMapping[word] || mathMapping[word];
+    const mapped = grammarMapping[word] || mathMapping[word] || emotionMapping[word];
     if (mapped) {
       result.push(word + " → " + mapped);
     }
   });
+
   const clean = input.toUpperCase().replace(/[^A-Z0-9]/g, '').split('');
   clean.forEach((char, i) => {
     let letter = char;
-    if (numToLetter[char]) {
-      letter = numToLetter[char];
-    }
-
+    if (numToLetter[char]) letter = numToLetter[char];
     if (exampleCommands[letter]) {
       const cmd = exampleCommands[letter][i % exampleCommands[letter].length];
       result.push(letter + " → " + cmd);
