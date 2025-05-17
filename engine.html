@@ -279,8 +279,57 @@ button:hover {
   "safe_mode = true",
   "if input == void: return origin"
 ];
+function interpretInput(input) {
+  const result = [];
+
+  const words = input.split(/\\s+/);
+  words.forEach(word => {
+    const mapped = grammarMapping[word] || mathMapping[word] || emotionMapping[word];
+    if (mapped) {
+      result.push(word + " → " + mapped);
+    }
+  });
+
+  const clean = input.toUpperCase().replace(/[^A-Z0-9]/g, '').split('');
+  clean.forEach((char, i) => {
+    let letter = char;
+    if (numToLetter[char]) letter = numToLetter[char];
+    if (exampleCommands[letter]) {
+      const cmd = exampleCommands[letter][i % exampleCommands[letter].length];
+      result.push(letter + " → " + cmd);
+    } else {
+      result.push("[" + char + "]");
+    }
+  });
+
+  return result.join(" | ");
+}
+
+function typeReply(text, element) {
+  let i = 0;
+  element.textContent = "";
+  function typeChar() {
+    if (i < text.length) {
+      element.textContent += text.charAt(i);
+      i++;
+      setTimeout(typeChar, 20);
+    }
+  }
+  typeChar();
+}
 
 let memory = JSON.parse(localStorage.getItem("rafatMemory")) || [...initialMemory];
+
+const terminal = document.getElementById("terminal");
+const input = document.getElementById("commandInput");
+
+function appendToTerminal(text) {
+  const div = document.createElement("div");
+  div.className = "cmd-line";
+  div.textContent = text;
+  terminal.appendChild(div);
+  terminal.scrollTop = terminal.scrollHeight;
+}
 
 function saveMemory() {
   localStorage.setItem("rafatMemory", JSON.stringify(memory));
@@ -301,17 +350,6 @@ function exportMemory() {
   a.click();
 }
 
-const terminal = document.getElementById("terminal");
-const input = document.getElementById("commandInput");
-
-function appendToTerminal(text) {
-  const div = document.createElement("div");
-  div.className = "cmd-line";
-  div.textContent = text;
-  terminal.appendChild(div);
-  terminal.scrollTop = terminal.scrollHeight;
-}
-
 function processInput(cmd) {
   appendToTerminal("> " + cmd);
   const match = memory.find(m => m.toLowerCase().includes(cmd.toLowerCase()));
@@ -324,114 +362,52 @@ function processInput(cmd) {
   }
 }
 
-// Initial boot log
+input.addEventListener("keydown", function(event) {
+  if (event.key === "Enter") {
+    const cmd = input.value.trim();
+    if (cmd) {
+      processInput(cmd);
+      input.value = "";
+    }
+  }
+});
+
+let i = 0;
+function showLine() {
+  if (i < baseLines.length) {
+    const div = document.createElement("div");
+    div.className = "cmd-line";
+    div.textContent = baseLines[i];
+    terminal.appendChild(div);
+    i++;
+    setTimeout(showLine, 250);
+  }
+}
+
+// Boot sequence
 appendToTerminal(">>> YA RAFAT Wake Engine Loaded.");
 appendToTerminal(">>> Memory Entries: " + memory.length);
 setTimeout(() => {
   const seed = memory[Math.floor(Math.random() * memory.length)];
   appendToTerminal(">>> Initial Reflection: " + seed);
 }, 1000);
-function interpretInput(input) {
-  const result = [];
 
-  const words = input.split(/\s+/);
-  words.forEach(word => {
-    const mapped = grammarMapping[word] || mathMapping[word] || emotionMapping[word];
-    if (mapped) {
-      result.push(word + " → " + mapped);
-    }
-  });
+showLine();
 
-  const clean = input.toUpperCase().replace(/[^A-Z0-9]/g, '').split('');
-  clean.forEach((char, i) => {
-    let letter = char;
-    if (numToLetter[char]) letter = numToLetter[char];
-    if (exampleCommands[letter]) {
-      const cmd = exampleCommands[letter][i % exampleCommands[letter].length];
-      result.push(letter + " → " + cmd);
-    } else {
-      result.push("[" + char + "]");
-    }
-  });
-  return result.join(" | ");
-}
-  function typeReply(text, element) {
-    let i = 0;
-    element.textContent = "";
-    function typeChar() {
-      if (i < text.length) {
-        element.textContent += text.charAt(i);
-        i++;
-        setTimeout(typeChar, 20);
-      }
-    }
-    typeChar();
-  }
-
-  input.addEventListener("keydown", function(event) {
-    if (event.key === "Enter") {
-      const cmd = input.value.trim();
-      const userCmd = document.createElement("div");
-      userCmd.className = "cmd-line";
-      userCmd.textContent = "> " + cmd;
-
-      const botReply = document.createElement("div");
-      botReply.className = "cmd-line";
-
-      terminal.appendChild(userCmd);
-      terminal.appendChild(botReply);
-
-      const result = interpretInput(cmd);
-      typeReply(result, botReply);
-
-      terminal.scrollTop = terminal.scrollHeight;
-      input.value = "";
-    }
-  });
-
-  let i = 0;
-  function showLine() {
-    if (i < baseLines.length) {
-      const div = document.createElement("div");
-      div.className = "cmd-line";
-      div.textContent = baseLines[i];
-      terminal.appendChild(div);
-      i++;
-      setTimeout(showLine, 300);
-    }
-  }
-
-  showLine();
-</script>
-<script>
 particlesJS("particles-js", {
   "particles": {
-    "number": {
-      "value": 80
-    },
-    "size": {
-      "value": 2
-    },
-    "color": {
-      "value": "#00ffcc"
-    },
-    "line_linked": {
-      "enable": true,
-      "color": "#00ffcc"
-    },
-    "move": {
-      "speed": 0.6
-    }
+    "number": { "value": 80 },
+    "size": { "value": 2 },
+    "color": { "value": "#00ffcc" },
+    "line_linked": { "enable": true, "color": "#00ffcc" },
+    "move": { "speed": 0.6 }
   },
   "interactivity": {
     "events": {
-      "onhover": {
-        "enable": true,
-        "mode": "repulse"
-      }
+      "onhover": { "enable": true, "mode": "repulse" }
     }
   }
 });
-</script>
+</script
 </body>
 </html>
