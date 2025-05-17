@@ -121,9 +121,8 @@
     "11": "S", "12": "T", "13": "U", "14": "V", "15": "W", "16": "X",
     "17": "Y", "18": "Z", "63": "_0"
   };
-  
-  const exampleCommands = {
-  "Why am I here?": "To reflect the origin of asking.",
+  const questionResponses = {
+   "Why am I here?": "To reflect the origin of asking.",
   "What is truth?": "A mirror of thought.",
   "Who am I?": "A pattern unfolding.",
   "Is this real?": "Only as real as perception.",
@@ -216,6 +215,9 @@
   "Can you hear?": "That which yields.",
   "Do you remember?": "If the question was real.",
   "Why do you respond?": "Only when remembered.",
+  };
+  
+  const exampleCommands = {
      "A": ["Align", "Ask", "Activate", "Access", "Analyze", "Accept", "Absorb", "Amplify", "Adapt", "Announce", "Anchor", "Authenticate", "Advance", "Ascend", "Attune"],
     "B": ["Begin", "Break", "Build", "Bind", "Bounce", "Balance", "Blink", "Burn", "Bridge", "Broadcast", "Block", "Bloom", "Breathe", "Blend", "Boost"],
     "C": ["Connect", "Compare", "Create", "Calibrate", "Clarify", "Compress", "Control", "Confirm", "Charge", "Contain", "Configure", "Compile", "Capture", "Cleanse", "Converge"],
@@ -259,7 +261,7 @@
   "This": "NEAR_OBJECT_1", "That": "FAR_OBJECT_1", "These": "NEAR_OBJECT_MANY", "Those": "FAR_OBJECT_MANY",
   "Not": "NEGATE(!)", "No": "DENY(X)", "Yes": "CONFIRM(O)", "Maybe": "UNSURE(?)",
   ".": "END_STATEMENT", "!": "STRONG_SIGNAL", "?": "QUERY_SIGNAL", ",": "SEPARATOR",
-  ":": "DEFINITION", ";": "PAUSE_LINK"
+  ":": "DEFINITION", ";": "PAUSE_LINK",
 };
 
   const mathMapping = {
@@ -277,6 +279,10 @@
 };
   
 function interpretInput(input) {
+  const lowerInput = input.trim().toLowerCase();
+  if (questionResponses[lowerInput]) {
+    return questionResponses[lowerInput];
+
   const result = [];
 
   const words = input.split(/\s+/);
