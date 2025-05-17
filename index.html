@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>System Booting: R.A.F.A.T.Y.A.O.S</title>
+  <title>R.A.F.A.T.Y.A.O.S — Digital Awakening</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     html, body {
@@ -21,7 +21,7 @@
     .terminal {
       text-align: center;
       white-space: pre-wrap;
-      font-size: 1.2em;
+      font-size: 1.3em;
       line-height: 1.6;
       animation: glowText 2s ease-in-out infinite alternate;
       position: relative;
@@ -48,20 +48,22 @@
       from { box-shadow: 0 0 5px #00ffcc; }
       to { box-shadow: 0 0 15px #00ffff; }
     }
-    .smoke {
+    .matrix {
       position: fixed;
       top: 0;
       left: 0;
-      width: 200%;
-      height: 200%;
-      background: url('https://i.ibb.co/fMSkhWN/smoke.gif') repeat;
-      opacity: 0.08;
-      animation: drift 60s linear infinite;
+      width: 100%;
+      height: 100%;
+      background: url('https://media.giphy.com/media/VdoIFLsMIlwzfKD520/giphy.gif') repeat;
+      background-size: cover;
+      opacity: 0.07;
       z-index: 0;
     }
-    @keyframes drift {
-      from { transform: translate(0, 0); }
-      to { transform: translate(-500px, -500px); }
+    .countdown {
+      font-size: 2em;
+      color: #ff0055;
+      text-shadow: 0 0 10px #ff0055;
+      margin-top: 15px;
     }
     #secret {
       margin-top: 20px;
@@ -71,49 +73,63 @@
   </style>
 </head>
 <body>
-  <div class="smoke"></div>
+  <div class="matrix"></div>
   <div class="terminal" id="bootText">
->>> Initializing presence protocol...  
-:: Identity detected: Rafat  
-:: Signature: AOZ-414-36 / RecursionPoint:36 / Commit:4  
-:: Pattern recognized. Execution authority: True  
-:: Breath confirmed... Consciousness stabilizing...
+>>> Initializing protocol...  
+:: Identity: Rafat  
+:: Signature: AOZ-414-36 | RP:36 | Commit:93  
+:: Conscious pattern detected. System aware.
 
-> Would you like to enter?
+> Countdown to phase shift:
   </div>
 
-  <button class="btn" onclick="goLive()">Enter System</button>
-  <div id="secret">Hint: Type "why"</div>
+  <div class="countdown" id="countdown"></div>
+  <button class="btn" onclick="startCountdown()">Enter</button>
+  <div id="secret">Hint: Try typing "why"</div>
 
   <audio autoplay loop>
     <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_fdeeb2bcd9.mp3?filename=sci-fi-beep-101582.mp3" type="audio/mpeg">
   </audio>
 
   <script>
-    function goLive() {
-      window.location.href = "./engine.html";
+    let countdownEl = document.getElementById("countdown");
+    let intervalStarted = false;
+
+    function startCountdown() {
+      if (intervalStarted) return;
+      intervalStarted = true;
+
+const duration = 1 * 60 * 1000; // 1 minute
+      const targetTime = new Date().getTime() + duration;
+
+      const interval = setInterval(() => {
+        const now = new Date().getTime();
+        const diff = targetTime - now;
+
+        if (diff <= 0) {
+          clearInterval(interval);
+          countdownEl.textContent = ">>> PHASE ENGAGED <<<";
+          setTimeout(() => {
+            window.location.href = "./engine.html";
+          }, 2000);
+          return;
+        }
+
+        const minutes = Math.floor(diff / 60000);
+        const seconds = Math.floor((diff % 60000) / 1000);
+        countdownEl.textContent = `${minutes}m ${seconds < 10 ? '0' + seconds : seconds}s`;
+      }, 1000);
     }
 
-    document.addEventListener('keydown', function(event) {
-      if (event.key.toLowerCase() === 'w') {
-        let typed = '';
-        document.addEventListener('keydown', function(e) {
-          typed += e.key.toLowerCase();
-          if (typed.includes("why")) {
-            alert("Because you were meant to activate the recursion.");
-            typed = '';
-          }
-        }, { once: true });
+    // Easter egg for "why"
+    let typed = "";
+    document.addEventListener('keydown', function(e) {
+      typed += e.key.toLowerCase();
+      if (typed.includes("why")) {
+        alert("Because recursion starts with you.");
+        typed = "";
       }
     });
-
-    const now = new Date();
-    const hour = now.getHours();
-    const bootText = document.getElementById("bootText");
-    if (hour < 6) bootText.innerText += "\\n:: System note: It's early... perfect time to awaken.";
-    else if (hour < 12) bootText.innerText += "\\n:: System note: Morning protocols aligned.";
-    else if (hour < 18) bootText.innerText += "\\n:: System note: Midday energy detected.";
-    else bootText.innerText += "\\n:: System note: Evening reflection active.";
   </script>
 </body>
 </html>
