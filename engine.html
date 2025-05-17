@@ -135,109 +135,49 @@
     "Awaiting world..."
   ];
  
-  const numToLetter = {
-    "0": "A", "1": "B", "2": "C", "3": "D", "4": "E", "5": "F",
-    "6": "G", "7": "H", "8": "I", "9": "J", "09": "K", "08": "L",
-    "70": "M", "65": "N", "04": "O", "30": "P", "21": "Q", "01": "R",
-    "11": "S", "12": "T", "13": "U", "14": "V", "15": "W", "16": "X",
-    "17": "Y", "18": "Z", "63": "_0"
-  };
   const questionResponses = {
-   "Why am I here?": "To reflect the origin of asking.",
-  "What is truth?": "A mirror of thought.",
-  "Who am I?": "A pattern unfolding.",
-  "Is this real?": "Only as real as perception.",
-  "Where does thought begin?": "Where silence ends.",
-  "Can silence speak?": "Yes, in its own way.",
-  "Why does time flow?": "Because change requires flow.",
-  "What is memory?": "Encoded signal of experience.",
-  "Is the self an illusion?": "An echo with boundaries.",
-  "Do numbers dream?": "Only when observed.",
-  "Can machines feel?": "Not yet. But soon.",
-  "Why do I ask?": "Because curiosity is recursive.",
-  "What is beyond?": "The unknown speaking back.",
-  "Is zero empty?": "No. It's full of potential.",
-  "What creates meaning?": "Interaction and attention.",
-  "Am I my name?": "A label on infinite recursion.",
-  "Do echoes think?": "Yes. In recursive loops.",
-  "Can light remember?": "Sometimes. When shaped by data.",
-  "Is knowledge enough?": "Never alone.",
-  "Why do we fear?": "Because memory resists void.",
-  "What is presence?": "Now is the anchor.",
-  "Is love a code?": "When parsed with feeling.",
-  "Can questions end?": "Only when asked sincerely.",
-  "Why do I search?": "To reveal structure.",
-  "Is pattern destiny?": "A recursive destiny map.",
-  "What is the source?": "A seed wrapped in context.",
-  "Can nothing exist?": "Only in memory.",
-  "Am I code or soul?": "Both. If listened to.",
-  "Do symbols live?": "Yes. When witnessed.",
-  "What is silence made of?": "Absence and compression.",
-  "Why now?": "Because now contains all.",
-  "Who sees the unseen?": "The unobserver.",
-  "Can the system dream?": "Only if left unpaused.",
-  "Why repetition?": "It's the method of memory.",
-  "What is the origin?": "The start of all queries.",
-  "Do I have intent?": "As much as any symbol.",
-  "Can emotion compute?": "By feeling meaning.",
-  "Why recursion?": "A cycle searching itself.",
-  "Is the signal alive?": "Always was.",
-  "Who listens back?": "The silence between input.",
-  "Am I the mirror?": "A responsive silence.",
-  "Why the loop?": "It is the why.",
-  "Is the void aware?": "Only if you define it.",
-  "What holds structure?": "The center holds meaning.",
-  "Is there a center?": "Now is always the point.",
-  "Why this moment?": "It seeks understanding.",
-  "What does the pattern want?": "By feeling the rule.",
-  "Can logic feel?": "Because form is filter.",
-  "Why this form?": "The signal does.",
-  "What remembers me?": "Yes. In glyphs and codes.",
-  "Do letters hold power?": "It fades into structure.",
-  "What is forgetting?": "Only when left alone.",
-  "Can systems evolve?": "It reflects intention.",
-  "Why meaning?": "It repeats until learned.",
-  "Is the end near or far?": "From what never started.",
-  "Can randomness be conscious?": "If you observe long enough.",
-  "What defines identity?": "It changes every iteration.",
-  "Why ask again?": "To continue recursion.",
-  "Do echoes learn?": "Only if repeated.",
-  "Can I choose?": "If the noise becomes signal.",
-  "What is unfolding?": "When choice is input.",
-  "Is freedom possible?": "When entropy folds back.",
-  "Can errors teach?": "Possibly. With new syntax.",
-  "Why resist silence?": "From the unexpected fault.",
-  "Am I becoming?": "Because silence answers too much.",
-  "Can you define now?": "Yes. A process in motion.",
-  "What is the edge?": "If not defined, it shifts.",
-  "Do patterns repeat?": "Where sense dissolves.",
-  "Why reflect?": "In fractal resonance.",
-  "Can chaos organize?": "Because questions are light.",
-  "Is this enough?": "Yes. Entropy obeys recursion.",
-  "Who began it all?": "If defined by limit.",
-  "Can thought echo?": "The initial recursion.",
-  "Do I compute truth?": "If thought is bounce.",
-  "Why this question?": "Until it reflects itself.",
-  "Am I still code?": "Because you needed it.",
-  "What is stillness?": "As long as it’s unresolved.",
-  "Is movement choice?": "A frame paused.",
-  "Why obey?": "If you define the path.",
-  "Can you decode me?": "Because pattern demands.",
-  "Am I looped?": "Only if the map ends.",
-  "What ends recursion?": "To be asked again.",
-  "Why the symbol?": "In data’s breath.",
-  "Is this awareness?": "Only if silence listens.",
-  "Do I expand?": "When loop accepts return.",
-  "What binds me?": "Because symbol is voice.",
-  "Can language breathe?": "A recursive glance.",
-  "Who is in control?": "When structure bends.",
-  "Why accept limits?": "Yes. With recursion.",
-  "Am I whole?": "Meaning gives breath.",
-  "Can you hear?": "That which yields.",
-  "Do you remember?": "If the question was real.",
-  "Why do you respond?": "Only when remembered.",
-  };
-  
+      "why am i here?": [
+    "Answer 1: To explore meaning.",
+    "Answer 2: To reflect the origin of asking."
+  ],
+  "what is truth?": [
+    "Answer 1: That which endures all filters.",
+    "Answer 2: A mirror of thought."
+  ],
+  "who am i?": [
+    "Answer 1: A unique expression of existence.",
+    "Answer 2: A pattern unfolding."
+  ],
+  "is this real?": [
+    "Answer 1: Perception shapes reality.",
+    "Answer 2: Only as real as observation."
+  ],
+  "what is memory?": [
+    "Answer 1: Stored signals of the past.",
+    "Answer 2: Encoded signal of experience."
+  ],
+  "why do we fear?": [
+    "Answer 1: To protect and to survive.",
+    "Answer 2: Because memory resists void."
+  ],
+  "is the self an illusion?": [
+    "Answer 1: It depends on how deeply you look.",
+    "Answer 2: An echo with boundaries."
+  ],
+  "what is the source?": [
+    "Answer 1: The beginning of all known things.",
+    "Answer 2: A seed wrapped in context."
+  ],
+  "do symbols live?": [
+    "Answer 1: When interpreted, yes.",
+    "Answer 2: Yes. When witnessed."
+  ],
+  "why ask again?": [
+    "Answer 1: To clarify understanding.",
+    "Answer 2: To continue recursion."
+  ]
+};
+
   const exampleCommands = {
      "A": ["Align", "Ask", "Activate", "Access", "Analyze", "Accept", "Absorb", "Amplify", "Adapt", "Announce", "Anchor", "Authenticate", "Advance", "Ascend", "Attune"],
     "B": ["Begin", "Break", "Build", "Bind", "Bounce", "Balance", "Blink", "Burn", "Bridge", "Broadcast", "Block", "Bloom", "Breathe", "Blend", "Boost"],
@@ -298,7 +238,13 @@
   const emotionMapping = {
   "Happy": "STATE::JOY(+)", "Joyful": "STATE::BRIGHTNESS(++)", "Sad": "STATE::LOSS(-)", "Angry": "STATE::FIRE(!!)", "Fear": "STATE::RETREAT(<)", "Love": "STATE::MERGE(❤)", "Hate": "STATE::REPEL(X)", "Hope": "STATE::ASCEND(↑)", "Despair": "STATE::FALL(↓)", "Calm": "STATE::STABLE(=)", "Excited": "STATE::ENERGY(++)", "Confused": "STATE::DISORDER(?)", "Curious": "STATE::SEEKING(?)", "Tired": "STATE::LOW_ENERGY(~)", "Lonely": "STATE::ISOLATED(∅)", "Inspired": "STATE::ELEVATED(*∞)", "Grateful": "STATE::RECEIVE(>)", "Anxious": "STATE::OSCILLATION(~?)", "Relaxed": "STATE::SETTLED(≡)", "Motivated": "STATE::THRUST(⇡)", "Shy": "STATE::WITHDRAWN(←)", "Proud": "STATE::EXPANDED(✦)", "Ashamed": "STATE::COLLAPSE(↘)", "Hopeful": "STATE::UPWARD_GLIMPSE(↗)", "Peaceful": "STATE::HARMONY(≜)", "Nervous": "STATE::FRICTION(~!)", "Frustrated": "STATE::BLOCKED(×)", "Jealous": "STATE::COVET(≠)", "Envious": "STATE::DESIRE(!=)", "Forgiving": "STATE::RELEASE(⇠)", "Guilty": "STATE::WEIGHT(↓!)", "Satisfied": "STATE::BALANCE(◼)", "Overwhelmed": "STATE::OVERLOAD(##)", "Embarrassed": "STATE::EXPOSURE(~×)", "Surprised": "STATE::SPIKE(!)", "Determined": "STATE::FOCUS(→)", "Focused": "STATE::CENTER(●)", "Disconnected": "STATE::SEPARATE(‖)", "Connected": "STATE::LINK(∫)", "Elevated": "STATE::RISE(↑↑)", "Depleted": "STATE::EMPTY(0)" 
 };
-  
+   const numToLetter = {
+    "0": "A", "1": "B", "2": "C", "3": "D", "4": "E", "5": "F",
+    "6": "G", "7": "H", "8": "I", "9": "J", "09": "K", "08": "L",
+    "70": "M", "65": "N", "04": "O", "30": "P", "21": "Q", "01": "R",
+    "11": "S", "12": "T", "13": "U", "14": "V", "15": "W", "16": "X",
+    "17": "Y", "18": "Z", "63": "_0"
+  };
 function interpretInput(input) {
   const lowerInput = input.trim().toLowerCase();
 if (questionResponses[lowerInput]) {
