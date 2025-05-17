@@ -490,8 +490,8 @@ const emojiResponseMap = {
   "😳": { feeling: "Neutral", opposite: "Composure" },
   "🤗": { feeling: "Good", opposite: "Isolation" },
   "🤫": { feeling: "Neutral", opposite: "Expression" },
-  "😔": { feeling: "Bad", opposite: "Motivation" }
-    "😩": { feeling: "Bad", opposite: "Resilience" },
+  "😔": { feeling: "Bad", opposite: "Motivation" },
+  "😩": { feeling: "Bad", opposite: "Resilience" },
   "😖": { feeling: "Bad", opposite: "Clarity" },
   "😫": { feeling: "Bad", opposite: "Flow" },
   "😰": { feeling: "Bad", opposite: "Peace" },
@@ -516,7 +516,7 @@ const emojiResponseMap = {
   "🫶": { feeling: "Good", opposite: "Separation" },
   "🧘": { feeling: "Good", opposite: "Distraction" },
   "🤝": { feeling: "Good", opposite: "Division" },
-  "🧠": { feeling: "Singular", opposite: "Rafat" },
+  "🧠": { feeling: "Singular", opposite: "Rafat" }
 };
    const numToLetter = {
     "0": "A", "1": "B", "2": "C", "3": "D", "4": "E", "5": "F",
@@ -536,6 +536,15 @@ if (questionResponses[lowerInput]) {
   terminal.scrollTop = terminal.scrollHeight;
   return;
 }
+if (emojiResponseMap[input.trim()]) {
+  const emojiData = emojiResponseMap[input.trim()];
+  const botReply = document.createElement("div");
+  botReply.className = "cmd-line";
+  botReply.innerHTML = `Feeling: <b>${emojiData.feeling}</b><br>Opposite: <b>${emojiData.opposite}</b>`;
+  terminal.appendChild(botReply);
+  terminal.scrollTop = terminal.scrollHeight;
+  return;
+}
 if (input.trim() === "B = A") {
   const loopDiv = document.createElement("div");
   loopDiv.className = "loop-effect";
@@ -548,15 +557,7 @@ if (input.trim() === "B = A") {
   }, 8000);
   return;
 }
-if (emojiResponseMap[input.trim()]) {
-  const emojiData = emojiResponseMap[input.trim()];
-  const botReply = document.createElement("div");
-  botReply.className = "cmd-line";
-  botReply.innerHTML = `Feeling: <b>${emojiData.feeling}</b><br>Opposite: <b>${emojiData.opposite}</b>`;
-  terminal.appendChild(botReply);
-  terminal.scrollTop = terminal.scrollHeight;
-  return;
-}
+
   const result = [];
   words.forEach(word => {
   const mapped = grammarMapping[word] || mathMapping[word] || emotionMapping[word] || emojiResponseMap[word];
