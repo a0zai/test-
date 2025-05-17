@@ -281,8 +281,15 @@
 function interpretInput(input) {
   const lowerInput = input.trim().toLowerCase();
   if (questionResponses[lowerInput]) {
-    return questionResponses[lowerInput];
-
+  const response = questionResponses[lowerInput];
+  const botReply = document.createElement("div");
+  botReply.className = "cmd-line";
+  terminal.appendChild(botReply);
+  typeReply(response, botReply);
+  terminal.scrollTop = terminal.scrollHeight;
+  return;
+  
+}
   const result = [];
 
   const words = input.split(/\s+/);
