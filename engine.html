@@ -935,7 +935,9 @@
 "can a repo change the world?": [
   "Not alone. But it can tilt it.",
   "If it’s built with intention, then yes — it already did."
-],
+  ],
+ };
+  const bilingualResponses = [
         "question_ar": "من أنت؟",
         "question_nl": "Wie ben jij?",
         "answers": [
@@ -1162,7 +1164,19 @@ const emojiResponseMap = {
   };
 function interpretInput(input) {
   const lowerInput = input.trim().toLowerCase();
+  const matched = bilingualResponses.find(item => 
+    item.question_ar.trim().toLowerCase() === lowerInput || 
+    item.question_nl.trim().toLowerCase() === lowerInput
+  );
 
+  if (matched) {
+    const botReply = document.createElement("div");
+    botReply.className = "cmd-line";
+    botReply.innerHTML = matched.answers.join("<br>");
+    terminal.appendChild(botReply);
+    terminal.scrollTop = terminal.scrollHeight;
+    return;
+    }
   if (questionResponses[lowerInput]) {
     const responses = questionResponses[lowerInput];
     const botReply = document.createElement("div");
