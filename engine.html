@@ -548,20 +548,11 @@ if (input.trim() === "B = A") {
   }, 8000);
   return;
 }
-if (emojiResponseMap[input.trim()]) {
-  const emojiData = emojiResponseMap[input.trim()];
-  const botReply = document.createElement("div");
-  botReply.className = "cmd-line";
-  botReply.innerHTML = `Feeling: <b>${emojiData.feeling}</b><br>Opposite: <b>${emojiData.opposite}</b>`;
-  terminal.appendChild(botReply);
-  terminal.scrollTop = terminal.scrollHeight;
-  return;
-}
   const result = [];
 
   const words = input.split(/\s+/);
   words.forEach(word => {
-    const mapped = grammarMapping[word] || mathMapping[word] || emotionMapping[word];
+    const mapped = grammarMapping[word] || mathMapping[word] || emotionMapping[word] || emojiResponseMap[word] ;
     if (mapped) {
       result.push(word + " → " + mapped);
     }
