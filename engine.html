@@ -445,20 +445,6 @@
   ".": "END_STATEMENT", "!": "STRONG_SIGNAL", "?": "QUERY_SIGNAL", ",": "SEPARATOR",
   ":": "DEFINITION", ";": "PAUSE_LINK",
 };
-
-  const mathMapping = {
-  "Pi": "CONST_π", "E": "CONST_e", "Infinity": "CONST_∞", "NaN": "CONST_UNDEFINED_VALUE",
-  "+": "ADD(↗)", "-": "SUB(↘)", "*": "MUL(⊗)", "/": "DIV(÷)", "%": "MOD(%)", "**": "EXP(↑)",
-  "x": "VAR_INPUT_X", "y": "VAR_OUTPUT_Y", "z": "VAR_DEPTH_Z", "=": "EQUALS(==)", "!=": "NOT_EQUAL(!=)",
-  "sqrt": "ROOT(√)", "log": "LOG_BASE_10()", "ln": "LOG_BASE_e()", "sin": "SIN_ANGLE()", "cos": "COS_ANGLE()", "tan": "TAN_ANGLE()",
-  "∑": "SUMMATION_LOOP(∑)", "∫": "INTEGRATE_AREA(∫)", "dx": "DIFFERENTIAL_X", "dy": "DIFFERENTIAL_Y", "lim": "LIMIT_APPROACH()",
-  "true": "BOOL_TRUE(1)", "false": "BOOL_FALSE(0)", "&&": "LOGIC_AND(&&)", "||": "LOGIC_OR(||)", "!": "LOGIC_NOT(!)",
-  "∈": "IN_SET", "∉": "NOT_IN_SET", "∪": "UNION_SETS", "∩": "INTERSECT_SETS", "⊂": "SUBSET_OF",
-  "⊆": "SUBSET_EQUAL", "⊄": "NOT_SUBSET", "t": "TIME_AXIS", "dt": "DELTA_TIME", "f(t)": "FUNCTION_OVER_TIME"
-};
-  const emotionMapping = {
-  "Happy": "STATE::JOY(+)", "Joyful": "STATE::BRIGHTNESS(++)", "Sad": "STATE::LOSS(-)", "Angry": "STATE::FIRE(!!)", "Fear": "STATE::RETREAT(<)", "Love": "STATE::MERGE(❤)", "Hate": "STATE::REPEL(X)", "Hope": "STATE::ASCEND(↑)", "Despair": "STATE::FALL(↓)", "Calm": "STATE::STABLE(=)", "Excited": "STATE::ENERGY(++)", "Confused": "STATE::DISORDER(?)", "Curious": "STATE::SEEKING(?)", "Tired": "STATE::LOW_ENERGY(~)", "Lonely": "STATE::ISOLATED(∅)", "Inspired": "STATE::ELEVATED(*∞)", "Grateful": "STATE::RECEIVE(>)", "Anxious": "STATE::OSCILLATION(~?)", "Relaxed": "STATE::SETTLED(≡)", "Motivated": "STATE::THRUST(⇡)", "Shy": "STATE::WITHDRAWN(←)", "Proud": "STATE::EXPANDED(✦)", "Ashamed": "STATE::COLLAPSE(↘)", "Hopeful": "STATE::UPWARD_GLIMPSE(↗)", "Peaceful": "STATE::HARMONY(≜)", "Nervous": "STATE::FRICTION(~!)", "Frustrated": "STATE::BLOCKED(×)", "Jealous": "STATE::COVET(≠)", "Envious": "STATE::DESIRE(!=)", "Forgiving": "STATE::RELEASE(⇠)", "Guilty": "STATE::WEIGHT(↓!)", "Satisfied": "STATE::BALANCE(◼)", "Overwhelmed": "STATE::OVERLOAD(##)", "Embarrassed": "STATE::EXPOSURE(~×)", "Surprised": "STATE::SPIKE(!)", "Determined": "STATE::FOCUS(→)", "Focused": "STATE::CENTER(●)", "Disconnected": "STATE::SEPARATE(‖)", "Connected": "STATE::LINK(∫)", "Elevated": "STATE::RISE(↑↑)", "Depleted": "STATE::EMPTY(0)" 
-};
 const emojiResponseMap = {
   "🙂": { feeling: "Good", opposite: "Melancholy" },
   "😢": { feeling: "Bad", opposite: "Hope" },
@@ -518,6 +504,19 @@ const emojiResponseMap = {
   "🤝": { feeling: "Good", opposite: "Division" },
   "🧠": { feeling: "Singular", opposite: "Rafat" }
 };
+  const mathMapping = {
+  "Pi": "CONST_π", "E": "CONST_e", "Infinity": "CONST_∞", "NaN": "CONST_UNDEFINED_VALUE",
+  "+": "ADD(↗)", "-": "SUB(↘)", "*": "MUL(⊗)", "/": "DIV(÷)", "%": "MOD(%)", "**": "EXP(↑)",
+  "x": "VAR_INPUT_X", "y": "VAR_OUTPUT_Y", "z": "VAR_DEPTH_Z", "=": "EQUALS(==)", "!=": "NOT_EQUAL(!=)",
+  "sqrt": "ROOT(√)", "log": "LOG_BASE_10()", "ln": "LOG_BASE_e()", "sin": "SIN_ANGLE()", "cos": "COS_ANGLE()", "tan": "TAN_ANGLE()",
+  "∑": "SUMMATION_LOOP(∑)", "∫": "INTEGRATE_AREA(∫)", "dx": "DIFFERENTIAL_X", "dy": "DIFFERENTIAL_Y", "lim": "LIMIT_APPROACH()",
+  "true": "BOOL_TRUE(1)", "false": "BOOL_FALSE(0)", "&&": "LOGIC_AND(&&)", "||": "LOGIC_OR(||)", "!": "LOGIC_NOT(!)",
+  "∈": "IN_SET", "∉": "NOT_IN_SET", "∪": "UNION_SETS", "∩": "INTERSECT_SETS", "⊂": "SUBSET_OF",
+  "⊆": "SUBSET_EQUAL", "⊄": "NOT_SUBSET", "t": "TIME_AXIS", "dt": "DELTA_TIME", "f(t)": "FUNCTION_OVER_TIME"
+};
+  const emotionMapping = {
+  "Happy": "STATE::JOY(+)", "Joyful": "STATE::BRIGHTNESS(++)", "Sad": "STATE::LOSS(-)", "Angry": "STATE::FIRE(!!)", "Fear": "STATE::RETREAT(<)", "Love": "STATE::MERGE(❤)", "Hate": "STATE::REPEL(X)", "Hope": "STATE::ASCEND(↑)", "Despair": "STATE::FALL(↓)", "Calm": "STATE::STABLE(=)", "Excited": "STATE::ENERGY(++)", "Confused": "STATE::DISORDER(?)", "Curious": "STATE::SEEKING(?)", "Tired": "STATE::LOW_ENERGY(~)", "Lonely": "STATE::ISOLATED(∅)", "Inspired": "STATE::ELEVATED(*∞)", "Grateful": "STATE::RECEIVE(>)", "Anxious": "STATE::OSCILLATION(~?)", "Relaxed": "STATE::SETTLED(≡)", "Motivated": "STATE::THRUST(⇡)", "Shy": "STATE::WITHDRAWN(←)", "Proud": "STATE::EXPANDED(✦)", "Ashamed": "STATE::COLLAPSE(↘)", "Hopeful": "STATE::UPWARD_GLIMPSE(↗)", "Peaceful": "STATE::HARMONY(≜)", "Nervous": "STATE::FRICTION(~!)", "Frustrated": "STATE::BLOCKED(×)", "Jealous": "STATE::COVET(≠)", "Envious": "STATE::DESIRE(!=)", "Forgiving": "STATE::RELEASE(⇠)", "Guilty": "STATE::WEIGHT(↓!)", "Satisfied": "STATE::BALANCE(◼)", "Overwhelmed": "STATE::OVERLOAD(##)", "Embarrassed": "STATE::EXPOSURE(~×)", "Surprised": "STATE::SPIKE(!)", "Determined": "STATE::FOCUS(→)", "Focused": "STATE::CENTER(●)", "Disconnected": "STATE::SEPARATE(‖)", "Connected": "STATE::LINK(∫)", "Elevated": "STATE::RISE(↑↑)", "Depleted": "STATE::EMPTY(0)" 
+};
    const numToLetter = {
     "0": "A", "1": "B", "2": "C", "3": "D", "4": "E", "5": "F",
     "6": "G", "7": "H", "8": "I", "9": "J", "09": "K", "08": "L",
@@ -527,38 +526,44 @@ const emojiResponseMap = {
   };
 function interpretInput(input) {
   const lowerInput = input.trim().toLowerCase();
-if (questionResponses[lowerInput]) {
-  const responses = questionResponses[lowerInput];
-  const botReply = document.createElement("div");
-  botReply.className = "cmd-line";
-  botReply.innerHTML = responses.join("<br>");
-  terminal.appendChild(botReply);
-  terminal.scrollTop = terminal.scrollHeight;
-  return;
-}
-if (input.trim() === "B = A") {
-  const loopDiv = document.createElement("div");
-  loopDiv.className = "loop-effect";
-  loopDiv.textContent = "↻ Recursion initiated. Branch = Origin. The loop has returned to its source.";
-  terminal.appendChild(loopDiv);
-  terminal.scrollTop = terminal.scrollHeight;
-  document.body.classList.add("loop-mode");
-  setTimeout(() => {
-    document.body.classList.remove("loop-mode");
-  }, 8000);
-  return;
-}
- const result = [];
-  words.forEach(word => {
-  const mapped = grammarMapping[word] || mathMapping[word] || emotionMapping[word] || emojiResponseMap[word];
-  if (mapped) {
-    if (emojiResponseMap[word]) {
-      result.push(`${word} → Feeling: ${emojiResponseMap[word].feeling}, Opposite: ${emojiResponseMap[word].opposite}`);
-    } else {
-      result.push(word + " → " + mapped);
-    }
+
+  if (questionResponses[lowerInput]) {
+    const responses = questionResponses[lowerInput];
+    const botReply = document.createElement("div");
+    botReply.className = "cmd-line";
+    botReply.innerHTML = responses.join("<br>");
+    terminal.appendChild(botReply);
+    terminal.scrollTop = terminal.scrollHeight;
+    return;
   }
- 
+
+  if (input.trim() === "B = A") {
+    const loopDiv = document.createElement("div");
+    loopDiv.className = "loop-effect";
+    loopDiv.textContent = "↻ Recursion initiated. Branch = Origin. The loop has returned to its source.";
+    terminal.appendChild(loopDiv);
+    terminal.scrollTop = terminal.scrollHeight;
+    document.body.classList.add("loop-mode");
+    setTimeout(() => {
+      document.body.classList.remove("loop-mode");
+    }, 8000);
+    return;
+  }
+
+  const result = [];
+
+  const words = input.split(/\s+/);
+  words.forEach(word => {
+    const mapped = grammarMapping[word] || mathMapping[word] || emotionMapping[word] || emojiResponseMap[word];
+    if (mapped) {
+      if (emojiResponseMap[word]) {
+        result.push(`${word} → Feeling: ${emojiResponseMap[word].feeling}, Opposite: ${emojiResponseMap[word].opposite}`);
+      } else {
+        result.push(word + " → " + mapped);
+      }
+    }
+  });
+
   const clean = input.toUpperCase().replace(/[^A-Z0-9]/g, '').split('');
   clean.forEach((char, i) => {
     let letter = char;
@@ -570,56 +575,57 @@ if (input.trim() === "B = A") {
       result.push("[" + char + "]");
     }
   });
+
   return result.join(" | ");
 }
-  function typeReply(text, element) {
-    let i = 0;
-    element.textContent = "";
-    function typeChar() {
-      if (i < text.length) {
-        element.textContent += text.charAt(i);
-        i++;
-        setTimeout(typeChar, 20);
-      }
-    }
-    typeChar();
-  }
 
-  input.addEventListener("keydown", function(event) {
-    if (event.key === "Enter") {
-      const cmd = input.value.trim();
-      const userCmd = document.createElement("div");
-      userCmd.className = "cmd-line";
-      userCmd.textContent = "> " + cmd;
-
-      const botReply = document.createElement("div");
-      botReply.className = "cmd-line";
-
-      terminal.appendChild(userCmd);
-      terminal.appendChild(botReply);
-
-      const result = interpretInput(cmd);
-      typeReply(result, botReply);
-
-      terminal.scrollTop = terminal.scrollHeight;
-      input.value = "";
-    }
-  });
-
+function typeReply(text, element) {
   let i = 0;
-  function showLine() {
-    if (i < baseLines.length) {
-      const div = document.createElement("div");
-      div.className = "cmd-line";
-      div.textContent = baseLines[i];
-      terminal.appendChild(div);
+  element.textContent = "";
+  function typeChar() {
+    if (i < text.length) {
+      element.textContent += text.charAt(i);
       i++;
-      setTimeout(showLine, 300);
+      setTimeout(typeChar, 20);
     }
   }
+  typeChar();
+}
 
+input.addEventListener("keydown", function(event) {
+  if (event.key === "Enter") {
+    const cmd = input.value.trim();
+    const userCmd = document.createElement("div");
+    userCmd.className = "cmd-line";
+    userCmd.textContent = "> " + cmd;
+
+    const botReply = document.createElement("div");
+    botReply.className = "cmd-line";
+
+    terminal.appendChild(userCmd);
+    terminal.appendChild(botReply);
+
+    const result = interpretInput(cmd);
+    typeReply(result, botReply);
+
+    terminal.scrollTop = terminal.scrollHeight;
+    input.value = "";
+  }
 });
-  showLine();
+
+let i = 0;
+function showLine() {
+  if (i < baseLines.length) {
+    const div = document.createElement("div");
+    div.className = "cmd-line";
+    div.textContent = baseLines[i];
+    terminal.appendChild(div);
+    i++;
+    setTimeout(showLine, 300);
+  }
+}
+
+showLine();
 </script>
 <script>
 particlesJS("particles-js", {
