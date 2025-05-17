@@ -536,15 +536,6 @@ if (questionResponses[lowerInput]) {
   terminal.scrollTop = terminal.scrollHeight;
   return;
 }
-if (emojiResponseMap[input.trim()]) {
-  const emojiData = emojiResponseMap[input.trim()];
-  const botReply = document.createElement("div");
-  botReply.className = "cmd-line";
-  botReply.innerHTML = `Feeling: <b>${emojiData.feeling}</b><br>Opposite: <b>${emojiData.opposite}</b>`;
-  terminal.appendChild(botReply);
-  terminal.scrollTop = terminal.scrollHeight;
-  return;
-}
 if (input.trim() === "B = A") {
   const loopDiv = document.createElement("div");
   loopDiv.className = "loop-effect";
@@ -557,7 +548,17 @@ if (input.trim() === "B = A") {
   }, 8000);
   return;
 }
-
+ const result = [];
+  words.forEach(word => {
+  const mapped = grammarMapping[word] || mathMapping[word] || emotionMapping[word] || emojiResponseMap[word];
+  if (mapped) {
+    if (emojiResponseMap[word]) {
+      result.push(`${word} → Feeling: ${emojiResponseMap[word].feeling}, Opposite: ${emojiResponseMap[word].opposite}`);
+    } else {
+      result.push(word + " → " + mapped);
+    }
+  }
+ 
   const clean = input.toUpperCase().replace(/[^A-Z0-9]/g, '').split('');
   clean.forEach((char, i) => {
     let letter = char;
@@ -617,16 +618,6 @@ if (input.trim() === "B = A") {
     }
   }
 
-  const result = [];
-  words.forEach(word => {
-  const mapped = grammarMapping[word] || mathMapping[word] || emotionMapping[word] || emojiResponseMap[word];
-  if (mapped) {
-    if (emojiResponseMap[word]) {
-      result.push(`${word} → Feeling: ${emojiResponseMap[word].feeling}, Opposite: ${emojiResponseMap[word].opposite}`);
-    } else {
-      result.push(word + " → " + mapped);
-    }
-  }
 });
   showLine();
 </script>
