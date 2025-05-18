@@ -1160,7 +1160,8 @@ const emojiResponseMap = {
     "17": "Y", "18": "Z", "63": "_0"
   };
 function interpretInput(input) {
-   input.trim().toLowerCase();
+    const lowerInput = input.trim().toLowerCase();
+
   if (questionResponses[lowerInput]) {
     const responses = questionResponses[lowerInput];
     const botReply = document.createElement("div");
@@ -1182,7 +1183,7 @@ function interpretInput(input) {
       document.body.classList.remove("loop-mode");
     }, 8000);
     return;
-  }
+  
 
   const result = [];
 
