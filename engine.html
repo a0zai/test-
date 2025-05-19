@@ -1,3 +1,4 @@
+<html lang="en">
 <head>
   <meta charset="UTF-8">
 <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
@@ -1242,8 +1243,10 @@ function interpretInput(input) {
   
 }
   const result = [];
-const words = input.toLowerCase().split(/\s+/);
-    const mapped = grammarMapping[word] || mathMapping[word] || emojiResponseMap[word] || emotionMapping[word];
+
+  const words = input.split(/\s+/);
+  words.forEach(word => {
+    const mapped = grammarMapping[word] || mathMapping[word] || emotionMapping[word] || emojiResponseMap[word];
         if (mapped) {
       if (emojiResponseMap[word]) {
         result.push(`${word} → Feeling: ${emojiResponseMap[word].feeling}, Opposite: ${emojiResponseMap[word].opposite}`);
@@ -1315,7 +1318,7 @@ function showLine() {
 }
 
 showLine();
-</script>
+</body>
 <script>
 particlesJS("particles-js", {
   "particles": {
@@ -1346,5 +1349,5 @@ particlesJS("particles-js", {
   }
 });
 </script>
-</body>
+</script>
 </html>
