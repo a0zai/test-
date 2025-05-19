@@ -2198,14 +2198,7 @@ const questionMapping = {
 };
 
 function cleanInput(input) {
-  return input.toLowerCase().replace(/[^\w\s]/g, '').trim();
-}
-
-const input = "Why am I here?";
-const cleaned = cleanInput(input);
-const reply = questionMapping[cleaned];
-
-console.log(reply);
+  return input.toLowerCase()
 
   if (input.trim() === "B = A") {
     const loopDiv = document.createElement("div");
@@ -2224,7 +2217,7 @@ console.log(reply);
 
   const words = input.split(/\s+/);
   words.forEach(word => {
-    const mapped = questionResponses[word] || grammarMapping[word] || mathMapping[word] || emotionMapping[word] || emojiResponseMap[word];
+    const mapped = questionmapping[word] || grammarMapping[word] || mathMapping[word] || emotionMapping[word] || emojiResponseMap[word];
         if (mapped) {
       if (emojiResponseMap[word]) {
         result.push(`${word} → Feeling: ${emojiResponseMap[word].feeling}, Opposite: ${emojiResponseMap[word].opposite}`);
