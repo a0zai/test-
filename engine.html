@@ -1227,17 +1227,7 @@ const emojiResponseMap = {
   };
 function interpretInput(input) {
     const lowerInput = 
-  const result = [];
  input.trim().toLowerCase();
-      if (questionResponses[trimmedInput]) {
-    const answer = questionResponses[trimmedInput];
-    if (Array.isArray(answer)) {
-      result.push(`→ ${answer[0]} / ${answer[1]}`);
-    } else {
-      result.push(`→ ${answer}`);
-    }
-    return result.join(" | ");
-
 
   if (input.trim() === "B = A") {
     const loopDiv = document.createElement("div");
@@ -1252,6 +1242,16 @@ function interpretInput(input) {
     return;
   
 }
+  const result = [];
+        if (questionResponses[trimmedInput]) {
+    const answer = questionResponses[trimmedInput];
+    if (Array.isArray(answer)) {
+      result.push(`→ ${answer[0]} / ${answer[1]}`);
+    } else {
+      result.push(`→ ${answer}`);
+    }
+    return result.join(" | ");
+
     const words = input.split(/\s+/);
 words.forEach(word => {
   const mapped = questionResponses[word] || grammarMapping[word] || mathMapping[word] || emotionMapping[word] || emojiResponseMap[word];
