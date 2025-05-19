@@ -135,7 +135,8 @@
     "Awaiting world..."
   ];
  
-  const questionResponses = {
+  const  questionMapping = {
+     "why am i here": "To explore meaning / To reflect the origin of asking",
       "why am i here?": [
     "Answer 1: To explore meaning.",
     "Answer 2: To reflect the origin of asking."
@@ -2190,7 +2191,21 @@ const emojiResponseMap = {
   };
 function interpretInput(input) {
     const lowerInput = input.trim().toLowerCase();
+const questionMapping = {
+  "why am i here": "To explore meaning / To reflect the origin of asking",
+  "what is truth": "That which endures all filters / A mirror of thought",
+  // ...
+};
 
+function cleanInput(input) {
+  return input.toLowerCase().replace(/[^\w\s]/g, '').trim();
+}
+
+const input = "Why am I here?";
+const cleaned = cleanInput(input);
+const reply = questionMapping[cleaned];
+
+console.log(reply);
 
   if (input.trim() === "B = A") {
     const loopDiv = document.createElement("div");
