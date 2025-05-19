@@ -1228,15 +1228,18 @@ const emojiResponseMap = {
 function interpretInput(input) {
     const lowerInput = 
  input.trim().toLowerCase();
-  if (questionResponses[trimmedInput]) {
-    const answer = questionResponses[trimmedInput];
-    if (Array.isArray(answer)) {
-      result.push(`→ ${answer[0]} / ${answer[1]}`);
-    } else {
-      result.push(`→ ${answer}`);
-    }
-    return result.join(" | ");
-}
+    if (input.trim() === "B = A") {
+    const loopDiv = document.createElement("div");
+    loopDiv.className = "loop-effect";
+    loopDiv.textContent = "↻ Recursion initiated. Branch = Origin. The loop has returned to its source.";
+    terminal.appendChild(loopDiv);
+    terminal.scrollTop = terminal.scrollHeight;
+    document.body.classList.add("loop-mode");
+    setTimeout(() => {
+      document.body.classList.remove("loop-mode");
+    }, 8000);
+    return;
+  
   const result = [];
 
     const words = input.split(/\s+/);
