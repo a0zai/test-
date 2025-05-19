@@ -1227,6 +1227,14 @@ const emojiResponseMap = {
   };
 function interpretInput(input) {
     const lowerInput = input.trim().toLowerCase();
+      if (questionResponses[trimmedInput]) {
+    const answer = questionResponses[trimmedInput];
+    if (Array.isArray(answer)) {
+      result.push(`→ ${answer[0]} / ${answer[1]}`);
+    } else {
+      result.push(`→ ${answer}`);
+    }
+    return result.join(" | ");
 
 
   if (input.trim() === "B = A") {
