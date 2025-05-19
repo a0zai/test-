@@ -1243,14 +1243,6 @@ function interpretInput(input) {
   
 }
   const result = [];
-        if (questionResponses[trimmedInput]) {
-    const answer = questionResponses[trimmedInput];
-    if (Array.isArray(answer)) {
-      result.push(`→ ${answer[0]} / ${answer[1]}`);
-    } else {
-      result.push(`→ ${answer}`);
-    }
-    return result.join(" | ");
 
     const words = input.split(/\s+/);
 words.forEach(word => {
@@ -1268,6 +1260,14 @@ words.forEach(word => {
 
   const clean = input.toUpperCase().replace(/[^A-Z0-9]/g, '').split('');
   clean.forEach((char, i) => {
+           if (questionResponses[trimmedInput]) {
+    const answer = questionResponses[trimmedInput];
+    if (Array.isArray(answer)) {
+      result.push(`→ ${answer[0]} / ${answer[1]}`);
+    } else {
+      result.push(`→ ${answer}`);
+    }
+    return result.join(" | ");
     let letter = char;
     if (numToLetter[char]) letter = numToLetter[char];
     if (exampleCommands[letter]) {
