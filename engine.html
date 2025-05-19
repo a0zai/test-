@@ -1243,22 +1243,19 @@ function interpretInput(input) {
   
 }
   const result = [];
-
-  const words = input.split(/\s+/);
-  words.forEach(word => {
-    if (questionResponses[word]) {
-  const answer = typeof questionResponses[word] === 'string' ? questionResponses[word] : JSON.stringify(questionResponses[word]);
-  result.push(word + " → " + answer);
-}
-    const mapped = grammarMapping[word] || mathMapping[word] || emotionMapping[word] || emojiResponseMap[word];
-        if (mapped) {
-      if (emojiResponseMap[word]) {
-        result.push(`${word} → Feeling: ${emojiResponseMap[word].feeling}, Opposite: ${emojiResponseMap[word].opposite}`);
-      } else {
-        result.push(word + " → " + mapped);
-      }
+    const words = input.split(/\s+/);
+words.forEach(word => {
+  const mapped = questionResponses[word] || grammarMapping[word] || mathMapping[word] || emotionMapping[word] || emojiResponseMap[word];
+  if (mapped) {
+    if (emojiResponseMap[word]) {
+      result.push(`${word} → Feeling: ${emojiResponseMap[word].feeling}, Opposite: ${emojiResponseMap[word].opposite}`);
+    } else if (Array.isArray(mapped)) {
+      result.push(word + " → " + mapped.join(" / "));
+    } else {
+      result.push(word + " → " + mapped);
     }
-  });
+  }
+});
 
   const clean = input.toUpperCase().replace(/[^A-Z0-9]/g, '').split('');
   clean.forEach((char, i) => {
