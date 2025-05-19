@@ -1242,8 +1242,8 @@ function interpretInput(input) {
   
 }
   const result = [];
-
-    const mapped = grammarMapping[word] || mathMapping[word] || emotionMapping[word] || emojiResponseMap[word];
+const words = input.toLowerCase().split(/\s+/);
+    const mapped = grammarMapping[word] || mathMapping[word] || emojiResponseMap[word] || emotionMapping[word];
         if (mapped) {
       if (emojiResponseMap[word]) {
         result.push(`${word} → Feeling: ${emojiResponseMap[word].feeling}, Opposite: ${emojiResponseMap[word].opposite}`);
