@@ -1,4 +1,4 @@
- lang="en">
+ <html lang="en">
 <head>
   <meta charset="UTF-8">
 <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
@@ -1228,6 +1228,7 @@ const emojiResponseMap = {
 function interpretInput(input) {
     const lowerInput = input.trim().toLowerCase();
 
+
   if (input.trim() === "B = A") {
     const loopDiv = document.createElement("div");
     loopDiv.className = "loop-effect";
@@ -1243,8 +1244,6 @@ function interpretInput(input) {
 }
   const result = [];
 
-  const words = input.split(/\s+/);
-  words.forEach(word => {
     const mapped = grammarMapping[word] || mathMapping[word] || emotionMapping[word] || emojiResponseMap[word];
         if (mapped) {
       if (emojiResponseMap[word]) {
