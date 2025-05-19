@@ -1226,9 +1226,9 @@ const emojiResponseMap = {
     "17": "Y", "18": "Z", "63": "_0"
   };
 function interpretInput(input) {
-    const lowerInput = 
- input.trim().toLowerCase();
-    if (input.trim() === "B = A") {
+    const lowerInput = input.trim().toLowerCase();
+
+  if (input.trim() === "B = A") {
     const loopDiv = document.createElement("div");
     loopDiv.className = "loop-effect";
     loopDiv.textContent = "↻ Recursion initiated. Branch = Origin. The loop has returned to its source.";
@@ -1240,12 +1240,13 @@ function interpretInput(input) {
     }, 8000);
     return;
   
+}
   const result = [];
 
   const words = input.split(/\s+/);
   words.forEach(word => {
-    const mapped = grammarMapping[word] || mathMapping[word] || emotionMapping[word] || emojiResponseMap[word];
-        if (mapped) {
+    const mapped = questionResponses || grammarMapping[word] || mathMapping[word] || emotionMapping[word] || emojiResponseMap[word];
+    if (mapped) {
       if (emojiResponseMap[word]) {
         result.push(${word} → Feeling: ${emojiResponseMap[word].feeling}, Opposite: ${emojiResponseMap[word].opposite});
       } else {
