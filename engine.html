@@ -1226,7 +1226,9 @@ const emojiResponseMap = {
     "17": "Y", "18": "Z", "63": "_0"
   };
 function interpretInput(input) {
-    const lowerInput = input.trim().toLowerCase();
+    const lowerInput = 
+  const result = [];
+ input.trim().toLowerCase();
       if (questionResponses[trimmedInput]) {
     const answer = questionResponses[trimmedInput];
     if (Array.isArray(answer)) {
@@ -1250,7 +1252,6 @@ function interpretInput(input) {
     return;
   
 }
-  const result = [];
     const words = input.split(/\s+/);
 words.forEach(word => {
   const mapped = questionResponses[word] || grammarMapping[word] || mathMapping[word] || emotionMapping[word] || emojiResponseMap[word];
