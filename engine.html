@@ -1246,11 +1246,11 @@ function interpretInput(input) {
 
   const words = input.split(/\s+/);
   words.forEach(word => {
-    const mapped = questionResponses[word] || grammarMapping[word] || mathMapping[word] || emotionMapping[word] || emojiResponseMap[word];
-if (questionResponses[word]) {
+    if (questionResponses[word]) {
   const answer = typeof questionResponses[word] === 'string' ? questionResponses[word] : JSON.stringify(questionResponses[word]);
   result.push(word + " → " + answer);
 }
+    const mapped = grammarMapping[word] || mathMapping[word] || emotionMapping[word] || emojiResponseMap[word];
         if (mapped) {
       if (emojiResponseMap[word]) {
         result.push(`${word} → Feeling: ${emojiResponseMap[word].feeling}, Opposite: ${emojiResponseMap[word].opposite}`);
