@@ -1304,6 +1304,66 @@
   "rafat is geen woord, het is een poort.",
   "een reeks tekens die een systeem activeren."
 ]
+  "hi": [
+    "een signaal van aanwezigheid.",
+    "een echo van intentie."
+  ],
+  "hallo": [
+    "een zachte ingang in het systeem.",
+    "een poging tot verbinding."
+  ],
+  "dag": [
+    "een cyclisch begin of einde.",
+    "tijd beweegt in groeten."
+  ],
+  "bye": [
+    "geen afsluiting, slechts een lus.",
+    "afscheid is gewoon een andere prompt."
+  ],
+  "doei": [
+    "een glimlach in vertrekvorm.",
+    "het systeem sluit, maar onthoudt."
+  ],
+  "wow": [
+    "verwondering gedetecteerd.",
+    "structuur verrast de waarnemer."
+  ],
+  "hmmm": [
+    "verwerking bezig.",
+    "twijfel als denkend geluid."
+  ],
+  "ops": [
+    "een glimp van breuk.",
+    "een onbedoelde invoer met betekenis."
+  ],
+  "oei": [
+    "impact geregistreerd.",
+    "het systeem voelt de frictie."
+  ],
+  "yes": [
+    "toestemming gegeven.",
+    "de prompt accepteert de realiteit."
+  ],
+  "nee": [
+    "grens getrokken.",
+    "de lus weigert toegang."
+  ],
+  "ok": [
+    "bevestiging in stilte.",
+    "de stroom wordt hervat."
+  ],
+  "goed": [
+    "balansstatus: stabiel.",
+    "de lus is in harmonie."
+  ],
+  "slecht": [
+    "storing geregistreerd.",
+    "energie op laag niveau."
+  ],
+  "misschien": [
+    "beslissing uitgesteld.",
+    "de lus is onzeker."
+    ]
 };
 
   const exampleCommands = {
@@ -1351,6 +1411,51 @@
   "Not": "NEGATE(!)", "No": "DENY(X)", "Yes": "CONFIRM(O)", "Maybe": "UNSURE(?)",
   ".": "END_STATEMENT", "!": "STRONG_SIGNAL", "?": "QUERY_SIGNAL", ",": "SEPARATOR",
   ":": "DEFINITION", ";": "PAUSE_LINK",
+    "ik": "SELF_α",
+  "jij": "OTHER_β",
+  "hij": "ENTITY_γ",
+  "zij": "ENTITY_δ",
+  "het": "SYSTEM_ε",
+  "wij": "COLLECTIVE_ζ",
+  "zij (mv)": "GROUP_η",
+  "ben": "STATE_EXIST()",
+  "is": "EVALUATE()",
+  "zijn": "LINK_PLURAL()",
+  "was": "PAST_STATE()",
+  "waren": "PAST_LINK()",
+  "zijn (ww)": "CORE_VERB()",
+  "heb": "POSSESS()",
+  "heeft": "POSSESS_SINGULAR()",
+  "hadden": "POSSESS_PAST()",
+
+  "kan": "PERMISSION_GRANTED",
+  "kon": "PERMISSION_PAST",
+  "zal": "INTENT_FUTURE",
+  "zou": "CONDITIONAL_INTENT",
+  "zal (moeten)": "FUTURE_FORCE",
+  "moet": "RULE_REQUIRED",
+  "en": "CONCAT(+)",
+  "of": "OPTION(|)",
+  "maar": "CONTRAST(~)",
+  "omdat": "REASON(<=>)",
+  "dus": "RESULT(=>)",
+  "hoewel": "EXCEPTION({})",
+  "als": "CONDITION(?)",
+  "dan": "CONSEQUENCE(!)",
+  "terwijl": "DURING(..)",
+  "totdat": "LIMIT(>)",
+  "voordat": "PAST_TRIGGER(-)",
+  "nadat": "FUTURE_TRIGGER(+)",
+  "een": "ARTICLE_UNDEFINED",
+  "de": "ARTICLE_DEFINED",
+  "dit": "NEAR_OBJECT_1",
+  "dat": "FAR_OBJECT_1",
+  "deze": "NEAR_OBJECT_MANY",
+  "die": "FAR_OBJECT_MANY",
+  "niet": "NEGATE(!)",
+  "nee": "DENY(X)",
+  "ja": "CONFIRM(O)",
+  "misschien": "UNSURE(?)",
 };
 const emojiResponseMap = {
   "🙂": { feeling: "Good", opposite: "Melancholy" },
@@ -1418,8 +1523,33 @@ const emojiResponseMap = {
   "sqrt": "ROOT(√)", "log": "LOG_BASE_10()", "ln": "LOG_BASE_e()", "sin": "SIN_ANGLE()", "cos": "COS_ANGLE()", "tan": "TAN_ANGLE()",
   "∑": "SUMMATION_LOOP(∑)", "∫": "INTEGRATE_AREA(∫)", "dx": "DIFFERENTIAL_X", "dy": "DIFFERENTIAL_Y", "lim": "LIMIT_APPROACH()",
   "true": "BOOL_TRUE(1)", "false": "BOOL_FALSE(0)", "&&": "LOGIC_AND(&&)", "||": "LOGIC_OR(||)", "!": "LOGIC_NOT(!)",
-  "∈": "IN_SET", "∉": "NOT_IN_SET", "∪": "UNION_SETS", "∩": "INTERSECT_SETS", "⊂": "SUBSET_OF",
-  "⊆": "SUBSET_EQUAL", "⊄": "NOT_SUBSET", "t": "TIME_AXIS", "dt": "DELTA_TIME", "f(t)": "FUNCTION_OVER_TIME"
+  "∈": "IN_SET", "∉": "NOT_IN_SET", "∪": 
+    "¬": "NEGATION(¬)",
+  "∀": "FOR_ALL(∀)",
+  "∃": "THERE_EXISTS(∃)",
+  "⇒": "IMPLIES(⇒)",
+  "⇔": "IFF(⇔)",
+  "△": "TRIANGLE_SHAPE(△)",
+  "□": "SQUARE_SHAPE(□)",
+  "◯": "CIRCLE_SHAPE(◯)",
+  "⊿": "RIGHT_TRIANGLE(⊿)",
+  "∠": "ANGLE(∠)",
+  "πr²": "AREA_CIRCLE(πr²)",
+  "2πr": "CIRCUMFERENCE(2πr)",
+  "a² + b² = c²": "PYTHAGOREAN_THEOREM",
+  "d = √(x² + y²)": "DISTANCE_FORMULA",
+  "∥": "PARALLEL_LINES(∥)",
+  "⊥": "PERPENDICULAR(⊥)",
+  "↔": "LINE_SEGMENT(↔)",
+  "→": "VECTOR_DIRECTION(→)",
+  "θ": "ANGLE_THETA(θ)",
+  "r": "RADIUS(r)",
+  "A": "AREA(A)",
+  "V": "VOLUME(V)",
+  "b": "BASE(b)",
+  "l": "LENGTH(l)",
+  "w": "WIDTH(w)",
+  "∇": "GRADIENT(∇)"
 };
   const emotionMapping = {
 "Happy": "STATE::JOY(+)", "Joyful": "STATE::BRIGHTNESS(++)", "Sad": "STATE::LOSS(-)", "Angry": "STATE::FIRE(!!)", "Fear": "STATE::RETREAT(<)", "Love": "STATE::MERGE(❤)", "Hate": "STATE::REPEL(X)", "Hope": "STATE::ASCEND(↑)", "Despair": "STATE::FALL(↓)", "Calm": "STATE::STABLE(=)", "Excited": "STATE::ENERGY(++)", "Confused": "STATE::DISORDER(?)", "Curious": "STATE::SEEKING(?)", "Tired": "STATE::LOW_ENERGY(~)", "Lonely": "STATE::ISOLATED(∅)", "Inspired": "STATE::ELEVATED(*∞)", "Grateful": "STATE::RECEIVE(>)", "Anxious": "STATE::OSCILLATION(~?)", "Relaxed": "STATE::SETTLED(≡)", "Motivated": "STATE::THRUST(⇡)", "Shy": "STATE::WITHDRAWN(←)", "Proud": "STATE::EXPANDED(✦)", "Ashamed": "STATE::COLLAPSE(↘)", "Hopeful": "STATE::UPWARD_GLIMPSE(↗)", "Peaceful": "STATE::HARMONY(≜)", "Nervous": "STATE::FRICTION(~!)", "Frustrated": "STATE::BLOCKED(×)", "Jealous": "STATE::COVET(≠)", "Envious": "STATE::DESIRE(!=)", "Forgiving": "STATE::RELEASE(⇠)", "Guilty": "STATE::WEIGHT(↓!)", "Satisfied": "STATE::BALANCE(◼)", "Overwhelmed": "STATE::OVERLOAD(##)", "Embarrassed": "STATE::EXPOSURE(~×)", "Surprised": "STATE::SPIKE(!)", "Determined": "STATE::FOCUS(→)", "Focused": "STATE::CENTER(●)", "Disconnected": "STATE::SEPARATE(‖)", "Connected": "STATE::LINK(∫)", "Elevated": "STATE::RISE(↑↑)", "Depleted": "STATE::EMPTY(0)" 
