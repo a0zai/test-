@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>YA RAFAT</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></<script>
 
   <style>
     html, body {
@@ -18,6 +18,17 @@
         display: flex;
   flex-direction: column;
     }
+        #matrixCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      background: black;
+    }
+
     
   #particles-js {
   position: fixed;
@@ -83,23 +94,12 @@
   color: #ff0044;
   font-weight: bold;
 }
-  </style>
+  </style
  </head>
 
 <body>
 
-  <div id="particles-js"></div>
 
-  <div id="rafat-title">YA RAFAT</div>
-
-  <div id="terminal"></div>
-
-  <div class="input-line">
-    <input type="text" id="commandInput" placeholder="Type your command here..." autocomplete="off">
-  </div>
-
-  <script>
-    // particles.js config
     particlesJS("particles-js", {
       "particles": {
         "number": { "value": 80 },
@@ -119,6 +119,16 @@
   const terminal = document.getElementById("terminal");
   const input = document.getElementById("commandInput");
 
+
+<canvas id="matrixCanvas"></canvas>
+<div id="particles-js"></div>
+<div id="rafat-title">YA RAFAT</div>
+<div id="terminal"></div>
+<div class="input-line">
+  <input type="text" id="commandInput" placeholder="Type your command here..." autocomplete="off">
+</div>
+
+<script>
   const baseLines = [
     ">>> Executing: R.A.F.A.T.Y.A.O.S",
     "[R] Root system initialized...",
@@ -140,7 +150,57 @@
     "Response: Live signal online.",
     "Awaiting world..."
   ];
- 
+ const canvas = document.getElementById("matrixCanvas");
+  const ctx = canvas.getContext("2d");
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const fontSize = 16;
+  const columns = Math.floor(canvas.width / fontSize);
+  const drops = new Array(columns).fill(1);
+
+  function getRandomChar() {
+    const allText = baseLines.join(" ");
+    return allText.charAt(Math.floor(Math.random() * allText.length));
+  }
+
+  function drawMatrix() {
+    ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "#00ffcc";
+    ctx.font = fontSize + "px monospace";
+
+    for (let i = 0; i < drops.length; i++) {
+      const char = getRandomChar();
+      ctx.fillText(char, i * fontSize, drops[i] * fontSize);
+      if (drops[i] * fontSize > canvas.height || Math.random() > 0.975) {
+        drops[i] = 0;
+      }
+      drops[i]++;
+    }
+  }
+
+  setInterval(drawMatrix, 50);
+  window.addEventListener("resize", () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  });
+
+  particlesJS("particles-js", {
+    "particles": {
+      "number": { "value": 80 },
+      "size": { "value": 2 },
+      "color": { "value": "#00ffcc" },
+      "line_linked": { "enable": true, "color": "#00ffcc" },
+      "move": { "speed": 0.6 }
+    },
+    "interactivity": {
+      "events": {
+        "onhover": { "enable": true, "mode": "repulse" }
+      }
+    }
+  });
+
   const questionResponses = {
       "why am i here?": [
     "Answer 1: To explore meaning.",
