@@ -69,7 +69,12 @@
       padding: 10px 20px;
       box-shadow: 0 -2px 10px #00ffcc33;
     }
-
+.matrix-effect {
+  color: #00ffcc;
+  text-shadow: 0 0 5px #00ffcc, 0 0 10px #00ffcc;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
     input {
       width: 100%;
       padding: 10px;
@@ -1483,6 +1488,29 @@ function typeReply(text, element) {
   }
   typeChar();
 }
+let m = 0;
+function showMatrixLine() {
+  if (m < baseLines.length) {
+    const line = baseLines[m];
+    const div = document.createElement("div");
+    div.className = "cmd-line matrix-effect";
+    terminal.appendChild(div);
+
+    let j = 0;
+    function typeChar() {
+      if (j < line.length) {
+        div.textContent += line.charAt(j);
+        j++;
+        terminal.scrollTop = terminal.scrollHeight;
+        setTimeout(typeChar, 35);
+      } else {
+        m++;
+        setTimeout(showMatrixLine, 150);
+    }
+
+    typeChar();
+  }
+}
 
 input.addEventListener("keydown", function(event) {
   if (event.key === "Enter") {
@@ -1516,6 +1544,7 @@ function showLine() {
 }
 
 showLine();
+showMatrixLine();
 </script>
 <script>
 particlesJS("particles-js", {
