@@ -1299,8 +1299,6 @@ input.addEventListener("keydown", function(event) {
 
     const result = interpretInput(cmd);
     typeReply(result, botReply);
-
-    terminal.scrollTop = terminal.scrollHeight;
     input.value = "";
   }
 });
