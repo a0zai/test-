@@ -46,26 +46,74 @@
   height: 100%;
   background: black;
 }
-#shadowWalker {
+.walker {
   position: fixed;
-  bottom: 0;
-  left: -200px;
-  width: 100px;
-  height: 200px;
-  background: url('https://i.imgur.com/7qZz1Z1.png') no-repeat center center;
+  width: 80px;
+  height: 160px;
+  background: url('https://i.imgur.com/Y3n5Z8v.png') no-repeat center center;
   background-size: contain;
-  z-index: 1;
-  opacity: 0.15;
-  animation: walkAcross 20s linear infinite;
+  opacity: 0.07;
+  z-index: 2;
+  pointer-events: none;
+  filter: blur(1px);
+  animation-timing-function: linear;
 }
 
-@keyframes walkAcross {
-  0% {
-    left: -200px;
-  }
-  100% {
-    left: 110%;
-  }
+
+.walker-left {
+  bottom: 15%;
+  left: -100px;
+  animation: walkLeft 25s infinite;
+}
+
+
+.walker-right {
+  top: 20%;
+  right: -100px;
+  transform: scaleX(-1);
+  animation: walkRight 28s infinite;
+}
+
+
+.walker-top {
+  top: -160px;
+  left: 35%;
+  animation: walkDown 26s infinite;
+}
+
+
+.walker-bottom {
+  bottom: -160px;
+  right: 45%;
+  animation: walkUp 30s infinite;
+}
+
+@keyframes walkLeft {
+  0% { left: -100px; opacity: 0; }
+  10% { opacity: 0.08; }
+  90% { opacity: 0.08; }
+  100% { left: 110%; opacity: 0; }
+}
+
+@keyframes walkRight {
+  0% { right: -100px; opacity: 0; }
+  10% { opacity: 0.08; }
+  90% { opacity: 0.08; }
+  100% { right: 110%; opacity: 0; }
+}
+
+@keyframes walkDown {
+  0% { top: -160px; opacity: 0; }
+  10% { opacity: 0.07; }
+  90% { opacity: 0.07; }
+  100% { top: 110%; opacity: 0; }
+}
+
+@keyframes walkUp {
+  0% { bottom: -160px; opacity: 0; }
+  10% { opacity: 0.07; }
+  90% { opacity: 0.07; }
+  100% { bottom: 110%; opacity: 0; }
 }
     .terminal {
       text-align: center;
@@ -116,8 +164,11 @@
   </style>
 </head>
 <body>
+<div class="walker walker-left"></div>
+<div class="walker walker-right"></div>
+<div class="walker walker-top"></div>
+<div class="walker walker-bottom"></div>
   <canvas id="bgCanvas"></canvas>
-  <div id="shadowWalker"></div>
 <div class="animated-background"></div>
   <div class="terminal" id="bootText">
 >>> Initializing protocol...  
