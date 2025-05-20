@@ -18,6 +18,37 @@
       justify-content: center;
       flex-direction: column;
     }
+
+    /* خلفية متحركة ثلاثية الأبعاد */
+    .animated-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 200%;
+      height: 200%;
+      background-image: repeating-linear-gradient(
+        0deg, #00ffcc 0px, #00ffcc 1px, transparent 1px, transparent 20px
+      ),
+      repeating-linear-gradient(
+        90deg, #00ffcc 0px, #00ffcc 1px, transparent 1px, transparent 20px
+      );
+      background-size: 40px 40px;
+      animation: flyGrid 30s linear infinite;
+      opacity: 0.06;
+      z-index: 0;
+      pointer-events: none;
+      transform: perspective(800px) rotateX(60deg);
+    }
+
+    @keyframes flyGrid {
+      0% {
+        transform: perspective(800px) rotateX(60deg) translate3d(0, 0, 0);
+      }
+      100% {
+        transform: perspective(800px) rotateX(60deg) translate3d(0, -200px, 0);
+      }
+    }
+
     .terminal {
       text-align: center;
       white-space: pre-wrap;
@@ -27,6 +58,7 @@
       position: relative;
       z-index: 2;
     }
+
     .btn {
       margin-top: 30px;
       padding: 12px 30px;
@@ -40,40 +72,37 @@
       z-index: 2;
       position: relative;
     }
-    @keyframes glowText {
-      from { text-shadow: 0 0 5px #00ffcc; }
-      to { text-shadow: 0 0 20px #00ffff, 0 0 30px #00ccff; }
-    }
-    @keyframes glowButton {
-      from { box-shadow: 0 0 5px #00ffcc; }
-      to { box-shadow: 0 0 15px #00ffff; }
-    }
-    .matrix {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: url('https://media.giphy.com/media/VdoIFLsMIlwzfKD520/giphy.gif') repeat;
-      background-size: cover;
-      opacity: 0.07;
-      z-index: 0;
-    }
+
     .countdown {
       font-size: 2em;
       color: #ff0055;
       text-shadow: 0 0 10px #ff0055;
       margin-top: 15px;
     }
+
     #secret {
       margin-top: 20px;
       color: #ffffff44;
       font-size: 0.8em;
     }
+
+    @keyframes glowText {
+      from { text-shadow: 0 0 5px #00ffcc; }
+      to { text-shadow: 0 0 20px #00ffff, 0 0 30px #00ccff; }
+    }
+
+    @keyframes glowButton {
+      from { box-shadow: 0 0 5px #00ffcc; }
+      to { box-shadow: 0 0 15px #00ffff; }
+    }
   </style>
 </head>
 <body>
-  <div class="matrix"></div>
+
+
+  <div class="animated-background"></div>
+
+
   <div class="terminal" id="bootText">
 >>> Initializing protocol...  
 :: Identity: Rafat  
@@ -83,13 +112,20 @@
 > Countdown to phase shift:
   </div>
 
+
   <div class="countdown" id="countdown"></div>
+
+
   <button class="btn" onclick="startCountdown()">Enter</button>
+
+
   <div id="secret">Hint: Try typing "why"</div>
+
 
   <audio autoplay loop>
     <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_fdeeb2bcd9.mp3?filename=sci-fi-beep-101582.mp3" type="audio/mpeg">
   </audio>
+
 
   <script>
     let countdownEl = document.getElementById("countdown");
@@ -99,7 +135,7 @@
       if (intervalStarted) return;
       intervalStarted = true;
 
-const duration = 1 * 60 * 1000; // 1 minute
+      const duration = 1 * 60 * 1000; // دقيقة واحدة
       const targetTime = new Date().getTime() + duration;
 
       const interval = setInterval(() => {
@@ -121,7 +157,6 @@ const duration = 1 * 60 * 1000; // 1 minute
       }, 1000);
     }
 
-    // Easter egg for "why"
     let typed = "";
     document.addEventListener('keydown', function(e) {
       typed += e.key.toLowerCase();
