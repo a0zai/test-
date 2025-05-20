@@ -1236,18 +1236,16 @@ const emojiResponseMap = {
   const trimmedInput = input.trim();
   const lowerInput = trimmedInput.toLowerCase();
 
-
   if (questionResponses[lowerInput]) {
     const answers = questionResponses[lowerInput];
-    return `Answer 1: ${answers[0]} \nAnswer 2: ${answers[1]}`;
+    return `Answer 1: ${answers[0]}\\nAnswer 2: ${answers[1]}`;
   }
-
 
   const result = [];
 
-  const words = trimmedInput.split(/\s+/);
+  const words = trimmedInput.split(/\\s+/);
   words.forEach(word => {
-    const mapped = grammarMapping[word] || mathMapping[word] || emotionMapping[word] || emojiResponseMap[word];
+    const mapped = grammarMapping[word] || mathMapping[word] || emojiResponseMap[word] || emotionMapping[word];
     if (mapped) {
       if (emojiResponseMap[word]) {
         result.push(`${word} → Feeling: ${emojiResponseMap[word].feeling}, Opposite: ${emojiResponseMap[word].opposite}`);
@@ -1269,8 +1267,11 @@ const emojiResponseMap = {
     }
   });
 
+  if (result.length === 0) {
+    return "No matching response found.";
+  }
+
   return result.join(" | ");
-  typeChar();
 }
 
 input.addEventListener("keydown", function(event) {
