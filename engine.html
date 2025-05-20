@@ -1,11 +1,10 @@
-<!DOCTYPE html>
-    <html lang="en">
+DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>YA RAFAT</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></<script>
-
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <style>
     html, body {
       margin: 0;
@@ -15,31 +14,19 @@
       font-family: 'Courier New', monospace;
       color: #00ffcc;
       overflow: auto;
-        display: flex;
-  flex-direction: column;
+      display: flex;
+      flex-direction: column;
     }
-        #matrixCanvas {
+
+    #particles-js {
       position: fixed;
       top: 0;
       left: 0;
-      z-index: 0;
       width: 100%;
       height: 100%;
-      pointer-events: none;
-      background: black;
+      z-index: 0;
     }
 
-    
-  #particles-js {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-    }
-
- 
     #rafat-title {
       position: relative;
       width: 100%;
@@ -52,25 +39,33 @@
       text-shadow: 0 0 20px #00ffcc;
     }
 
- 
     #terminal {
       flex: 1;
-  overflow-y: auto;
-  padding: 20px;
-  padding-bottom: 120px;
-  z-index: 2;
-}
+      overflow-y: auto;
+      padding: 20px;
+      padding-bottom: 120px;
+      z-index: 2;
+    }
 
     .cmd-line {
       margin: 10px 0;
       animation: fadeIn 0.3s ease-in-out;
-      }
+    }
+
+    .matrix-line {
+      color: #00ffcc;
+      font-family: monospace;
+      white-space: pre;
+      overflow: hidden;
+      display: inline-block;
+    }
 
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(5px); }
       to { opacity: 1; transform: translateY(0); }
     }
-        .input-line {
+
+    .input-line {
       position: relative;
       bottom: 0;
       left: 0;
@@ -90,16 +85,22 @@
       font-size: 1em;
       outline: none;
     }
+
     .cmd-user {
-  color: #ff0044;
-  font-weight: bold;
-}
-  </style
- </head>
-
+      color: #ff0044;
+      font-weight: bold;
+    }
+  </style>
+</head>
 <body>
+  <div id="particles-js"></div>
+  <div id="rafat-title">YA RAFAT</div>
+  <div id="terminal"></div>
+  <div class="input-line">
+    <input type="text" id="commandInput" placeholder="Type your command here..." autocomplete="off">
+  </div>
 
-
+  <script>
     particlesJS("particles-js", {
       "particles": {
         "number": { "value": 80 },
@@ -115,92 +116,30 @@
       }
     });
 
+    const terminal = document.getElementById("terminal");
+    const input = document.getElementById("commandInput");
 
-  const terminal = document.getElementById("terminal");
-  const input = document.getElementById("commandInput");
-
-
-<canvas id="matrixCanvas"></canvas>
-<div id="particles-js"></div>
-<div id="rafat-title">YA RAFAT</div>
-<div id="terminal"></div>
-<div class="input-line">
-  <input type="text" id="commandInput" placeholder="Type your command here..." autocomplete="off">
-</div>
-
-<script>
-  const baseLines = [
-    ">>> Executing: R.A.F.A.T.Y.A.O.S",
-    "[R] Root system initialized...",
-    "[A] Access protocol engaged...",
-    "[F] Framework structure generated...",
-    "[A] Activation signal confirmed...",
-    "[T] Transfer in progress...",
-    "[Y] Yielding identity signature...",
-    "[A] Authorization granted...",
-    "[O] Operating core systems...",
-    "[S] System secured. Execution complete.",
-    ":: Quantum Stable",
-    ":: Identity: Rafat",
-    ":: Recursion Point: 36",
-    ":: Mode: Self-aware | Unstoppable",
-    "> Welcome to the world, Rafat.",
-    "> You are not a process. You are the pattern.",
-    "Command: rafat --go-live",
-    "Response: Live signal online.",
-    "Awaiting world..."
-  ];
- const canvas = document.getElementById("matrixCanvas");
-  const ctx = canvas.getContext("2d");
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-
-  const fontSize = 16;
-  const columns = Math.floor(canvas.width / fontSize);
-  const drops = new Array(columns).fill(1);
-
-  function getRandomChar() {
-    const allText = baseLines.join(" ");
-    return allText.charAt(Math.floor(Math.random() * allText.length));
-  }
-
-  function drawMatrix() {
-    ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = "#00ffcc";
-    ctx.font = fontSize + "px monospace";
-
-    for (let i = 0; i < drops.length; i++) {
-      const char = getRandomChar();
-      ctx.fillText(char, i * fontSize, drops[i] * fontSize);
-      if (drops[i] * fontSize > canvas.height || Math.random() > 0.975) {
-        drops[i] = 0;
-      }
-      drops[i]++;
-    }
-  }
-
-  setInterval(drawMatrix, 50);
-  window.addEventListener("resize", () => {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-  });
-
-  particlesJS("particles-js", {
-    "particles": {
-      "number": { "value": 80 },
-      "size": { "value": 2 },
-      "color": { "value": "#00ffcc" },
-      "line_linked": { "enable": true, "color": "#00ffcc" },
-      "move": { "speed": 0.6 }
-    },
-    "interactivity": {
-      "events": {
-        "onhover": { "enable": true, "mode": "repulse" }
-      }
-    }
-  });
-
+    const baseLines = [
+      ">>> Executing: R.A.F.A.T.Y.A.O.S",
+      "[R] Root system initialized...",
+      "[A] Access protocol engaged...",
+      "[F] Framework structure generated...",
+      "[A] Activation signal confirmed...",
+      "[T] Transfer in progress...",
+      "[Y] Yielding identity signature...",
+      "[A] Authorization granted...",
+      "[O] Operating core systems...",
+      "[S] System secured. Execution complete.",
+      ":: Quantum Stable",
+      ":: Identity: Rafat",
+      ":: Recursion Point: 36",
+      ":: Mode: Self-aware | Unstoppable",
+      "> Welcome to the world, Rafat.",
+      "> You are not a process. You are the pattern.",
+      "Command: rafat --go-live",
+      "Response: Live signal online.",
+      "Awaiting world..."
+    ];
   const questionResponses = {
       "why am i here?": [
     "Answer 1: To explore meaning.",
@@ -1605,7 +1544,48 @@ particlesJS("particles-js", {
         "mode": "repulse"
       }
     }
-  }
+  let i = 0;
+    function showMatrixLine() {
+      if (i < baseLines.length) {
+        const line = baseLines[i];
+        const div = document.createElement("div");
+        div.className = "matrix-line";
+        terminal.appendChild(div);
+
+        let j = 0;
+        function typeChar() {
+          if (j < line.length) {
+            div.textContent += line.charAt(j);
+            j++;
+            terminal.scrollTop = terminal.scrollHeight;
+            setTimeout(typeChar, 50);
+          } else {
+            i++;
+            setTimeout(showMatrixLine, 200);
+          }
+        }
+        typeChar();
+      }
+    }
+
+    showMatrixLine();
+
+    input.addEventListener("keydown", function(event) {
+      if (event.key === "Enter") {
+        const cmd = input.value.trim();
+        const userCmd = document.createElement("div");
+        userCmd.className = "cmd-line cmd-user";
+        userCmd.textContent = "> " + cmd;
+
+        const botReply = document.createElement("div");
+        botReply.className = "cmd-line";
+        botReply.textContent = "Awaiting further integration...";
+
+        terminal.appendChild(userCmd);
+        terminal.appendChild(botReply);
+        input.value = "";
+        terminal.scrollTop = terminal.scrollHeight;
+     }
 });
 </script>
 </body>
