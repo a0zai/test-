@@ -1235,6 +1235,10 @@ const emojiResponseMap = {
  function interpretInput(input) {
   const trimmedInput = input.trim();
   const lowerInput = trimmedInput.toLowerCase();
+  if (questionResponses[cleanedInput]) {
+    const responses = questionResponses[cleanedInput];
+    return responses.join(" | ");
+  }
 
 
   if (questionResponses[lowerInput]) {
