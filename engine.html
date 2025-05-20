@@ -15,6 +15,8 @@
       font-family: 'Courier New', monospace;
       color: #00ffcc;
       overflow: auto;
+        display: flex;
+  flex-direction: column;
     }
     
   #particles-js {
@@ -41,12 +43,13 @@
 
  
     #terminal {
-      position: relative;
-      z-index: 2;
-      padding-bottom: 160px;
-      height: calc(100vh - 220px);
-      overflow-y: auto;
-    }
+       flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  padding-bottom: 120px; 
+  z-index: 2;
+}
+
 
     .cmd-line {
       margin: 10px 0;
@@ -58,7 +61,7 @@
       to { opacity: 1; transform: translateY(0); }
     }
         .input-line {
-      position: fixed;
+      position: relative;
       bottom: 0;
       left: 0;
       right: 0;
