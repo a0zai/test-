@@ -1270,7 +1270,6 @@ function interpretInput(input) {
 
   return result.join(" | ");
 }
-
 function typeReply(text, element) {
   let i = 0;
   element.textContent = "";
@@ -1278,7 +1277,8 @@ function typeReply(text, element) {
     if (i < text.length) {
       element.textContent += text.charAt(i);
       i++;
-      setTimeout(typeChar, 20);
+      terminal.scrollTop = terminal.scrollHeight; 
+    setTimeout(typeChar, 20);
     }
   }
   typeChar();
