@@ -1103,7 +1103,7 @@
   "Wat is de bedoeling van dit systeem?": [
     "Om Jouw Eigen Vraag Terug Te Keren Naar Jou.",
     "Om Informatie Te Transformeren Tot Inzicht."
-  ],
+  ]
 };
 
   const exampleCommands = {
@@ -1232,20 +1232,27 @@ const emojiResponseMap = {
     "17": "Y", "18": "Z", "63": "_0"
   };
 
- function interpretInput(input) {
+function interpretInput(input) {
   const trimmedInput = input.trim();
-  const lowerInput = trimmedInput.toLowerCase();
+  const cleanedInput = trimmedInput.replace(/[^\w\s?]/g, '').toLowerCase(); // تنظيف الرموز مثل ? أو . إلخ
 
-  if (questionResponses[lowerInput]) {
-    const answers = questionResponses[lowerInput];
-    return `Answer 1: ${answers[0]}\\nAnswer 2: ${answers[1]}`;
+  // تحقق من الأسئلة الكاملة
+  if (questionResponses[cleanedInput]) {
+    const answers = questionResponses[cleanedInput];
+    return `Answer 1: ${answers[0]}\nAnswer 2: ${answers[1]}`;
   }
 
+  // تحليل الرموز والكلمات والحروف
   const result = [];
 
-  const words = trimmedInput.split(/\\s+/);
+  const words = trimmedInput.split(/\s+/);
   words.forEach(word => {
-    const mapped = grammarMapping[word] || mathMapping[word] || emojiResponseMap[word] || emotionMapping[word];
+    const mapped =
+      grammarMapping[word] ||
+      mathMapping[word] ||
+      emojiResponseMap[word] ||
+      emotionMapping[word];
+
     if (mapped) {
       if (emojiResponseMap[word]) {
         result.push(`${word} → Feeling: ${emojiResponseMap[word].feeling}, Opposite: ${emojiResponseMap[word].opposite}`);
@@ -1255,8 +1262,8 @@ const emojiResponseMap = {
     }
   });
 
-  const clean = trimmedInput.toUpperCase().replace(/[^A-Z0-9]/g, '').split('');
-  clean.forEach((char, i) => {
+  const cleanChars = trimmedInput.toUpperCase().replace(/[^A-Z0-9]/g, '').split('');
+  cleanChars.forEach((char, i) => {
     let letter = char;
     if (numToLetter[char]) letter = numToLetter[char];
     if (exampleCommands[letter]) {
@@ -1265,6 +1272,10 @@ const emojiResponseMap = {
     } else {
       result.push("[" + char + "]");
     }
+  });
+
+  return result.join(" | ");
+}
   });
 
   if (result.length === 0) {
