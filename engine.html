@@ -1239,29 +1239,23 @@ const emojiResponseMap = {
 
   if (questionResponses[lowerInput]) {
     const answers = questionResponses[lowerInput];
-
+    return `Answer 1: ${answers[0]} \nAnswer 2: ${answers[1]}`;
+  }
 
 
   const result = [];
+
   const words = trimmedInput.split(/\s+/);
   words.forEach(word => {
-    const mapped =
-      grammarMapping[word] ||
-      mathMapping[word] ||
-      emojiResponseMap[word]
-      emotionMapping[word];
-
+    const mapped = grammarMapping[word] || mathMapping[word] || emotionMapping[word] || emojiResponseMap[word];
     if (mapped) {
       if (emojiResponseMap[word]) {
         result.push(`${word} → Feeling: ${emojiResponseMap[word].feeling}, Opposite: ${emojiResponseMap[word].opposite}`);
       } else {
-        result.push(`${word} → ${mapped}`);
+        result.push(word + " → " + mapped);
       }
-        return `>> ${answers[0]} | ${answers[1]}`;
-  }
     }
   });
-
 
   const clean = trimmedInput.toUpperCase().replace(/[^A-Z0-9]/g, '').split('');
   clean.forEach((char, i) => {
@@ -1269,14 +1263,13 @@ const emojiResponseMap = {
     if (numToLetter[char]) letter = numToLetter[char];
     if (exampleCommands[letter]) {
       const cmd = exampleCommands[letter][i % exampleCommands[letter].length];
-      result.push(`${letter} → ${cmd}`);
+      result.push(letter + " → " + cmd);
     } else {
-      result.push(`[${char}]`);
+      result.push("[" + char + "]");
     }
   });
 
   return result.join(" | ");
-}
   typeChar();
 }
 
