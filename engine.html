@@ -79,7 +79,10 @@
       font-size: 1em;
       outline: none;
     }
-    
+    .cmd-user {
+  color: #ff0044;
+  font-weight: bold;
+}
   </style>
  </head>
 
@@ -1291,7 +1294,7 @@ input.addEventListener("keydown", function(event) {
   if (event.key === "Enter") {
     const cmd = input.value.trim();
     const userCmd = document.createElement("div");
-    userCmd.className = "cmd-line";
+    userCmd.className = "cmd-line cmd-user";
     userCmd.textContent = "> " + cmd;
 
     const botReply = document.createElement("div");
