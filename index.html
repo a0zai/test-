@@ -46,6 +46,36 @@
   height: 100%;
   background: black;
 }
+.shadow {
+  position: absolute;
+  width: 60px;
+  height: 100px;
+  background: url('https://github.com/a0zai.png') no-repeat center/contain;
+  opacity: 0.2;
+  animation: walk 6s linear infinite;
+}
+
+.shadow.top-left    { top: 0; left: 0; animation-name: walk-diag1; }
+.shadow.top-right   { top: 0; right: 0; animation-name: walk-diag2; }
+.shadow.bottom-left { bottom: 0; left: 0; animation-name: walk-diag3; }
+.shadow.bottom-right{ bottom: 0; right: 0; animation-name: walk-diag4; }
+
+@keyframes walk-diag1 {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(300px, 300px); }
+}
+@keyframes walk-diag2 {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(-300px, 300px); }
+}
+@keyframes walk-diag3 {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(300px, -300px); }
+}
+@keyframes walk-diag4 {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(-300px, -300px); }
+}
 .walker {
   position: fixed;
   width: 80px;
@@ -58,7 +88,6 @@
   filter: blur(1px);
   animation-timing-function: linear;
 }
-
 
 .walker-left {
   bottom: 15%;
@@ -115,6 +144,21 @@
   90% { opacity: 0.07; }
   100% { bottom: 110%; opacity: 0; }
 }
+.shadow.horizontal {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  background: url('https://github.com/a0zai.png') no-repeat center/cover;
+  opacity: 0.06;
+  filter: blur(1px) brightness(0.9);
+  animation: walkHorizontal 8s ease-in-out infinite;
+}
+
+@keyframes walkHorizontal {
+  0%   { transform: translateX(0); opacity: 0.04; }
+  50%  { transform: translateX(20px); opacity: 0.10; }
+  100% { transform: translateX(0); opacity: 0.04; }
+}
     .terminal {
       text-align: center;
       white-space: pre-wrap;
@@ -164,6 +208,14 @@
   </style>
 </head>
 <body>
+  <div class="shadow horizontal" style="top: 10%; left: 0;"></div>
+<div class="shadow horizontal" style="top: 10%; right: 0;"></div>
+<div class="shadow horizontal" style="bottom: 10%; left: 0;"></div>
+<div class="shadow horizontal" style="bottom: 10%; right: 0;"></div>
+  <div class="shadow top-left"></div>
+<div class="shadow top-right"></div>
+<div class="shadow bottom-left"></div>
+<div class="shadow bottom-right"></div>
 <div class="walker walker-left"></div>
 <div class="walker walker-right"></div>
 <div class="walker walker-top"></div>
