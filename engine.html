@@ -1476,19 +1476,6 @@ function interpretInput(input) {
 
   return result.join(" | ");
 }
-function typeReply(text, element) {
-  let i = 0;
-  element.textContent = "";
-  function typeChar() {
-    if (i < text.length) {
-      element.textContent += text.charAt(i);
-      i++;
-      terminal.scrollTop = terminal.scrollHeight; 
-    setTimeout(typeChar, 20);
-    }
-  }
-  typeChar();
-}
 let m = 0;
 function showMatrixLine() {
   if (m < baseLines.length) {
@@ -1544,7 +1531,6 @@ function showLine() {
   }
 }
 
-showLine();
 showMatrixLine();
 </script>
 <script>
