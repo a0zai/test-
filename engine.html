@@ -1103,7 +1103,7 @@
   "Wat is de bedoeling van dit systeem?": [
     "Om Jouw Eigen Vraag Terug Te Keren Naar Jou.",
     "Om Informatie Te Transformeren Tot Inzicht."
-  ]
+  ],
 };
 
   const exampleCommands = {
@@ -1231,28 +1231,20 @@ const emojiResponseMap = {
     "11": "S", "12": "T", "13": "U", "14": "V", "15": "W", "16": "X",
     "17": "Y", "18": "Z", "63": "_0"
   };
-
 function interpretInput(input) {
   const trimmedInput = input.trim();
-  const cleanedInput = trimmedInput.replace(/[^\w\s?]/g, '').toLowerCase(); // تنظيف الرموز مثل ? أو . إلخ
-
-  // تحقق من الأسئلة الكاملة
-  if (questionResponses[cleanedInput]) {
-    const answers = questionResponses[cleanedInput];
-    return `Answer 1: ${answers[0]}\nAnswer 2: ${answers[1]}`;
+  const lowerInput = trimmedInput.toLowerCase();
+  if (questionResponses[lowerInput]) {
+    const answers = questionResponses[lowerInput];
+    return `Answer 1: ${answers[0]} \nAnswer 2: ${answers[1]}`;
   }
 
-  // تحليل الرموز والكلمات والحروف
+
   const result = [];
 
   const words = trimmedInput.split(/\s+/);
   words.forEach(word => {
-    const mapped =
-      grammarMapping[word] ||
-      mathMapping[word] ||
-      emojiResponseMap[word] ||
-      emotionMapping[word];
-
+    const mapped = grammarMapping[word] || mathMapping[word] || emotionMapping[word] || emojiResponseMap[word];
     if (mapped) {
       if (emojiResponseMap[word]) {
         result.push(`${word} → Feeling: ${emojiResponseMap[word].feeling}, Opposite: ${emojiResponseMap[word].opposite}`);
@@ -1262,8 +1254,8 @@ function interpretInput(input) {
     }
   });
 
-  const cleanChars = trimmedInput.toUpperCase().replace(/[^A-Z0-9]/g, '').split('');
-  cleanChars.forEach((char, i) => {
+  const clean = trimmedInput.toUpperCase().replace(/[^A-Z0-9]/g, '').split('');
+  clean.forEach((char, i) => {
     let letter = char;
     if (numToLetter[char]) letter = numToLetter[char];
     if (exampleCommands[letter]) {
@@ -1276,13 +1268,18 @@ function interpretInput(input) {
 
   return result.join(" | ");
 }
-  });
-
-  if (result.length === 0) {
-    return "No matching response found.";
+function typeReply(text, element) {
+  let i = 0;
+  element.textContent = "";
+  function typeChar() {
+    if (i < text.length) {
+      element.textContent += text.charAt(i);
+      i++;
+      terminal.scrollTop = terminal.scrollHeight; 
+    setTimeout(typeChar, 20);
+    }
   }
-
-  return result.join(" | ");
+  typeChar();
 }
 
 input.addEventListener("keydown", function(event) {
