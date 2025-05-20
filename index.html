@@ -17,38 +17,31 @@
       align-items: center;
       justify-content: center;
       flex-direction: column;
-    }
-
-    /* خلفية متحركة ثلاثية الأبعاد */
-    .animated-background {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 200%;
-      height: 200%;
-      background-image: repeating-linear-gradient(
-        0deg, #00ffcc 0px, #00ffcc 1px, transparent 1px, transparent 20px
-      ),
-      repeating-linear-gradient(
-        90deg, #00ffcc 0px, #00ffcc 1px, transparent 1px, transparent 20px
-      );
-      background-size: 40px 40px;
-      animation: flyGrid 30s linear infinite;
-      opacity: 0.06;
-      z-index: 0;
-      pointer-events: none;
-      transform: perspective(800px) rotateX(60deg);
-    }
-
-    @keyframes flyGrid {
-      0% {
-        transform: perspective(800px) rotateX(60deg) translate3d(0, 0, 0);
-      }
-      100% {
-        transform: perspective(800px) rotateX(60deg) translate3d(0, -200px, 0);
-      }
-    }
-
+    } 
+.animated-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 300%;
+  height: 300%;
+  background: conic-gradient(
+    from 0deg at center,
+    #000000 0deg,
+    #001f1f 90deg,
+    #003333 180deg,
+    #001f1f 270deg,
+    #000000 360deg
+  );
+  animation: spinBackground 60s linear infinite;
+  z-index: 0;
+  opacity: 0.05;
+  filter: blur(4px) brightness(0.8) saturate(1.2);
+  transform: scale(1.2);
+}
+@keyframes spinBackground {
+  0% { transform: scale(1.2) rotate(0deg); }
+  100% { transform: scale(1.2) rotate(360deg); }
+}
     .terminal {
       text-align: center;
       white-space: pre-wrap;
@@ -98,11 +91,7 @@
   </style>
 </head>
 <body>
-
-
-  <div class="animated-background"></div>
-
-
+<div class="animated-background"></div>
   <div class="terminal" id="bootText">
 >>> Initializing protocol...  
 :: Identity: Rafat  
@@ -135,7 +124,7 @@
       if (intervalStarted) return;
       intervalStarted = true;
 
-      const duration = 1 * 60 * 1000; // دقيقة واحدة
+      const duration = 1 * 60 * 1000; 
       const targetTime = new Date().getTime() + duration;
 
       const interval = setInterval(() => {
