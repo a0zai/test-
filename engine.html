@@ -1509,20 +1509,6 @@ function showMatrixLine() {
     const div = document.createElement("div");
     div.className = "matrix-line";
     terminal.appendChild(div);
-
-    let j = 0;
-    function typeChar() {
-      if (j < line.length) {
-        div.textContent += line.charAt(j);
-        j++;
-        terminal.scrollTop = terminal.scrollHeight;
-        setTimeout(typeChar, 50);
-      } else {
-        i++;
-        setTimeout(showMatrixLine, 200);
-      }
-    }
-    typeChar();
   }
 }
 
