@@ -1292,7 +1292,7 @@ input.addEventListener("keydown", function(event) {
   if (event.key === "Enter") {
     const cmd = input.value.trim();
     const userCmd = document.createElement("div");
-    userCmd.className = "cmd-line cmd-user";
+    userCmd.className = "cmd-line";
     userCmd.textContent = "> " + cmd;
 
     const botReply = document.createElement("div");
