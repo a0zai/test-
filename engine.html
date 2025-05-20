@@ -1235,30 +1235,32 @@ const emojiResponseMap = {
  function interpretInput(input) {
   const trimmedInput = input.trim();
   const lowerInput = trimmedInput.toLowerCase();
-  if (questionResponses[cleanedInput]) {
-    const responses = questionResponses[cleanedInput];
-    return responses.join(" | ");
-  }
 
 
   if (questionResponses[lowerInput]) {
     const answers = questionResponses[lowerInput];
-    return `Answer 1: ${answers[0]} \nAnswer 2: ${answers[1]}`;
+    return `>> ${answers[0]} | ${answers[1]}`;
   }
 
-  const result = [];
 
+  const result = [];
   const words = trimmedInput.split(/\s+/);
   words.forEach(word => {
-    const mapped = grammarMapping[word] || mathMapping[word] || emotionMapping[word] || emojiResponseMap[word];
+    const mapped =
+      grammarMapping[word] ||
+      mathMapping[word] ||
+      emojiResponseMap[word]
+      emotionMapping[word];
+
     if (mapped) {
       if (emojiResponseMap[word]) {
         result.push(`${word} → Feeling: ${emojiResponseMap[word].feeling}, Opposite: ${emojiResponseMap[word].opposite}`);
       } else {
-        result.push(word + " → " + mapped);
+        result.push(`${word} → ${mapped}`);
       }
     }
   });
+
 
   const clean = trimmedInput.toUpperCase().replace(/[^A-Z0-9]/g, '').split('');
   clean.forEach((char, i) => {
@@ -1266,25 +1268,14 @@ const emojiResponseMap = {
     if (numToLetter[char]) letter = numToLetter[char];
     if (exampleCommands[letter]) {
       const cmd = exampleCommands[letter][i % exampleCommands[letter].length];
-      result.push(letter + " → " + cmd);
+      result.push(`${letter} → ${cmd}`);
     } else {
-      result.push("[" + char + "]");
+      result.push(`[${char}]`);
     }
   });
 
   return result.join(" | ");
 }
-function typeReply(text, element) {
-  let i = 0;
-  element.textContent = "";
-  function typeChar() {
-    if (i < text.length) {
-      element.textContent += text.charAt(i);
-      i++;
-      terminal.scrollTop = terminal.scrollHeight; 
-    setTimeout(typeChar, 20);
-    }
-  }
   typeChar();
 }
 
