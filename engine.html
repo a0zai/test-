@@ -1,4 +1,4 @@
-DOCTYPE html>
+<DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -1503,48 +1503,7 @@ input.addEventListener("keydown", function(event) {
   }
 });
 
-let i = 0;
-function showLine() {
-  if (i < baseLines.length) {
-    const div = document.createElement("div");
-    div.className = "cmd-line";
-    div.textContent = baseLines[i];
-    terminal.appendChild(div);
-    i++;
-    setTimeout(showLine, 300);
-  }
-}
-
-showLine();
-</script>
-<script>
-particlesJS("particles-js", {
-  "particles": {
-    "number": {
-      "value": 80
-    },
-    "size": {
-      "value": 2
-    },
-    "color": {
-      "value": "#00ffcc"
-    },
-    "line_linked": {
-      "enable": true,
-      "color": "#00ffcc"
-    },
-    "move": {
-      "speed": 0.6
-    }
-  },
-  "interactivity": {
-    "events": {
-      "onhover": {
-        "enable": true,
-        "mode": "repulse"
-      }
-    }
-  let i = 0;
+ let i = 0;
     function showMatrixLine() {
       if (i < baseLines.length) {
         const line = baseLines[i];
@@ -1586,6 +1545,37 @@ particlesJS("particles-js", {
         input.value = "";
         terminal.scrollTop = terminal.scrollHeight;
      }
+
+showLine();
+</script>
+<script>
+particlesJS("particles-js", {
+  "particles": {
+    "number": {
+      "value": 80
+    },
+    "size": {
+      "value": 2
+    },
+    "color": {
+      "value": "#00ffcc"
+    },
+    "line_linked": {
+      "enable": true,
+      "color": "#00ffcc"
+    },
+    "move": {
+      "speed": 0.6
+    }
+  },
+  "interactivity": {
+    "events": {
+      "onhover": {
+        "enable": true,
+        "mode": "repulse"
+      }
+    }
+ }
 });
 </script>
 </body>
