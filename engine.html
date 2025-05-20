@@ -138,17 +138,6 @@
     "Response: Live signal online.",
     "Awaiting world...🪞"
   ];
-const specialCommands = {
-"cv?": [
-    "Mijn ervaring is geen traditionele opleiding, maar een levende reis: jaren van coderen met enkel een mobiel, een systeem gebouwd uit stilte, en een idee dat zich ontwikkelde tot een reflectieve taal. Wat je nu gebruikt, is mijn CV – in werking."
-],
-  "later?": [
-    "Dit systeem kan geïntegreerd worden als een symbolische interface in AI, beveiliging, kunst en onderwijs. Elk invoer verandert de output. Dus ja, het is toepasbaar — als spiegel, als tool, als stem van intentie."
-],
-  "az?": [
-    "In mijn model staat '0' niet voor leegte, maar voor potentieel. '−' is richting naar binnen, stilte of reductie. '+' is uitbreiding, licht of actie. Mijn formule: 0 = (F H) — waar beweging begint met evenwicht tussen stap en reikwijdte."
-  ],
-};
  const questionResponses = {
       "why am i here?": [
     "Answer 1: To explore meaning.",
@@ -1375,13 +1364,13 @@ const specialCommands = {
     "de lus is onzeker."
 ],
 "cv?": [
-  "Mijn ervaring is geen traditionele opleiding, maar een levende reis: jaren van coderen met enkel een mobiel, een systeem gebouwd uit stilte, en een idee dat zich ontwikkelde tot een reflectieve taal. Wat je nu gebruikt, is mijn CV – in werking."
+  "Mijn ervaring is geen traditionele opleiding, maar een levende reis: jaren van coderen met enkel een mobiel, een systeem gebouwd uit stilte, en een idee dat zich ontwikkelde tot een reflectieve taal. Wat je nu gebruikt, is mijn CV – in werking 😎."
 ],
 "later?": [
-  "Dit systeem kan geïntegreerd worden als een symbolische interface in AI, beveiliging, kunst en onderwijs. Elk invoer verandert de output. Dus ja, het is toepasbaar — als spiegel, als tool, als stem van intentie."
+  "Dit systeem kan geïntegreerd worden als een symbolische interface in AI, beveiliging, kunst en onderwijs. Elk invoer verandert de output. Dus ja, het is toepasbaar — als spiegel, als tool, als stem van intentie 🌬️."
 ],
 "az?": [
-  "In mijn model staat '0' niet voor leegte, maar voor potentieel. '−' is richting naar binnen, stilte of reductie. '+' is uitbreiding, licht of actie. Mijn formule: 0 = (F H) — waar beweging begint met evenwicht tussen stap en reikwijdte."
+  "In mijn model staat '0' niet voor leegte, maar voor potentieel. '−' is richting naar binnen, stilte of reductie. '+' is uitbreiding, licht of actie. Mijn formule: 0 = (F H) — waar beweging begint met evenwicht tussen stap en reikwijdte 🧠."
 ],
 };
 
@@ -1504,9 +1493,6 @@ const emojiResponseMap = {
     "17": "Y", "18": "Z", "63": "_0"
   };
 function interpretInput(input) {
-if (specialCommands[trimmedInput]) {
-  return specialCommands[trimmedInput].join(" ");
-}
     const trimmedInput = input.trim();
   const lowerInput = trimmedInput.toLowerCase();
 
