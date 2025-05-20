@@ -1527,27 +1527,6 @@ function showMatrixLine() {
 }
 
 showMatrixLine();
-
-input.addEventListener("keydown", function(event) {
-  if (event.key === "Enter") {
-    const cmd = input.value.trim();
-    const userCmd = document.createElement("div");
-    userCmd.className = "cmd-line cmd-user";
-    userCmd.textContent = "> " + cmd;
-
-    const botReply = document.createElement("div");
-    botReply.className = "cmd-line";
-
-    terminal.appendChild(userCmd);
-    terminal.appendChild(botReply);
-
-    const result = interpretInput(cmd);
-    typeReply(result, botReply);
-    input.value = "";
-    terminal.scrollTop = terminal.scrollHeight;
-  }
-});
-showLine();
 </script>
 <script>
 particlesJS("particles-js", {
