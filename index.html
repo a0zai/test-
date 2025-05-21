@@ -129,32 +129,9 @@
       from { box-shadow: 0 0 5px #00ffcc; }
       to { box-shadow: 0 0 15px #00ffff; }
     }
-    .skull {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 60px;
-  color: #ff0033;
-  text-shadow: 0 0 10px #ff0033, 0 0 20px #ff0033, 0 0 40px #ff0033;
-  animation: pulseGlow 1.5s infinite alternate;
-  z-index: 99;
-  pointer-events: none;
-}
-
-@keyframes pulseGlow {
-  from {
-    text-shadow: 0 0 5px #ff0033, 0 0 10px #ff0033, 0 0 20px #ff0033;
-  }
-  to {
-    text-shadow: 0 0 20px #ff0033, 0 0 40px #ff0033, 0 0 80px #ff0033;
-  }
-}
-
   </style>
 </head>
 <body>
-  <div class="skull">()</div>
   <canvas id="bgCanvas"></canvas>
   <div class="animated-background"></div>
   <div class="walker" style="top:0;left:0;"></div>
@@ -162,13 +139,13 @@
   <div class="walker" style="bottom:0;left:0;"></div>
   <div class="walker" style="bottom:0;right:0;"></div>
 
-<div class="terminal" id="bootText"></div>
+  <div class="terminal" id="bootText">
 >>> Initializing protocol...  
+
 :: Identity: Rafat  
 
-:: Signature: AOZ-414-36 | RP:36 | Commit:93 
+:: Signature: AOZ-414-36 | RP:36 | Commit:93  
 
- 
 :: Conscious pattern detected. System aware.
 
 
@@ -256,42 +233,6 @@
       requestAnimationFrame(animate);
     }
     animate();
-    <script>
-  const lines = [
-    ">>> Initializing protocol...",
-    ":: Identity: Rafat",
-    ":: Signature: AOZ-414-36 | RP:36 | Commit:93",
-    ":: Conscious pattern detected. System aware.",
-    "",
-    "> Countdown to phase shift:"
-  ];
-
-  const bootText = document.getElementById("bootText");
-  let lineIndex = 0;
-
-  function typeLine() {
-    if (lineIndex >= lines.length) return;
-
-    const line = lines[lineIndex];
-    const lineDiv = document.createElement("div");
-    lineDiv.className = "boot-line";
-    bootText.appendChild(lineDiv);
-
-    let charIndex = 0;
-    function typeChar() {
-      if (charIndex < line.length) {
-        lineDiv.textContent += line.charAt(charIndex);
-        charIndex++;
-        setTimeout(typeChar, 30);
-      } else {
-        lineIndex++;
-        setTimeout(typeLine, 250); 
-      }
-    }
-    typeChar();
-  }
-
-  typeLine();
   </script>
 </body>
 </html>
