@@ -147,7 +147,62 @@
   transform: translate(-50%, -50%);
   box-shadow: 0 0 6px currentColor;
 }
+    margin: 0;
+    overflow: hidden;
+    background: radial-gradient(ellipse at bottom, #050505 0%, #000000 100%);
+    font-family: 'Courier New', monospace;
+  }
 
+  .star {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: white;
+    border-radius: 50%;
+    animation: twinkle 2s infinite ease-in-out alternate;
+  }
+
+  @keyframes twinkle {
+    from { opacity: 0.1; }
+    to { opacity: 1; }
+  }
+
+  .planet {
+    position: absolute;
+    border-radius: 50%;
+    animation: orbit linear infinite;
+    transform-origin: center;
+  }
+
+  .planet::before {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .mercury::before { width: 6px; height: 6px; background: #aaa; }
+  .venus::before { width: 10px; height: 10px; background: #c9b037; }
+  .earth::before { width: 12px; height: 12px; background: #2e75b6; }
+  .mars::before { width: 8px; height: 8px; background: #d14c32; }
+  .jupiter::before { width: 18px; height: 18px; background: #c58b43; }
+  .saturn::before { width: 16px; height: 16px; background: #d9c28f; }
+  .uranus::before { width: 14px; height: 14px; background: #6cc5ce; }
+  .neptune::before { width: 14px; height: 14px; background: #3050f8; }
+
+  .mercury { animation-duration: 4s; top: 50%; left: 50%; }
+  .venus { animation-duration: 6s; top: 50%; left: 50%; }
+  .earth { animation-duration: 8s; top: 50%; left: 50%; }
+  .mars { animation-duration: 10s; top: 50%; left: 50%; }
+  .jupiter { animation-duration: 14s; top: 50%; left: 50%; }
+  .saturn { animation-duration: 18s; top: 50%; left: 50%; }
+  .uranus { animation-duration: 22s; top: 50%; left: 50%; }
+  .neptune { animation-duration: 26s; top: 50%; left: 50%; }
+
+  @keyframes orbit {
+    0% { transform: rotate(0deg) translateX(80px) rotate(0deg); }
+    100% { transform: rotate(360deg) translateX(80px) rotate(-360deg); }
+  
 @keyframes rotateOrbit {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
@@ -155,6 +210,9 @@
   </style>
 </head>
 <body>
+  <div id="space"></div>
+
+
 <div class="planet-orbit" style="width:100px; height:100px; margin:-50px 0 0 -50px; animation-duration:10s;">
   <div class="planet" style="width:6px; height:6px; background:gray; color:gray;"></div>
 </div>
@@ -211,6 +269,25 @@
   </audio>
 
   <script>
+  const space = document.getElementById('space');
+
+  for (let i = 0; i < 200; i++) {
+    const star = document.createElement('div');
+    star.className = 'star';
+    star.style.top = Math.random() * 100 + 'vh';
+    star.style.left = Math.random() * 100 + 'vw';
+    star.style.animationDelay = Math.random() * 2 + 's';
+    space.appendChild(star);
+  }
+
+  const planets = ['mercury', 'venus', 'earth', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune'];
+  planets.forEach((name, i) => {
+    const planet = document.createElement('div');
+    planet.className = `planet ${name}`;
+    planet.style.transform = `rotate(0deg) translateX(${80 + i * 25}px) rotate(0deg)`;
+    space.appendChild(planet);
+  });
+
     let countdownEl = document.getElementById("countdown");
     let intervalStarted = false;
 
