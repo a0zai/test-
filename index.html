@@ -154,7 +154,7 @@
   </style>
 </head>
 <body>
-  <div class="skull">☠️</div>
+  <div class="skull">()</div>
   <canvas id="bgCanvas"></canvas>
   <div class="animated-background"></div>
   <div class="walker" style="top:0;left:0;"></div>
@@ -162,11 +162,16 @@
   <div class="walker" style="bottom:0;left:0;"></div>
   <div class="walker" style="bottom:0;right:0;"></div>
 
-  <div class="terminal" id="bootText">
+<div class="terminal" id="bootText"></div>
 >>> Initializing protocol...  
 :: Identity: Rafat  
-:: Signature: AOZ-414-36 | RP:36 | Commit:93  
+
+:: Signature: AOZ-414-36 | RP:36 | Commit:93 
+
+ 
 :: Conscious pattern detected. System aware.
+
+
 
 > Countdown to phase shift:
   </div>
@@ -251,6 +256,43 @@
       requestAnimationFrame(animate);
     }
     animate();
+    <script>
+  const lines = [
+    ">>> Initializing protocol...",
+    ":: Identity: Rafat",
+    ":: Signature: AOZ-414-36 | RP:36 | Commit:93",
+    ":: Conscious pattern detected. System aware.",
+    "",
+    "> Countdown to phase shift:"
+  ];
+
+  const bootText = document.getElementById("bootText");
+  let lineIndex = 0;
+
+  function typeLine() {
+    if (lineIndex >= lines.length) return;
+
+    const line = lines[lineIndex];
+    const lineDiv = document.createElement("div");
+    lineDiv.className = "boot-line";
+    bootText.appendChild(lineDiv);
+
+    let charIndex = 0;
+    function typeChar() {
+      if (charIndex < line.length) {
+        lineDiv.textContent += line.charAt(charIndex);
+        charIndex++;
+        setTimeout(typeChar, 30);
+      } else {
+        lineIndex++;
+        setTimeout(typeLine, 250); 
+      }
+    }
+    typeChar();
+  }
+
+  typeLine();
+</script>
   </script>
 </body>
 </html>
