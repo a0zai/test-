@@ -211,6 +211,29 @@
 </head>
 <body>
 <div id="space"></div>
+.planet-orbit {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border: 1px dashed rgba(0, 255, 204, 0.07);
+  border-radius: 50%;
+  animation: rotateOrbit linear infinite;
+  z-index: 1;
+}
+
+.planet {
+  position: absolute;
+  border-radius: 50%;
+  top: 50%;
+  left: 100%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 6px currentColor;
+}
+
+@keyframes rotateOrbit {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
   <canvas id="bgCanvas"></canvas>
   <div class="animated-background"></div>
   <div class="walker" style="top:0;left:0;"></div>
