@@ -17,148 +17,72 @@
       align-items: center;
       justify-content: center;
       flex-direction: column;
-    } 
-.animated-background {
-  position: fixed;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle at center, rgba(0,255,204,0.1), transparent 60%),
-              repeating-radial-gradient(circle, #00ffcc 1px, transparent 2px, transparent 50px);
-  background-blend-mode: screen;
-  animation: orbitSpin 60s linear infinite;
-  opacity: 0.08;
-  z-index: 0;
-  pointer-events: none;
-}
+    }
 
-@keyframes orbitSpin {
-  0% { transform: rotate(0deg) scale(1); }
-  100% { transform: rotate(360deg) scale(1); }
-}
-#bgCanvas {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 0;
-  width: 100%;
-  height: 100%;
-  background: black;
-}
-.shadow {
-  position: absolute;
-  width: 60px;
-  height: 100px;
-  background: url('https://github.com/a0zai.png') no-repeat center/contain;
-  opacity: 0.2;
-  animation: walk 6s linear infinite;
-}
+    .animated-background {
+      position: fixed;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at center, rgba(0,255,204,0.1), transparent 60%),
+                  repeating-radial-gradient(circle, #00ffcc 1px, transparent 2px, transparent 50px);
+      background-blend-mode: screen;
+      animation: orbitSpin 60s linear infinite;
+      opacity: 0.08;
+      z-index: 0;
+      pointer-events: none;
+    }
 
-.shadow.top-left    { top: 0; left: 0; animation-name: walk-diag1; }
-.shadow.top-right   { top: 0; right: 0; animation-name: walk-diag2; }
-.shadow.bottom-left { bottom: 0; left: 0; animation-name: walk-diag3; }
-.shadow.bottom-right{ bottom: 0; right: 0; animation-name: walk-diag4; }
+    @keyframes orbitSpin {
+      0% { transform: rotate(0deg) scale(1); }
+      100% { transform: rotate(360deg) scale(1); }
+    }
 
-@keyframes walk-diag1 {
-  0% { transform: translate(0, 0); }
-  100% { transform: translate(300px, 300px); }
-}
-@keyframes walk-diag2 {
-  0% { transform: translate(0, 0); }
-  100% { transform: translate(-300px, 300px); }
-}
-@keyframes walk-diag3 {
-  0% { transform: translate(0, 0); }
-  100% { transform: translate(300px, -300px); }
-}
-@keyframes walk-diag4 {
-  0% { transform: translate(0, 0); }
-  100% { transform: translate(-300px, -300px); }
-}
-.walker {
-  position: fixed;
-  width: 80px;
-  height: 160px;
-  background: url('https://i.imgur.com/Y3n5Z8v.png') no-repeat center center;
-  background-size: contain;
-  opacity: 0.07;
-  z-index: 2;
-  pointer-events: none;
-  filter: blur(1px);
-  animation-timing-function: linear;
-}
+    #bgCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      width: 100%;
+      height: 100%;
+      background: black;
+    }
 
-.walker-left {
-  bottom: 15%;
-  left: -100px;
-  animation: walkLeft 25s infinite;
-}
+    .walker {
+      position: fixed;
+      width: 80px;
+      height: 160px;
+      background: url('https://i.imgur.com/Y3n5Z8v.png') no-repeat center center;
+      background-size: contain;
+      opacity: 0.07;
+      z-index: 2;
+      pointer-events: none;
+      filter: blur(1px);
+      animation: moveWalker 30s linear infinite;
+    }
 
+    @keyframes moveWalker {
+      0% {
+        transform: translate(0, 0);
+      }
+      100% {
+        transform: translate(calc(100vw - 100px), calc(100vh - 100px));
+      }
+    }
 
-.walker-right {
-  top: 20%;
-  right: -100px;
-  transform: scaleX(-1);
-  animation: walkRight 28s infinite;
-}
+    .walker:nth-child(2) {
+      animation-delay: 5s;
+    }
 
+    .walker:nth-child(3) {
+      animation-delay: 10s;
+    }
 
-.walker-top {
-  top: -160px;
-  left: 35%;
-  animation: walkDown 26s infinite;
-}
+    .walker:nth-child(4) {
+      animation-delay: 15s;
+    }
 
-
-.walker-bottom {
-  bottom: -160px;
-  right: 45%;
-  animation: walkUp 30s infinite;
-}
-
-@keyframes walkLeft {
-  0% { left: -100px; opacity: 0; }
-  10% { opacity: 0.08; }
-  90% { opacity: 0.08; }
-  100% { left: 110%; opacity: 0; }
-}
-
-@keyframes walkRight {
-  0% { right: -100px; opacity: 0; }
-  10% { opacity: 0.08; }
-  90% { opacity: 0.08; }
-  100% { right: 110%; opacity: 0; }
-}
-
-@keyframes walkDown {
-  0% { top: -160px; opacity: 0; }
-  10% { opacity: 0.07; }
-  90% { opacity: 0.07; }
-  100% { top: 110%; opacity: 0; }
-}
-
-@keyframes walkUp {
-  0% { bottom: -160px; opacity: 0; }
-  10% { opacity: 0.07; }
-  90% { opacity: 0.07; }
-  100% { bottom: 110%; opacity: 0; }
-}
-.shadow.horizontal {
-  position: absolute;
-  width: 60px;
-  height: 60px;
-  background: url('https://github.com/a0zai.png') no-repeat center/cover;
-  opacity: 0.06;
-  filter: blur(1px) brightness(0.9);
-  animation: walkHorizontal 8s ease-in-out infinite;
-}
-
-@keyframes walkHorizontal {
-  0%   { transform: translateX(0); opacity: 0.04; }
-  50%  { transform: translateX(20px); opacity: 0.10; }
-  100% { transform: translateX(0); opacity: 0.04; }
-}
     .terminal {
       text-align: center;
       white-space: pre-wrap;
@@ -208,20 +132,13 @@
   </style>
 </head>
 <body>
-  <div class="shadow horizontal" style="top: 10%; left: 0;"></div>
-<div class="shadow horizontal" style="top: 10%; right: 0;"></div>
-<div class="shadow horizontal" style="bottom: 10%; left: 0;"></div>
-<div class="shadow horizontal" style="bottom: 10%; right: 0;"></div>
-  <div class="shadow top-left"></div>
-<div class="shadow top-right"></div>
-<div class="shadow bottom-left"></div>
-<div class="shadow bottom-right"></div>
-<div class="walker walker-left"></div>
-<div class="walker walker-right"></div>
-<div class="walker walker-top"></div>
-<div class="walker walker-bottom"></div>
   <canvas id="bgCanvas"></canvas>
-<div class="animated-background"></div>
+  <div class="animated-background"></div>
+  <div class="walker" style="top:0;left:0;"></div>
+  <div class="walker" style="top:0;right:0;"></div>
+  <div class="walker" style="bottom:0;left:0;"></div>
+  <div class="walker" style="bottom:0;right:0;"></div>
+
   <div class="terminal" id="bootText">
 >>> Initializing protocol...  
 :: Identity: Rafat  
@@ -231,31 +148,22 @@
 > Countdown to phase shift:
   </div>
 
-
   <div class="countdown" id="countdown"></div>
-
-
   <button class="btn" onclick="startCountdown()">Enter</button>
-
-
   <div id="secret">Hint: Try typing "why"</div>
-
 
   <audio autoplay loop>
     <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_fdeeb2bcd9.mp3?filename=sci-fi-beep-101582.mp3" type="audio/mpeg">
   </audio>
 
-
   <script>
-  
     let countdownEl = document.getElementById("countdown");
     let intervalStarted = false;
 
     function startCountdown() {
       if (intervalStarted) return;
       intervalStarted = true;
-
-      const duration = 1 * 60 * 1000; 
+      const duration = 1 * 60 * 1000;
       const targetTime = new Date().getTime() + duration;
 
       const interval = setInterval(() => {
@@ -287,39 +195,39 @@
     });
   </script>
   <script>
-const canvas = document.getElementById("bgCanvas");
-const ctx = canvas.getContext("2d");
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+    const canvas = document.getElementById("bgCanvas");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
-let dots = [];
-for (let i = 0; i < 120; i++) {
-  dots.push({
-    x: Math.random() * canvas.width,
-    y: Math.random() * canvas.height,
-    z: Math.random() * canvas.width
-  });
-}
+    let dots = [];
+    for (let i = 0; i < 120; i++) {
+      dots.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        z: Math.random() * canvas.width
+      });
+    }
 
-function animate() {
-  ctx.fillStyle = "rgba(0, 0, 0, 0.15)";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+    function animate() {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.15)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  for (let dot of dots) {
-    dot.z -= 2;
-    if (dot.z <= 0) dot.z = canvas.width;
+      for (let dot of dots) {
+        dot.z -= 2;
+        if (dot.z <= 0) dot.z = canvas.width;
 
-    const k = 128.0 / dot.z;
-    const x = dot.x * k + canvas.width / 2 - k * canvas.width / 2;
-    const y = dot.y * k + canvas.height / 2 - k * canvas.height / 2;
+        const k = 128.0 / dot.z;
+        const x = dot.x * k + canvas.width / 2 - k * canvas.width / 2;
+        const y = dot.y * k + canvas.height / 2 - k * canvas.height / 2;
 
-    ctx.fillStyle = "#00ffcc";
-    ctx.fillRect(x, y, 2, 2);
-  }
+        ctx.fillStyle = "#00ffcc";
+        ctx.fillRect(x, y, 2, 2);
+      }
 
-  requestAnimationFrame(animate);
-}
-animate();
-</script>
+      requestAnimationFrame(animate);
+    }
+    animate();
+  </script>
 </body>
 </html>
