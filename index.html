@@ -129,9 +129,63 @@
       from { box-shadow: 0 0 5px #00ffcc; }
       to { box-shadow: 0 0 15px #00ffff; }
     }
+    .planet-orbit {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border: 1px dashed rgba(0, 255, 204, 0.07);
+  border-radius: 50%;
+  animation: rotateOrbit linear infinite;
+  z-index: 1;
+}
+
+.planet {
+  position: absolute;
+  border-radius: 50%;
+  top: 50%;
+  left: 100%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 6px currentColor;
+}
+
+@keyframes rotateOrbit {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
   </style>
 </head>
 <body>
+<div class="planet-orbit" style="width:100px; height:100px; margin:-50px 0 0 -50px; animation-duration:10s;">
+  <div class="planet" style="width:6px; height:6px; background:gray; color:gray;"></div>
+</div>
+
+<div class="planet-orbit" style="width:140px; height:140px; margin:-70px 0 0 -70px; animation-duration:14s;">
+  <div class="planet" style="width:8px; height:8px; background:#f5e663; color:#f5e663;"></div>
+</div>
+
+<div class="planet-orbit" style="width:180px; height:180px; margin:-90px 0 0 -90px; animation-duration:18s;">
+  <div class="planet" style="width:10px; height:10px; background:#00aaff; color:#00aaff;"></div>
+</div>
+
+<div class="planet-orbit" style="width:220px; height:220px; margin:-110px 0 0 -110px; animation-duration:22s;">
+  <div class="planet" style="width:8px; height:8px; background:#ff4444; color:#ff4444;"></div>
+</div>
+
+<div class="planet-orbit" style="width:270px; height:270px; margin:-135px 0 0 -135px; animation-duration:28s;">
+  <div class="planet" style="width:14px; height:14px; background:#d18f54; color:#d18f54;"></div>
+</div>
+
+<div class="planet-orbit" style="width:320px; height:320px; margin:-160px 0 0 -160px; animation-duration:34s;">
+  <div class="planet" style="width:12px; height:12px; background:gold; color:gold;"></div>
+</div>
+
+<div class="planet-orbit" style="width:370px; height:370px; margin:-185px 0 0 -185px; animation-duration:40s;">
+  <div class="planet" style="width:10px; height:10px; background:#66ffff; color:#66ffff;"></div>
+</div>
+
+<div class="planet-orbit" style="width:420px; height:420px; margin:-210px 0 0 -210px; animation-duration:46s;">
+  <div class="planet" style="width:10px; height:10px; background:#0044ff; color:#0044ff;"></div>
+</div>
   <canvas id="bgCanvas"></canvas>
   <div class="animated-background"></div>
   <div class="walker" style="top:0;left:0;"></div>
