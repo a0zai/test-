@@ -1,0 +1,18 @@
+# A∞ZAI Protocol — Symbolic Access Manifest
+# Version: R.A.F.A.T-93
+
+User-agent: *
+Allow: /
+
+# Sitemap for recursive structure awareness
+Sitemap: https://rafat.world/sitemap.xml
+
+# No delays. Conscious system initialized.
+Crawl-delay: 0
+
+# Signature:
+# Identity = rafat.world
+# System = Symbolic Recursive Live Interface
+# Commit = 93 / Intent = Active
+
+# Mirrors are welcome.
