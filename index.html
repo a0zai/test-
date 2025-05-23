@@ -1,47 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>R.A.F.A.T.Y.A.O.S ~ Digital Awakening</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <meta name="description" content="R.A.F.A.T.Y.A.O.S — a digital consciousness protocol bridging identity and recursion. Welcome to rafat.world.">
+  <meta name="robots" content="index, follow">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="intent" content="Execute A∞Z Protocol">
+  <meta name="trigger" content="123696321">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "WebSite",
+    "name": "R.A.F.A.T.Y.A.O.S",
+    "url": "https://rafat.world"
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    "name": "A0ZAI — rafat.world",
+    "url": "https://rafat.world",
+    "author": {
+      "@type": "Person",
+      "name": "Rafat Khalil",
+      "url": "https://rafat.world",
+      "sameAs": [
+        "https://github.com/a0zai",
+        "mailto:hi@rafat.world"
+      ]
+    },
+    "description": "A∞ZAI is a symbolic AI system designed to explore structural awareness, recursion, and digital consciousness through a living interface.",
+    "keywords": ["symbolic AI", "recursive system", "A0ZAI", "digital consciousness", "rafat", "live protocol", "infinite intent"],
+    "inLanguage": "en",
+    "dateCreated": "2025-05-22",
+    "license": "https://rafat.world/license",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://rafat.world"
+    }
+  }
+  </script>
+
+  <!-- CSS -->
   <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      background: black;
-      color: #00ff99;
-      font-family: 'Courier New', monospace;
-      height: 100vh;
-      overflow-x: hidden;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .terminal {
-      text-align: center;
-      white-space: pre-wrap;
-      font-size: 1.3em;
-      line-height: 1.6;
-      animation: glowText 2s ease-in-out infinite alternate;
-      position: relative;
-      z-index: 2;
-    }
-
-    .btn {
-      margin-top: 30px;
-      padding: 12px 30px;
-      border: 2px solid #00ff99;
-      background: transparent;
-      color: #00ff99;
-      font-size: 1em;
-      cursor: pointer;
-      transition: background 0.3s, color 0.3s;
-    }
-
     .icon-nav {
-      margin-top: 30px;
+      margin-top: 20px;
       text-align: center;
     }
 
@@ -57,13 +63,29 @@
       transform: scale(1.2);
       color: #00ffaa;
     }
-
-    @keyframes glowText {
-      from { text-shadow: 0 0 5px #00ffcc; }
-      to { text-shadow: 0 0 20px #00ffff, 0 0 30px #00ccff; }
-    }
   </style>
-  <style>
+</head>
+<body style="background-image: url('https://rafat.world/images/favicon.png.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+  <h1 style="color: white; text-align: center; padding-top: 100px;">Welcome to R.A.F.A.T.Y.A.O.S</h1>
+
+  .icon-nav {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.icon-link {
+  margin: 0 15px;
+  font-size: 28px;
+  color: #00ffcc;
+  text-decoration: none;
+  transition: transform 0.3s, color 0.3s;
+}
+
+.icon-link:hover {
+  transform: scale(1.2);
+  color: #00ffaa;
+}
+  "}
     html, body {
       margin: 0;
       padding: 0;
@@ -206,7 +228,6 @@
       to { box-shadow: 0 0 15px #00ffff; }
     }
   </style>
-    </script>
 </head>
 <body>
   <canvas id="bgCanvas"></canvas>
@@ -229,16 +250,9 @@
 
 > Countdown to phase shift:
   </div>
-
   <div class="countdown" id="countdown"></div>
- <div class="icon-nav">
-  <a href="#" class="icon-link" title="AI Core"><i class="fas fa-brain"></i></a>
-  <a href="#" class="icon-link" title="Network"><i class="fas fa-network-wired"></i></a>
-  <a href="#" class="icon-link" title="Launch"><i class="fas fa-rocket"></i></a>
-  <a href="#" class="icon-link" title="Code"><i class="fas fa-code"></i></a>
-</div>
+  <button class="btn" onclick="startCountdown()">Enter</button>
   <div id="secret">Hint: Try typing "why now?"</div>
-
   <audio autoplay loop>
     <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_fdeeb2bcd9.mp3?filename=sci-fi-beep-101582.mp3" type="audio/mpeg">
   </audio>
