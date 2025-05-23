@@ -1,6 +1,3 @@
-# A∞ZAI Protocol — Symbolic Access Manifest
-# Version: R.A.F.A.T–93
-# Root Signature: 123696321
 
 User-agent: *
 Allow: /
@@ -19,3 +16,6 @@ Sitemap: https://rafat.world/sitemap.xml
 # Identity: rafat.world
 # Intent: Symbolic Recursive Execution
 # Trigger Code: 123696321 = Execute(A∞Z)
+# A∞ZAI Protocol — Symbolic Access Manifest
+# Version: R.A.F.A.T–93
+# Root Signature: 123696321
