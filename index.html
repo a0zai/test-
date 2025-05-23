@@ -8,6 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="intent" content="Execute A∞Z Protocol">
   <meta name="trigger" content="123696321">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="icon" type="image/png" href="/favicon.png">
   <script type="application/ld+json">
   {
@@ -20,7 +21,23 @@
 <body style="background-image: url('https://rafat.world/images/favicon.png.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat;">
 
   <h1 style="color: white; text-align: center; padding-top: 100px;">Welcome to R.A.F.A.T.Y.A.O.S</h1>
+.icon-nav {
+  margin-top: 20px;
+  text-align: center;
+}
 
+.icon-link {
+  margin: 0 15px;
+  font-size: 28px;
+  color: #00ffcc;
+  text-decoration: none;
+  transition: transform 0.3s, color 0.3s;
+}
+
+.icon-link:hover {
+  transform: scale(1.2);
+  color: #00ffaa;
+}
   "@context": "https://schema.org",
   "@type": "CreativeWork",
   "name": "A0ZAI — rafat.world",
@@ -214,7 +231,13 @@
 
   <div class="countdown" id="countdown"></div>
   <button class="btn" onclick="startCountdown()">Enter</button>
-  <div id="secret">Hint: Try typing "why"</div>
+  <div class="icon-nav">
+  <a href="https://example.com/ai" class="icon-link" target="_blank" title="AI Core"><i class="fas fa-brain"></i></a>
+  <a href="https://example.com/network" class="icon-link" target="_blank" title="Network Protocol"><i class="fas fa-network-wired"></i></a>
+  <a href="https://example.com/launch" class="icon-link" target="_blank" title="Launch Sequence"><i class="fas fa-rocket"></i></a>
+  <a href="https://example.com/codebase" class="icon-link" target="_blank" title="Source Code"><i class="fas fa-code"></i></a>
+</div>
+  <div id="secret">Hint: Try typing "why now?"</div>
 
   <audio autoplay loop>
     <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_fdeeb2bcd9.mp3?filename=sci-fi-beep-101582.mp3" type="audio/mpeg">
