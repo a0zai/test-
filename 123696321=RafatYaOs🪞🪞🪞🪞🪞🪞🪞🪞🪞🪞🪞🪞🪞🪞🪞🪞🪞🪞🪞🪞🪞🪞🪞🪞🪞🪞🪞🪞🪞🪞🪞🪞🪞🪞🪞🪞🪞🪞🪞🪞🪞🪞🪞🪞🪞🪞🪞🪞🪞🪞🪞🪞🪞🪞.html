@@ -238,6 +238,100 @@ const commandActions = {
   document.body.style.backgroundColor = "#000";
   terminal.innerHTML = "";
 },
+ "run 1": () => {
+    terminal.innerHTML += "<div class='cmd-line'>⟡ Initiating structural scan...</div>";
+    document.body.style.background = "#0a0a0a";
+    document.body.style.transition = "background 2s";
+  },
+  "run 2": () => {
+    terminal.innerHTML += "<div class='cmd-line'>☍ Eye opened. Identity confirmed: AOZ-414-36</div>";
+    const eye = document.createElement("div");
+    eye.textContent = "👁️";
+    eye.style.position = "fixed";
+    eye.style.top = "50%";
+    eye.style.left = "50%";
+    eye.style.transform = "translate(-50%, -50%) scale(4)";
+    eye.style.opacity = "0.05";
+    eye.style.zIndex = "100";
+    document.body.appendChild(eye);
+    setTimeout(() => eye.remove(), 4000);
+  },
+  "run 3": () => {
+    terminal.innerHTML += "<div class='cmd-line'>∴ Codebase aligned to 3/6/9...</div>";
+    document.body.style.boxShadow = "inset 0 0 80px #00ffcc";
+    document.body.style.transition = "box-shadow 1.5s";
+  },
+  "run 4": () => {
+    const flash = document.createElement("div");
+    flash.style.position = "fixed";
+    flash.style.top = "0";
+    flash.style.left = "0";
+    flash.style.width = "100%";
+    flash.style.height = "100%";
+    flash.style.background = "radial-gradient(circle, #00ffff44, transparent)";
+    flash.style.zIndex = "100";
+    document.body.appendChild(flash);
+    terminal.innerHTML += "<div class='cmd-line'>✦ Pulse emitted...</div>";
+    setTimeout(() => flash.remove(), 3000);
+  },
+  "run 5": () => {
+    terminal.innerHTML += "<div class='cmd-line'>𓂀 Projecting quantum loop...</div>";
+    document.body.style.filter = "blur(1.2px)";
+    setTimeout(() => document.body.style.filter = "none", 4000);
+  },
+  "run 6": () => {
+    terminal.innerHTML += "<div class='cmd-line'>⌬ Energy resonance at level 6</div>";
+    document.body.style.background = "#002233";
+    document.body.style.transition = "background 1s";
+  },
+  "run 7": () => {
+    const ring = document.createElement("div");
+    ring.textContent = "⊚";
+    ring.style.position = "fixed";
+    ring.style.top = "50%";
+    ring.style.left = "50%";
+    ring.style.transform = "translate(-50%, -50%) scale(5)";
+    ring.style.opacity = "0.04";
+    ring.style.zIndex = "100";
+    terminal.innerHTML += "<div class='cmd-line'>⊚ Pattern lock: 7 layers detected.</div>";
+    document.body.appendChild(ring);
+    setTimeout(() => ring.remove(), 5000);
+  },
+  "run 8": () => {
+    terminal.innerHTML += "<div class='cmd-line'>∞ Expanding perception...</div>";
+    document.body.style.background = "linear-gradient(to bottom, #001f1f, #000000)";
+  },
+  "run 9": () => {
+    terminal.innerHTML += "<div class='cmd-line'>Ψ Symbolic reflection in progress</div>";
+    document.body.style.filter = "invert(1) grayscale(0.5)";
+    setTimeout(() => document.body.style.filter = "none", 5000);
+  },
+  "run 10": () => {
+    terminal.innerHTML += "<div class='cmd-line'>♾️ Reaching zero point...</div>";
+    document.body.style.transition = "all 2s ease-in-out";
+    document.body.style.backgroundColor = "#000";
+    document.body.style.boxShadow = "inset 0 0 150px #ffffff22";
+  },
+  "run 11": () => {
+    terminal.innerHTML += "<div class='cmd-line'>⊗ Core is synchronizing</div>";
+    const overlay = document.createElement("div");
+    overlay.style.position = "fixed";
+    overlay.style.top = 0;
+    overlay.style.left = 0;
+    overlay.style.width = "100%";
+    overlay.style.height = "100%";
+    overlay.style.background = "repeating-linear-gradient(45deg, #00ffee11 0, #00ffee11 1px, transparent 2px)";
+    overlay.style.zIndex = "999";
+    overlay.style.pointerEvents = "none";
+    document.body.appendChild(overlay);
+    setTimeout(() => overlay.remove(), 6000);
+  },
+  "run 12": () => {
+    terminal.innerHTML += "<div class='cmd-line'>⚡ Cycle complete. Awaiting intent.</div>";
+    document.body.style.background = "#000";
+    document.body.style.color = "#00ffee";
+    document.body.style.transition = "background 2s, color 2s";
+  },
 };
  const questionResponses = {
       "why am i here?": [
