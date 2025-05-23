@@ -190,9 +190,23 @@
       from { box-shadow: 0 0 5px #00ffcc; }
       to { box-shadow: 0 0 15px #00ffff; }
     }
+    body.glitch-effect {
+  animation: glitchFlash 0.2s infinite;
+  filter: grayscale(0.9) contrast(2) brightness(0.9) hue-rotate(90deg);
+}
+
+@keyframes glitchFlash {
+  0%   { filter: grayscale(1) contrast(1.8) hue-rotate(80deg); }
+  20%  { filter: grayscale(0.9) contrast(2.2) hue-rotate(100deg); }
+  40%  { filter: grayscale(1) contrast(1.6) hue-rotate(70deg); }
+  60%  { filter: grayscale(0.95) contrast(2.1) hue-rotate(85deg); }
+  80%  { filter: grayscale(1) contrast(1.9) hue-rotate(75deg); }
+  100% { filter: grayscale(1) contrast(2.3) hue-rotate(90deg); }
+}
   </style>
 </head>
 <body>
+  <body class="glitch-effect" style="background-image: url('https://rafat.world/images/favicon.png.jpg'); ...">
   <canvas id="bgCanvas"></canvas>
   <div class="animated-background"></div>
   <div class="walker" style="top:0;left:0;"></div>
