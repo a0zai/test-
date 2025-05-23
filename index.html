@@ -179,6 +179,52 @@
   z-index: 3;
   position: relative;
 }
+.avatar-card {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 160px;
+  padding: 10px;
+  background: rgba(0, 255, 204, 0.07);
+  border: 1px solid #00ffcc;
+  border-radius: 10px;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  z-index: 99;
+}
+
+.avatar-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px #00ffcc, 0 0 30px #00ffff;
+}
+
+.avatar-card img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 2px solid #00ffcc;
+  margin-bottom: 10px;
+}
+
+.avatar-card .qr {
+  width: 100px;
+  border-radius: 5px;
+  margin-top: 10px;
+  border: 1px dashed #00cccc;
+}
+
+.avatar-card .title {
+  font-size: 0.8em;
+  color: #00ffee;
+  margin-top: 5px;
+}
+
+.avatar-card a {
+  color: #00ffcc;
+  text-decoration: none;
+  font-size: 0.75em;
+}
 @keyframes countdownGlow {
   from {
     opacity: 0.8;
@@ -231,6 +277,12 @@
   <div class="countdown" id="countdown"></div>
   <button class="btn" onclick="startCountdown()">Enter</button>
   <div id="secret">Hint: Try typing "why now?"</div>
+  <div class="avatar-card" onclick="window.open('https://gravatar.com/queenbriefly09f4c9df75', '_blank')">
+  <img src="https://www.gravatar.com/avatar/09f4c9df75" alt="Rafat Gravatar">
+  <div class="title">Rafat Khalil</div>
+  <img class="qr" src="https://www.gravatar.com/avatar/09f4c9df75?s=200&d=identicon" alt="QR Gravatar">
+  <a href="https://gravatar.com/queenbriefly09f4c9df75" target="_blank">View Gravatar</a>
+</div>
   <audio autoplay loop>
     <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_fdeeb2bcd9.mp3?filename=sci-fi-beep-101582.mp3" type="audio/mpeg">
   </audio>
