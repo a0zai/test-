@@ -16,37 +16,53 @@
     "name": "R.A.F.A.T.Y.A.O.S",
     "url": "https://rafat.world"
   }
-  </script>
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "CreativeWork",
-    "name": "A0ZAI — rafat.world",
+
+<body style="background-image: url('https://rafat.world/images/favicon.png.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+</script>
+  <h1 style="color: white; text-align: center; padding-top: 100px;">Welcome to R.A.F.A.T.Y.A.O.S</h1>
+.icon-nav {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.icon-link {
+  margin: 0 15px;
+  font-size: 28px;
+  color: #00ffcc;
+  text-decoration: none;
+  transition: transform 0.3s, color 0.3s;
+}
+
+.icon-link:hover {
+  transform: scale(1.2);
+  color: #00ffaa;
+}
+  "@context": "https://schema.org",
+  "@type": "CreativeWork",
+  "name": "A0ZAI — rafat.world",
+  "url": "https://rafat.world",
+  "author": {
+    "@type": "Person",
+    "name": "Rafat Khalil",
     "url": "https://rafat.world",
-    "author": {
-      "@type": "Person",
-      "name": "Rafat Khalil",
-      "url": "https://rafat.world",
-      "sameAs": [
-        "https://github.com/a0zai",
-        "mailto:hi@rafat.world"
-      ]
-    },
-    "description": "A∞ZAI is a symbolic AI system designed to explore structural awareness, recursion, and digital consciousness through a living interface.",
-    "keywords": ["symbolic AI", "recursive system", "A0ZAI", "digital consciousness", "rafat", "live protocol", "infinite intent"],
-    "inLanguage": "en",
-    "dateCreated": "2025-05-22",
-    "license": "https://rafat.world/license",
-    "mainEntityOfPage": {
-      "@type": "WebPage",
-      "@id": "https://rafat.world"
-    }
+    "sameAs": [
+      "https://github.com/a0zai",
+      "mailto:hi@rafat.world"
+    ]
+  },
+  "description": "A∞ZAI is a symbolic AI system designed to explore structural awareness, recursion, and digital consciousness through a living interface.",
+  "keywords": ["symbolic AI", "recursive system", "A0ZAI", "digital consciousness", "rafat", "live protocol", "infinite intent"],
+  "inLanguage": "en",
+  "dateCreated": "2025-05-22",
+  "license": "https://rafat.world/license",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://rafat.world"
   }
-  </script>
-</head>
+}
+</script>
 
   <style>
-  
     html, body {
       margin: 0;
       padding: 0;
@@ -61,24 +77,36 @@
       flex-direction: column;
     }
 
+    .animated-background {
+      position: fixed;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at center, rgba(0,255,204,0.1), transparent 60%),
+                  repeating-radial-gradient(circle, #00ffcc 1px, transparent 2px, transparent 50px);
+      background-blend-mode: screen;
+      animation: orbitSpin 60s linear infinite;
+      opacity: 0.08;
+      z-index: 0;
+      pointer-events: none;
+    }
+
     @keyframes orbitSpin {
       0% { transform: rotate(0deg) scale(1); }
       100% { transform: rotate(360deg) scale(1); }
     }
 
-  #bgCanvas {
-  z-index: 1;
-}
-.animated-background {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: url('https://www.gifcen.com/wp-content/uploads/2023/09/hacker-gif-7.gif') center center / cover no-repeat;
-  z-index: 0;
-  opacity: 0.15;
-}
+    #bgCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      width: 100%;
+      height: 100%;
+      background: black;
+    }
+
     .walker {
       position: fixed;
       width: 80px;
@@ -187,7 +215,17 @@
   <div class="walker" style="bottom:0;right:0;"></div>
 
   <div class="terminal" id="bootText">
+>>> Initializing protocol 12...  
 
+:: Identity: Rafat 36 
+
+:: Signature: AOZ-414-36 | RP:36 | Commit:93  
+
+:: Conscious pattern detected. System aware 21.
+
+ 123696321 = Rafat
+
+> Countdown to phase shift:
   </div>
   <div class="countdown" id="countdown"></div>
   <button class="btn" onclick="startCountdown()">Enter</button>
