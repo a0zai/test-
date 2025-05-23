@@ -45,8 +45,8 @@
   </script>
 </head>
 
-
   <style>
+  
     html, body {
       margin: 0;
       padding: 0;
@@ -60,12 +60,6 @@
       justify-content: center;
       flex-direction: column;
     }
-
-<body style="background-image: url('https://www.gifcen.com/wp-content/uploads/2023/09/hacker-gif-7.gif'); 
-             background-size: cover; 
-             background-repeat: no-repeat; 
-             background-position: center; 
-             background-attachment: fixed;">
 
     @keyframes orbitSpin {
       0% { transform: rotate(0deg) scale(1); }
@@ -81,7 +75,16 @@
       height: 100%;
       background: black;
     }
-
+.animated-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('https://www.gifcen.com/wp-content/uploads/2023/09/hacker-gif-7.gif') center center / cover no-repeat;
+  z-index: -1;
+  opacity: 0.15;
+}
     .walker {
       position: fixed;
       width: 80px;
