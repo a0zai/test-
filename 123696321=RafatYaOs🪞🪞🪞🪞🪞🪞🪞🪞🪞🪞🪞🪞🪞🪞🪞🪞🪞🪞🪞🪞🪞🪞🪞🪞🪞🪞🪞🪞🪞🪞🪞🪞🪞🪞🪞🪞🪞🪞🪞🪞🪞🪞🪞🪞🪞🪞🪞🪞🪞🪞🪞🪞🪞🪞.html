@@ -158,6 +158,56 @@ const baseLines = [
   "Response: Live signal online.",
   "Awaiting world🚀..."
 ];
+const commandActions = {
+  "wake up": () => {
+    document.body.style.backgroundColor = "#001f1f";
+    terminal.style.color = "#00ffcc";
+  },
+  "clear": () => {
+    terminal.innerHTML = "";
+  },
+  "subscribe": () => {
+    const form = document.getElementById("subscription-form");
+    if (form) form.style.display = "block";
+  },
+  "glitch": () => {
+    document.body.classList.add("glitch-effect");
+    setTimeout(() => {
+      document.body.classList.remove("glitch-effect");
+    }, 3000);
+  },
+  "open portal": () => {
+    const msg = document.createElement("div");
+    msg.className = "cmd-line";
+    msg.textContent = "🌀 Portaal geopend.";
+    terminal.appendChild(msg);
+  },
+  "darkmode": () => {
+    document.body.style.backgroundColor = "#000000";
+    terminal.style.color = "#00ffcc";
+  },
+  "lightmode": () => {
+    document.body.style.backgroundColor = "#ffffff";
+    terminal.style.color = "#111111";
+  },
+  "run rafat": () => {
+    const msg = document.createElement("div");
+    msg.className = "cmd-line";
+    msg.textContent = "⚡ Executing Rafat protocol...";
+    terminal.appendChild(msg);
+    document.body.style.boxShadow = "0 0 20px #00ffcc";
+  },
+  "whoami": () => {
+    const msg = document.createElement("div");
+    msg.className = "cmd-line";
+    msg.innerHTML = "🪪 Identiteit geladen: <strong>Rafat</strong> | Structuur: AOZ-414-36";
+    terminal.appendChild(msg);
+  },
+  "collapse": () => {
+    document.body.style.display = "none";
+    setTimeout(() => { document.body.style.display = "block"; }, 2000);
+  }
+};
  const questionResponses = {
       "why am i here?": [
     "Answer 1: To explore meaning.",
@@ -1927,7 +1977,10 @@ function interpretInput(input) {
     const answers = questionResponses[lowerInput];
     return `Answer 1: ${answers[0]} \nAnswer 2: ${answers[1]}`;
   }
-
+if (commandActions[lowerInput]) {
+  commandActions[lowerInput]();
+  return `🔧 Commando "${lowerInput}" geactiveerd.`;
+}
 
   const result = [];
 
@@ -2034,5 +2087,6 @@ particlesJS("particles-js", {
  }
 });
 </script>
+<script src="commandActions.js"></script>
 </body>
 </html>
