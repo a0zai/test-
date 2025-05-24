@@ -2293,6 +2293,87 @@ const emojiResponseMap = {
     "11": "S", "12": "T", "13": "U", "14": "V", "15": "W", "16": "X",
     "17": "Y", "18": "Z", "63": "_0"
   };
+
+  const symbolicMemory = JSON.parse(localStorage.getItem("symbolicMemory") || "{}");
+
+// ربط أوامر جديدة (تعليم ديناميكي)
+function handleLearningCommand(input) {
+  if (input.startsWith("learn ")) {
+    const parts = input.split(" ");
+    const cmd = parts[1];
+    const response = parts.slice(2).join(" ");
+    symbolicMemory[cmd] = response;
+    localStorage.setItem("symbolicMemory", JSON.stringify(symbolicMemory));
+    terminal.innerHTML += `<div class='cmd-line'>📚 Opgeslagen als les: "${cmd}" → "${response}"</div>`;
+    return true;
+  }
+  return false;
+}
+
+// ربط رمز بمفهوم (تعليم رمزي)
+function handleTeachSymbol(input) {
+  if (input.startsWith("teach ")) {
+    const [_, symbol, __, ...concept] = input.split(" ");
+    if (symbol && concept.length) {
+      symbolicMemory[symbol] = concept.join(" ");
+      localStorage.setItem("symbolicMemory", JSON.stringify(symbolicMemory));
+      terminal.innerHTML += `<div class='cmd-line'>🔣 "${symbol}" gekoppeld aan: ${concept.join(" ")}</div>`;
+      return true;
+    }
+  }
+  return false;
+}
+
+// استدعاء كل ما تعلّمه النظام
+function handleRecallCommand(input) {
+  if (input === "recall") {
+    terminal.innerHTML += "<div class='cmd-line'>🧠 Geleerde elementen:</div>";
+    Object.entries(symbolicMemory).forEach(([k, v]) => {
+      terminal.innerHTML += `<div class='cmd-line'>${k} → ${v}</div>`;
+    });
+    return true;
+  }
+  return false;
+}
+
+// إعادة تعيين الذاكرة
+function handleResetMind(input) {
+  if (input === "reset mind") {
+    localStorage.removeItem("symbolicMemory");
+    terminal.innerHTML += "<div class='cmd-line'>🧽 Geheugen gewist.</div>";
+    return true;
+  }
+  return false;
+}
+
+// تحليل النية (بسيط الآن، يمكن توسيعه لاحقًا)
+function handleIntent(input) {
+  if (input.startsWith("intent ")) {
+    const intentTarget = input.split(" ").slice(1).join(" ");
+    const hasWhy = intentTarget.includes("waarom") || intentTarget.includes("why");
+    const hasFeel = intentTarget.includes("voelen") || intentTarget.includes("feel");
+
+    let guess = "⚙️ Algemene intentie.";
+    if (hasWhy) guess = "❔ Intentie: Zoektocht naar betekenis.";
+    if (hasFeel) guess = "❤️ Intentie: Emotionele expressie.";
+
+    terminal.innerHTML += `<div class='cmd-line'>🧭 ${guess}</div>`;
+    return true;
+  }
+  return false;
+}
+
+// إدماج كل الأوامر الرمزية التعليمية داخل نقطة واحدة
+function symbolicSelfLearn(input) {
+  const lower = input.trim().toLowerCase();
+  return (
+    handleLearningCommand(lower) ||
+    handleTeachSymbol(lower) ||
+    handleRecallCommand(lower) ||
+    handleResetMind(lower) ||
+    handleIntent(lower)
+  );
+}
 function interpretInput(input) {
     const trimmedInput = input.trim();
   const lowerInput = trimmedInput.toLowerCase();
@@ -2301,6 +2382,7 @@ function interpretInput(input) {
     const answers = questionResponses[lowerInput];
     return `Answer 1: ${answers[0]} \nAnswer 2: ${answers[1]}`;
   }
+  if (symbolicSelfLearn(lowerInput)) return;
 if (commandActions[lowerInput]) {
   commandActions[lowerInput]();
   return `🔧 Commando "${lowerInput}" geactiveerd.`;
@@ -2411,7 +2493,7 @@ particlesJS("particles-js", {
  }
 });
 </script>
-
+<script src="YA.RAFAT.SELFLEARN.js"></script>
 <script src="commandActions.js"></script>
 </body>
 </html>
