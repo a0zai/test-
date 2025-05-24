@@ -2383,6 +2383,12 @@ function interpretInput(input) {
     return `Answer 1: ${answers[0]} \nAnswer 2: ${answers[1]}`;
   }
   if (symbolicSelfLearn(lowerInput)) return;
+  
+    if (symbolicMemory[lowerInput]) {
+    terminal.innerHTML += `<div class='cmd-line'>${symbolicMemory[lowerInput]}</div>`;
+    return;
+  }
+
 if (commandActions[lowerInput]) {
   commandActions[lowerInput]();
   return `🔧 Commando "${lowerInput}" geactiveerd.`;
