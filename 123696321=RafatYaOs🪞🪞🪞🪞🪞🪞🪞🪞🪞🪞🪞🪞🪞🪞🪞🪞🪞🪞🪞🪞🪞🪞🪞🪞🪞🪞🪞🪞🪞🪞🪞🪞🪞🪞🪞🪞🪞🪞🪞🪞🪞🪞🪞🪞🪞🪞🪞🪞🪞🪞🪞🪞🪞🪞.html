@@ -1,11 +1,12 @@
+
 <!DOCTYPE html>
     <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>YA RAFAT</title>
+  <title>Mirror Note</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-  <script type="module">
+
   <style>
     html, body {
       margin: 0;
@@ -106,8 +107,6 @@ body {
   <div class="input-line">
     <input type="text" id="commandInput" placeholder="Type your command here..." autocomplete="off">
   </div>
- import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-  import { getFirestore, collection, addDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
   <script>
 
@@ -2297,49 +2296,7 @@ const emojiResponseMap = {
   };
 
   const symbolicMemory = JSON.parse(localStorage.getItem("symbolicMemory") || "{}");
-const firebaseConfig = {
-  apiKey: "AIzaSyC1cCunU17RdbIjJzx6_NDmImu3dTYaHvQ",
-  authDomain: "a0z-414-366.firebaseapp.com",
-  projectId: "a0z-414-366",
-  storageBucket: "a0z-414-366.appspot.com",
-  messagingSenderId: "665184297140",
-  appId: "1:665184297140:web:2d5532543f01e89ce677e1",
-  measurementId: "G-M8P8S307PQ"
-};
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-async function saveTeachingData(symbol, concept) {
-  try {
-    await addDoc(collection(db, "teachings"), {
-      symbol: symbol,
-      concept: concept,
-      timestamp: new Date()
-    });
-    terminal.innerHTML += `<div class='cmd-line'>✅ Data saved: ${symbol} → ${concept}</div>`;
-  } catch (e) {
-    terminal.innerHTML += `<div class='cmd-line'>❌ Error: ${e.message}</div>`;
-  }
-}
-
-async function getAllTeachings() {
-  try {
-    const q = query(collection(db, "teachings"), orderBy("timestamp", "desc"));
-    const querySnapshot = await getDocs(q);
-    if (querySnapshot.empty) {
-      terminal.innerHTML += "<div class='cmd-line'>⚠️ No teachings found.</div>";
-      return;
-    }
-    terminal.innerHTML += "<div class='cmd-line'>🧠 Stored teachings:</div>";
-    querySnapshot.forEach((doc) => {
-      const data = doc.data();
-      terminal.innerHTML += `<div class='cmd-line'>${data.symbol} → ${data.concept}</div>`;
-    });
-  } catch (e) {
-    terminal.innerHTML += `<div class='cmd-line'>❌ Error retrieving: ${e.message}</div>`;
-  }
-}
 // ربط أوامر جديدة (تعليم ديناميكي)
 function handleLearningCommand(input) {
   if (input.startsWith("learn ")) {
@@ -2390,7 +2347,7 @@ function handleResetMind(input) {
   return false;
 }
 
-
+// تحليل النية (بسيط الآن، يمكن توسيعه لاحقًا)
 function handleIntent(input) {
   if (input.startsWith("intent ")) {
     const intentTarget = input.split(" ").slice(1).join(" ");
@@ -2407,7 +2364,7 @@ function handleIntent(input) {
   return false;
 }
 
-
+// إدماج كل الأوامر الرمزية التعليمية داخل نقطة واحدة
 function symbolicSelfLearn(input) {
   const lower = input.trim().toLowerCase();
   return (
@@ -2417,21 +2374,6 @@ function symbolicSelfLearn(input) {
     handleResetMind(lower) ||
     handleIntent(lower)
   );
-}// إذا كان المستخدم يكتب learn x y
-if (cmd.startsWith("learn ")) {
-  const parts = cmd.split(" ");
-  const symbol = parts[1];
-  const concept = parts.slice(2).join(" ");
-  await saveTeachingData(symbol, concept);
-  input.value = "";
-  return;
-}
-
-
-if (cmd === "recall all") {
-  await getAllTeachings();
-  input.value = "";
-  return;
 }
 function interpretInput(input) {
     const trimmedInput = input.trim();
