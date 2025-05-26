@@ -97,7 +97,9 @@ body {
  </head>
 
 <body>
-
+   <div id="rafat-title">Mirror Note</div>
+  <div id="signature"></div>
+<div id="signature">{{SIGNATURE}}</div>
   <div id="particles-js"></div>
 
   <div id="rafat-title">Mirror Note</div>
@@ -110,6 +112,8 @@ body {
 
   <script>
 
+html, _ := ioutil.ReadFile("index.html")
+content := strings.Replace(string(html), "{{SIGNATURE}}", signature, 1)
     particlesJS("particles-js", {
       "particles": {
         "number": { "value": 80 },
@@ -124,7 +128,9 @@ body {
         }
       }
     });
-
+http.HandleFunc("/signature", func(w http.ResponseWriter, r *http.Request) {
+    w.Write([]byte("12r36a96fa3t21"))
+})
   const terminal = document.getElementById("terminal");
   const input = document.getElementById("commandInput");
 
@@ -2294,7 +2300,9 @@ const emojiResponseMap = {
     "11": "S", "12": "T", "13": "U", "14": "V", "15": "W", "16": "X",
     "17": "Y", "18": "Z", "63": "_0"
   };
-
+document.getElementById("signature").textContent = "🖋️ Rafat Signature: 123696321";
+  .then(response => response.text())
+  .then(sig => document.getElementById("signature").textContent = sig);
   const symbolicMemory = JSON.parse(localStorage.getItem("symbolicMemory") || "{}");
 
 // ربط أوامر جديدة (تعليم ديناميكي)
