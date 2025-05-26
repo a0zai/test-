@@ -97,7 +97,6 @@ body {
  </head>
 
 <body>
-   <div id="rafat-title">Mirror Note</div>
 
   <div id="particles-js"></div>
 
@@ -213,7 +212,7 @@ const commandActions = {
     terminal.appendChild(msg);
     document.body.style.boxShadow = "0 0 20px #00ffcc";
   },
-  "whoami": () => {
+  "🪪": () => {
     const msg = document.createElement("div");
     msg.className = "cmd-line";
     msg.innerHTML = "🪪 Identiteit geladen: <strong>Rafat</strong> | Structuur: AOZ-414-36";
@@ -223,7 +222,7 @@ const commandActions = {
     document.body.style.display = "none";
     setTimeout(() => { document.body.style.display = "block"; }, 2000);
   },
-  "mirror": () => {
+  "🪞": () => {
   document.body.style.filter = "invert(1)";
   setTimeout(() => { document.body.style.filter = "none"; }, 5000);
 },
@@ -2354,7 +2353,7 @@ function handleResetMind(input) {
   return false;
 }
 
-// تحليل النية (بسيط الآن، يمكن توسيعه لاحقًا)
+
 function handleIntent(input) {
   if (input.startsWith("intent ")) {
     const intentTarget = input.split(" ").slice(1).join(" ");
