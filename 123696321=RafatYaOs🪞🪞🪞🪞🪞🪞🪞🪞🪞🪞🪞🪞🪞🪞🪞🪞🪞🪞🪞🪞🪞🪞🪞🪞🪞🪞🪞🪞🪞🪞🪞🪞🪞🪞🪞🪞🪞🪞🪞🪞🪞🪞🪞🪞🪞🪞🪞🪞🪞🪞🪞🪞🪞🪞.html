@@ -122,7 +122,6 @@ body {
         }
       }
     });
-    terminal.scrollTop = terminal.scrollHeight;
   const terminal = document.getElementById("terminal");
   const input = document.getElementById("commandInput");
 
@@ -2691,6 +2690,7 @@ function showLine() {
     div.textContent = baseLines[i];
     terminal.appendChild(div);
     i++;
+    terminal.scrollTop = terminal.scrollHeight;
     setTimeout(showLine, 300);
   }
 }
