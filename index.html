@@ -331,13 +331,14 @@
     }
     animate();
     function playSound(soundFile) {
-      const audio = new Audio(soundFile);
-      audio.play();
-    }
+    const audio = new Audio(soundFile);
+    audio.play();
+  }
 
-    document.querySelector("https://pixabay.com/music/electronic-dark-drone-intrigue-suspence-horror-drone-245048/").addEventListener("click", function() {
-
-    });
+  document.getElementById("play-link").addEventListener("click", function(event) {
+    event.preventDefault(); // عشان ما يروحش للصفحة التانية
+    playSound("https://cdn.pixabay.com/audio/2023/01/31/audio_245048.mp3"); // أو أي رابط صوتي صحيح
+  })
   </script>
 </body>
 </html>
