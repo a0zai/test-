@@ -330,6 +330,14 @@
       requestAnimationFrame(animate);
     }
     animate();
+    function playSound(soundFile) {
+      const audio = new Audio(soundFile);
+      audio.play();
+    }
+
+    document.querySelector(".btn").addEventListener("click", function() {
+      playSound("https://filmmusic.io/ar/song/12249-cinematic-tension-002");
+    });
   </script>
 </body>
 </html>
