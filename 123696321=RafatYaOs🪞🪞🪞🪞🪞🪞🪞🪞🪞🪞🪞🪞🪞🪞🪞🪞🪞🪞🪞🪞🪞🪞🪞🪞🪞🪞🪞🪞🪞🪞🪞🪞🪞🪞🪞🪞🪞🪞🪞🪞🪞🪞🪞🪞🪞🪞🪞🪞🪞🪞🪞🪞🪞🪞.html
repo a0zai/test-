@@ -379,7 +379,7 @@ const commandActions = {
     voidDiv.style.transform = "translate(-50%, -50%)";
     document.body.appendChild(voidDiv);
   },
-  "run 17": () => {
+  "!": () => {
     document.body.style.animation = "shake 0.2s infinite";
     terminal.innerHTML += "<div class='cmd-line'>✴️ SYSTEM REWRITE INITIATED...</div>";
     setTimeout(() => {
@@ -433,7 +433,7 @@ const commandActions = {
     q.style.fontStyle = "italic";
     terminal.appendChild(q);
   },
-  "run 25": () => {
+  "!!": () => {
     terminal.innerHTML += "<div class='cmd-line'>🌀 Bewustzijn draait in lussen...</div>";
     document.body.style.transition = "all 1.5s ease-in-out";
     document.body.style.transform = "rotate(360deg)";
