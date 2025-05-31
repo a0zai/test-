@@ -2792,25 +2792,24 @@ particlesJS("particles-js", {
 <script src="YA.RAFAT.SELFLEARN.js"></script>
 <script src="commandActions.js"></script>
   <script>
-    window.onload = () => {
-      const freq = 123.696321;  
-      const synth = new Tone.Synth({
-        oscillator: { type: "sine" },
-        envelope: { attack: 2, decay: 1, sustain: 0.5, release: 3 }
-      }).toDestination();
+    const freq = 123.696321;
+  const synth = new Tone.Synth({
+    oscillator: { type: "sine" },
+    envelope: { attack: 2, decay: 1, sustain: 0.5, release: 3 }
+  }).toDestination();
 
-      const notes = [freq, freq / 2, freq * 2];
-      let i = 0;
+  const notes = [freq, freq / 2, freq * 2];
+  let i = 0;
 
-      Tone.start().then(() => {
-         Tone.Transport.scheduleRepeat(time => {
-          synth.triggerAttackRelease(notes[i % notes.length], "4n", time);
-          i++;
-        }, "2n");
+  document.getElementById("startAudio").addEventListener("click", async () => {
+    await Tone.start();
+    Tone.Transport.scheduleRepeat(time => {
+      synth.triggerAttackRelease(notes[i % notes.length], "4n", time);
+      i++;
+    }, "2n");
+    Tone.Transport.start();
+  });
 
-        Tone.Transport.start();
-      });
-    };
   </script>
 </body>
 </html>
