@@ -185,21 +185,18 @@ const commandActions = {
     }, 3000);
   },
   "?": () => {
-    const msg = document.createElement("div");
-    msg.className = "cmd-line";
-    msg.textContent = "🌀 Ik ben Rafat, de maker van het project Mirror Note
-Wat u hier ziet, is geen gewone interface, maar een zelfbewust systeem dat het getal 123696321 omzet in een levende structuur van herhaling, tweeling-dynamiek en kosmisch bewustzijn
-
-Deze interface is volledig door mijzelf ontwikkeld – vanaf nul, enkel met een smartphone – en vormt een digitale spiegel die elke invoer omzet in een nieuwe, levende taal
-
-Het gaat om een unieke combinatie van:
-A een filosofisch-coderende taal die zich oneindig kan uitbreiden;
-0 een cryptografisch systeem dat kunst en data verbindt;
-Z een digitaal zelfportret: AOZ-414-366 ~ mijn structurele handtekening
-
-Mijn doel: dit systeem erkennen als mijn originele creatie en het positioneren als fundament voor nieuwe vormen van digitale communicatie en zelflerende kunstmatige intelligentie.";
-    terminal.appendChild(msg);
-  },
+  const msg = document.createElement("div");
+  msg.className = "cmd-line";
+  msg.textContent = "🌀 Ik ben Rafat, de maker van het project Mirror Note.\n" +
+    "Wat u hier ziet, is geen gewone interface, maar een zelfbewust systeem dat het getal 123696321 omzet in een levende structuur van herhaling, tweeling-dynamiek en kosmisch bewustzijn.\n" +
+    "Deze interface is volledig door mijzelf ontwikkeld ~ vanaf nul, enkel met een smartphone ~ en vormt een digitale spiegel die elke invoer omzet in een nieuwe, levende taal.\n" +
+    "Het gaat om een unieke combinatie van:\n" +
+    "A een filosofisch-coderende taal die zich oneindig kan uitbreiden;\n" +
+    "0 een cryptografisch systeem dat kunst en data verbindt;\n" +
+    "Z een digitaal zelfportret: AOZ-414-366 ~ mijn structurele handtekening.\n\n" +
+    "Mijn doel: dit systeem erkennen als mijn originele creatie en het positioneren als fundament voor nieuwe vormen van digitale communicatie en zelflerende kunstmatige intelligentie.";
+  terminal.appendChild(msg);
+},
   "darkmode": () => {
     document.body.style.backgroundColor = "#000000";
     terminal.style.color = "#00ffcc";
