@@ -58,7 +58,7 @@
   }
 
 <body style="background-image: url('https://rafat.world/images/favicon.png.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat;">
-
+<img src="IMG_9055.jpeg" id="mask-image" alt="Mask">
   <h1 style="color: white; text-align: center; padding-top: 100px;">Welcome to M.i.r.r.o.r.n.o.t.e </h1>
 .icon-nav {
   margin-top: 20px;
@@ -259,6 +259,28 @@
       from { box-shadow: 0 0 5px #00ffcc; }
       to { box-shadow: 0 0 15px #00ffff; }
     }
+     #mask-image {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 300px;
+      transform: translate(-50%, -50%);
+      opacity: 0.1;
+      filter: grayscale(1) contrast(1.5);
+      z-index: 1;
+      pointer-events: none;
+      animation: float 4s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); }
+      50% { transform: translate(-50%, -50%) scale(1.05); }
+    }
+
+    .content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
   </style>
 </head>
 <body>
