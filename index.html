@@ -258,18 +258,19 @@
       from { box-shadow: 0 0 5px #00ffcc; }
       to { box-shadow: 0 0 15px #00ffff; }
     }
-     #mask-image {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 300px;
-      transform: translate(-50%, -50%);
-      opacity: 0.1;
-      filter: grayscale(1) contrast(1.5);
-      z-index: 1;
-      pointer-events: none;
-      animation: float 4s ease-in-out infinite;
-    }
+#mask-image {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover; 
+  opacity: 0.3;
+  filter: grayscale(1) contrast(1.5);
+  z-index: 1;
+  pointer-events: none;
+  animation: float 4s ease-in-out infinite;
+}
 
     @keyframes float {
       0%, 100% { transform: translate(-50%, -50%) scale(1); }
