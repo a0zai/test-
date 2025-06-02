@@ -324,9 +324,9 @@
           return;
         }
 
-        const minutes = Math.floor(diff / 60000);
-        const seconds = Math.floor((diff % 60000) / 1000);
-        countdownEl.textContent = `${minutes}m ${seconds < 10 ? '0' + seconds : seconds}s`;
+
+        const seconds = Math.floor((diff % 33000) / 1000);
+        countdownEl.textContent = `${seconds < 10 ? '0' + seconds : seconds}s`;
       }, 1000);
     }
 
