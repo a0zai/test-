@@ -119,15 +119,13 @@ body {
       outline: none;
       font-size: 24px;
       text-align: center;
-      width: 100px;
-      margin: 24px;
+      width: 33px;
     ">
 
 
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/tone"></script>
   <script>
-    // Particles effect
     particlesJS("particles-js", {
       "particles": {
         "number": { "value": 80 },
@@ -137,8 +135,11 @@ body {
         "move": { "speed": 0.6 }
       },
       "interactivity": {
-        "events": { "onhover": { "enable": true, "mode": "repulse" } }
+        "events": {
+          "onhover": { "enable": true, "mode": "repulse" }
+        }
       }
+       <div style="text-align: center; padding: 50px; font-family: Arial;">
     });
 
   const terminal = document.getElementById("terminal");
