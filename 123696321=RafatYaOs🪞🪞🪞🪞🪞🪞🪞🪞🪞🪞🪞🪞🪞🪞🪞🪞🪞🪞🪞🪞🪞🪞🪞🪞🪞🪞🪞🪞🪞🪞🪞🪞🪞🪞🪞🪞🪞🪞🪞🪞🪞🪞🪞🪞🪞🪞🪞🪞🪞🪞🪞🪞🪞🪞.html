@@ -94,37 +94,35 @@ body {
  
   <div id="terminal" style="padding: 24px; color: #00ffcc; font-family: monospace;"></div>
 
-  <div class="input-line" style="
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
+  <div class="input-line">
+      <div style="
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 50px;
     display: flex;
     justify-content: center;
     align-items: center;
-    background: rgba(0, 0, 0, 0.8);
-    padding: 24px;
-    z-index: 3;
-  ">
-    <label for="imageInput" style="cursor: pointer; margin-right: 5px;">📷</label>
-    <input type="file" id="imageInput" style="display: none;" onchange="uploadFile('analyze-image')">
-
-    <label for="audioInput" style="cursor: pointer; margin-right: 5px;">🔊</label>
-    <input type="file" id="audioInput" style="display: none;" onchange="uploadFile('analyze-audio')">
-
-    <input type="text" id="commandInput" placeholder="👁️‍🗨️" autocomplete="off" style="
+    border: none;
+  "> 
+  <input type="text" id="commandInput" placeholder="🔛👁️‍🗨️" autocomplete="off" style="
       background: none;
       border: none;
       color: #00fff0;
       outline: none;
       font-size: 24px;
       text-align: center;
-      width: 33px;
+      width: 33%;
     ">
+      <label for="imageInput" style="cursor: pointer; margin-right: 5px;">📷♾️</label>
+    <input type="file" id="imageInput" style="display: none;" onchange="uploadFile('analyze-image')">
 
-
-  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/tone"></script>
+    <label for="audioInput" style="cursor: pointer; margin-right: 5px;">🔊</label>
+    <input type="file" id="audioInput" style="display: none;" onchange="uploadFile('analyze-audio')">
+  </div>
+</div>
   <script>
     particlesJS("particles-js", {
       "particles": {
@@ -139,7 +137,6 @@ body {
           "onhover": { "enable": true, "mode": "repulse" }
         }
       }
-       <div style="text-align: center; padding: 50px; font-family: Arial;">
     });
 
   const terminal = document.getElementById("terminal");
