@@ -35,7 +35,7 @@
   <link rel="icon" type="image/png" href="/favicon.png">
 </head>
 
-<body style="margin: 0; background-image: url('https://rafat.world/images/favicon.png.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; font-family: sans-serif; text-align: center;">
+
 
   <h1>🌀 Welcome to M.i.r.r.o.r.n.o.t.e</h1>
 
@@ -278,7 +278,7 @@
 > Countdown to phase shift:
   </div>
   <div class="countdown" id="countdown"></div>
-  <button class="btn" onclick="startCountdown()">En🪞er</button>
+<button class="btn" onclick="startCountdown(); document.getElementById('bgMusic').play();">En🪞er</button>
 </div>
 
   <script>
@@ -354,8 +354,7 @@
       requestAnimationFrame(animate);
     }
     animate();
-  <button onclick="document.getElementById('bgMusic').play()">En🪞er</button>
-<audio id="bgMusic" src="🌀🎶.mp3" loop></audio>
   </script>
+  <audio id="bgMusic" src="🌀🎶.mp3" loop></audio>
 </body>
 </html>
