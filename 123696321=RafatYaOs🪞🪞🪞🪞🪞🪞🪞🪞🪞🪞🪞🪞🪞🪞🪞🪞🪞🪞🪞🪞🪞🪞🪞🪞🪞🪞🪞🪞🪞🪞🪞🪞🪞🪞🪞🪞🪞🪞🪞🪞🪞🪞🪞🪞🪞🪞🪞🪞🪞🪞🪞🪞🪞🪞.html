@@ -49,10 +49,8 @@
   padding: 20px;
   padding-bottom: 120px;
   z-index: 2;
+  margin: 0 0 10px 0;
 }
-#terminal pre {
-  font-size: 14px; /* حجم أكبر */
-  margin: 0 0 10px 0; /* مسافة سطر فارغ قبل آخر رد */
 
     .cmd-line {
       margin: 10px 0;
@@ -70,7 +68,7 @@
   right: 0;
   z-index: 3;
   background: rgba(0, 0, 0, 0.9);
-  padding: 10px 20px;
+  padding: 10px 24px;
 
 }
 
@@ -95,7 +93,7 @@ body {
 
   <div id="rafat-title" style="text-align:center; font-size: 30px; padding: 20px;">Mirror Note</div>
  
-  <div id="terminal" style="padding: 20px; color: #00ffcc; font-family: monospace;"></div>
+  <div id="terminal" style="padding: 24px; color: #00ffcc; font-family: monospace;"></div>
 
   <div class="input-line" style="
     position: fixed;
@@ -106,7 +104,7 @@ body {
     justify-content: center;
     align-items: center;
     background: rgba(0, 0, 0, 0.8);
-    padding: 20px;
+    padding: 24px;
     z-index: 3;
   ">
     <label for="imageInput" style="cursor: pointer; margin-right: 5px;">📷</label>
@@ -123,7 +121,7 @@ body {
       font-size: 24px;
       text-align: center;
       width: 100px;
-      margin: 16px;
+      margin: 24px;
     ">
 
 
@@ -2847,21 +2845,7 @@ particlesJS("particles-js", {
 <script src="YA.RAFAT.SELFLEARN.js"></script>
 <script src="commandActions.js"></script>
   <script>
-  function appendToTerminal(content) {
-  // إضافة سطر فارغ
-  const blankLine = document.createElement("pre");
-  blankLine.textContent = ""; // سطر فارغ
-  terminal.appendChild(blankLine);
-
-  const pre = document.createElement("pre");
-  pre.textContent = content;
-  pre.style.fontSize = "14px"; // تكبير الخط
-  terminal.appendChild(pre);
-
-  terminal.scrollTop = terminal.scrollHeight;
-}
-
-    async function uploadFile(endpoint) {
+      async function uploadFile(endpoint) {
       let fileInputId = endpoint === "analyze-image" ? "imageInput" : "audioInput";
       let file = document.getElementById(fileInputId).files[0];
       if (!file) { alert("Please select a file first!"); return; }
