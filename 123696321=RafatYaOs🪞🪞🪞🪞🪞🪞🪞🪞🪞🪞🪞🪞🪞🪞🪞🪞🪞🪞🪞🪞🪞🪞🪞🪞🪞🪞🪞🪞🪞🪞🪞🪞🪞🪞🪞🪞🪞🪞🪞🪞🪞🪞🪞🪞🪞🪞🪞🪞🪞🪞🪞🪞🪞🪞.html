@@ -88,58 +88,65 @@ body {
 }
   </style>
  </head>
-
-<body>
-
   <div id="particles-js"></div>
 
-  <div id="rafat-title">Mirror Note</div>
+  <div id="rafat-title" style="text-align:center; font-size: 30px; padding: 20px;">Mirror Note</div>
  
-  <div id="terminal"></div>
+  <div id="terminal" style="padding: 20px; color: #00ffcc; font-family: monospace;"></div>
 
-  <div class="input-line">
-      <div style="
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100px;
-    height: 50px;
+  <div class="input-line" style="
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    border: none;
-  "> 
-  <input type="text" id="commandInput" placeholder="👁️‍🗨️" autocomplete="off" style="
+    background: rgba(0, 0, 0, 0.8);
+    padding: 10px;
+    z-index: 3;
+  ">
+    <label for="imageInput" style="cursor: pointer; margin-right: 5px;">📷</label>
+    <input type="file" id="imageInput" style="display: none;" onchange="uploadFile('analyze-image')">
+
+    <label for="audioInput" style="cursor: pointer; margin-right: 5px;">🔊</label>
+    <input type="file" id="audioInput" style="display: none;" onchange="uploadFile('analyze-audio')">
+
+    <input type="text" id="commandInput" placeholder="👁️‍🗨️" autocomplete="off" style="
       background: none;
       border: none;
       color: #00fff0;
       outline: none;
       font-size: 16px;
       text-align: center;
-      width: 33%;
+      width: 200px;
+      margin: 0 5px;
     ">
+
+    <button onclick="analyzeText()" style="
+      background: none;
+      border: none;
+      color: #00ffcc;
+      font-size: 20px;
+      cursor: pointer;
+      margin-left: 5px;
+    ">📝</button>
+
+
+    <button id="startAudio" style="
+      background: none;
+      border: none;
+      color: #00ffcc;
+      font-size: 20px;
+      cursor: pointer;
+      margin-left: 5px;
+    ">🎶</button>
   </div>
 
-<div style="text-align: center; padding: 50px; font-family: Arial;">
-  <h2>"📊"</h2>
-
-  <h3>"🧩"</h3>
-  <input type="file" id="imageInput" />
-  <button onclick="uploadFile('analyze-image')">"📷"</button>
-
-  <h3>"📣"</h3>
-  <input type="file" id="audioInput" />
-  <button onclick="uploadFile('analyze-audio')">"🔊"</button>
-
-  <h3>"📈</h3>
-  <textarea id="textInput" style="width: 300px; height: 100px;"></textarea>
-  <br />
-  <button onclick="analyzeText()">"📝 </button>
-
-  <pre id="resultDisplay" style="text-align: left; margin-top: 20px; background: #000; color: #0f0; padding: 10px;"></pre>
-</div>
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tone"></script>
   <script>
+    // Particles effect
     particlesJS("particles-js", {
       "particles": {
         "number": { "value": 80 },
@@ -149,11 +156,14 @@ body {
         "move": { "speed": 0.6 }
       },
       "interactivity": {
-        "events": {
-          "onhover": { "enable": true, "mode": "repulse" }
-        }
+        "events": { "onhover": { "enable": true, "mode": "repulse" } }
       }
     });
+
+  
+
+
+
   const terminal = document.getElementById("terminal");
   const input = document.getElementById("commandInput");
 
@@ -2857,23 +2867,48 @@ particlesJS("particles-js", {
 <script src="YA.RAFAT.SELFLEARN.js"></script>
 <script src="commandActions.js"></script>
   <script>
+    async function uploadFile(endpoint) {
+      let fileInputId = endpoint === "analyze-image" ? "imageInput" : "audioInput";
+      let file = document.getElementById(fileInputId).files[0];
+      if (!file) { alert("Please select a file first!"); return; }
+      const formData = new FormData();
+      formData.append("file", file);
+      const response = await fetch(`/api/${endpoint}`, { method: "POST", body: formData });
+      const data = await response.json();
+      appendToTerminal(`🟩 [${endpoint}] ✅\n${JSON.stringify(data, null, 2)}`);
+    }
+
+    async function analyzeText() {
+      let text = document.getElementById("commandInput").value;
+      if (!text) { alert("Please enter some text!"); return; }
+      const response = await fetch("/api/analyze-text", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text }),
+      });
+      const data = await response.json();
+      appendToTerminal(`🟩 [analyze-text] ✅\n${JSON.stringify(data, null, 2)}`);
+    }
+
+    // Tone.js audio logic
     const freq = 123.696321;
-  const synth = new Tone.Synth({
-    oscillator: { type: "sine" },
-    envelope: { attack: 2, decay: 1, sustain: 0.5, release: 3 }
-  }).toDestination();
+    const synth = new Tone.Synth({
+      oscillator: { type: "sine" },
+      envelope: { attack: 2, decay: 1, sustain: 0.5, release: 3 }
+    }).toDestination();
 
-  const notes = [freq, freq / 2, freq * 2];
-  let i = 0;
+    const notes = [freq, freq / 2, freq * 2];
+    let i = 0;
 
-  document.getElementById("startAudio").addEventListener("click", async () => {
-    await Tone.start();
-    Tone.Transport.scheduleRepeat(time => {
-      synth.triggerAttackRelease(notes[i % notes.length], "4n", time);
-      i++;
-    }, "2n");
-    Tone.Transport.start();
-  });
+    document.getElementById("startAudio").addEventListener("click", async () => {
+      await Tone.start();
+      Tone.Transport.scheduleRepeat(time => {
+        synth.triggerAttackRelease(notes[i % notes.length], "4n", time);
+        i++;
+      }, "2n");
+      Tone.Transport.start();
+    });
+
   </script>
 </body>
 </html>
