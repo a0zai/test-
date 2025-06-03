@@ -372,15 +372,8 @@
       requestAnimationFrame(animate);
     }
     animate();
-<button onclick="playSound()">تشغيل الصوت</button>
-  function playSound() {
-  const audio = new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3');
-  audio.volume = 0.7; 
-  audio.play().catch(error => {
-    console.error("حدث خطأ أثناء تشغيل الصوت:", error);
-  });
-}
-  
+  <button onclick="document.getElementById('bgMusic').play()">En🪞er</button>
+<audio id="bgMusic" src="🌀🎶.mp3" loop></audio>
   </script>
 </body>
 </html>
