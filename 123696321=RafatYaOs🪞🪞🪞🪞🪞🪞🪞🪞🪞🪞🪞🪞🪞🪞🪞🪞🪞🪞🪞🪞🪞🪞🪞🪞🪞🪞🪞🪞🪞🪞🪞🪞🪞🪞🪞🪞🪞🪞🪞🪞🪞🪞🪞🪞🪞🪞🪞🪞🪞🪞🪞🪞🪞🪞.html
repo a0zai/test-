@@ -2853,13 +2853,11 @@ particlesJS("particles-js", {
     Tone.Transport.start();
   });
 
+
   async function uploadFile(endpoint) {
     let fileInputId = endpoint === "analyze-image" ? "imageInput" : "audioInput";
     let file = document.getElementById(fileInputId).files[0];
-    if (!file) {
-      alert("الرجاء اختيار ملف أولاً!");
-      return;
-    }
+    if (!file) { alert("🗂️"); return; }
     const formData = new FormData();
     formData.append("file", file);
     const response = await fetch(`/api/${endpoint}`, { method: "POST", body: formData });
@@ -2869,10 +2867,7 @@ particlesJS("particles-js", {
 
   async function analyzeText() {
     let text = document.getElementById("textInput").value;
-    if (!text) {
-      alert("الرجاء كتابة نص أولاً!");
-      return;
-    }
+    if (!text) { alert("✍🏼"); return; }
     const response = await fetch("/api/analyze-text", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -2881,6 +2876,7 @@ particlesJS("particles-js", {
     const data = await response.json();
     document.getElementById("resultDisplay").textContent = JSON.stringify(data, null, 2);
   }
+
   </script>
 </body>
 </html>
