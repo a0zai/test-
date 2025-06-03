@@ -2654,10 +2654,9 @@ let authorized = false; // حالة الأمان
       if (secret === '6339') {   
         authorized = true;
       } else {
-if (password === '6339') { 
-      passwordContainer.style.display = 'none';
-        commandInput.blur(); 
-      }
+        alert('Access denied!');
+        commandInput.blur();
+        }
     }
   });
 
