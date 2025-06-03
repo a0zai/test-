@@ -6,7 +6,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.46/Tone.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-<button id="startAudio" style="position: absolute; top: 10px; left: 10px; z-index: 999;">🔊 Start</button>
   <style>
     html, body {
       margin: 0;
@@ -2867,26 +2866,7 @@ particlesJS("particles-js", {
       const data = await response.json();
       appendToTerminal(`🟩 [analyze-text] ✅\n${JSON.stringify(data, null, 2)}`);
     }
-
-    // Tone.js audio logic
-    const freq = 123.696321;
-    const synth = new Tone.Synth({
-      oscillator: { type: "sine" },
-      envelope: { attack: 2, decay: 1, sustain: 0.5, release: 3 }
-    }).toDestination();
-
-    const notes = [freq, freq / 2, freq * 2];
-    let i = 0;
-
-    document.getElementById("startAudio").addEventListener("click", async () => {
-      await Tone.start();
-      Tone.Transport.scheduleRepeat(time => {
-        synth.triggerAttackRelease(notes[i % notes.length], "4n", time);
-        i++;
-      }, "2n");
-      Tone.Transport.start();
-    });
-
+});
   </script>
 </body>
 </html>
