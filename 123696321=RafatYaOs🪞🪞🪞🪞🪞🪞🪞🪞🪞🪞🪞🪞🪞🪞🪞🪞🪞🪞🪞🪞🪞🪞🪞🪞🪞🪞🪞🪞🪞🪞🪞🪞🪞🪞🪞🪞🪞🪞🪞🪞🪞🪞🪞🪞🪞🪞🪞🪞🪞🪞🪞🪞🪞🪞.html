@@ -50,6 +50,9 @@
   padding-bottom: 120px;
   z-index: 2;
 }
+#terminal pre {
+  font-size: 14px; /* حجم أكبر */
+  margin: 0 0 10px 0; /* مسافة سطر فارغ قبل آخر رد */
 
     .cmd-line {
       margin: 10px 0;
@@ -2844,6 +2847,20 @@ particlesJS("particles-js", {
 <script src="YA.RAFAT.SELFLEARN.js"></script>
 <script src="commandActions.js"></script>
   <script>
+  function appendToTerminal(content) {
+  // إضافة سطر فارغ
+  const blankLine = document.createElement("pre");
+  blankLine.textContent = ""; // سطر فارغ
+  terminal.appendChild(blankLine);
+
+  const pre = document.createElement("pre");
+  pre.textContent = content;
+  pre.style.fontSize = "14px"; // تكبير الخط
+  terminal.appendChild(pre);
+
+  terminal.scrollTop = terminal.scrollHeight;
+}
+
     async function uploadFile(endpoint) {
       let fileInputId = endpoint === "analyze-image" ? "imageInput" : "audioInput";
       let file = document.getElementById(fileInputId).files[0];
