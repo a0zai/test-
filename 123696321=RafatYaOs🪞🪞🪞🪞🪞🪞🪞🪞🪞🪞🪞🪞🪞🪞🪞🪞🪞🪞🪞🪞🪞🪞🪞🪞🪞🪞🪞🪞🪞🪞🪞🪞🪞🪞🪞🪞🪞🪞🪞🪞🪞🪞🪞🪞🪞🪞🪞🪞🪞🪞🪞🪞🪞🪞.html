@@ -90,6 +90,24 @@ body {
  </head>
 
 <body>
+<div style="text-align: center; padding: 50px; font-family: Arial;">
+  <h2>تحليل البيانات</h2>
+
+  <h3>تحليل الصور</h3>
+  <input type="file" id="imageInput" />
+  <button onclick="uploadFile('analyze-image')">رفع الصورة</button>
+
+  <h3>تحليل الصوت</h3>
+  <input type="file" id="audioInput" />
+  <button onclick="uploadFile('analyze-audio')">رفع الصوت</button>
+
+  <h3>تحليل النصوص</h3>
+  <textarea id="textInput" style="width: 300px; height: 100px;"></textarea>
+  <br />
+  <button onclick="analyzeText()">تحليل النص</button>
+
+  <pre id="resultDisplay" style="text-align: left; margin-top: 20px; background: #000; color: #0f0; padding: 10px;"></pre>
+</div>
 
   <div id="particles-js"></div>
 
@@ -2835,6 +2853,34 @@ particlesJS("particles-js", {
     Tone.Transport.start();
   });
 
+  async function uploadFile(endpoint) {
+    let fileInputId = endpoint === "analyze-image" ? "imageInput" : "audioInput";
+    let file = document.getElementById(fileInputId).files[0];
+    if (!file) {
+      alert("الرجاء اختيار ملف أولاً!");
+      return;
+    }
+    const formData = new FormData();
+    formData.append("file", file);
+    const response = await fetch(`/api/${endpoint}`, { method: "POST", body: formData });
+    const data = await response.json();
+    document.getElementById("resultDisplay").textContent = JSON.stringify(data, null, 2);
+  }
+
+  async function analyzeText() {
+    let text = document.getElementById("textInput").value;
+    if (!text) {
+      alert("الرجاء كتابة نص أولاً!");
+      return;
+    }
+    const response = await fetch("/api/analyze-text", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text }),
+    });
+    const data = await response.json();
+    document.getElementById("resultDisplay").textContent = JSON.stringify(data, null, 2);
+  }
   </script>
 </body>
 </html>
