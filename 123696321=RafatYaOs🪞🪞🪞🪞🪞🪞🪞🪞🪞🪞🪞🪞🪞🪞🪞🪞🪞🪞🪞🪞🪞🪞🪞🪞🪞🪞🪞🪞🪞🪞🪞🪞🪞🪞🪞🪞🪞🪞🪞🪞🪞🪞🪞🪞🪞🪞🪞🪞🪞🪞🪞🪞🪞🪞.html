@@ -2868,6 +2868,47 @@ particlesJS("particles-js", {
       appendToTerminal(`🟩 [analyze-text] ✅\n${JSON.stringify(data, null, 2)}`);
     }
 });
+    function R() {
+      log("R: Reflecting input...");
+    }
+
+    function A() {
+      log("A: Activating awareness...");
+    }
+
+    function F() {
+      log("F: Framework initiated.");
+    }
+
+    function T() {
+      log("T: Triggering transcendence.");
+    }
+
+    function RAFAT() {
+      R();
+      A();
+      F();
+      A();
+      T();
+      log("🌀 RAFAT Sequence Executed 🐌");
+    }
+
+    input.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") {
+        const command = input.value.trim().toUpperCase();
+        log(">> " + command);
+        if (command === "RAFAT") {
+          RAFAT();
+        } else {
+          log("Unknown command.");
+        }
+        input.value = "";
+      }
+    });
+
+    window.onload = () => {
+      RAFAT();
+    };
   </script>
 </body>
 </html>
