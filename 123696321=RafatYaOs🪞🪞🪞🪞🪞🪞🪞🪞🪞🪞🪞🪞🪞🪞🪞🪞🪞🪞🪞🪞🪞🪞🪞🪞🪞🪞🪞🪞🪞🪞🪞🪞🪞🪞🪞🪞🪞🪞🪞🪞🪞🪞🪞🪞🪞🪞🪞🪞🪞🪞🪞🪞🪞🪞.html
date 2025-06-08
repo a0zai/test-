@@ -49,7 +49,7 @@
   padding-bottom: 120px;
   z-index: 2;
   margin: 0 0 10px 0;
-    font-size: px;
+    font-size: 16px;
   line-height: 1.4;
 }
 
@@ -2696,7 +2696,26 @@ function symbolicSelfLearn(input) {
 function interpretInput(input) {
     const trimmedInput = input.trim();
   const lowerInput = trimmedInput.toLowerCase();
+if (lowerInput.startsWith("spiral ")) {
+  const numbers = lowerInput.split(" ").slice(1).map(Number);
+  const size = Math.ceil(Math.sqrt(numbers.length));
+  const spiral = Array(size).fill().map(() => Array(size).fill(0));
+  let x = Math.floor(size / 2), y = x;
+  let dx = 0, dy = -1;
 
+  for (let i = 0; i < size * size; i++) {
+    if (x >= 0 && x < size && y >= 0 && y < size) {
+      spiral[y][x] = numbers[i % numbers.length];
+    }
+    if (x === y || (x < y && x + y === size - 1) || (x > y && x + y === size)) {
+      [dx, dy] = [-dy, dx];
+    }
+    x += dx; y += dy;
+  }
+
+  terminal.innerHTML += `<div class='cmd-line'>🌀 Spiral:<br>${spiral.map(row => row.join(" ")).join("<br>")}</div>`;
+  return;
+}
   if (questionResponses[lowerInput]) {
     const answers = questionResponses[lowerInput];
     return `Answer 1: ${answers[0]} \nAnswer 2: ${answers[1]}`;
