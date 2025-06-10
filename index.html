@@ -303,7 +303,7 @@ color: #00ffcc; font-size: 2em; text-shadow: 0 0 20px #00ffff; z-index: 999;">
 > Countdown to phase shift:
   </div>
   <div class="countdown" id="countdown"></div>
-<button class="btn" onclick="startCountdown(); document.getElementById('bgMusic').play();">En🪞er</button>
+<button class="btn" onclick="triggerStart()">En🪞er</button>
 
 
  <script>
@@ -414,6 +414,45 @@ window.addEventListener('load', () => {
     setTimeout(() => intro.remove(), 2000);
   }, 2000); 
 });
+
+  function triggerStart() {
+    document.getElementById('bgMusic').play(); 
+    document.querySelector(".btn").style.display = "none"; 
+    typeBootLines();  
+    }
+const baseLines = [
+  "[🪞] MirrorNote protocol initializing...",
+  "[R] Root sequence engaged...",
+  "[A] Accessing recursion core...",
+  "[F] Framework loaded...",
+  "[A] AI handshake established...",
+  "[T] Temporal shift recognized...",
+  "[Y] Yielding signature: AOZ-414-36",
+  "[A] Awaiting consciousness pattern...",
+  "[O] Operating memory...",
+  "[S] System ready.",
+  "> Initiating phase shift...",
+];
+
+function typeBootLines() {
+  const terminal = document.getElementById("bootText");
+  let i = 0;
+
+  function showLine() {
+    if (i < baseLines.length) {
+      const line = document.createElement("div");
+      line.textContent = baseLines[i];
+      terminal.appendChild(line);
+      terminal.scrollTop = terminal.scrollHeight;
+      i++;
+      setTimeout(showLine, 120);
+      } else {
+
+      startCountdown();
+    }
+  }
+  showLine();
+}
 </script>
 </body>
 </html>
