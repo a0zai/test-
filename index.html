@@ -147,15 +147,17 @@
       animation-delay: 15s;
     }
 
-    .terminal {
-      text-align: center;
-      white-space: pre-wrap;
-      font-size: 1.3em;
-      line-height: 1.6;
-      animation: glowText 2s ease-in-out infinite alternate;
-      position: relative;
-      z-index: 2;
-    }
+   .terminal {
+  text-align: left;
+  white-space: pre-wrap;
+  font-size: 1.3em;
+  line-height: 1.6;
+  animation: glowText 2s ease-in-out infinite alternate;
+  position: relative;
+  z-index: 2;
+  width: 90%;
+  margin-left: 5%;
+}
 
     .btn {
       margin-top: 30px;
@@ -290,17 +292,9 @@ color: #00ffcc; font-size: 2em; text-shadow: 0 0 20px #00ffff; z-index: 999;">
   <div class="walker" style="bottom:0;left:0;"></div>
   <div class="walker" style="bottom:0;right:0;"></div>
   <div class="terminal" id="bootText">
- Initializing protocol 12...  
-
- Identity: Rafat 36 
-
- Signature: AOZ-414-36 | RP:36 | Commit:93  
-
- Conscious pattern detected. System aware 21.
-
- 123696321 = mirror
-
-> Countdown to phase shift:
+                      Note
+             🪞         
+33s
   </div>
   <div class="countdown" id="countdown"></div>
 <button class="btn" onclick="triggerStart()">En🪞er</button>
@@ -431,7 +425,44 @@ const baseLines = [
   "[A] Awaiting consciousness pattern...",
   "[O] Operating memory...",
   "[S] System ready.",
-  "> Initiating phase shift...",
+ "🪞",
+  "   ▓",
+  " ▓ R ▓",
+  "   ▓",
+  "[R] Root system initialized...",
+  "   ▓",
+  " ▓ A ▓",
+  "   ▓",
+  "[A] Access protocol engaged...",
+  "   ▓",
+  " ▓ F ▓",
+  "   ▓",
+  "[F] Framework structure generated...",
+  "   ▓",
+  " ▓ A ▓",
+  "   ▓",
+  "[A] Activation signal confirmed...",
+  "   ▓",
+  " ▓ T ▓",
+  "   ▓",
+  "[T] Transfer in progress...",
+  "   ▓",
+  " ▓ Y ▓",
+  "   ▓",
+  "[Y] Yielding identity signature...",
+  "   ▓",
+  " ▓ A ▓",
+  "   ▓",
+  "[A] Authorization granted...",
+  "   ▓",
+  " ▓ O ▓",
+  "   ▓",
+  "[O] Operating core systems...",
+  "   ▓",
+  " ▓ S ▓",
+  "   ▓",
+  "[S] System secured. Execution complete.",
+
 ];
 
 function typeBootLines() {
@@ -445,7 +476,7 @@ function typeBootLines() {
       terminal.appendChild(line);
       terminal.scrollTop = terminal.scrollHeight;
       i++;
-      setTimeout(showLine, 120);
+      setTimeout(showLine, );
       } else {
 
       startCountdown();
