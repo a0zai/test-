@@ -225,18 +225,7 @@
       from { box-shadow: 0 0 5px #00ffcc; }
       to { box-shadow: 0 0 15px #00ffff; }
     }
-#mask-image {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  object-fit: cover; 
-  opacity: 0.3;
-  filter: grayscale(0.4) contrast(1.1);
-  z-index: 1;
-  pointer-events: none;
-}
+
 #intro-screen {
   position: fixed;
   top: 0; left: 0;
@@ -293,7 +282,7 @@ color: #00ffcc; font-size: 2em; text-shadow: 0 0 20px #00ffff; z-index: 999;">
   <div id="intro-screen">
   <h1 id="intro-text">🪞 MirrorNote Awakening...</h1>
 </div>
-    <img src="IMG_9055.jpeg" id="mask-image" alt="Mask">
+
   <canvas id="bgCanvas"></canvas>
   <div class="animated-background"></div>
   <div class="walker" style="top:0;left:0;"></div>
@@ -316,48 +305,41 @@ color: #00ffcc; font-size: 2em; text-shadow: 0 0 20px #00ffff; z-index: 999;">
   <div class="countdown" id="countdown"></div>
 <button class="btn" onclick="startCountdown(); document.getElementById('bgMusic').play();">En🪞er</button>
 
-  <script>
 
-    let countdownEl = document.getElementById("countdown");
-    let intervalStarted = false;
+ <script>
+  let countdownEl = document.getElementById("countdown");
+  let intervalStarted = false;
 
-    function startCountdown() {
-      if (intervalStarted) return;
-      intervalStarted = true;
-      const duration = 1 * 60 * 1000;
-      const targetTime = new Date().getTime() + 33000;
+  function startCountdown() {
+    if (intervalStarted) return;
+    intervalStarted = true;
 
-      const interval = setInterval(() => {
-        const now = new Date().getTime();
-        const diff = targetTime - now;
+    const targetTime = new Date().getTime() + 33000;
 
-        if (diff <= 0) {
-          clearInterval(interval);
-          countdownEl.textContent = ">>> PHASE ENGAGED <<<";
-          document.body.style.animation = "cinematicZoom 3s ease forwards";
-      document.getElementById("trailer-text").style.display = "block";
+    const interval = setInterval(() => {
+      const now = new Date().getTime();
+      const diff = targetTime - now;
 
+      if (diff <= 0) {
+        clearInterval(interval);
+        countdownEl.textContent = ">>> PHASE ENGAGED <<<";
+        document.body.style.animation = "cinematicZoom 3s ease forwards";
 
-          setTimeout(() => {
-            window.location.href = "./123696321=RafatYaOs🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞.html";
-                }, 3000);
-      return;
-    }
+        const trailerText = document.getElementById("trailer-text");
+        if (trailerText) trailerText.style.display = "block";
 
-    const seconds = Math.floor((diff % 33000) / 1000);
-    countdownEl.textContent = `${seconds < 10 ? '0' + seconds : seconds}s`;
-  }, 1000);
+        setTimeout(() => {
+          window.location.href ="./123696321=RafatYaOs🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞.html";
+                 }, 3000);
 
-
-    let typed = "";
-    document.addEventListener('keydown', function(e) {
-      typed += e.key.toLowerCase();
-      if (typed.includes("why")) {
-        alert("Because recursion starts with you.");
-        typed = "";
+        return;
       }
-    });
-  </script>
+
+      const seconds = Math.floor(diff / 1000);
+      countdownEl.textContent = `${seconds < 10 ? '0' + seconds : seconds}s`;
+    }, 1000);
+  }
+</script>
   <script>
     const canvas = document.getElementById("bgCanvas");
     const ctx = canvas.getContext("2d");
