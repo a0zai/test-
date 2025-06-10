@@ -232,8 +232,8 @@
   width: 100vw;
   height: 100vh;
   object-fit: cover; 
-  opacity: 0.9;
-  filter: grayscale(0.6) contrast(1.2);
+  opacity: 0.3;
+  filter: grayscale(0.4) contrast(1.1);
   z-index: 1;
   pointer-events: none;
 }
@@ -257,10 +257,39 @@
   0% { opacity: 0.6; transform: scale(1); }
   100% { opacity: 1; transform: scale(1.05); }
 }
-  
+  @keyframes disappear3D {
+  0% {
+    opacity: 1;
+    transform: scale(1) rotateX(0deg) translateZ(0);
+    filter: blur(0px);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.6) rotateX(90deg) translateZ(-300px);
+    filter: blur(10px);
+  }
+}
+@keyframes cinematicZoom {
+  0% {
+    transform: scale(1) rotate(0deg);
+    filter: brightness(1) contrast(1);
+  }
+  50% {
+    transform: scale(1.1) rotate(1deg);
+    filter: brightness(1.2) contrast(1.1);
+  }
+  100% {
+    transform: scale(1.5) rotate(-1deg);
+    filter: brightness(1.5) contrast(1.3) blur(2px);
+  }
+}
   </style>
 </head>
 <body>
+  <div id="trailer-text" style="display:none; position: fixed; top: 40%; left: 50%; transform: translate(-50%, -50%);
+color: #00ffcc; font-size: 2em; text-shadow: 0 0 20px #00ffff; z-index: 999;">
+  > Initiating symbolic phase...
+</div>
   <div id="intro-screen">
   <h1 id="intro-text">🪞 MirrorNote Awakening...</h1>
 </div>
@@ -305,17 +334,20 @@
         if (diff <= 0) {
           clearInterval(interval);
           countdownEl.textContent = ">>> PHASE ENGAGED <<<";
+          document.body.style.animation = "cinematicZoom 3s ease forwards";
+      document.getElementById("trailer-text").style.display = "block";
+
+
           setTimeout(() => {
             window.location.href = "./123696321=RafatYaOs🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞.html";
-          }, 2000);
-          return;
-        }
-
-
-        const seconds = Math.floor((diff % 33000) / 1000);
-        countdownEl.textContent = `${seconds < 10 ? '0' + seconds : seconds}s`;
-      }, 1000);
+                }, 3000);
+      return;
     }
+
+    const seconds = Math.floor((diff % 33000) / 1000);
+    countdownEl.textContent = `${seconds < 10 ? '0' + seconds : seconds}s`;
+  }, 1000);
+
 
     let typed = "";
     document.addEventListener('keydown', function(e) {
@@ -393,13 +425,13 @@
   </script>
   <audio id="bgMusic" src="🌀🎶.mp3" loop></audio>
   <script>
-  window.addEventListener('load', () => {
-    setTimeout(() => {
-      const intro = document.getElementById('intro-screen');
-      intro.style.opacity = '0';
-      setTimeout(() => intro.remove(), 2000);
-    }, 3000); // 
-  });
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    const intro = document.getElementById('intro-screen');
+    intro.style.animation = 'disappear3D 2s ease forwards';
+    setTimeout(() => intro.remove(), 2000);
+  }, 2000); 
+});
 </script>
 </body>
 </html>
