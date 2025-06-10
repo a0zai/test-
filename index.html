@@ -292,9 +292,7 @@ color: #00ffcc; font-size: 2em; text-shadow: 0 0 20px #00ffff; z-index: 999;">
   <div class="walker" style="bottom:0;left:0;"></div>
   <div class="walker" style="bottom:0;right:0;"></div>
   <div class="terminal" id="bootText">
-                      Note
-             🪞         
-33s
+                    
   </div>
   <div class="countdown" id="countdown"></div>
 <button class="btn" onclick="triggerStart()">En🪞er</button>
@@ -476,7 +474,7 @@ function typeBootLines() {
       terminal.appendChild(line);
       terminal.scrollTop = terminal.scrollHeight;
       i++;
-      setTimeout(showLine, );
+      setTimeout(showLine, 900);
       } else {
 
       startCountdown();
