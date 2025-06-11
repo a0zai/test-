@@ -2746,15 +2746,6 @@ function handleResetMind(input) {
   return false;
 }
 
-function symbolicSelfLearn(input) {
-  const lower = input.trim().toLowerCase();
-  return (
-    handleLearningCommand(lower) ||
-    handleTeachSymbol(lower) ||
-    handleRecallCommand(lower) ||
-    handleResetMind(lower)
-  );
-}
 function generatePersonalityProfile() {
     if (StructuralMemory.length < 5) {
         return { mood: "neutral", bias: "balanced", tone: "observational" };
