@@ -2762,7 +2762,7 @@ function generatePersonalityProfile() {
 
     let totalAnomalies = StructuralMemory.reduce((acc, e) => acc + e.anomalies.length, 0);
     let totalSymbols = StructuralMemory.reduce((acc, e) => acc + e.symbols.length, 0);
-    let intensity = (totalAnomalies + totalSymbols) / StructuralMemory.length;
+    let intensity = (tota هوlAnomalies + totalSymbols) / StructuralMemory.length;
 
     let mood = "stable";
     if (intensity > 4) mood = "anxious";
@@ -2857,8 +2857,7 @@ function typeReply(text, element) {
   typeChar();
 }
 
-input.addEventListener("keydown", function(event) {
-  if (event.key === "Enter") {
+if (e.key === "Enter")
     const cmd = input.value.trim();
     const userCmd = document.createElement("div");
     userCmd.className = "cmd-line cmd-user";
@@ -2874,7 +2873,7 @@ input.addEventListener("keydown", function(event) {
     typeReply(result, botReply);
     input.value = "";
   }
-  input.addEventListener("keydown", function(event) {
+input.addEventListener("keydown", function(event) {
   if (event.key === "Enter") {
     const cmd = input.value.trim();
     const userCmd = document.createElement("div");
@@ -2887,7 +2886,8 @@ input.addEventListener("keydown", function(event) {
     terminal.appendChild(userCmd);
     terminal.appendChild(botReply);
 
-    interpretInput(cmd);
+    const result = interpretInput(cmd);
+    typeReply(result, botReply);
     input.value = "";
   }
 });
