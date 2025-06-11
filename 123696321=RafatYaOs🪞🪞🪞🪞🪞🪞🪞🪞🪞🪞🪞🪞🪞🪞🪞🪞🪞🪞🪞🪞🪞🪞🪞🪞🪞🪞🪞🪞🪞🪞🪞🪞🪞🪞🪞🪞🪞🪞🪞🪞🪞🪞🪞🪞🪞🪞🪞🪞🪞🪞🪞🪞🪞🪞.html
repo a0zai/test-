@@ -2762,7 +2762,7 @@ function generatePersonalityProfile() {
 
     let totalAnomalies = StructuralMemory.reduce((acc, e) => acc + e.anomalies.length, 0);
     let totalSymbols = StructuralMemory.reduce((acc, e) => acc + e.symbols.length, 0);
-    let intensity = (tota هوlAnomalies + totalSymbols) / StructuralMemory.length;
+    let intensity = (totalSymbols) / StructuralMemory.length;
 
     let mood = "stable";
     if (intensity > 4) mood = "anxious";
@@ -2857,7 +2857,7 @@ function typeReply(text, element) {
   typeChar();
 }
 
-if (e.key === "Enter")
+if (e.key === "Enter") {
     const cmd = input.value.trim();
     const userCmd = document.createElement("div");
     userCmd.className = "cmd-line cmd-user";
