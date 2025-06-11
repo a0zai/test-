@@ -78,8 +78,8 @@
       height: 100vh;
       overflow: hidden;
       display: flex;
-      align-items: center;
-      justify-content: center;
+      align-items: flex-start;
+      justify-content: flex-start;
       flex-direction: column;
     }
 
@@ -153,11 +153,13 @@
   padding: 20px;
   padding-bottom: 120px;
   z-index: 2;
-  margin: 0 0 10px 0;
+  margin: 0 auto 10px auto;
   font-size: 14px;
   line-height: 1.4;
   text-align: left;
   white-space: pre-wrap;
+  width: 100%;
+  max-width: 900px;
 }
     .btn {
       margin-top: 30px;
@@ -376,7 +378,7 @@ color: #00ffcc; font-size: 2em; text-shadow: 0 0 20px #00ffff; z-index: 999;">
   renderer.domElement.style.zIndex = '0';
   document.body.appendChild(renderer.domElement);
 
-  const geometry = new THREE.TorusKnotGeometry(10, 3, 100, 16);
+  const geometry = new THREE.TorusKnotGeometry(5, 1.5, 100, 16);
   const material = new THREE.MeshStandardMaterial({ color: 0x00ffff, metalness: 0.8, roughness: 0.2 });
   const knot = new THREE.Mesh(geometry, material);
   scene.add(knot);
