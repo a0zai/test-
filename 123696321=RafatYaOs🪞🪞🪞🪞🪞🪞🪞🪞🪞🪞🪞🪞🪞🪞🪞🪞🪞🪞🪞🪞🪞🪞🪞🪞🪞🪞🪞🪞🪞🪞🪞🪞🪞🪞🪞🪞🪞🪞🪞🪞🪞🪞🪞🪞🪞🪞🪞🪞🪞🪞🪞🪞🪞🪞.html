@@ -94,7 +94,7 @@ body {
 
   <div id="rafat-title" style="text-align:center; font-size: 66px; padding: 20px;">Mirror Note</div>
  
-  <div id="terminal" style="padding: 24px; color: #00ffcc; font-family: monospace;"></div>
+  <div id="terminal" style="padding: 24px; color: #00ffcc; font-family: monospace;">👁️‍🗨️</div>
 
   <div class="input-line">
       <div style="
@@ -118,7 +118,7 @@ body {
       text-align: center;
       width: 33%;
     ">
-      <label for="imageInput" style="cursor: pointer; margin-right: 5px;">👁️‍🗨️</label>
+      <label for="imageInput" style="cursor: pointer; margin-right: 5px;"></label>
     <input type="file" id="imageInput" style="display: none;" onchange="uploadFile('analyze-image')">
 
     <label for="audioInput" style="cursor: pointer; margin-right: 5px;"></label>
@@ -2600,7 +2600,7 @@ const emojiResponseMap = {
     "17": "Y", "18": "Z", "63": "_0"
   };
 
-  const symbolicMemory = JSON.parse(localStorage.getItem("symbolicMemory") || "{}");
+const symbolicMemory = JSON.parse(localStorage.getItem("symbolicMemory") || "{}");
 
 // ربط أوامر جديدة (تعليم ديناميكي)
 function handleLearningCommand(input) {
@@ -2693,51 +2693,6 @@ function symbolicSelfLearn(input) {
     handleIntent(lower)
   );
 }
-const symbolicMemory = JSON.parse(localStorage.getItem("symbolicMemory") || "{}");
-const StructuralMemory = [];
-
-function storeAnalysisResult(result) {
-  StructuralMemory.push(result);
-  if (StructuralMemory.length > 100) StructuralMemory.shift();
-}
-function handleLearningCommand(input) {
-  if (input.startsWith("learn ")) {
-    const parts = input.split(" ");
-    const cmd = parts[1];
-    const response = parts.slice(2).join(" ");
-    symbolicMemory[cmd] = response;
-    localStorage.setItem("symbolicMemory", JSON.stringify(symbolicMemory));
-    terminal.innerHTML += `<div class='cmd-line'>📚 Learned: "${cmd}" → "${response}"</div>`;
-    return true;
-  }
-  return false;
-}
-
-function handleTeachSymbol(input) {
-  if (input.startsWith("teach ")) {
-    const [_, symbol, __, ...concept] = input.split(" ");
-    if (symbol && concept.length) {
-      symbolicMemory[symbol] = concept.join(" ");
-      localStorage.setItem("symbolicMemory", JSON.stringify(symbolicMemory));
-      terminal.innerHTML += `<div class='cmd-line'>🔣 Symbol "${symbol}" linked to: ${concept.join(" ")}</div>`;
-      return true;
-    }
-  }
-  return false;
-}
-
-function handleRecallCommand(input) {
-  if (input === "recall") {
-    terminal.innerHTML += "<div class='cmd-line'>🧠 Learned symbols:</div>";
-    Object.entries(symbolicMemory).forEach(([k, v]) => {
-      terminal.innerHTML += `<div class='cmd-line'>${k} → ${v}</div>`;
-    });
-    return true;
-  }
-  return false;
-}
-
-
 function interpretInput(input) {
     const trimmedInput = input.trim();
   const lowerInput = trimmedInput.toLowerCase();
@@ -2819,22 +2774,6 @@ function typeReply(text, element) {
   typeChar();
 }
 
-if (e.key === "Enter") {
-    const cmd = input.value.trim();
-    const userCmd = document.createElement("div");
-    userCmd.className = "cmd-line cmd-user";
-    userCmd.textContent = "> " + cmd;
-
-    const botReply = document.createElement("div");
-    botReply.className = "cmd-line";
-
-    terminal.appendChild(userCmd);
-    terminal.appendChild(botReply);
-
-    const result = interpretInput(cmd);
-    typeReply(result, botReply);
-    input.value = "";
-  }
 input.addEventListener("keydown", function(event) {
   if (event.key === "Enter") {
     const cmd = input.value.trim();
@@ -2889,15 +2828,6 @@ function showLine() {
     document.getElementById("resultDisplay").textContent = JSON.stringify(data, null, 2);
   }
 
-    if (symbolicSelfLearn(trimmedInput)) return;
-    
-    if (symbolicMemory[trimmedInput]) {
-        terminal.innerHTML += `<div class='cmd-line'>${symbolicMemory[trimmedInput]}</div>`;
-        return;
-    }
-
-    terminal.innerHTML += `<div class='cmd-line'>⚠️ Unknown command.</div>`;
-}
 showLine();
 </script>
 <script>
