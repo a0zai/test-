@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <title>MirrorNote ~ Digital Awakening 🌀 1 2 3 • 6 9 6 • 3 2 1</title>
+  <div id="darkReveal" class="fullscreen-flash" style="display:none;"></div>
+
   <!-- Meta Tags for SEO -->
   <meta name="description" content="M.i.r.r.o.r.n.o.t.e 🪞 A symbolic consciousness protocol bridging identity and recursion. Welcome to rafat.world.">
   <meta name="keywords" content="mirror, ya rafat, rafat.world, symbolic AI, digital identity, recursion, conscious code, A∞Z protocol, AOZ-414-36, 123696321">
@@ -202,7 +204,20 @@
   cursor: pointer;
   z-index: 99;
 }
+.video-background {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  z-index: 1;
+}
 
+.video-background iframe {
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  }
 @keyframes countdownGlow {
   from {
     opacity: 0.8;
@@ -276,17 +291,55 @@
     filter: brightness(1.5) contrast(1.3) blur(2px);
   }
 }
+.fullscreen-flash {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: radial-gradient(ellipse at center, #ff0022 0%, black 70%);
+  animation: burstDark 3s ease-in-out forwards;
+  z-index: 10000;
+  pointer-events: none;
+  opacity: 0;
+}
+
+@keyframes burstDark {
+  0% {
+    opacity: 0;
+    transform: scale(1);
+    filter: blur(0);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.1);
+    filter: blur(2px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1.2);
+    filter: blur(5px);
+  }
+}
   </style>
 </head>
 <body>
-  <div id="trailer-text" style="display:none; position: fixed; top: 40%; left: 50%; transform: translate(-50%, -50%);
-color: #00ffcc; font-size: 2em; text-shadow: 0 0 20px #00ffff; z-index: 999;">
-  > Initiating symbolic phase...
-</div>
-  <div id="intro-screen">
-  <h1 id="intro-text"> MirrorNote Awakening</h1>
+  <div class="video-background">
+  <iframe
+  src="https://www.youtube.com/embed/6ioJ__kg6wM?autoplay=1&mute=1&loop=1&playlist=6ioJ__kg6wM&controls=0&showinfo=0&modestbranding=1&rel=0"
+  frameborder="0"
+  allow="autoplay; fullscreen"
+  allowfullscreen
+></iframe>
 </div>
 
+  <div id="trailer-text" style="display:none; position: fixed; top: 40%; left: 50%; transform: translate(-50%, -50%);
+  color: #00ffcc; font-size: 2em; text-shadow: 0 0 20px #00ffff; z-index: 999;">
+    > Initiating symbolic phase...
+  </div>
+
+  <div id="intro-screen" style="position: relative; z-index: 10;">
+    <h1 id="intro-text"> MirrorNote Awakening</h1>
+  </div>
   <canvas id="bgCanvas"></canvas>
   <div class="animated-background"></div>
   <div class="walker" style="top:0;left:0;"></div>
@@ -294,7 +347,8 @@ color: #00ffcc; font-size: 2em; text-shadow: 0 0 20px #00ffff; z-index: 999;">
   <div class="walker" style="bottom:0;left:0;"></div>
   <div class="walker" style="bottom:0;right:0;"></div>
   <div class="terminal" id="bootText">
-                    
+                  
+                    123696321
   </div>
   <div class="countdown" id="countdown"></div>
 <button class="btn" onclick="triggerStart()">En🪞er</button>
@@ -315,13 +369,15 @@ color: #00ffcc; font-size: 2em; text-shadow: 0 0 20px #00ffff; z-index: 999;">
       const diff = targetTime - now;
 
       if (diff <= 0) {
-        clearInterval(interval);
-        countdownEl.textContent = ">>> PHASE ENGAGED <<<";
-        document.body.style.animation = "cinematicZoom 3s ease forwards";
+          const reveal = document.getElementById("darkReveal");
+  if (reveal) reveal.style.display = "block";
 
-        const trailerText = document.getElementById("trailer-text");
-        if (trailerText) trailerText.style.display = "block";
+  document.body.style.animation = "cinematicZoom 3s ease forwards";
 
+  const trailerText = document.getElementById("trailer-text");
+  if (trailerText) trailerText.style.display = "block";
+const flash = document.querySelector(".fullscreen-flash");
+  if (flash) flash.style.opacity = "1";
         setTimeout(() => {
           window.location.href ="./123696321=RafatYaOs🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞.html";
                  }, 2000);
