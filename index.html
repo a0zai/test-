@@ -206,18 +206,22 @@
 }
 .video-background {
   position: fixed;
-  top: 0; left: 0;
-  width: 100vw;
-  height: 100vh;
+  top: 0;
+  left: 0;
+  width: 100vw;      
+  height: 100vh;      
   overflow: hidden;
-  z-index: 1;
+  z-index: -1;      
 }
 
 .video-background iframe {
   width: 100vw;
   height: 100vh;
-  pointer-events: none;
-  }
+  border: none;
+    transform: scale(1.2);
+    transform-origin: center center;
+
+}
 @keyframes countdownGlow {
   from {
     opacity: 0.8;
