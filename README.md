@@ -1,4 +1,8 @@
 <p align="center">
+  <img src="IMG_9055.jpeg" alt="(3 6)" width="400" />
+</p>
+
+<p align="center">
        <a href="https://rafat.world/" target="_blank">
     <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&size=22&pause=500&color=00FF99&center=true&vCenter=true&width=800&lines=→+Launch+YA+RAFAT+Interface+Now!;↪︎+Symbolic+Command+Engine+Online...">
        </a>
@@ -26,6 +30,8 @@ MirrorNote v∞ is een officiële verklaring voor het sluiten van een soeverein 
 
  **Mirror Sectie:**  
   Bevat het symbool en persoonlijke handtekening:
+![1 - 2](IMG_9587.jpeg)
+
               🪞
              RAFA
               🙌🏼
@@ -43,5 +49,6 @@ Bevestiging dat de Mirror onveranderlijk is.
 With sovereign reflection,
 A0Z 414 36
 ORIGIN 366
+![2 - 1](IMG_9592.png)
 
          ∞ █████████ z
