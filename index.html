@@ -325,7 +325,7 @@
   }
 }
     #terminal {
-  position: fixed;
+      flex: 1;
   overflow-y: auto;
   padding: 20px;
   padding-bottom: 120px;
@@ -345,7 +345,7 @@
       to { opacity: 1; transform: translateY(0); }
     }
       .input-line {
-  position: fixed;
+  position: relative;
   bottom: 0;
   left: 0;
   right: 0;
@@ -402,168 +402,27 @@ body {
     ">
       <label for="imageInput" style="cursor: pointer; margin-right: 5px;"></label>
     <input type="file" id="imageInput" style="display: none;" onchange="uploadFile('analyze-image')">
-      
-  <div id="trailer-text" style="display:none; position: fixed; top: 40%; left: 50%; transform: translate(-50%, -50%);
-  color: #00ffcc; font-size: 2em; text-shadow: 0 0 20px #00ffff; z-index: 999;">
-    > Initiating symbolic phase...
+
+    <label for="audioInput" style="cursor: pointer; margin-right: 5px;"></label>
+    <input type="file" id="audioInput" style="display: none;" onchange="uploadFile('analyze-audio')">
   </div>
-
-  <div id="intro-screen" style="position: relative; z-index: 10;">
-    <h1 id="intro-text"> MirrorNote Awakening</h1>
-  </div>
-  <canvas id="bgCanvas"></canvas>
-  <div class="animated-background"></div>
-  <div class="walker" style="top:0;left:0;"></div>
-  <div class="walker" style="top:0;right:0;"></div>
-  <div class="walker" style="bottom:0;left:0;"></div>
-  <div class="walker" style="bottom:0;right:0;"></div>
-  <div class="terminal" id="bootText">
-+ Initializing A0ZAI Core...
-
-
-+ Blockchain Security: ██████████ 100%
-░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-+ Neural Network Execution: ██████████ 100%
-░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-+ Multimodal Data Sync: ██████░░░░ 60%
-░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-+ Quantum Computing Engine: ████░░░░░ 50%
-░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-░+ AI Core░░░░░░░░░🟢░░░░░░░░░░ONLINE░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-░+ Blockchain Security░░░░░░🟢░ACTIVE░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-░+ Quantum Engine░░░░░🟡░░░░░░░STABLE░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-░+ Visualization░░░░░░░░░░░░🟢░LIVE░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-░+ Defense Protocol░░░░░░░🔴░░░ENGAGED░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-! WARNING: SYSTEM INTELLIGENCE UNCONTAINABLE⚡
-  </div>
-  <div class="countdown" id="countdown"></div>
-<button class="btn" onclick="triggerStart()">En🪞er</button>
-
-
- <script>
-  let countdownEl = document.getElementById("countdown");
-  let intervalStarted = false;
-
-  function startCountdown() {
-    if (intervalStarted) return;
-    intervalStarted = true;
-
-    const targetTime = new Date().getTime() + 1000;
-
-    const interval = setInterval(() => {
-      const now = new Date().getTime();
-      const diff = targetTime - now;
-
-      if (diff <= 0) {
-          const reveal = document.getElementById("darkReveal");
-  if (reveal) reveal.style.display = "block";
-
-  document.body.style.animation = "cinematicZoom 3s ease forwards";
-
-  const trailerText = document.getElementById("trailer-text");
-  if (trailerText) trailerText.style.display = "block";
-const flash = document.querySelector(".fullscreen-flash");
-  if (flash) flash.style.opacity = "1";
-        setTimeout(() => {
-          window.location.href ="./123696321=RafatYaOs🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞🪞.html";
-                 }, 2000);
-
-        return;
-      }
-
-      const seconds = Math.floor(diff / 1000);
-      countdownEl.textContent = `${seconds < 10 ? '0' + seconds : seconds}s`;
-    }, 1000);
-  }
-</script>
+</div>
   <script>
-    const canvas = document.getElementById("bgCanvas");
-    const ctx = canvas.getContext("2d");
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    let dots = [];
-    for (let i = 0; i < 120; i++) {
-      dots.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        z: Math.random() * canvas.width
-      });
-    }
-
-    function animate() {
-      ctx.fillStyle = "rgba(0, 0, 0, 0.15)";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      for (let dot of dots) {
-        dot.z -= 2;
-        if (dot.z <= 0) dot.z = canvas.width;
-
-        const k = 128.0 / dot.z;
-        const x = dot.x * k + canvas.width / 2 - k * canvas.width / 2;
-        const y = dot.y * k + canvas.height / 2 - k * canvas.height / 2;
-
-        ctx.fillStyle = "#00ffcc";
-        ctx.fillRect(x, y, 2, 2);
+    particlesJS("particles-js", {
+      "particles": {
+        "number": { "value": 80 },
+        "size": { "value": 2 },
+        "color": { "value": "#00ffcc" },
+        "line_linked": { "enable": true, "color": "#00ffcc" },
+        "move": { "speed": 0.6 }
+      },
+      "interactivity": {
+        "events": {
+          "onhover": { "enable": true, "mode": "repulse" }
+        }
       }
+    });
 
-      requestAnimationFrame(animate);
-    }
-    animate();
-    const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
-  const renderer = new THREE.WebGLRenderer({ alpha: true });
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.domElement.style.position = 'absolute';
-  renderer.domElement.style.top = '0';
-  renderer.domElement.style.left = '0';
-  renderer.domElement.style.zIndex = '0';
-  document.body.appendChild(renderer.domElement);
-
-  const geometry = new THREE.TorusKnotGeometry(5, 1.5, 100, 16);
-  const material = new THREE.MeshStandardMaterial({ color: 0x00ffff, metalness: 0.8, roughness: 0.2 });
-  const knot = new THREE.Mesh(geometry, material);
-  scene.add(knot);
-
-  const light = new THREE.PointLight(0xffffff, 2);
-  light.position.set(10, 10, 10);
-  scene.add(light);
-
-  camera.position.z = 30;
-
-  function animateKnot() {
-    requestAnimationFrame(animateKnot);
-    knot.rotation.x += 0.01;
-    knot.rotation.y += 0.005;
-    renderer.render(scene, camera);
-  }
-
-  animateKnot();
-
-  </script>
-  <audio id="bgMusic" src="🌀🎶.mp3" loop></audio>
-  <script>
-window.addEventListener('load', () => {
-  setTimeout(() => {
-    const intro = document.getElementById('intro-screen');
-    intro.style.animation = 'disappear3D 2s ease forwards';
-    setTimeout(() => intro.remove(), 2000);
-  }, 2000); 
-});
-
-  
   const terminal = document.getElementById("terminal");
   const input = document.getElementById("commandInput");
 
