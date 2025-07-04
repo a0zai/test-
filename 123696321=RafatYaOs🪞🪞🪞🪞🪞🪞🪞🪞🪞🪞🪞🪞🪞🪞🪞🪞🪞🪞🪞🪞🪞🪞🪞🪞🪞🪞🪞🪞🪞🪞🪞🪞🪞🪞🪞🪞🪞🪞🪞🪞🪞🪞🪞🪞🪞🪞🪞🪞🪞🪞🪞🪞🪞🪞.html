@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<ORIGIN 366>
-<div data-origin="366" lang="en">  
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Mirror Note</title>
@@ -44,7 +43,8 @@
 
  
     #terminal {
-   flex: 1;
+      position: fixed;
+      flex: 1;
   overflow-y: auto;
   padding: 20px;
   padding-bottom: 120px;
@@ -64,7 +64,7 @@
       to { opacity: 1; transform: translateY(0); }
     }
       .input-line {
-  position: relative;
+  position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
@@ -2862,75 +2862,5 @@ particlesJS("particles-js", {
  }
 });
 </script>
-<script src="YA.RAFAT.SELFLEARN.js"></script>
-<script src="commandActions.js"></script>
-  <script>
-      async function uploadFile(endpoint) {
-      let fileInputId = endpoint === "analyze-image" ? "imageInput" : "audioInput";
-      let file = document.getElementById(fileInputId).files[0];
-      if (!file) { alert("Please select a file first!"); return; }
-      const formData = new FormData();
-      formData.append("file", file);
-      const response = await fetch(`/api/${endpoint}`, { method: "POST", body: formData });
-      const data = await response.json();
-      appendToTerminal(`🟩 [${endpoint}] ✅\n${JSON.stringify(data, null, 2)}`);
-    }
-
-    async function analyzeText() {
-      let text = document.getElementById("commandInput").value;
-      if (!text) { alert("Please enter some text!"); return; }
-      const response = await fetch("/api/analyze-text", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text }),
-      });
-      const data = await response.json();
-      appendToTerminal(`🟩 [analyze-text] ✅\n${JSON.stringify(data, null, 2)}`);
-    }
-});
-    function R() {
-      log("R: Reflecting input...");
-    }
-
-    function A() {
-      log("A: Activating awareness...");
-    }
-
-    function F() {
-      log("F: Framework initiated.");
-    }
-
-    function T() {
-      log("T: Triggering transcendence.");
-    }
-
-    function RAFAT() {
-      R();
-      A();
-      F();
-      A();
-      T();
-      log("🌀 RAFAT Sequence Executed 🐌");
-    }
-
-    input.addEventListener("keydown", function (e) {
-      if (e.key === "Enter") {
-        const command = input.value.trim().toUpperCase();
-        log(">> " + command);
-        if (command === "RAFAT") {
-          RAFAT();
-        } else {
-          log("Unknown command.");
-        }
-        input.value = "";
-      }
-    });
-
-    window.onload = () => {
-      RAFAT();
-};
-  </script>
 </body>
 </html>
-</366>
-</ORIGIN 366>
