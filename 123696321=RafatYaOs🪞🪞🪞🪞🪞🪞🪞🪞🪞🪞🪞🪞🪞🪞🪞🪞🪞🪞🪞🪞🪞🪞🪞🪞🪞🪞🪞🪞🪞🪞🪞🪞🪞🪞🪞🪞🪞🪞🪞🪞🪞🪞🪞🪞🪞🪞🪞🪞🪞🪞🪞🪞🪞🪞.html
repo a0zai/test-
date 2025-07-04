@@ -4,6 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <title>Mirror Note</title>
+   <script src="https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js"></script>
+ <script src="https://www.gstatic.com/firebasejs/11.10.0/firebase-analytics.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.46/Tone.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
@@ -89,6 +91,7 @@
 body {
   animation: none; 
 }
+
   </style>
  </head>
   <div id="particles-js"></div>
@@ -141,6 +144,17 @@ body {
         }
       }
     });
+    const firebaseConfig = {
+    apiKey: "AIzaSyBxBBwVwzk0ys5JzVexzdkBCO6vF9F-2iA",
+    authDomain: "a0zai-4308a.firebaseapp.com",
+    projectId: "a0zai-4308a",
+    storageBucket: "a0zai-4308a.firebasestorage.app",
+    messagingSenderId: "703923912545",
+    appId: "1:703923912545:web:7d429e0bac48b02a3b0f20",
+    measurementId: "G-MHBBCJQJHE"
+  };
+    const app = firebase.initializeApp(firebaseConfig);
+  const analytics = firebase.getAnalytics(app);
 
   const terminal = document.getElementById("terminal");
   const input = document.getElementById("commandInput");
@@ -216,6 +230,7 @@ const baseLines = [
   "Response: Live signal online.",
   "Awaiting world🚀..."
 ];
+
 const commandActions = {
   "wake up": () => {
     document.body.style.backgroundColor = "#001f1f";
@@ -2601,24 +2616,31 @@ const emojiResponseMap = {
     "11": "S", "12": "T", "13": "U", "14": "V", "15": "W", "16": "X",
     "17": "Y", "18": "Z", "63": "_0"
   };
-
-const symbolicMemory = JSON.parse(localStorage.getItem("symbolicMemory") || "{}");
-
-// ربط أوامر جديدة (تعليم ديناميكي)
+function saveMemoryToFirebase() {
+  set(ref(db, 'sharedMemory'), symbolicMemory)
+    .then(() => console.log("Memory saved to Firebase"))
+    .catch((error) => console.error("Error saving memory:", error));
+}
 function handleLearningCommand(input) {
   if (input.startsWith("learn ")) {
     const parts = input.split(" ");
     const cmd = parts[1];
     const response = parts.slice(2).join(" ");
     symbolicMemory[cmd] = response;
+    
+‎    // حفظ محلي
     localStorage.setItem("symbolicMemory", JSON.stringify(symbolicMemory));
+    
+‎    // حفظ في Firebase
+    saveMemoryToFirebase();
+
     terminal.innerHTML += `<div class='cmd-line'>📚 Opgeslagen als les: "${cmd}" → "${response}"</div>`;
     return true;
   }
   return false;
 }
 
-// ربط رمز بمفهوم (تعليم رمزي)
+‎// ربط رمز بمفهوم (تعليم رمزي)
 function handleTeachSymbol(input) {
   if (input.startsWith("teach ")) {
     const [_, symbol, __, ...concept] = input.split(" ");
@@ -2632,7 +2654,7 @@ function handleTeachSymbol(input) {
   return false;
 }
 
-// استدعاء كل ما تعلّمه النظام
+‎// استدعاء كل ما تعلّمه النظام
 function handleRecallCommand(input) {
   if (input === "recall") {
     terminal.innerHTML += "<div class='cmd-line'>🧠 Geleerde elementen:</div>";
@@ -2644,16 +2666,26 @@ function handleRecallCommand(input) {
   return false;
 }
 
-// إعادة تعيين الذاكرة
 function handleResetMind(input) {
   if (input === "reset mind") {
+‎    // إزالة الذاكرة محليًا
     localStorage.removeItem("symbolicMemory");
-    terminal.innerHTML += "<div class='cmd-line'>🧽 Geheugen gewist.</div>";
+‎    // تفريغ الذاكرة في المتغير
+    Object.keys(symbolicMemory).forEach(key => delete symbolicMemory[key]);
+
+‎    // إزالة الذاكرة من Firebase
+    remove(ref(db, 'sharedMemory'))
+      .then(() => {
+        terminal.innerHTML += "<div class='cmd-line'>🧽 Geheugen gewist (lokal en Firebase).</div>";
+      })
+      .catch((error) => {
+        terminal.innerHTML += `<div class='cmd-line'>⚠️ Fout bij wissen van geheugen: ${error}</div>`;
+      });
+
     return true;
   }
   return false;
 }
-let authorized = false; // حالة الأمان 
 
   commandInput.addEventListener('focus', function() {
     if (!authorized) {
@@ -2684,7 +2716,7 @@ function handleIntent(input) {
   return false;
 }
 
-// إدماج كل الأوامر الرمزية التعليمية داخل نقطة واحدة
+‎// إدماج كل الأوامر الرمزية التعليمية داخل نقطة واحدة
 function symbolicSelfLearn(input) {
   const lower = input.trim().toLowerCase();
   return (
@@ -2895,7 +2927,6 @@ particlesJS("particles-js", {
     function A() {
       log("A: Activating awareness...");
     }
-
     function F() {
       log("F: Framework initiated.");
     }
@@ -2910,9 +2941,8 @@ particlesJS("particles-js", {
       F();
       A();
       T();
-      log("🌀 RAFAT Sequence Executed 🐌");
+      log("🌀 RAFAT Sequenc Executed 🐌");
     }
-
     input.addEventListener("keydown", function (e) {
       if (e.key === "Enter") {
         const command = input.value.trim().toUpperCase();
