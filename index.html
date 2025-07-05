@@ -1,7 +1,6 @@
 
 <!DOCTYPE html>
 <ORIGIN>
-  <366>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -70,7 +69,7 @@
   overflow-y: auto;
   padding: 20px;
   padding-bottom: 120px;
-  z-index: 2;
+  z-index: 3;
   margin: 0 0 10px 0;
     font-size: 16px;
   line-height: 1.4;
@@ -2679,18 +2678,17 @@ function handleResetMind(input) {
 }
 let authorized = false; // حالة الأمان 
 
-  commandInput.addEventListener('focus', function() {
-    if (!authorized) {
-      const secret = prompt('Enter secret code to unlock chat:');
-      if (secret === '6339') {   
-        authorized = true;
-      } else {
-        alert('Access denied!');
-        commandInput.blur();
-        }
+input.addEventListener('focus', function() {
+  if (!authorized) {
+    const secret = prompt('Enter secret code to unlock chat:');
+    if (secret === '6339') {   
+      authorized = true;
+    } else {
+      alert('Access denied!');
+      input.blur();
     }
-  });
-
+  }
+});
 
 function handleIntent(input) {
   if (input.startsWith("intent ")) {
@@ -2888,5 +2886,4 @@ particlesJS("particles-js", {
   </script>
 </body>
 </ORIGIN>
-</366>
 </html>
