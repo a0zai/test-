@@ -1,4 +1,4 @@
-<ORIGIN>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -68,6 +68,7 @@
 
  
   #terminal {
+    position: fixed;
       flex: 1;
   overflow-y: auto;
   padding: 20px;
@@ -88,7 +89,7 @@
       to { opacity: 1; transform: translateY(0); }
     }
       .input-line {
-position: relative;
+  position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
@@ -126,12 +127,10 @@ body {
     bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
-    width: 400px;
+    width: 100px;
     height: 50px;
     display: flex;
     justify-content: center;
-    align-items: center;
-    border: none;
   "> 
   <input type="text" id="commandInput" placeholder="👁️‍🗨️" autocomplete="off" style="
       background: none;
@@ -140,10 +139,8 @@ body {
       outline: none;
       font-size: 16px;
       text-align: center;
-      width: 99%;
-      padding: 8px 12px;
-      box-sizing: border-box;
-">
+      width: 66%;
+  ">
     ">
       <label for="imageInput" style="cursor: pointer; margin-right: 5px;"></label>
     <input type="file" id="imageInput" style="display: none;" onchange="uploadFile('analyze-image')">
@@ -2890,4 +2887,3 @@ particlesJS("particles-js", {
   </script>
 </body>
 </html>
-</origin>
