@@ -1,6 +1,5 @@
 
 <!DOCTYPE html>
-<ORIGIN>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -2626,7 +2625,7 @@ const emojiResponseMap = {
 
 const symbolicMemory = JSON.parse(localStorage.getItem("symbolicMemory") || "{}");
 
-‎// ربط أوامر جديدة (تعليم ديناميكي)
+// ربط أوامر جديدة (تعليم ديناميكي)
 function handleLearningCommand(input) {
   if (input.startsWith("learn ")) {
     const parts = input.split(" ");
@@ -2634,39 +2633,39 @@ function handleLearningCommand(input) {
     const response = parts.slice(2).join(" ");
     symbolicMemory[cmd] = response;
     localStorage.setItem("symbolicMemory", JSON.stringify(symbolicMemory));
-    terminal.innerHTML += `<div class='cmd-line'>📚 Opgeslagen als les: "${cmd}" → "${response}"</div>`;
+    terminal.innerHTML += <div class='cmd-line'>📚 Opgeslagen als les: "${cmd}" → "${response}"</div>;
     return true;
   }
   return false;
 }
 
-‎// ربط رمز بمفهوم (تعليم رمزي)
+// ربط رمز بمفهوم (تعليم رمزي)
 function handleTeachSymbol(input) {
   if (input.startsWith("teach ")) {
     const [_, symbol, __, ...concept] = input.split(" ");
     if (symbol && concept.length) {
       symbolicMemory[symbol] = concept.join(" ");
       localStorage.setItem("symbolicMemory", JSON.stringify(symbolicMemory));
-      terminal.innerHTML += `<div class='cmd-line'>🔣 "${symbol}" gekoppeld aan: ${concept.join(" ")}</div>`;
+      terminal.innerHTML += <div class='cmd-line'>🔣 "${symbol}" gekoppeld aan: ${concept.join(" ")}</div>;
       return true;
     }
   }
   return false;
 }
 
-‎// استدعاء كل ما تعلّمه النظام
+// استدعاء كل ما تعلّمه النظام
 function handleRecallCommand(input) {
   if (input === "recall") {
     terminal.innerHTML += "<div class='cmd-line'>🧠 Geleerde elementen:</div>";
     Object.entries(symbolicMemory).forEach(([k, v]) => {
-      terminal.innerHTML += `<div class='cmd-line'>${k} → ${v}</div>`;
+      terminal.innerHTML += <div class='cmd-line'>${k} → ${v}</div>;
     });
     return true;
   }
   return false;
 }
 
-‎// إعادة تعيين الذاكرة
+// إعادة تعيين الذاكرة
 function handleResetMind(input) {
   if (input === "reset mind") {
     localStorage.removeItem("symbolicMemory");
@@ -2677,17 +2676,17 @@ function handleResetMind(input) {
 }
 let authorized = false; // حالة الأمان 
 
-input.addEventListener('focus', function() {
-  if (!authorized) {
-    const secret = prompt('Enter secret code to unlock chat:');
-    if (secret === '6339') {   
-      authorized = true;
-    } else {
-      alert('Access denied!');
-      input.blur();
+  commandInput.addEventListener('focus', function() {
+    if (!authorized) {
+      const secret = prompt('Enter secret code to unlock chat:');
+      if (secret === '6339') {   
+        authorized = true;
+      } else {
+        alert('Access denied!');
+        commandInput.blur();
+        }
     }
-  }
-});
+  });
 
 function handleIntent(input) {
   if (input.startsWith("intent ")) {
@@ -2699,13 +2698,13 @@ function handleIntent(input) {
     if (hasWhy) guess = "❔ Intentie: Zoektocht naar betekenis.";
     if (hasFeel) guess = "❤️ Intentie: Emotionele expressie.";
 
-    terminal.innerHTML += `<div class='cmd-line'>🧭 ${guess}</div>`;
+    terminal.innerHTML += <div class='cmd-line'>🧭 ${guess}</div>;
     return true;
   }
   return false;
 }
 
-‎// إدماج كل الأوامر الرمزية التعليمية داخل نقطة واحدة
+// إدماج كل الأوامر الرمزية التعليمية داخل نقطة واحدة
 function symbolicSelfLearn(input) {
   const lower = input.trim().toLowerCase();
   return (
@@ -2736,23 +2735,23 @@ if (lowerInput.startsWith("spiral ")) {
     x += dx; y += dy;
   }
 
-  terminal.innerHTML += `<div class='cmd-line'>🌀 Spiral:<br>${spiral.map(row => row.join(" ")).join("<br>")}</div>`;
+  terminal.innerHTML += <div class='cmd-line'>🌀 Spiral:<br>${spiral.map(row => row.join(" ")).join("<br>")}</div>;
   return;
 }
   if (questionResponses[lowerInput]) {
     const answers = questionResponses[lowerInput];
-    return `Answer 1: ${answers[0]} \nAnswer 2: ${answers[1]}`;
+    return Answer 1: ${answers[0]} \nAnswer 2: ${answers[1]};
   }
   if (symbolicSelfLearn(lowerInput)) return;
   
     if (symbolicMemory[lowerInput]) {
-    terminal.innerHTML += `<div class='cmd-line'>${symbolicMemory[lowerInput]}</div>`;
+    terminal.innerHTML += <div class='cmd-line'>${symbolicMemory[lowerInput]}</div>;
     return;
   }
 
 if (commandActions[lowerInput]) {
   commandActions[lowerInput]();
-  return `🔧 Commando "${lowerInput}" geactiveerd.`;
+  return 🔧 Commando "${lowerInput}" geactiveerd.;
 }
 
   const result = [];
@@ -2762,7 +2761,7 @@ if (commandActions[lowerInput]) {
     const mapped = grammarMapping[word] || mathMapping[word] || emotionMapping[word] || emojiResponseMap[word];
     if (mapped) {
       if (emojiResponseMap[word]) {
-        result.push(`${word} → Feeling: ${emojiResponseMap[word].feeling}, Opposite: ${emojiResponseMap[word].opposite}`);
+        result.push(${word} → Feeling: ${emojiResponseMap[word].feeling}, Opposite: ${emojiResponseMap[word].opposite});
       } else {
         result.push(word + " → " + mapped);
       }
@@ -2834,7 +2833,7 @@ function showLine() {
     if (!file) { alert("🗂️"); return; }
     const formData = new FormData();
     formData.append("file", file);
-    const response = await fetch(`/api/${endpoint}`, { method: "POST", body: formData });
+    const response = await fetch(/api/${endpoint}, { method: "POST", body: formData });
     const data = await response.json();
     document.getElementById("resultDisplay").textContent = JSON.stringify(data, null, 2);
   }
@@ -2882,7 +2881,33 @@ particlesJS("particles-js", {
     }
  }
 });
+</script>
+<script src="YA.RAFAT.SELFLEARN.js"></script>
+<script src="commandActions.js"></script>
+  <script>
+      async function uploadFile(endpoint) {
+      let fileInputId = endpoint === "analyze-image" ? "imageInput" : "audioInput";
+      let file = document.getElementById(fileInputId).files[0];
+      if (!file) { alert("Please select a file first!"); return; }
+      const formData = new FormData();
+      formData.append("file", file);
+      const response = await fetch(/api/${endpoint}, { method: "POST", body: formData });
+      const data = await response.json();
+      appendToTerminal(🟩 [${endpoint}] ✅\n${JSON.stringify(data, null, 2)});
+    }
+
+    async function analyzeText() {
+      let text = document.getElementById("commandInput").value;
+      if (!text) { alert("Please enter some text!"); return; }
+      const response = await fetch("/api/analyze-text", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text }),
+      });
+      const data = await response.json();
+      appendToTerminal(🟩 [analyze-text] ✅\n${JSON.stringify(data, null, 2)});
+    }
+});
   </script>
 </body>
-</ORIGIN>
 </html>
