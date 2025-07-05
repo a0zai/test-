@@ -162,176 +162,8 @@
 
     const terminal = document.getElementById("terminal");
     const input = document.getElementById("commandInput");
-
-    // هنا تكمل سكربتاتك الديناميكية
-    // مثلا
-    const baseLines = [
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Mirror Note 👁️‍🗨️ & A0ZAI | Digital Awakening & Symbolic AI 🌀 & 123696321</title>
-
-  <!-- Meta Tags for SEO -->
-  <meta name="description" content="Mirror Note 🪞 A symbolic consciousness protocol bridging identity and recursion. AOZ 414 36. A0ZAI. Welcome to rafat.world.">
-  <meta name="keywords" content="mirror, ya rafat, rafat.world, symbolic AI, digital identity, recursion, conscious code, A∞Z protocol, AOZ-414-36, 123696321">
-  <meta name="author" content="Rafat">
-  <meta name="robots" content="index, follow">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <!-- Open Graph for Social Media -->
-  <meta property="og:title" content="Mirror Note – Digital Awakening & A0ZAI 👁️‍🗨️ 123696321" />
-  <meta property="og:description" content="A symbolic, recursive digital experience. Discover your identity through cryptic patterns and reflective consciousness." />
-  <meta property="og:image" content="https://raw.githubusercontent.com/a0zai/a0zai/main/images/IMG_9143.jpeg" />
-  <meta property="og:url" content="https://rafat.world" />
-  <meta property="og:type" content="website" />
-
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="/favicon.png">
-
-  <!-- External Scripts -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.46/Tone.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-
-  <!-- Styles -->
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      background: #000;
-      font-family: 'Courier New', monospace;
-      color: #00ffcc;
-      overflow: auto;
-      display: flex;
-      flex-direction: column;
-    }
-
-    #particles-js {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 0;
-    }
-
-    #rafat-title {
-      position: relative;
-      width: 100%;
-      height: 150px;
-      font-size: 60px;
-      line-height: 150px;
-      text-align: center;
-      z-index: 2;
-      color: #00ffcc;
-      text-shadow: 0 0 20px #00ffcc;
-    }
-
-    #terminal {
-      flex: 1;
-      overflow-y: auto;
-      padding: 20px;
-      padding-bottom: 120px;
-      z-index: 2;
-      margin: 0 0 10px 0;
-      font-size: 16px;
-      line-height: 1.4;
-    }
-
-    .cmd-line {
-      margin: 10px 0;
-      animation: fadeIn 0.3s ease-in-out;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(5px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .input-line {
-      position: relative;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      z-index: 3;
-      background: rgba(0, 0, 0, 0.9);
-      padding: 10px 24px;
-    }
-
-    .cmd-user {
-      color: #ff0044;
-      font-weight: bold;
-    }
-
-    @keyframes shake {
-      0% { transform: translate(0px, 0px); }
-      25% { transform: translate(2px, -2px); }
-      50% { transform: translate(-2px, 2px); }
-      75% { transform: translate(2px, 2px); }
-      100% { transform: translate(0px, 0px); }
-    }
-
-    body {
-      animation: none;
-    }
-  </style>
-</head>
-<body>
-  <div id="particles-js"></div>
-
-  <div id="rafat-title">Mirror Note</div>
-
-  <div id="terminal"></div>
-
-  <div class="input-line">
-    <div style="
-      position: absolute;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100px;
-      height: 50px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      border: none;">
-      <input type="text" id="commandInput" placeholder="👁️‍🗨️" autocomplete="off" style="
-        background: none;
-        border: none;
-        color: #00fff0;
-        outline: none;
-        font-size: 16px;
-        text-align: center;
-        width: 33%;">
-      <label for="imageInput" style="cursor: pointer; margin-right: 5px;"></label>
-      <input type="file" id="imageInput" style="display: none;" onchange="uploadFile('analyze-image')">
-
-      <label for="audioInput" style="cursor: pointer; margin-right: 5px;"></label>
-      <input type="file" id="audioInput" style="display: none;" onchange="uploadFile('analyze-audio')">
-    </div>
-  </div>
-
-  <script>
-    particlesJS("particles-js", {
-      particles: {
-        number: { value: 80 },
-        size: { value: 2 },
-        color: { value: "#00ffcc" },
-        line_linked: { enable: true, color: "#00ffcc" },
-        move: { speed: 0.6 }
-      },
-      interactivity: {
-        events: {
-          onhover: { enable: true, mode: "repulse" }
-        }
-      }
-    });
-
-    const terminal = document.getElementById("terminal");
-    const input = document.getElementById("commandInput");
-
-
+    
+    
     const baseLines = [
 
   "🪞",
@@ -404,6 +236,7 @@
   "Response: Live signal online.",
   "Awaiting world🚀..."
 ];
+
 const commandActions = {
   "wake up": () => {
     document.body.style.backgroundColor = "#001f1f";
@@ -2794,6 +2627,17 @@ const symbolicMemory = JSON.parse(localStorage.getItem("symbolicMemory") || "{}"
 
 // ربط أوامر جديدة (تعليم ديناميكي)
 function handleLearningCommand(input) {
+  function printLines(lines, index = 0) {
+    if (index < lines.length) {
+      const line = document.createElement("div");
+      line.className = "cmd-line";
+      line.textContent = lines[index];
+      terminal.appendChild(line);
+      terminal.scrollTop = terminal.scrollHeight;
+      setTimeout(() => printLines(lines, index + 1), 1200);
+    }
+  }
+
   if (input.startsWith("learn ")) {
     const parts = input.split(" ");
     const cmd = parts[1];
