@@ -39,13 +39,13 @@
       background: #000;
       font-family: 'Courier New', monospace;
       color: #00ffcc;
-      overflow: auto;
+      overflow: hidden;
         display: flex;
   flex-direction: column;
     }
     
   #particles-js {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
@@ -68,7 +68,7 @@
 
  
   #terminal {
-    position: fixed;
+    position: relative;
       flex: 1;
   overflow-y: auto;
   padding: 20px;
@@ -89,7 +89,7 @@
       to { opacity: 1; transform: translateY(0); }
     }
       .input-line {
-  position: fixed;
+  position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
