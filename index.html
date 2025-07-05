@@ -2678,17 +2678,17 @@ function handleResetMind(input) {
 }
 let authorized = false; // حالة الأمان 
 
-  commandInput.addEventListener('focus', function() {
-    if (!authorized) {
-      const secret = prompt('Enter secret code to unlock chat:');
-      if (secret === '6339') {   
-        authorized = true;
-      } else {
-        alert('Access denied!');
-        commandInput.blur();
-        }
+input.addEventListener('focus', function() {
+  if (!authorized) {
+    const secret = prompt('Enter secret code to unlock chat:');
+    if (secret === '6339') {   
+      authorized = true;
+    } else {
+      alert('Access denied!');
+      input.blur();
     }
-  });
+  }
+});
 
 
 function handleIntent(input) {
