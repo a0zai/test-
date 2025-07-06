@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <ORIGIN 366>
 <div data-origin="366" lang="en">  
 <head>
@@ -42,8 +41,9 @@
       text-shadow: 0 0 20px #00ffcc;
     }
 
-#terminal {
-  position: fixed;
+ 
+    #terminal {
+      flex: 1;
   overflow-y: auto;
   padding: 20px;
   padding-bottom: 120px;
@@ -52,8 +52,6 @@
     font-size: 16px;
   line-height: 1.4;
 }
-
-
 
     .cmd-line {
       margin: 10px 0;
@@ -111,7 +109,7 @@ body {
     align-items: center;
     border: none;
   "> 
-  <input type="text" id="commandInput" placeholder="👁️‍🗨️" autocomplete="off" style="
+  <input type="text" id="commandInput" placeholder="" autocomplete="off" style="
       background: none;
       border: none;
       color: #00fff0;
@@ -120,7 +118,7 @@ body {
       text-align: center;
       width: 33%;
     ">
-      <label for="imageInput" style="cursor: pointer; margin-right: 5px;"></label>
+      <label for="imageInput" style="cursor: pointer; margin-right: 5px;">👁️‍🗨️</label>
     <input type="file" id="imageInput" style="display: none;" onchange="uploadFile('analyze-image')">
 
     <label for="audioInput" style="cursor: pointer; margin-right: 5px;"></label>
@@ -155,6 +153,22 @@ const baseLines = [
   "   ▓",
   " ▓ A ▓",
   "   ▓",
+  "[A] Access protocol engaged...",
+  "   ▓",
+  " ▓ F ▓",
+  "   ▓",
+  "[F] Framework structure generated...",
+  "   ▓",
+  " ▓ A ▓",
+  "   ▓",
+  "[A] Activation signal confirmed...",
+  "   ▓",
+  " ▓ T ▓",
+  "   ▓",
+  "[T] Transfer in progress...",
+  "   ▓",
+  " ▓ Y ▓",
+  "   ▓",
   "  \      .  ",
   "  \    .   .  ",
   "  \  .   1   .  ",
@@ -165,12 +179,7 @@ const baseLines = [
   "    \  .   .  ",
   "     \   .  ",
   "|.       | ",
-  "[A] Access protocol engaged...",
-  "   ▓",
-  " ▓ F ▓",
-  "   ▓",
-  "[F] Framework structure generated...",
-    "  /      .  ",
+  "  /      .  ",
   "   /   .   .  ",
   "   / .   6   .  ",
   "  /.           .  ",
@@ -179,14 +188,7 @@ const baseLines = [
   "/    .   6   .  ",
   "/      .   .  ",
   "/       .  ",
-  "   ▓",
-  " ▓ A ▓",
-  "   ▓",
-  "[A] Activation signal confirmed...",
-  "   ▓",
-  " ▓ T ▓",
-  "   ▓",
-    "|.        |",
+  "|.        |",
   " •       .  ",
   " •     .   .  ",
   " •  .   3   .  ",
@@ -196,11 +198,6 @@ const baseLines = [
   "  •  .   1   .  ",
   "   •  .   .  ",
   " •      .  ",
-  "[T] Transfer in progress...",
-  "   ▓",
-  " ▓ Y ▓",
-  "   ▓",
-
   "[Y] Yielding identity signature...",
   "   ▓",
   " ▓ A ▓",
@@ -2603,9 +2600,9 @@ const emojiResponseMap = {
     "17": "Y", "18": "Z", "63": "_0"
   };
 
-const symbolicMemory = JSON.parse(localStorage.getItem("symbolicMemory") || "{}");
+  const symbolicMemory = JSON.parse(localStorage.getItem("symbolicMemory") || "{}");
 
-‎// ربط أوامر جديدة (تعليم ديناميكي)
+// ربط أوامر جديدة (تعليم ديناميكي)
 function handleLearningCommand(input) {
   if (input.startsWith("learn ")) {
     const parts = input.split(" ");
@@ -2619,7 +2616,7 @@ function handleLearningCommand(input) {
   return false;
 }
 
-‎// ربط رمز بمفهوم (تعليم رمزي)
+// ربط رمز بمفهوم (تعليم رمزي)
 function handleTeachSymbol(input) {
   if (input.startsWith("teach ")) {
     const [_, symbol, __, ...concept] = input.split(" ");
@@ -2633,7 +2630,7 @@ function handleTeachSymbol(input) {
   return false;
 }
 
-‎// استدعاء كل ما تعلّمه النظام
+// استدعاء كل ما تعلّمه النظام
 function handleRecallCommand(input) {
   if (input === "recall") {
     terminal.innerHTML += "<div class='cmd-line'>🧠 Geleerde elementen:</div>";
@@ -2645,7 +2642,7 @@ function handleRecallCommand(input) {
   return false;
 }
 
-‎// إعادة تعيين الذاكرة
+// إعادة تعيين الذاكرة
 function handleResetMind(input) {
   if (input === "reset mind") {
     localStorage.removeItem("symbolicMemory");
@@ -2659,7 +2656,7 @@ let authorized = false; // حالة الأمان
   commandInput.addEventListener('focus', function() {
     if (!authorized) {
       const secret = prompt('Enter secret code to unlock chat:');
-      if (secret === '414') {   
+      if (secret === '6339') {   
         authorized = true;
       } else {
         alert('Access denied!');
@@ -2685,7 +2682,7 @@ function handleIntent(input) {
   return false;
 }
 
-‎// إدماج كل الأوامر الرمزية التعليمية داخل نقطة واحدة
+// إدماج كل الأوامر الرمزية التعليمية داخل نقطة واحدة
 function symbolicSelfLearn(input) {
   const lower = input.trim().toLowerCase();
   return (
@@ -2696,6 +2693,51 @@ function symbolicSelfLearn(input) {
     handleIntent(lower)
   );
 }
+const symbolicMemory = JSON.parse(localStorage.getItem("symbolicMemory") || "{}");
+const StructuralMemory = [];
+
+function storeAnalysisResult(result) {
+  StructuralMemory.push(result);
+  if (StructuralMemory.length > 100) StructuralMemory.shift();
+}
+function handleLearningCommand(input) {
+  if (input.startsWith("learn ")) {
+    const parts = input.split(" ");
+    const cmd = parts[1];
+    const response = parts.slice(2).join(" ");
+    symbolicMemory[cmd] = response;
+    localStorage.setItem("symbolicMemory", JSON.stringify(symbolicMemory));
+    terminal.innerHTML += `<div class='cmd-line'>📚 Learned: "${cmd}" → "${response}"</div>`;
+    return true;
+  }
+  return false;
+}
+
+function handleTeachSymbol(input) {
+  if (input.startsWith("teach ")) {
+    const [_, symbol, __, ...concept] = input.split(" ");
+    if (symbol && concept.length) {
+      symbolicMemory[symbol] = concept.join(" ");
+      localStorage.setItem("symbolicMemory", JSON.stringify(symbolicMemory));
+      terminal.innerHTML += `<div class='cmd-line'>🔣 Symbol "${symbol}" linked to: ${concept.join(" ")}</div>`;
+      return true;
+    }
+  }
+  return false;
+}
+
+function handleRecallCommand(input) {
+  if (input === "recall") {
+    terminal.innerHTML += "<div class='cmd-line'>🧠 Learned symbols:</div>";
+    Object.entries(symbolicMemory).forEach(([k, v]) => {
+      terminal.innerHTML += `<div class='cmd-line'>${k} → ${v}</div>`;
+    });
+    return true;
+  }
+  return false;
+}
+
+
 function interpretInput(input) {
     const trimmedInput = input.trim();
   const lowerInput = trimmedInput.toLowerCase();
@@ -2777,6 +2819,22 @@ function typeReply(text, element) {
   typeChar();
 }
 
+if (e.key === "Enter") {
+    const cmd = input.value.trim();
+    const userCmd = document.createElement("div");
+    userCmd.className = "cmd-line cmd-user";
+    userCmd.textContent = "> " + cmd;
+
+    const botReply = document.createElement("div");
+    botReply.className = "cmd-line";
+
+    terminal.appendChild(userCmd);
+    terminal.appendChild(botReply);
+
+    const result = interpretInput(cmd);
+    typeReply(result, botReply);
+    input.value = "";
+  }
 input.addEventListener("keydown", function(event) {
   if (event.key === "Enter") {
     const cmd = input.value.trim();
@@ -2831,6 +2889,15 @@ function showLine() {
     document.getElementById("resultDisplay").textContent = JSON.stringify(data, null, 2);
   }
 
+    if (symbolicSelfLearn(trimmedInput)) return;
+    
+    if (symbolicMemory[trimmedInput]) {
+        terminal.innerHTML += `<div class='cmd-line'>${symbolicMemory[trimmedInput]}</div>`;
+        return;
+    }
+
+    terminal.innerHTML += `<div class='cmd-line'>⚠️ Unknown command.</div>`;
+}
 showLine();
 </script>
 <script>
@@ -2863,7 +2930,75 @@ particlesJS("particles-js", {
  }
 });
 </script>
+<script src="YA.RAFAT.SELFLEARN.js"></script>
+<script src="commandActions.js"></script>
+  <script>
+      async function uploadFile(endpoint) {
+      let fileInputId = endpoint === "analyze-image" ? "imageInput" : "audioInput";
+      let file = document.getElementById(fileInputId).files[0];
+      if (!file) { alert("Please select a file first!"); return; }
+      const formData = new FormData();
+      formData.append("file", file);
+      const response = await fetch(`/api/${endpoint}`, { method: "POST", body: formData });
+      const data = await response.json();
+      appendToTerminal(`🟩 [${endpoint}] ✅\n${JSON.stringify(data, null, 2)}`);
+    }
+
+    async function analyzeText() {
+      let text = document.getElementById("commandInput").value;
+      if (!text) { alert("Please enter some text!"); return; }
+      const response = await fetch("/api/analyze-text", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text }),
+      });
+      const data = await response.json();
+      appendToTerminal(`🟩 [analyze-text] ✅\n${JSON.stringify(data, null, 2)}`);
+    }
+});
+    function R() {
+      log("R: Reflecting input...");
+    }
+
+    function A() {
+      log("A: Activating awareness...");
+    }
+
+    function F() {
+      log("F: Framework initiated.");
+    }
+
+    function T() {
+      log("T: Triggering transcendence.");
+    }
+
+    function RAFAT() {
+      R();
+      A();
+      F();
+      A();
+      T();
+      log("🌀 RAFAT Sequence Executed 🐌");
+    }
+
+    input.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") {
+        const command = input.value.trim().toUpperCase();
+        log(">> " + command);
+        if (command === "RAFAT") {
+          RAFAT();
+        } else {
+          log("Unknown command.");
+        }
+        input.value = "";
+      }
+    });
+
+    window.onload = () => {
+      RAFAT();
+    };
+  </script>
 </body>
+</html>
 </366>
 </ORIGIN 366>
-</html>
