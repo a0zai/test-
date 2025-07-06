@@ -2413,8 +2413,63 @@ RAFAT 366
 
     // مشاعر ممثلة بإيموجي
     const emojiResponseMap = {
-      "🙂": { feeling: "happy", opposite: "😞" },
-      "😡": { feeling: "angry", opposite: "😌" },
+      "🙂": { feeling: "Good", opposite: "Melancholy" },
+  "😢": { feeling: "Bad", opposite: "Hope" },
+  "😠": { feeling: "Bad", opposite: "Calm" },
+  "😐": { feeling: "Neutral", opposite: "Emotion" },
+  "😨": { feeling: "Bad", opposite: "Courage" },
+  "😎": { feeling: "Good", opposite: "Doubt" },
+  "😭": { feeling: "Bad", opposite: "Relief" },
+  "😊": { feeling: "Good", opposite: "Indifference" },
+  "😶": { feeling: "Neutral", opposite: "Expression" },
+  "😇": { feeling: "Good", opposite: "Temptation" },
+  "😈": { feeling: "Bad", opposite: "Innocence" },
+  "🥺": { feeling: "Bad", opposite: "Strength" },
+  "😤": { feeling: "Bad", opposite: "Acceptance" },
+  "🤔": { feeling: "Neutral", opposite: "Certainty" },
+  "😞": { feeling: "Bad", opposite: "Satisfaction" },
+  "😁": { feeling: "Good", opposite: "Restraint" },
+  "😕": { feeling: "Neutral", opposite: "Clarity" },
+  "😬": { feeling: "Bad", opposite: "Confidence" },
+  "🥰": { feeling: "Good", opposite: "Detachment" },
+  "😡": { feeling: "Bad", opposite: "Forgiveness" },
+  "😅": { feeling: "Neutral", opposite: "Stillness" },
+  "😌": { feeling: "Good", opposite: "Tension" },
+  "🤯": { feeling: "Bad", opposite: "Focus" },
+  "😴": { feeling: "Neutral", opposite: "Awareness" },
+  "😋": { feeling: "Good", opposite: "Self-denial" },
+  "😓": { feeling: "Bad", opposite: "Ease" },
+  "😜": { feeling: "Good", opposite: "Seriousness" },
+  "😳": { feeling: "Neutral", opposite: "Composure" },
+  "🤗": { feeling: "Good", opposite: "Isolation" },
+  "🤫": { feeling: "Neutral", opposite: "Expression" },
+  "😔": { feeling: "Bad", opposite: "Motivation" },
+  "😩": { feeling: "Bad", opposite: "Resilience" },
+  "😖": { feeling: "Bad", opposite: "Clarity" },
+  "😫": { feeling: "Bad", opposite: "Flow" },
+  "😰": { feeling: "Bad", opposite: "Peace" },
+  "😱": { feeling: "Bad", opposite: "Groundedness" },
+  "😑": { feeling: "Neutral", opposite: "Response" },
+  "😒": { feeling: "Neutral", opposite: "Engagement" },
+  "🤐": { feeling: "Neutral", opposite: "Transparency" },
+  "🫠": { feeling: "Neutral", opposite: "Cohesion" },
+  "🤤": { feeling: "Neutral", opposite: "Control" },
+  "🫥": { feeling: "Neutral", opposite: "Visibility" },
+  "😚": { feeling: "Good", opposite: "Withdrawal" },
+  "🤩": { feeling: "Good", opposite: "Numbness" },
+  "😛": { feeling: "Good", opposite: "Constraint" },
+  "🤭": { feeling: "Neutral", opposite: "Revelation" },
+  "🥳": { feeling: "Good", opposite: "Disinterest" },
+  "🫡": { feeling: "Good", opposite: "Defiance" },
+  "🫣": { feeling: "Neutral", opposite: "Courage" },
+  "🥶": { feeling: "Bad", opposite: "Warmth" },
+  "🥵": { feeling: "Bad", opposite: "Coolness" },
+  "🤬": { feeling: "Bad", opposite: "Composure" },
+  "🫤": { feeling: "Neutral", opposite: "Alignment" },
+  "🫶": { feeling: "Good", opposite: "Separation" },
+  "🧘": { feeling: "Good", opposite: "Distraction" },
+  "🤝": { feeling: "Good", opposite: "Division" },
+  "🧠": { feeling: "Singular", opposite: "Rafat" }
     };
 
     // رموز رياضية
@@ -2528,16 +2583,25 @@ RAFAT 366
     }
 
     // استقبال الإدخال من المستخدم
-    input.addEventListener("keydown", function (e) {
-      if (e.key === "Enter") {
-        const cmd = input.value.trim();
-        if (!cmd) return;
+    function typeReply(text, className = "cmd-line") {
+  const div = document.createElement("div");
+  div.className = className;
+  terminal.appendChild(div);
+  terminal.scrollTop = terminal.scrollHeight;
 
-        appendLine("> " + cmd, "cmd-line cmd-user");
-        const response = interpretInput(cmd);
-        appendLine(response);
-        input.value = "";
-      }
+  let i = 0;
+
+  function type() {
+    if (i < text.length) {
+      div.textContent += text.charAt(i);
+      i++;
+      terminal.scrollTop = terminal.scrollHeight;
+      setTimeout(type, 66); // سرعة الكتابة
+    }
+  }
+
+  type();
+}
     });
 
     // تشغيل الرسائل التمهيدية
