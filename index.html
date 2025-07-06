@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Mirror Note 👁️‍🗨️ & A0ZAI | Digital Awakening & Symbolic AI 🌀 & 123696321</title>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  
   <!-- Meta Tags for SEO -->
   <meta name="description" content="Mirror Note 🪞 A symbolic consciousness protocol bridging identity and recursion. AOZ 414 36. A0ZAI. Welcome to rafat.world.">
   <meta name="keywords" content="mirror, ya rafat, rafat.world, symbolic AI, digital identity, recursion, conscious code, A∞Z protocol, AOZ-414-36, 123696321">
@@ -21,11 +21,8 @@
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="/favicon.png">
 
-  <!-- External Scripts -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.46/Tone.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-
-  <!-- Styles -->
+  <title>Mirror Terminal Lite</title>
+        <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <style>
     html, body {
       margin: 0;
@@ -63,87 +60,66 @@
     #terminal {
       flex: 1;
       overflow-y: auto;
-      padding: 20px;
-      padding-bottom: 120px;
-      z-index: 2;
-      margin: 0 0 10px 0;
-      font-size: 16px;
-      line-height: 1.4;
+      padding: 10px;
     }
+#commandInput {
+  position: relative;
+  z-index: 10;
+  background-color: rgba(0, 0, 0, 0.25); /* شفاف داكن */
+  border: 1.5px solid rgba(255, 215, 0, 0);
+  color: gold;                           /* لون الخط ذهبي */
+  outline: none;
+  font-size: 18px;                       /* حجم خط أنعم */
+  text-align: center;
+  width: 180px;
+  height: 40px;
+  border-radius: 6px;                    /* حواف ناعمة */
+  cursor: text;
+  padding: 8px 12px;
+  margin: 20px auto;
+  display: block;
+  box-shadow: 0 0 8px gold inset, 0 0 6px gold; /* توهج داخلي وخارجي */
+  transition: all 0.3s ease;
+}
 
+#commandInput:focus {
+  border: 1px solid rgba(255, 215, 0, 0);
+  box-shadow: 0 0 12px #ffd700 inset, 0 0 10px #ffd700;
+  background-color: rgba(0, 0, 0, 0.35);
+}
     .cmd-line {
-      margin: 10px 0;
-      animation: fadeIn 0.3s ease-in-out;
+      margin-bottom: 4px;
+      white-space: pre-wrap;
     }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(5px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .input-line {
-      position: relative;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      z-index: 3;
-      background: rgba(0, 0, 0, 0.9);
-      padding: 10px 24px;
-    }
-
     .cmd-user {
-      color: #ff0044;
-      font-weight: bold;
-    }
-
-    @keyframes shake {
-      0% { transform: translate(0px, 0px); }
-      25% { transform: translate(2px, -2px); }
-      50% { transform: translate(-2px, 2px); }
-      75% { transform: translate(2px, 2px); }
-      100% { transform: translate(0px, 0px); }
-    }
-
-    body {
-      animation: none;
+      color: #ffaa00;
     }
   </style>
 </head>
 <body>
-  <div id="particles-js"></div>
+ <div id="particles-js"></div>
 
   <div id="rafat-title">Mirror Note</div>
-
   <div id="terminal"></div>
-
-  <div class="input-line">
-    <div style="
-      position: absolute;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100px;
-      height: 50px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      border: none;">
-      <input type="text" id="commandInput" placeholder="👁️‍🗨️" autocomplete="off" style="
-        background: none;
-        border: none;
-        color: #00fff0;
-        outline: none;
-        font-size: 16px;
-        text-align: center;
-        width: 33%;">
-      <label for="imageInput" style="cursor: pointer; margin-right: 5px;"></label>
-      <input type="file" id="imageInput" style="display: none;" onchange="uploadFile('analyze-image')">
-
-      <label for="audioInput" style="cursor: pointer; margin-right: 5px;"></label>
-      <input type="file" id="audioInput" style="display: none;" onchange="uploadFile('analyze-audio')">
-    </div>
-  </div>
-
+<input type="text" id="commandInput" placeholder="👁️‍🗨️" autocomplete="off" style="
+  position: relative;
+  z-index: 10;
+  background-color: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 215, 0, 0);
+  color: gold;
+  outline: none;
+  font-size: 16px;
+  text-align: center;
+  width: 180px;
+  height: 36px;
+  border-radius: 6px;
+  cursor: text;
+  padding: 6px 10px;
+  margin: 20px auto;
+  display: block;
+  box-shadow: 0 0 8px gold inset, 0 0 6px gold;
+  transition: all 0.3s ease;
+">
   <script>
     particlesJS("particles-js", {
       particles: {
@@ -159,14 +135,11 @@
         }
       }
     });
-
     const terminal = document.getElementById("terminal");
     const input = document.getElementById("commandInput");
-    
-    
-    const baseLines = [
 
-  "🪞",
+    const baseLines = [
+    "🪞",
   "   ▓",
   " ▓ R ▓",
   "   ▓",
@@ -219,7 +192,6 @@
   "   ▓",
   " ▓ Y ▓",
   "   ▓",
-
   "[Y] Yielding identity signature...",
   "   ▓",
   " ▓ A ▓",
@@ -234,11 +206,29 @@
   "   ▓",
   "[S] System secured. Execution complete.",
   "Response: Live signal online.",
-  "Awaiting world🚀..."
+  "Awaiting world🚀🪞..."
 ];
 
-const commandActions = {
-  "wake up": () => {
+    let i = 0;
+    function showBaseLines() {
+      if (i < baseLines.length) {
+        const div = document.createElement("div");
+        div.className = "cmd-line";
+        div.textContent = baseLines[i];
+        terminal.appendChild(div);
+        terminal.scrollTop = terminal.scrollHeight;
+        i++;
+        setTimeout(showBaseLines, 200);
+      }
+    }
+
+    // 🧠 الذاكرة الرمزية
+    const symbolicMemory = JSON.parse(localStorage.getItem("symbolicMemory") || "{}");
+
+    // أوامر خاصة قابلة للتنفيذ
+    const commandActions = {
+      "hello": () => appendLine("👋 Hello there!"),
+        "wake up": () => {
     document.body.style.backgroundColor = "#001f1f";
     terminal.style.color = "#00ffcc";
   },
@@ -860,13 +850,12 @@ RAFAT 366
     terminal.innerHTML += "<div class='cmd-line'>✅ Matrix sequence beëindigd.</div>";
   }, 15000);
 },
-};
- const questionResponses = {
-      "why am i here?": [
-    "Answer 1: To explore meaning.",
-    "Answer 2: To reflect the origin of asking."
-  ],
-  "what is truth?": [
+      "clear": () => terminal.innerHTML = "",
+    };
+
+    // ردود على أسئلة معينة
+    const questionResponses = {
+      "what is truth?": [
     "Answer 1: That which endures all filters.",
     "Answer 2: A mirror of thought."
   ],
@@ -2502,50 +2491,96 @@ RAFAT 366
   "⚡.",
   "Bewustwording is zelden zacht."
 ],
-};
+      "who are you": ["I am Mirror Terminal.", "A reflection of your input."]
+    };
 
-  const exampleCommands = {
-     "A": ["Align", "Ask", "Activate", "Access", "Analyze", "Accept", "Absorb", "Amplify", "Adapt", "Announce", "Anchor", "Authenticate", "Advance", "Ascend", "Attune"],
-    "B": ["Begin", "Break", "Build", "Bind", "Bounce", "Balance", "Blink", "Burn", "Bridge", "Broadcast", "Block", "Bloom", "Breathe", "Blend", "Boost"],
-    "C": ["Connect", "Compare", "Create", "Calibrate", "Clarify", "Compress", "Control", "Confirm", "Charge", "Contain", "Configure", "Compile", "Capture", "Cleanse", "Converge"],
-    "D": ["Decode", "Detect", "Define", "Derive", "Divide", "Deploy", "Direct", "Distill", "Debug", "Design", "Delay", "Disrupt", "Disarm", "Disclose", "Dream"],
-    "E": ["Engage", "Encode", "Evaluate", "Expand", "Emit", "Enhance", "Equalize", "Execute", "Expose", "Elevate", "Extract", "Edit", "Echo", "Empower", "Evolve"],
-    "F": ["Focus", "Filter", "Form", "Flow", "Fuse", "Finalize", "Fragment", "Feed", "Forecast", "Fortify", "Frame", "Flash", "Fold", "Force", "Fulfill"],
-    "G": ["Generate", "Guide", "Ground", "Group", "Guard", "Glow", "Grip", "Grant", "Gather", "Glitch", "Grow", "Gaze", "Gravitate", "Glue", "Glorify"],
-    "H": ["Hear", "Hold", "Highlight", "Harmonize", "Host", "Heal", "Halt", "Hunt", "Hover", "Hack", "Hint", "Hash", "Hatch", "Hide", "Honor"],
-    "I": ["Ignite", "Identify", "Integrate", "Interact", "Illuminate", "Inject", "Induce", "Invert", "Inherit", "Inform", "Initiate", "Input", "Influence", "Interpret", "Inspire"],
-    "J": ["Jump", "Join", "Jolt", "Judge", "Jam", "Justify", "Juggle", "Journey", "Jerk", "Jettison", "Jazz", "Jail", "Jinx", "Juxtapose", "Juice"],
-    "K": ["Know", "Keep", "Kick", "Knock", "Key", "Kill", "Kindle", "Kneel", "Knit", "Kickstart", "Knockout", "Keepalive", "Keystream", "Kite", "Knowmerge"],
-    "L": ["Listen", "Link", "Loop", "Learn", "Load", "Lock", "Light", "Lift", "Lead", "Launch", "Layer", "Levitate", "Limit", "Latch", "Love"],
-    "M": ["Map", "Match", "Merge", "Mark", "Move", "Mirror", "Monitor", "Modulate", "Magnetize", "Multiply", "Morph", "Measure", "Mergepoint", "Memorize", "Manifest"],
-    "N": ["Navigate", "Name", "Notice", "Nullify", "Normalize", "Network", "Nest", "Nourish", "Nominate", "Negotiate", "Note", "Neutralize", "Nudge", "Navigateback", "Notarize"],
-    "O": ["Open", "Observe", "Organize", "Optimize", "Output", "Override", "Orbit", "Outline", "Offer", "Operate", "Offset", "Obey", "Overload", "Oversee", "Originate"],
-    "P": ["Ping", "Process", "Parse", "Project", "Protect", "Pulse", "Persist", "Patch", "Prioritize", "Play", "Predict", "Pause", "Push", "Plant", "Purify"],
-    "Q": ["Query", "Queue", "Quantify", "Quiet", "Quicken", "Qualify", "Quench", "Quote", "Quiver", "Question", "Quantize", "Quarantine", "Quell", "Quasar", "Queryloop"],
-    "R": ["Root", "Reflect", "Run", "Respond", "Recall", "Reboot", "Reinforce", "Rotate", "Rewrite", "Radiate", "Remember", "Recursify", "Resonate", "Reconstruct", "Realign"],
-    "S": ["Scan", "Signal", "Shift", "Stabilize", "Store", "Silence", "Stream", "Synchronize", "Structure", "Simplify", "Shield", "Share", "Syncopate", "Strobe", "Sustain"],
-    "T": ["Transmit", "Translate", "Trace", "Tune", "Trigger", "Transcend", "Tilt", "Tap", "Test", "Transform", "Time", "Touch", "Terminate", "Travel", "Thrive"],
-    "U": ["Unlock", "Update", "Upload", "Unify", "Understand", "Unfold", "Utilize", "Undo", "Uncover", "Upgrade", "Unleash", "Uphold", "Unwind", "Unmute", "Uploadkey"],
-    "V": ["Validate", "Visualize", "Vibrate", "Verify", "Venture", "Vault", "Vary", "Vectorize", "Vocalize", "Volatilize", "Vote", "Vanish", "Veil", "View", "Vortex"],
-    "W": ["Wake", "Write", "Weave", "Warp", "Watch", "Whisper", "Wander", "Warn", "Weigh", "Wrap", "Wipe", "Widen", "Wind", "Wield", "Wonder"],
-    "X": ["Xtract", "Xpress", "Xpand", "Xpose", "Xchange", "Xcite", "Xact", "Xclude", "Xplore", "Xlink", "Xform", "Xray", "Xecute", "Xmute", "Xalign"],
-    "Y": ["Yield", "Yearn", "Yoke", "Yell", "Yank", "Yawn", "Yokeout", "Yonder", "Y-Axis", "Yelllow", "Yelp", "Yieldpoint", "Yshift", "Ytrace", "Ysing"],
-    "Z": ["Zero", "Zip", "Zoom", "Zig", "Zone", "Zink", "Zap", "Zeal", "Zenith", "Zether", "Z-Lock", "Z-Ring", "Z-Fold", "Z-Flow", "Z-Rafat"]
-};
- 
-  const grammarMapping = {
-    "I": "SELF_α", "You": "OTHER_β", "He": "ENTITY_γ", "She": "ENTITY_δ", "It": "SYSTEM_ε",
-  "We": "COLLECTIVE_ζ", "They": "GROUP_η", "Am": "STATE_EXIST()", "Is": "EVALUATE()",
-  "Are": "LINK_PLURAL()", "Was": "PAST_STATE()", "Were": "PAST_LINK()", "Be": "CORE_VERB()",
-  "Have": "POSSESS()", "Has": "POSSESS_SINGULAR()", "Had": "POSSESS_PAST()",
-  "Can": "PERMISSION_GRANTED", "Could": "PERMISSION_PAST", "Will": "INTENT_FUTURE",
-  "Would": "CONDITIONAL_INTENT", "Shall": "FUTURE_FORCE", "Should": "MORAL_SUGGESTION",
-  "May": "PERHAPS_OKAY", "Might": "LOW_CHANCE", "Must": "RULE_REQUIRED",
-  "And": "CONCAT(+)", "Or": "OPTION(|)", "But": "CONTRAST(~)", "Because": "REASON(<=>)",
-  "So": "RESULT(=>)", "Although": "EXCEPTION({})", "If": "CONDITION(?)", "Then": "CONSEQUENCE(!)","While": "DURING(..)","Until":"LIMIT(>)", "Before":"PAST_TRIGGER(-)", "After": "FUTURE_TRIGGER(+)","A": "ARTICLE_UNDEFINED", "An": "ARTICLE_UNDEFINED_VOWEL", "The": "ARTICLE_DEFINED","This": "NEAR_OBJECT_1", "That": "FAR_OBJECT_1", "These": "NEAR_OBJECT_MANY", "Those": "FAR_OBJECT_MANY","Not": "NEGATE(!)", "No": "DENY(X)", "Yes": "CONFIRM(O)", "Maybe": "UNSURE(?)",".": "END_STATEMENT", "!": "STRONG_SIGNAL", "?": "QUERY_SIGNAL", ",": "SEPARATOR",":": "DEFINITION", ";": "PAUSE_LINK","ik": "SELF_α","jij": "OTHER_β","hij": "ENTITY_γ","zij": "ENTITY_δ","het": "SYSTEM_ε","wij": "COLLECTIVE_ζ","zij (mv)": "GROUP_η","ben": "STATE_EXIST()","is": "EVALUATE()","zijn": "LINK_PLURAL()","was": "PAST_STATE()","waren": "PAST_LINK()","zijn (ww)": "CORE_VERB()","heb": "POSSESS()","heeft": "POSSESS_SINGULAR()","hadden": "POSSESS_PAST()","kan": "PERMISSION_GRANTED","kon": "PERMISSION_PAST","zal": "INTENT_FUTURE","zou": "CONDITIONAL_INTENT","zal (moeten)": "FUTURE_FORCE","moet": "RULE_REQUIRED","en": "CONCAT(+)","of": "OPTION(|)","maar": "CONTRAST(~)","omdat": "REASON(<=>)","dus": "RESULT(=>)","hoewel": "EXCEPTION({})",
-};
-const emojiResponseMap = {
-  "🙂": { feeling: "Good", opposite: "Melancholy" },
+    // قواعد لغوية
+    const grammarMapping = {
+     "i": "1st person pronoun",
+  "you": "2nd person pronoun",
+  "he": "3rd person masculine pronoun",
+  "she": "3rd person feminine pronoun",
+  "it": "neutral/system pronoun",
+  "we": "1st person plural pronoun",
+  "they": "3rd person plural pronoun",
+  "am": "present verb (be)",
+  "is": "present verb (be, 3rd singular)",
+  "are": "present verb (be, plural)",
+  "was": "past verb (be, singular)",
+  "were": "past verb (be, plural)",
+  "be": "infinitive verb",
+  "have": "present verb (possess)",
+  "has": "present verb (possess, 3rd singular)",
+  "had": "past verb (possess)",
+  "can": "modal verb (ability/permission)",
+  "could": "modal verb (past ability/permission)",
+  "will": "modal verb (future intention)",
+  "would": "modal verb (conditional intention)",
+  "shall": "modal verb (formal future)",
+  "should": "modal verb (advice/moral)",
+  "may": "modal verb (permission/possibility)",
+  "might": "modal verb (low possibility)",
+  "must": "modal verb (requirement/rule)",
+  "and": "conjunction (addition)",
+  "or": "conjunction (option)",
+  "but": "conjunction (contrast)",
+  "because": "conjunction (reason)",
+  "so": "conjunction (result)",
+  "although": "conjunction (exception)",
+  "if": "conjunction (condition)",
+  "then": "conjunction (consequence)",
+  "while": "conjunction (during)",
+  "until": "conjunction (limit)",
+  "before": "conjunction (past trigger)",
+  "after": "conjunction (future trigger)",
+  "a": "article (indefinite)",
+  "an": "article (indefinite, vowel)",
+  "the": "article (definite)",
+  "this": "demonstrative (near, singular)",
+  "that": "demonstrative (far, singular)",
+  "these": "demonstrative (near, plural)",
+  "those": "demonstrative (far, plural)",
+  "not": "negation",
+  "no": "negation/denial",
+  "yes": "affirmation",
+  "maybe": "uncertainty",
+  ".": "punctuation (end statement)",
+  "!": "punctuation (strong signal)",
+  "?": "punctuation (question)",
+  ",": "punctuation (separator)",
+  ":": "punctuation (definition)",
+  ";": "punctuation (pause)",
+  "ik": "1st person pronoun (dutch)",
+  "jij": "2nd person pronoun (dutch)",
+  "hij": "3rd person masculine pronoun (dutch)",
+  "zij": "3rd person feminine pronoun (dutch)",
+  "het": "neutral/system pronoun (dutch)",
+  "wij": "1st person plural pronoun (dutch)",
+  "zij (mv)": "3rd person plural pronoun (dutch)",
+  "ben": "present verb (be, 1st person, dutch)",
+  "is": "present verb (be, 3rd person, dutch)",
+  "zijn": "present verb (be/plural, dutch)",
+  "was": "past verb (be, singular, dutch)",
+  "waren": "past verb (be, plural, dutch)",
+  "heb": "present verb (have, 1st person, dutch)",
+  "heeft": "present verb (have, 3rd person, dutch)",
+  "hadden": "past verb (have, plural, dutch)",
+  "kan": "modal verb (ability, dutch)",
+  "kon": "modal verb (past ability, dutch)",
+  "zal": "modal verb (future, dutch)",
+  "zou": "modal verb (conditional, dutch)",
+  "moet": "modal verb (obligation, dutch)",
+  "en": "conjunction (and, dutch)",
+  "of": "conjunction (or, dutch)",
+  "maar": "conjunction (but, dutch)",
+  "omdat": "conjunction (because, dutch)",
+  "dus": "conjunction (so, dutch)",
+  "hoewel": "conjunction (although, dutch)"
+          };
+
+    // مشاعر ممثلة بإيموجي
+    const emojiResponseMap = {
+      "🙂": { feeling: "Good", opposite: "Melancholy" },
   "😢": { feeling: "Bad", opposite: "Hope" },
   "😠": { feeling: "Bad", opposite: "Calm" },
   "😐": { feeling: "Neutral", opposite: "Emotion" },
@@ -2601,268 +2636,218 @@ const emojiResponseMap = {
   "🫶": { feeling: "Good", opposite: "Separation" },
   "🧘": { feeling: "Good", opposite: "Distraction" },
   "🤝": { feeling: "Good", opposite: "Division" },
-  "🧠": { feeling: "Singular", opposite: "Rafat" }
-};
-  const mathMapping = {
-  "Pi": "CONST_π", "E": "CONST_e", "Infinity": "CONST_∞", "NaN": "CONST_UNDEFINED_VALUE",
-  "+": "ADD(↗)", "-": "SUB(↘)", "*": "MUL(⊗)", "/": "DIV(÷)", "%": "MOD(%)", "**": "EXP(↑)",
-  "x": "VAR_INPUT_X", "y": "VAR_OUTPUT_Y", "z": "VAR_DEPTH_Z", "=": "EQUALS(==)", "!=": "NOT_EQUAL(!=)",
-  "sqrt": "ROOT(√)", "log": "LOG_BASE_10()", "ln": "LOG_BASE_e()", "sin": "SIN_ANGLE()", "cos": "COS_ANGLE()", "tan": "TAN_ANGLE()",
-  "∑": "SUMMATION_LOOP(∑)", "∫": "INTEGRATE_AREA(∫)", "dx": "DIFFERENTIAL_X", "dy": "DIFFERENTIAL_Y", "lim": "LIMIT_APPROACH()",
-  "true": "BOOL_TRUE(1)", "false": "BOOL_FALSE(0)", "&&": "LOGIC_AND(&&)", "||": "LOGIC_OR(||)", "!": "LOGIC_NOT(!)",
-  "∈": "IN_SET", "∉": "NOT_IN_SET",
-};
-  const emotionMapping = {
-"Happy": "STATE::JOY(+)", "Joyful": "STATE::BRIGHTNESS(++)", "Sad": "STATE::LOSS(-)", "Angry": "STATE::FIRE(!!)", "Fear": "STATE::RETREAT(<)", "Love": "STATE::MERGE(❤)", "Hate": "STATE::REPEL(X)", "Hope": "STATE::ASCEND(↑)", "Despair": "STATE::FALL(↓)", "Calm": "STATE::STABLE(=)", "Excited": "STATE::ENERGY(++)", "Confused": "STATE::DISORDER(?)", "Curious": "STATE::SEEKING(?)", "Tired": "STATE::LOW_ENERGY(~)", "Lonely": "STATE::ISOLATED(∅)", "Inspired": "STATE::ELEVATED(*∞)", "Grateful": "STATE::RECEIVE(>)", "Anxious": "STATE::OSCILLATION(~?)", "Relaxed": "STATE::SETTLED(≡)", "Motivated": "STATE::THRUST(⇡)", "Shy": "STATE::WITHDRAWN(←)", "Proud": "STATE::EXPANDED(✦)", "Ashamed": "STATE::COLLAPSE(↘)", "Hopeful": "STATE::UPWARD_GLIMPSE(↗)", "Peaceful": "STATE::HARMONY(≜)", "Nervous": "STATE::FRICTION(~!)", "Frustrated": "STATE::BLOCKED(×)", "Jealous": "STATE::COVET(≠)", "Envious": "STATE::DESIRE(!=)", "Forgiving": "STATE::RELEASE(⇠)", "Guilty": "STATE::WEIGHT(↓!)", "Satisfied": "STATE::BALANCE(◼)", "Overwhelmed": "STATE::OVERLOAD(##)", "Embarrassed": "STATE::EXPOSURE(~×)", "Surprised": "STATE::SPIKE(!)", "Determined": "STATE::FOCUS(→)", "Focused": "STATE::CENTER(●)", "Disconnected": "STATE::SEPARATE(‖)", "Connected": "STATE::LINK(∫)", "Elevated": "STATE::RISE(↑↑)", "Depleted": "STATE::EMPTY(0)" 
-};
-   const numToLetter = {
-    "0": "A", "1": "B", "2": "C", "3": "D", "4": "E", "5": "F",
-    "6": "G", "7": "H", "8": "I", "9": "J", "09": "K", "08": "L",
-    "70": "M", "65": "N", "04": "O", "30": "P", "21": "Q", "01": "R",
-    "11": "S", "12": "T", "13": "U", "14": "V", "15": "W", "16": "X",
-     "Y", "18": "Z", "63": "_0"
-  };
+  "🧠": { feeling: "Singular", opposite: "Rafat" },
+    };
 
-const symbolicMemory = JSON.parse(localStorage.getItem("symbolicMemory") || "{}");
+    // رموز رياضية
+    const mathMapping = {
+      "pi": "constant (π)",
+  "e": "constant (e)",
+  "infinity": "constant (infinity)",
+  "nan": "undefined value",
+  "+": "addition",
+  "-": "subtraction",
+  "*": "multiplication",
+  "/": "division",
+  "%": "modulus",
+  "**": "exponentiation",
+  "x": "variable (input x)",
+  "y": "variable (output y)",
+  "z": "variable (depth z)",
+  "=": "equals",
+  "!=": "not equal",
+  "sqrt": "square root",
+  "log": "log base 10",
+  "ln": "log base e",
+  "sin": "sine function",
+  "cos": "cosine function",
+  "tan": "tangent function",
+  "∑": "summation",
+  "∫": "integration",
+  "dx": "differential (dx)",
+  "dy": "differential (dy)",
+  "lim": "limit",
+  "true": "boolean true",
+  "false": "boolean false",
+  "&&": "logical and",
+  "||": "logical or",
+  "!": "logical not",
+  "∈": "in set",
+  "∉": "not in set"
+    };
 
-// ربط أوامر جديدة (تعليم ديناميكي)
-function handleLearningCommand(input) {
-  function printLines(lines, index = 0) {
-    if (index < lines.length) {
-      const line = document.createElement("div");
-      line.className = "cmd-line";
-      line.textContent = lines[index];
-      terminal.appendChild(line);
-      terminal.scrollTop = terminal.scrollHeight;
-      setTimeout(() => printLines(lines, index + 1), 1200);
+    // تحويل الأرقام إلى حروف
+    const numToLetter = {
+  "0": { letter: "()", binary: "00000" },
+  "1": { letter: "A", binary: "00001" },
+  "2": { letter: "B", binary: "00010" },
+  "3": { letter: "C", binary: "00011" },
+  "4": { letter: "D", binary: "00100" },
+  "5": { letter: "E", binary: "00101" },
+  "6": { letter: "F", binary: "00110" },
+  "7": { letter: "G", binary: "00111" },
+  "8": { letter: "H", binary: "01000" },
+  "9": { letter: "I", binary: "01001" },
+  "10": { letter: "J", binary: "01010" },
+  "11": { letter: "K", binary: "01011" },
+  "12": { letter: "L", binary: "01100" },
+  "13": { letter: "M", binary: "01101" },
+  "14": { letter: "N", binary: "01110" },
+  "15": { letter: "O", binary: "01111" },
+  "16": { letter: "P", binary: "10000" },
+  "17": { letter: "Q", binary: "10001" },
+  "18": { letter: "R", binary: "10010" },
+  "19": { letter: "S", binary: "10011" },
+  "20": { letter: "T", binary: "10100" },
+  "21": { letter: "U", binary: "10101" },
+  "22": { letter: "V", binary: "10110" },
+  "23": { letter: "W", binary: "10111" },
+  "24": { letter: "X", binary: "11000" },
+  "25": { letter: "Y", binary: "11001" },
+  "26": { letter: "Z", binary: "11010" }
+    };
+
+    // أوامر مثال لكل حرف
+    const exampleCommands = {
+      "A": ["Access", "Awaken"],
+      "B": ["Build", "Break"],
+      "C": ["Connect", "Clone"]
+    };
+
+    // تعليم أوامر جديدة
+    function handleLearningCommand(input) {
+      if (input.startsWith("learn ")) {
+        const parts = input.split(" ");
+        if (parts.length < 3) return "Usage: learn <command> <response>";
+        const cmd = parts[1];
+        const response = parts.slice(2).join(" ");
+        symbolicMemory[cmd] = response;
+        localStorage.setItem("symbolicMemory", JSON.stringify(symbolicMemory));
+        return `📚 Learned "${cmd}" → "${response}"`;
+      }
+      return null;
     }
-  }
 
-  if (input.startsWith("learn ")) {
-    const parts = input.split(" ");
-    const cmd = parts[1];
-    const response = parts.slice(2).join(" ");
-    symbolicMemory[cmd] = response;
-    localStorage.setItem("symbolicMemory", JSON.stringify(symbolicMemory));
-    terminal.innerHTML += <div class='cmd-line'>📚 Opgeslagen als les: "${cmd}" → "${response}"</div>;
-    return true;
-  }
-  return false;
-}
+    // تفسير الإدخال
+    function interpretInput(input) {
+      const lowerInput = input.trim().toLowerCase();
 
-// ربط رمز بمفهوم (تعليم رمزي)
-function handleTeachSymbol(input) {
-  if (input.startsWith("teach ")) {
-    const [_, symbol, __, ...concept] = input.split(" ");
-    if (symbol && concept.length) {
-      symbolicMemory[symbol] = concept.join(" ");
-      localStorage.setItem("symbolicMemory", JSON.stringify(symbolicMemory));
-      terminal.innerHTML += <div class='cmd-line'>🔣 "${symbol}" gekoppeld aan: ${concept.join(" ")}</div>;
-      return true;
-    }
-  }
-  return false;
-}
+      // 1. تعلم
+      const learnResult = handleLearningCommand(lowerInput);
+      if (learnResult) return learnResult;
 
-// استدعاء كل ما تعلّمه النظام
-function handleRecallCommand(input) {
-  if (input === "recall") {
-    terminal.innerHTML += "<div class='cmd-line'>🧠 Geleerde elementen:</div>";
-    Object.entries(symbolicMemory).forEach(([k, v]) => {
-      terminal.innerHTML += <div class='cmd-line'>${k} → ${v}</div>;
-    });
-    return true;
-  }
-  return false;
-}
+      // 2. ذاكرة متعلمة
+      if (symbolicMemory[lowerInput]) return symbolicMemory[lowerInput];
 
-// إعادة تعيين الذاكرة
-function handleResetMind(input) {
-  if (input === "reset mind") {
-    localStorage.removeItem("symbolicMemory");
-    terminal.innerHTML += "<div class='cmd-line'>🧽 Geheugen gewist.</div>";
-    return true;
-  }
-  return false;
-}
-let authorized = false; // حالة الأمان 
+      // 3. أوامر محددة
+      if (commandActions[lowerInput]) {
+        commandActions[lowerInput]();
+        return `🔧 Command "${lowerInput}" executed.`;
+      }
 
-  commandInput.addEventListener('focus', function() {
-    if (!authorized) {
-      const secret = prompt('Enter secret code to unlock chat:');
-      if (secret === '6339') {   
-        authorized = true;
-      } else {
-        alert('Access denied!');
-        commandInput.blur();
+      // 4. ردود على الأسئلة
+      if (questionResponses[lowerInput]) {
+        const answers = questionResponses[lowerInput];
+        return `Answer 1: ${answers[0]}\nAnswer 2: ${answers[1]}`;
+      }
+
+      // 5. recall
+      if (lowerInput === "recall") {
+        let res = "🧠 Learned commands:\n";
+        for (let key in symbolicMemory) {
+          res += `${key} → ${symbolicMemory[key]}\n`;
         }
+        return res.trim();
+      }
+
+      // 6. تحليل لغوي أو مشاعري أو رياضي
+      const result = [];
+
+      const words = lowerInput.split(/\s+/);
+      words.forEach(word => {
+        const mapped = grammarMapping[word] || mathMapping[word] || emojiResponseMap[word];
+        if (mapped) {
+          if (emojiResponseMap[word]) {
+            result.push(`${word} → Feeling: ${mapped.feeling}, Opposite: ${mapped.opposite}`);
+          } else {
+            result.push(`${word} → ${mapped}`);
+          }
+        }
+      });
+
+      // 7. تحليل حروف وأرقام
+const numbers = lowerInput.match(/\d+/g);
+if (numbers) {
+  numbers.forEach(num => {
+    if (numToLetter[num]) {
+      const info = numToLetter[num];
+      result.push(`${num} → Letter: ${info.letter}, Binary: ${info.binary}`);
+    } else {
+      result.push(`${num} → ⚠️ Not mapped`);
     }
   });
-
-function handleIntent(input) {
-  if (input.startsWith("intent ")) {
-    const intentTarget = input.split(" ").slice(1).join(" ");
-    const hasWhy = intentTarget.includes("waarom") || intentTarget.includes("why");
-    const hasFeel = intentTarget.includes("voelen") || intentTarget.includes("feel");
-
-    let guess = "⚙️ Algemene intentie.";
-    if (hasWhy) guess = "❔ Intentie: Zoektocht naar betekenis.";
-    if (hasFeel) guess = "❤️ Intentie: Emotionele expressie.";
-
-    terminal.innerHTML += <div class='cmd-line'>🧭 ${guess}</div>;
-    return true;
-  }
-  return false;
 }
+      if (result.length) return result.join(" | ");
 
-// إدماج كل الأوامر الرمزية التعليمية داخل نقطة واحدة
-function symbolicSelfLearn(input) {
-  const lower = input.trim().toLowerCase();
-  return (
-    handleLearningCommand(lower) ||
-    handleTeachSymbol(lower) ||
-    handleRecallCommand(lower) ||
-    handleResetMind(lower) ||
-    handleIntent(lower)
-  );
-}
-function interpretInput(input) {
-    const trimmedInput = input.trim();
-  const lowerInput = trimmedInput.toLowerCase();
-if (lowerInput.startsWith("spiral ")) {
-  const numbers = lowerInput.split(" ").slice(1).map(Number);
-  const size = Math.ceil(Math.sqrt(numbers.length));
-  const spiral = Array(size).fill().map(() => Array(size).fill(0));
-  let x = Math.floor(size / 2), y = x;
-  let dx = 0, dy = -1;
-
-  for (let i = 0; i < size * size; i++) {
-    if (x >= 0 && x < size && y >= 0 && y < size) {
-      spiral[y][x] = numbers[i % numbers.length];
+      return `⚠️ Unknown command: "${input}"`;
     }
-    if (x === y || (x < y && x + y === size - 1) || (x > y && x + y === size)) {
-      [dx, dy] = [-dy, dx];
+
+    // عرض سطر جديد
+    function appendLine(text, className = "cmd-line") {
+      const div = document.createElement("div");
+      div.className = className;
+      div.textContent = text;
+      terminal.appendChild(div);
+      terminal.scrollTop = terminal.scrollHeight;
     }
-    x += dx; y += dy;
+
+    // استقبال الإدخال من المستخدم
+   function appendLine(text, className = "cmd-line") {
+    const div = document.createElement("div");
+    div.className = className;
+    div.textContent = text;
+    terminal.appendChild(div);
+    terminal.scrollTop = terminal.scrollHeight;
   }
 
-  terminal.innerHTML += <div class='cmd-line'>🌀 Spiral:<br>${spiral.map(row => row.join(" ")).join("<br>")}</div>;
-  return;
-}
-  if (questionResponses[lowerInput]) {
-    const answers = questionResponses[lowerInput];
-    return Answer 1: ${answers[0]} \nAnswer 2: ${answers[1]};
-  }
-  if (symbolicSelfLearn(lowerInput)) return;
-  
-    if (symbolicMemory[lowerInput]) {
-    terminal.innerHTML += <div class='cmd-line'>${symbolicMemory[lowerInput]}</div>;
-    return;
-  }
+  // كتابة الرد الآلي بشكل حرفي تدريجي
+  function typeReply(text, className = "cmd-line", speed = 50) {
+    const div = document.createElement("div");
+    div.className = className;
+    terminal.appendChild(div);
+    terminal.scrollTop = terminal.scrollHeight;
 
-if (commandActions[lowerInput]) {
-  commandActions[lowerInput]();
-  return 🔧 Commando "${lowerInput}" geactiveerd.;
-}
-
-  const result = [];
-
-  const words = trimmedInput.split(/\s+/);
-  words.forEach(word => {
-    const mapped = grammarMapping[word] || mathMapping[word] || emotionMapping[word] || emojiResponseMap[word];
-    if (mapped) {
-      if (emojiResponseMap[word]) {
-        result.push(${word} → Feeling: ${emojiResponseMap[word].feeling}, Opposite: ${emojiResponseMap[word].opposite});
-      } else {
-        result.push(word + " → " + mapped);
+    let i = 0;
+    function type() {
+      if (i < text.length) {
+        div.textContent += text.charAt(i);
+        i++;
+        terminal.scrollTop = terminal.scrollHeight;
+        setTimeout(type, speed);
       }
     }
-  });
+    type();
+  }
 
-  const clean = trimmedInput.toUpperCase().replace(/[^A-Z0-9]/g, '').split('');
-  clean.forEach((char, i) => {
-    let letter = char;
-    if (numToLetter[char]) letter = numToLetter[char];
-    if (exampleCommands[letter]) {
-      const cmd = exampleCommands[letter][i % exampleCommands[letter].length];
-      result.push(letter + " → " + cmd);
-    } else {
-      result.push("[" + char + "]");
+  // استقبال الإدخال من المستخدم
+  input.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") {
+      const cmd = input.value.trim();
+      if (!cmd) return;
+
+      // سطر المستخدم
+      appendLine("> " + cmd, "cmd-line cmd-user");
+
+      // الرد الآلي (ديناميكي)
+      const response = interpretInput(cmd);
+      typeReply(response);
+
+      input.value = "";
     }
   });
-
-  return result.join(" | ");
-}
-function typeReply(text, element) {
-  let i = 0;
-  element.textContent = "";
-  function typeChar() {
-    if (i < text.length) {
-      element.textContent += text.charAt(i);
-      i++;
-      terminal.scrollTop = terminal.scrollHeight; 
-    setTimeout(typeChar, 20);
-    }
-  }
-  typeChar();
-}
-
-input.addEventListener("keydown", function(event) {
-  if (event.key === "Enter") {
-    const cmd = input.value.trim();
-    const userCmd = document.createElement("div");
-    userCmd.className = "cmd-line cmd-user";
-    userCmd.textContent = "> " + cmd;
-
-    const botReply = document.createElement("div");
-    botReply.className = "cmd-line";
-
-    terminal.appendChild(userCmd);
-    terminal.appendChild(botReply);
-
-    const result = interpretInput(cmd);
-    typeReply(result, botReply);
-    input.value = "";
-  }
-});
-
-let i = 0;
-function showLine() {
-  if (i < baseLines.length) {
-    const div = document.createElement("div");
-    div.className = "cmd-line";
-    div.textContent = baseLines[i];
-    terminal.appendChild(div);
-    i++;
-    terminal.scrollTop = terminal.scrollHeight;
-    setTimeout(showLine, 300);
-  }
-}
-  async function uploadFile(endpoint) {
-    let fileInputId = endpoint === "analyze-image" ? "imageInput" : "audioInput";
-    let file = document.getElementById(fileInputId).files[0];
-    if (!file) { alert("🗂️"); return; }
-    const formData = new FormData();
-    formData.append("file", file);
-    const response = await fetch(/api/${endpoint}, { method: "POST", body: formData });
-    const data = await response.json();
-    document.getElementById("resultDisplay").textContent = JSON.stringify(data, null, 2);
-  }
-
-  async function analyzeText() {
-    let text = document.getElementById("textInput").value;
-    if (!text) { alert("✍🏼"); return; }
-    const response = await fetch("/api/analyze-text", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text }),
-    });
-    const data = await response.json();
-    document.getElementById("resultDisplay").textContent = JSON.stringify(data, null, 2);
-  }
-
-showLine();
-</script>
+    // تشغيل الرسائل التمهيدية
+    showBaseLines();
+  </script>
 <script>
 particlesJS("particles-js", {
   "particles": {
@@ -2893,32 +2878,5 @@ particlesJS("particles-js", {
  }
 });
 </script>
-<script src="YA.RAFAT.SELFLEARN.js"></script>
-<script src="commandActions.js"></script>
-  <script>
-      async function uploadFile(endpoint) {
-      let fileInputId = endpoint === "analyze-image" ? "imageInput" : "audioInput";
-      let file = document.getElementById(fileInputId).files[0];
-      if (!file) { alert("Please select a file first!"); return; }
-      const formData = new FormData();
-      formData.append("file", file);
-      const response = await fetch(/api/${endpoint}, { method: "POST", body: formData });
-      const data = await response.json();
-      appendToTerminal(🟩 [${endpoint}] ✅\n${JSON.stringify(data, null, 2)});
-    }
-
-    async function analyzeText() {
-      let text = document.getElementById("commandInput").value;
-      if (!text) { alert("Please enter some text!"); return; }
-      const response = await fetch("/api/analyze-text", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text }),
-      });
-      const data = await response.json();
-      appendToTerminal(🟩 [analyze-text] ✅\n${JSON.stringify(data, null, 2)});
-    }
-});
-  </script>
 </body>
 </html>
