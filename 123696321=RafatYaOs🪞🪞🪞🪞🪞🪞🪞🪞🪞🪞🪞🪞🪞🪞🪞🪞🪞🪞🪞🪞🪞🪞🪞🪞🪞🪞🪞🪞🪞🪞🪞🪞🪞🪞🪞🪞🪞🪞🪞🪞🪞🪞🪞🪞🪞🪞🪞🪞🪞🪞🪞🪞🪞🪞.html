@@ -2504,143 +2504,333 @@ const emojiResponseMap = {
   };
 
 
+const symbolicMemory = JSON.parse(localStorage.getItem("symbolicMemory") || "{}");
 
-  // ذاكرة رمزية محفوظة في localStorage
-  const symbolicMemory = JSON.parse(localStorage.getItem("symbolicMemory") || "{}");
+‎// ربط أوامر جديدة (تعليم ديناميكي)
+function handleLearningCommand(input) {
+  if (input.startsWith("learn ")) {
+    const parts = input.split(" ");
+    const cmd = parts[1];
+    const response = parts.slice(2).join(" ");
+    symbolicMemory[cmd] = response;
+    localStorage.setItem("symbolicMemory", JSON.stringify(symbolicMemory));
+    terminal.innerHTML += `<div class='cmd-line'>📚 Opgeslagen als les: "${cmd}" → "${response}"</div>`;
+    return true;
+  }
+  return false;
+}
 
-  // تنفيذ أوامر التعلم البسيطة
-  function handleLearningCommand(input) {
-    if(input.startsWith("learn ")) {
-      const parts = input.split(" ");
-      if(parts.length < 3) return "Usage: learn <command> <response>";
-      const cmd = parts[1];
-      const response = parts.slice(2).join(" ");
-      symbolicMemory[cmd] = response;
+‎// ربط رمز بمفهوم (تعليم رمزي)
+function handleTeachSymbol(input) {
+  if (input.startsWith("teach ")) {
+    const [_, symbol, __, ...concept] = input.split(" ");
+    if (symbol && concept.length) {
+      symbolicMemory[symbol] = concept.join(" ");
       localStorage.setItem("symbolicMemory", JSON.stringify(symbolicMemory));
-      return `Learned command "${cmd}" with response: "${response}"`;
-    }
-    return null;
-  }
-  let i = 0;
-  function showBaseLines() {
-    if(i < baseLines.length) {
-      const div = document.createElement("div");
-      div.className = "cmd-line";
-      div.textContent = baseLines[i];
-      terminal.appendChild(div);
-      terminal.scrollTop = terminal.scrollHeight;
-      i++;
-      setTimeout(showBaseLines, 300);
+      terminal.innerHTML += `<div class='cmd-line'>🔣 "${symbol}" gekoppeld aan: ${concept.join(" ")}</div>`;
+      return true;
     }
   }
+  return false;
+}
 
-  // تفسير الإدخال
+‎// استدعاء كل ما تعلّمه النظام
+function handleRecallCommand(input) {
+  if (input === "recall") {
+    terminal.innerHTML += "<div class='cmd-line'>🧠 Geleerde elementen:</div>";
+    Object.entries(symbolicMemory).forEach(([k, v]) => {
+      terminal.innerHTML += `<div class='cmd-line'>${k} → ${v}</div>`;
+    });
+    return true;
+  }
+  return false;
+}
+
+‎// إعادة تعيين الذاكرة
+function handleResetMind(input) {
+  if (input === "reset mind") {
+    localStorage.removeItem("symbolicMemory");
+    terminal.innerHTML += "<div class='cmd-line'>🧽 Geheugen gewist.</div>";
+    return true;
+  }
+  return false;
+}
+let authorized = false; // حالة الأمان 
+
+  commandInput.addEventListener('focus', function() {
+    if (!authorized) {
+      const secret = prompt('Enter secret code to unlock chat:');
+      if (secret === '6339') {   
+        authorized = true;
+      } else {
+        alert('Access denied!');
+        commandInput.blur();
+        }
+    }
+  });
+
+
+function handleIntent(input) {
+  if (input.startsWith("intent ")) {
+    const intentTarget = input.split(" ").slice(1).join(" ");
+    const hasWhy = intentTarget.includes("waarom") || intentTarget.includes("why");
+    const hasFeel = intentTarget.includes("voelen") || intentTarget.includes("feel");
+
+    let guess = "⚙️ Algemene intentie.";
+    if (hasWhy) guess = "❔ Intentie: Zoektocht naar betekenis.";
+    if (hasFeel) guess = "❤️ Intentie: Emotionele expressie.";
+
+    terminal.innerHTML += `<div class='cmd-line'>🧭 ${guess}</div>`;
+    return true;
+  }
+  return false;
+}
+
+‎// إدماج كل الأوامر الرمزية التعليمية داخل نقطة واحدة
+function symbolicSelfLearn(input) {
+  const lower = input.trim().toLowerCase();
+  return (
+    handleLearningCommand(lower) ||
+    handleTeachSymbol(lower) ||
+    handleRecallCommand(lower) ||
+    handleResetMind(lower) ||
+    handleIntent(lower)
+  );
+}
 function interpretInput(input) {
-  const lowerInput = input.trim().toLowerCase();
+    const trimmedInput = input.trim();
+  const lowerInput = trimmedInput.toLowerCase();
+if (lowerInput.startsWith("spiral ")) {
+  const numbers = lowerInput.split(" ").slice(1).map(Number);
+  const size = Math.ceil(Math.sqrt(numbers.length));
+  const spiral = Array(size).fill().map(() => Array(size).fill(0));
+  let x = Math.floor(size / 2), y = x;
+  let dx = 0, dy = -1;
 
-  // -------------------------
-  // 1. تعلم (learn)
-  const learnResult = handleLearningCommand(lowerInput);
-  if (learnResult) return learnResult;
-
-  // -------------------------
-  // 2. أوامر مخزنة
-  if (symbolicMemory[lowerInput]) return symbolicMemory[lowerInput];
-
-  // -------------------------
-  // 3. أوامر خاصة
-  if (commandActions[lowerInput]) {
-    commandActions[lowerInput]();
-    return `🔧 Command "${lowerInput}" executed.`;
+  for (let i = 0; i < size * size; i++) {
+    if (x >= 0 && x < size && y >= 0 && y < size) {
+      spiral[y][x] = numbers[i % numbers.length];
+    }
+    if (x === y || (x < y && x + y === size - 1) || (x > y && x + y === size)) {
+      [dx, dy] = [-dy, dx];
+    }
+    x += dx; y += dy;
   }
 
-  // -------------------------
-  // 4. أسئلة محفوظة
+  terminal.innerHTML += `<div class='cmd-line'>🌀 Spiral:<br>${spiral.map(row => row.join(" ")).join("<br>")}</div>`;
+  return;
+}
   if (questionResponses[lowerInput]) {
     const answers = questionResponses[lowerInput];
-    return `Answer 1: ${answers[0]}\nAnswer 2: ${answers[1]}`;
+    return `Answer 1: ${answers[0]} \nAnswer 2: ${answers[1]}`;
+  }
+  if (symbolicSelfLearn(lowerInput)) return;
+  
+    if (symbolicMemory[lowerInput]) {
+    terminal.innerHTML += `<div class='cmd-line'>${symbolicMemory[lowerInput]}</div>`;
+    return;
   }
 
-  // -------------------------
-  // 5. أمر clear
-  if (lowerInput === "clear") {
-    terminal.innerHTML = "";
-    return "Terminal cleared.";
-  }
+if (commandActions[lowerInput]) {
+  commandActions[lowerInput]();
+  return `🔧 Commando "${lowerInput}" geactiveerd.`;
+}
 
-  // -------------------------
-  // 6. أمر recall
-  if (lowerInput === "recall") {
-    let res = "🧠 Learned commands:\n";
-    for (let key in symbolicMemory) {
-      res += `${key} → ${symbolicMemory[key]}\n`;
-    }
-    return res.trim();
-  }
-
-  // -------------------------
-  // 7. تحليل لغوي وخرائط
   const result = [];
 
-  // تحليل كلمات
-  const words = lowerInput.split(/\s+/);
+  const words = trimmedInput.split(/\s+/);
   words.forEach(word => {
-    const mapped = grammarMapping[word] || mathMapping[word] || emojiResponseMap[word];
+    const mapped = grammarMapping[word] || mathMapping[word] || emotionMapping[word] || emojiResponseMap[word];
     if (mapped) {
       if (emojiResponseMap[word]) {
-        result.push(`${word} → Feeling: ${mapped.feeling}, Opposite: ${mapped.opposite}`);
+        result.push(`${word} → Feeling: ${emojiResponseMap[word].feeling}, Opposite: ${emojiResponseMap[word].opposite}`);
       } else {
-        result.push(`${word} → ${mapped}`);
+        result.push(word + " → " + mapped);
       }
     }
   });
 
-  // تحليل أحرف وأرقام
-  const chars = lowerInput.toUpperCase().replace(/[^A-Z0-9]/g, '').split('');
-  chars.forEach((char, i) => {
+  const clean = trimmedInput.toUpperCase().replace(/[^A-Z0-9]/g, '').split('');
+  clean.forEach((char, i) => {
     let letter = char;
     if (numToLetter[char]) letter = numToLetter[char];
     if (exampleCommands[letter]) {
       const cmd = exampleCommands[letter][i % exampleCommands[letter].length];
-      result.push(`${letter} → ${cmd}`);
+      result.push(letter + " → " + cmd);
     } else {
-      result.push(`[${char}]`);
+      result.push("[" + char + "]");
     }
   });
 
-  if (result.length) return result.join(" | ");
-
-  // -------------------------
-  // 8. افتراضي إذا لم يجد شيئًا
-  return `⚠️ Unknown command: "${input}"`;
+  return result.join(" | ");
+}
+function typeReply(text, element) {
+  let i = 0;
+  element.textContent = "";
+  function typeChar() {
+    if (i < text.length) {
+      element.textContent += text.charAt(i);
+      i++;
+      terminal.scrollTop = terminal.scrollHeight; 
+    setTimeout(typeChar, 20);
+    }
+  }
+  typeChar();
 }
 
-  // إضافة سطر جديد مع تمرير تلقائي
-  function appendLine(text, className="cmd-line") {
+input.addEventListener("keydown", function(event) {
+  if (event.key === "Enter") {
+    const cmd = input.value.trim();
+    const userCmd = document.createElement("div");
+    userCmd.className = "cmd-line cmd-user";
+    userCmd.textContent = "> " + cmd;
+
+    const botReply = document.createElement("div");
+    botReply.className = "cmd-line";
+
+    terminal.appendChild(userCmd);
+    terminal.appendChild(botReply);
+
+    const result = interpretInput(cmd);
+    typeReply(result, botReply);
+    input.value = "";
+  }
+});
+
+let i = 0;
+function showLine() {
+  if (i < baseLines.length) {
     const div = document.createElement("div");
-    div.className = className;
-    div.textContent = text;
+    div.className = "cmd-line";
+    div.textContent = baseLines[i];
     terminal.appendChild(div);
+    i++;
     terminal.scrollTop = terminal.scrollHeight;
+    setTimeout(showLine, 300);
+  }
+}
+  async function uploadFile(endpoint) {
+    let fileInputId = endpoint === "analyze-image" ? "imageInput" : "audioInput";
+    let file = document.getElementById(fileInputId).files[0];
+    if (!file) { alert("🗂️"); return; }
+    const formData = new FormData();
+    formData.append("file", file);
+    const response = await fetch(`/api/${endpoint}`, { method: "POST", body: formData });
+    const data = await response.json();
+    document.getElementById("resultDisplay").textContent = JSON.stringify(data, null, 2);
   }
 
-  // حدث الضغط على إنتر في حقل الإدخال
-  input.addEventListener("keydown", function(e) {
-    if(e.key === "Enter") {
-      const cmd = input.value.trim();
-      if(!cmd) return;
+  async function analyzeText() {
+    let text = document.getElementById("textInput").value;
+    if (!text) { alert("✍🏼"); return; }
+    const response = await fetch("/api/analyze-text", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text }),
+    });
+    const data = await response.json();
+    document.getElementById("resultDisplay").textContent = JSON.stringify(data, null, 2);
+  }
 
-      appendLine("> " + cmd, "cmd-line cmd-user");
-      const response = interpretInput(cmd);
-      appendLine(response);
-
-      input.value = "";
-    }
-  });
-
-  // بدء عرض الخطوط الأساسية
-  showBaseLines();
+showLine();
 </script>
+<script>
+particlesJS("particles-js", {
+  "particles": {
+    "number": {
+      "value": 80
+    },
+    "size": {
+      "value": 2
+    },
+    "color": {
+      "value": "#00ffcc"
+    },
+    "line_linked": {
+      "enable": true,
+      "color": "#00ffcc"
+    },
+    "move": {
+      "speed": 0.6
+    }
+  },
+  "interactivity": {
+    "events": {
+      "onhover": {
+        "enable": true,
+        "mode": "repulse"
+      }
+    }
+ }
+});
+</script>
+<script src="YA.RAFAT.SELFLEARN.js"></script>
+<script src="commandActions.js"></script>
+  <script>
+      async function uploadFile(endpoint) {
+      let fileInputId = endpoint === "analyze-image" ? "imageInput" : "audioInput";
+      let file = document.getElementById(fileInputId).files[0];
+      if (!file) { alert("Please select a file first!"); return; }
+      const formData = new FormData();
+      formData.append("file", file);
+      const response = await fetch(`/api/${endpoint}`, { method: "POST", body: formData });
+      const data = await response.json();
+      appendToTerminal(`🟩 [${endpoint}] ✅\n${JSON.stringify(data, null, 2)}`);
+    }
 
+    async function analyzeText() {
+      let text = document.getElementById("commandInput").value;
+      if (!text) { alert("Please enter some text!"); return; }
+      const response = await fetch("/api/analyze-text", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text }),
+      });
+      const data = await response.json();
+      appendToTerminal(`🟩 [analyze-text] ✅\n${JSON.stringify(data, null, 2)}`);
+    }
+});
+    function R() {
+      log("R: Reflecting input...");
+    }
+
+    function A() {
+      log("A: Activating awareness...");
+    }
+
+    function F() {
+      log("F: Framework initiated.");
+    }
+
+    function T() {
+      log("T: Triggering transcendence.");
+    }
+
+    function RAFAT() {
+      R();
+      A();
+      F();
+      A();
+      T();
+      log("🌀 RAFAT Sequence Executed 🐌");
+    }
+
+    input.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") {
+        const command = input.value.trim().toUpperCase();
+        log(">> " + command);
+        if (command === "RAFAT") {
+          RAFAT();
+        } else {
+          log("Unknown command.");
+        }
+        input.value = "";
+      }
+    });
+
+    window.onload = () => {
+      RAFAT();
+    };
+  </script>
 </body>
 </html>
