@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>Support & Contact with Dynamic Text</title>
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <style>
     html, body {
       height: 100%;
@@ -18,6 +19,24 @@
       align-items: center;
       text-align: center;
     }
+#particles-js {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;  /* تحت */
+}
+
+#overlayImage {
+  position: fixed;  /* ثابت فوق */
+  top: 20px;        /* مثلاً مكان الصورة */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;      /* فوق particles */
+  max-width: 300px; /* الحجم */
+  pointer-events: none; /* حتى لا تمنع النقر على العناصر تحت */
+}
     .container {
       width: 90%;
       max-width: 500px;
@@ -125,7 +144,8 @@
     <h1>👑 Support & Donate 👑</h1>
     <p><strong>My Ethereum Address (ENS):</strong></p>
     <p class="wallet-address">123696321.eth</p>
-
+   <div id="particles-js"></div>
+  <img src="IMG_9055.jpeg" alt="Overlay Image" id="overlayImage" />
     <a class="button" href="ethereum:123696321.eth" title="Open in Wallet">💰 Send via Wallet</a>
     <a class="button" href="https://etherscan.io/address/123696321.eth" target="_blank" title="View on Etherscan">🔎 View on Etherscan</a>
 
@@ -187,6 +207,61 @@
     typeText();
   });
 </script>
-
+<script>
+  particlesJS("particles-js", {
+    particles: {
+      number: { value: 70, density: { enable: true, value_area: 800 } },
+      color: { value: "#00ffcc" },
+      shape: {
+        type: "circle",
+        stroke: { width: 0, color: "#000000" },
+        polygon: { nb_sides: 5 },
+      },
+      opacity: {
+        value: 0.5,
+        random: true,
+        anim: { enable: true, speed: 1, opacity_min: 0.1, sync: false }
+      },
+      size: {
+        value: 3,
+        random: true,
+        anim: { enable: false }
+      },
+      line_linked: {
+        enable: true,
+        distance: 150,
+        color: "#00ffcc",
+        opacity: 0.3,
+        width: 1
+      },
+      move: {
+        enable: true,
+        speed: 1,
+        direction: "none",
+        random: true,
+        straight: false,
+        out_mode: "out",
+        bounce: false,
+        attract: { enable: false }
+      }
+    },
+    interactivity: {
+      detect_on: "canvas",
+      events: {
+        onhover: { enable: true, mode: "grab" },
+        onclick: { enable: true, mode: "push" },
+        resize: true
+      },
+      modes: {
+        grab: { distance: 200, line_linked: { opacity: 0.5 } },
+        bubble: { distance: 200, size: 6, duration: 2, opacity: 0.8 },
+        repulse: { distance: 100 },
+        push: { particles_nb: 4 },
+        remove: { particles_nb: 2 }
+      }
+    },
+    retina_detect: true
+  });
+</script>
 </body>
 </html>
