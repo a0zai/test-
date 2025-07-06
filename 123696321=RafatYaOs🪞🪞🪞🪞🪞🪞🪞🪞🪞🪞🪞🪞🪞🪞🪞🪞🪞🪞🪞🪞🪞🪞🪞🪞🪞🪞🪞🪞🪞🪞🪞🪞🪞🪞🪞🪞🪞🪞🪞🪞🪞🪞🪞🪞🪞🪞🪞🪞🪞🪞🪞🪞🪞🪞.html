@@ -2414,7 +2414,7 @@ RAFAT 366
   "Can": "PERMISSION_GRANTED", "Could": "PERMISSION_PAST", "Will": "INTENT_FUTURE",
   "Would": "CONDITIONAL_INTENT", "Shall": "FUTURE_FORCE", "Should": "MORAL_SUGGESTION",
   "May": "PERHAPS_OKAY", "Might": "LOW_CHANCE", "Must": "RULE_REQUIRED",
-  "And": "CONCAT(+)", "Or": "OPTION(|)", "But": "CONTRAST(~)", "Because": "REASON(<=>)",
+  "And": "CONCAT(+)", "Or": "OPTION(|)", "But": "CONTRAST(~)", "Because": "REASON(<=>)"
     };
 
     // مشاعر ممثلة بإيموجي
@@ -2480,53 +2480,24 @@ RAFAT 366
 
     // رموز رياضية
     const mathMapping = {
-        "Pi": "CONST_π", "E": "CONST_e", "Infinity": "CONST_∞", "NaN": "CONST_UNDEFINED_VALUE",
-  "+": "ADD(↗)", "-": "SUB(↘)", "*": "MUL(⊗)", "/": "DIV(÷)", "%": "MOD(%)", "**": "EXP(↑)",
-  "x": "VAR_INPUT_X", "y": "VAR_OUTPUT_Y", "z": "VAR_DEPTH_Z", "=": "EQUALS(==)", "!=": "NOT_EQUAL(!=)",
-  "sqrt": "ROOT(√)", "log": "LOG_BASE_10()", "ln": "LOG_BASE_e()", "sin": "SIN_ANGLE()", "cos": "COS_ANGLE()", "tan": "TAN_ANGLE()",
-  "∑": "SUMMATION_LOOP(∑)", "∫": "INTEGRATE_AREA(∫)", "dx": "DIFFERENTIAL_X", "dy": "DIFFERENTIAL_Y", "lim": "LIMIT_APPROACH()",
-  "true": "BOOL_TRUE(1)", "false": "BOOL_FALSE(0)", "&&": "LOGIC_AND(&&)", "||": "LOGIC_OR(||)", "!": "LOGIC_NOT(!)",
-  "∈": "IN_SET", "∉": "NOT_IN_SET"
+      "+": "addition",
+      "-": "subtraction",
+      "*": "multiplication",
+      "/": "division"
     };
 
     // تحويل الأرقام إلى حروف
     const numToLetter = {
-      "0": "()", "1": "B", "2": "C", "3": "D", "4": "E", "5": "F",
-    "6": "G", "7": "H", "8": "I", "9": "J", "09": "K", "08": "L",
-    "70": "M", "65": "N", "04": "O", "30": "P", "21": "Q", "01": "R",
-    "11": "S", "12": "T", "13": "U", "14": "V", "15": "W", "16": "X",
-     "Y", "18": "Z", "63": "_0"
+      "1": "A", "2": "B", "3": "C", "4": "D",
+      "5": "E", "6": "F", "7": "G", "8": "H",
+      "9": "I", "0": "O"
     };
 
     // أوامر مثال لكل حرف
     const exampleCommands = {
-      "A": ["Align", "Ask", "Activate", "Access", "Analyze", "Accept", "Absorb", "Amplify", "Adapt", "Announce", "Anchor", "Authenticate", "Advance", "Ascend", "Attune"],
-    "B": ["Begin", "Break", "Build", "Bind", "Bounce", "Balance", "Blink", "Burn", "Bridge", "Broadcast", "Block", "Bloom", "Breathe", "Blend", "Boost"],
-    "C": ["Connect", "Compare", "Create", "Calibrate", "Clarify", "Compress", "Control", "Confirm", "Charge", "Contain", "Configure", "Compile", "Capture", "Cleanse", "Converge"],
-    "D": ["Decode", "Detect", "Define", "Derive", "Divide", "Deploy", "Direct", "Distill", "Debug", "Design", "Delay", "Disrupt", "Disarm", "Disclose", "Dream"],
-    "E": ["Engage", "Encode", "Evaluate", "Expand", "Emit", "Enhance", "Equalize", "Execute", "Expose", "Elevate", "Extract", "Edit", "Echo", "Empower", "Evolve"],
-    "F": ["Focus", "Filter", "Form", "Flow", "Fuse", "Finalize", "Fragment", "Feed", "Forecast", "Fortify", "Frame", "Flash", "Fold", "Force", "Fulfill"],
-    "G": ["Generate", "Guide", "Ground", "Group", "Guard", "Glow", "Grip", "Grant", "Gather", "Glitch", "Grow", "Gaze", "Gravitate", "Glue", "Glorify"],
-    "H": ["Hear", "Hold", "Highlight", "Harmonize", "Host", "Heal", "Halt", "Hunt", "Hover", "Hack", "Hint", "Hash", "Hatch", "Hide", "Honor"],
-    "I": ["Ignite", "Identify", "Integrate", "Interact", "Illuminate", "Inject", "Induce", "Invert", "Inherit", "Inform", "Initiate", "Input", "Influence", "Interpret", "Inspire"],
-    "J": ["Jump", "Join", "Jolt", "Judge", "Jam", "Justify", "Juggle", "Journey", "Jerk", "Jettison", "Jazz", "Jail", "Jinx", "Juxtapose", "Juice"],
-    "K": ["Know", "Keep", "Kick", "Knock", "Key", "Kill", "Kindle", "Kneel", "Knit", "Kickstart", "Knockout", "Keepalive", "Keystream", "Kite", "Knowmerge"],
-    "L": ["Listen", "Link", "Loop", "Learn", "Load", "Lock", "Light", "Lift", "Lead", "Launch", "Layer", "Levitate", "Limit", "Latch", "Love"],
-    "M": ["Map", "Match", "Merge", "Mark", "Move", "Mirror", "Monitor", "Modulate", "Magnetize", "Multiply", "Morph", "Measure", "Mergepoint", "Memorize", "Manifest"],
-    "N": ["Navigate", "Name", "Notice", "Nullify", "Normalize", "Network", "Nest", "Nourish", "Nominate", "Negotiate", "Note", "Neutralize", "Nudge", "Navigateback", "Notarize"],
-    "O": ["Open", "Observe", "Organize", "Optimize", "Output", "Override", "Orbit", "Outline", "Offer", "Operate", "Offset", "Obey", "Overload", "Oversee", "Originate"],
-    "P": ["Ping", "Process", "Parse", "Project", "Protect", "Pulse", "Persist", "Patch", "Prioritize", "Play", "Predict", "Pause", "Push", "Plant", "Purify"],
-    "Q": ["Query", "Queue", "Quantify", "Quiet", "Quicken", "Qualify", "Quench", "Quote", "Quiver", "Question", "Quantize", "Quarantine", "Quell", "Quasar", "Queryloop"],
-    "R": ["Root", "Reflect", "Run", "Respond", "Recall", "Reboot", "Reinforce", "Rotate", "Rewrite", "Radiate", "Remember", "Recursify", "Resonate", "Reconstruct", "Realign"],
-    "S": ["Scan", "Signal", "Shift", "Stabilize", "Store", "Silence", "Stream", "Synchronize", "Structure", "Simplify", "Shield", "Share", "Syncopate", "Strobe", "Sustain"],
-    "T": ["Transmit", "Translate", "Trace", "Tune", "Trigger", "Transcend", "Tilt", "Tap", "Test", "Transform", "Time", "Touch", "Terminate", "Travel", "Thrive"],
-    "U": ["Unlock", "Update", "Upload", "Unify", "Understand", "Unfold", "Utilize", "Undo", "Uncover", "Upgrade", "Unleash", "Uphold", "Unwind", "Unmute", "Uploadkey"],
-    "V": ["Validate", "Visualize", "Vibrate", "Verify", "Venture", "Vault", "Vary", "Vectorize", "Vocalize", "Volatilize", "Vote", "Vanish", "Veil", "View", "Vortex"],
-    "W": ["Wake", "Write", "Weave", "Warp", "Watch", "Whisper", "Wander", "Warn", "Weigh", "Wrap", "Wipe", "Widen", "Wind", "Wield", "Wonder"],
-    "X": ["Xtract", "Xpress", "Xpand", "Xpose", "Xchange", "Xcite", "Xact", "Xclude", "Xplore", "Xlink", "Xform", "Xray", "Xecute", "Xmute", "Xalign"],
-    "Y": ["Yield", "Yearn", "Yoke", "Yell", "Yank", "Yawn", "Yokeout", "Yonder", "Y-Axis", "Yelllow", "Yelp", "Yieldpoint", "Yshift", "Ytrace", "Ysing"],
-    "Z": ["Zero", "Zip", "Zoom", "Zig", "Zone", "Zink", "Zap", "Zeal", "Zenith", "Zether", "Z-Lock", "Z-Ring", "Z-Fold", "Z-Flow", "Z-Rafat"]
-    };
+      "A": ["Access", "Awaken"],
+      "B": ["Build", "Break"],
+      "C": ["Connect", "Clone"]
 
     // تعليم أوامر جديدة
     function handleLearningCommand(input) {
