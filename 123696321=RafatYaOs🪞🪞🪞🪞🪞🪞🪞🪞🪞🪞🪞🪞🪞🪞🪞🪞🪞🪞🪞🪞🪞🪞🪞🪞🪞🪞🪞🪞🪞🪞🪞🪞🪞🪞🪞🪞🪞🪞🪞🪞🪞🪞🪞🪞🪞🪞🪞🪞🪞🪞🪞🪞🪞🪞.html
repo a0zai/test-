@@ -2407,8 +2407,15 @@ RAFAT 366
     // قواعد لغوية
     const grammarMapping = {
       "you": "2nd person pronoun",
-      "are": "verb to be",
-      "i": "1st person pronoun"
+      "I": "SELF_α", "You": "OTHER_β", "He": "ENTITY_γ", "She": "ENTITY_δ", "It": "SYSTEM_ε",
+  "We": "COLLECTIVE_ζ", "They": "GROUP_η", "Am": "STATE_EXIST()", "Is": "EVALUATE()",
+  "Are": "LINK_PLURAL()", "Was": "PAST_STATE()", "Were": "PAST_LINK()", "Be": "CORE_VERB()",
+  "Have": "POSSESS()", "Has": "POSSESS_SINGULAR()", "Had": "POSSESS_PAST()",
+  "Can": "PERMISSION_GRANTED", "Could": "PERMISSION_PAST", "Will": "INTENT_FUTURE",
+  "Would": "CONDITIONAL_INTENT", "Shall": "FUTURE_FORCE", "Should": "MORAL_SUGGESTION",
+  "May": "PERHAPS_OKAY", "Might": "LOW_CHANCE", "Must": "RULE_REQUIRED",
+  "And": "CONCAT(+)", "Or": "OPTION(|)", "But": "CONTRAST(~)", "Because": "REASON(<=>)",
+  "So": "RESULT(=>)", "Although": "EXCEPTION({})", "If": "CONDITION(?)", "Then": "CONSEQUENCE(!)","While": "DURING(..)","Until":"LIMIT(>)", "Before":"PAST_TRIGGER(-)", "After": "FUTURE_TRIGGER(+)","A": "ARTICLE_UNDEFINED", "An": "ARTICLE_UNDEFINED_VOWEL", "The": "ARTICLE_DEFINED","This": "NEAR_OBJECT_1", "That": "FAR_OBJECT_1", "These": "NEAR_OBJECT_MANY", "Those": "FAR_OBJECT_MANY","Not": "NEGATE(!)", "No": "DENY(X)", "Yes": "CONFIRM(O)", "Maybe": "UNSURE(?)",".": "END_STATEMENT", "!": "STRONG_SIGNAL", "?": "QUERY_SIGNAL", ",": "SEPARATOR",":": "DEFINITION", ";": "PAUSE_LINK","ik": "SELF_α","jij": "OTHER_β","hij": "ENTITY_γ","zij": "ENTITY_δ","het": "SYSTEM_ε","wij": "COLLECTIVE_ζ","zij (mv)": "GROUP_η","ben": "STATE_EXIST()","is": "EVALUATE()","zijn": "LINK_PLURAL()","was": "PAST_STATE()","waren": "PAST_LINK()","zijn (ww)": "CORE_VERB()","heb": "POSSESS()","heeft": "POSSESS_SINGULAR()","hadden": "POSSESS_PAST()","kan": "PERMISSION_GRANTED","kon": "PERMISSION_PAST","zal": "INTENT_FUTURE","zou": "CONDITIONAL_INTENT","zal (moeten)": "FUTURE_FORCE","moet": "RULE_REQUIRED","en": "CONCAT(+)","of": "OPTION(|)","maar": "CONTRAST(~)","omdat": "REASON(<=>)","dus": "RESULT(=>)","hoewel": "EXCEPTION({})"
           };
 
     // مشاعر ممثلة بإيموجي
