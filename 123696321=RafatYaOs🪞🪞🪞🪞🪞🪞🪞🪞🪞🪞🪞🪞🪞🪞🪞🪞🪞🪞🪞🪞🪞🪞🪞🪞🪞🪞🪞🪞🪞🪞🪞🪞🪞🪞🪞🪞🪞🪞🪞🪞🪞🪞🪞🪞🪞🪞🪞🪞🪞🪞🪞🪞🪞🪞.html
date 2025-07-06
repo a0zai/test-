@@ -19,6 +19,22 @@
       align-items: center;
       text-align: center;
     }
+    #pageOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(12px);  /* تأثير ضبابي */
+  background-color: rgba(0, 0, 0, 0.6);  /* لون شفاف داكن */
+  z-index: 9999;  /* فوق كل شيء */
+  opacity: 1;
+  transition: opacity 3s ease;
+}
+#pageOverlay.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
 #particles-js {
   position: fixed;
   top: 0;
@@ -130,6 +146,7 @@
   </style>
 </head>
 <body>
+  <div id="pageOverlay"></div>
    <div id="particles-js"></div>
   <div class="container">
     <h1>👑 Support & Donate 👑</h1>
@@ -250,6 +267,12 @@
       }
     },
     retina_detect: true
+  });
+</script>
+<script>
+  window.addEventListener('load', () => {
+    const overlay = document.getElementById('pageOverlay');
+    overlay.classList.add('fade-out');
   });
 </script>
 </body>
