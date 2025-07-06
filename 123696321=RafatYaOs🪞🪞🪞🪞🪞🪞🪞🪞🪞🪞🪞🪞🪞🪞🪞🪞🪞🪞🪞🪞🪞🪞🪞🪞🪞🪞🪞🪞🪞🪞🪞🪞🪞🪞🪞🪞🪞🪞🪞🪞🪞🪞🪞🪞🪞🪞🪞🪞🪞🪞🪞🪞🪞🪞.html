@@ -4,17 +4,41 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Mirror Terminal Lite</title>
+        <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <style>
-    body {
-      background: #001f1f;
-      color: #00ffcc;
-      font-family: monospace;
+    html, body {
       margin: 0;
       padding: 0;
+      height: 100%;
+      background: #000;
+      font-family: 'Courier New', monospace;
+      color: #00ffcc;
+      overflow: auto;
       display: flex;
       flex-direction: column;
-      height: 100vh;
     }
+
+    #particles-js {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+
+    #rafat-title {
+      position: relative;
+      width: 100%;
+      height: 150px;
+      font-size: 60px;
+      line-height: 150px;
+      text-align: center;
+      z-index: 2;
+      color: #00ffcc;
+      text-shadow: 0 0 20px #00ffcc;
+    }
+
     #terminal {
       flex: 1;
       overflow-y: auto;
@@ -40,11 +64,27 @@
   </style>
 </head>
 <body>
+ <div id="particles-js"></div>
 
+  <div id="rafat-title">Mirror Note</div>
   <div id="terminal"></div>
   <input id="commandInput" type="text" placeholder="Enter command and press Enter..." autocomplete="off" autofocus />
 
   <script>
+    particlesJS("particles-js", {
+      particles: {
+        number: { value: 80 },
+        size: { value: 2 },
+        color: { value: "#00ffcc" },
+        line_linked: { enable: true, color: "#00ffcc" },
+        move: { speed: 0.6 }
+      },
+      interactivity: {
+        events: {
+          onhover: { enable: true, mode: "repulse" }
+        }
+      }
+    });
     const terminal = document.getElementById("terminal");
     const input = document.getElementById("commandInput");
 
@@ -2758,6 +2798,35 @@ if (numbers) {
     // تشغيل الرسائل التمهيدية
     showBaseLines();
   </script>
-
+<script>
+particlesJS("particles-js", {
+  "particles": {
+    "number": {
+      "value": 80
+    },
+    "size": {
+      "value": 2
+    },
+    "color": {
+      "value": "#00ffcc"
+    },
+    "line_linked": {
+      "enable": true,
+      "color": "#00ffcc"
+    },
+    "move": {
+      "speed": 0.6
+    }
+  },
+  "interactivity": {
+    "events": {
+      "onhover": {
+        "enable": true,
+        "mode": "repulse"
+      }
+    }
+ }
+});
+</script>
 </body>
 </html>
