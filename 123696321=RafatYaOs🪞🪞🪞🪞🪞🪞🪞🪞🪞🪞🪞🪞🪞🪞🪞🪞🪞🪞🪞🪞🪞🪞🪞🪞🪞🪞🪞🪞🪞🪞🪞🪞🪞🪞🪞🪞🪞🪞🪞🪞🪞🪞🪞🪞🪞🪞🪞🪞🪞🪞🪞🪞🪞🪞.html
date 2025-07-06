@@ -2583,27 +2583,49 @@ RAFAT 366
     }
 
     // استقبال الإدخال من المستخدم
-    function typeReply(text, className = "cmd-line") {
-  const div = document.createElement("div");
-  div.className = className;
-  terminal.appendChild(div);
-  terminal.scrollTop = terminal.scrollHeight;
-
-  let i = 0;
-
-  function type() {
-    if (i < text.length) {
-      div.textContent += text.charAt(i);
-      i++;
-      terminal.scrollTop = terminal.scrollHeight;
-      setTimeout(type, 66); // سرعة الكتابة
-    }
+   function appendLine(text, className = "cmd-line") {
+    const div = document.createElement("div");
+    div.className = className;
+    div.textContent = text;
+    terminal.appendChild(div);
+    terminal.scrollTop = terminal.scrollHeight;
   }
 
-  type();
-}
-    });
+  // كتابة الرد الآلي بشكل حرفي تدريجي
+  function typeReply(text, className = "cmd-line", speed = 50) {
+    const div = document.createElement("div");
+    div.className = className;
+    terminal.appendChild(div);
+    terminal.scrollTop = terminal.scrollHeight;
 
+    let i = 0;
+    function type() {
+      if (i < text.length) {
+        div.textContent += text.charAt(i);
+        i++;
+        terminal.scrollTop = terminal.scrollHeight;
+        setTimeout(type, speed);
+      }
+    }
+    type();
+  }
+
+  // استقبال الإدخال من المستخدم
+  input.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") {
+      const cmd = input.value.trim();
+      if (!cmd) return;
+
+      // سطر المستخدم
+      appendLine("> " + cmd, "cmd-line cmd-user");
+
+      // الرد الآلي (ديناميكي)
+      const response = interpretInput(cmd);
+      typeReply(response);
+
+      input.value = "";
+    }
+  });
     // تشغيل الرسائل التمهيدية
     showBaseLines();
   </script>
