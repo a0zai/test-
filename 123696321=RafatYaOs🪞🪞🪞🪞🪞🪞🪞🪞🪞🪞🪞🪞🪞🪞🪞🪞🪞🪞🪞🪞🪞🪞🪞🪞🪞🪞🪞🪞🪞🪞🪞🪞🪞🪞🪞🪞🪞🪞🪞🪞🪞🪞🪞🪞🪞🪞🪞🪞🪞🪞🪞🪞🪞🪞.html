@@ -2,102 +2,127 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Support & Contact</title>
+  <title>Support & Contact with Dynamic Text</title>
   <style>
-    body {
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
       background-color: #000;
       color: gold;
       font-family: 'Courier New', monospace;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
       text-align: center;
-      padding: 40px 20px;
     }
-
-    h1 {
-      color: gold;
-      text-shadow: 0 0 8px gold;
-      margin-bottom: 20px;
-      font-size: 36px;
-    }
-
-    .wallet-section {
+    .container {
+      width: 90%;
+      max-width: 500px;
       background: rgba(255, 215, 0, 0.08);
       border: 2px solid gold;
       border-radius: 12px;
-      padding: 30px;
-      display: inline-block;
-      box-shadow: 0 0 20px gold;
-      max-width: 400px;
-      width: 100%;
+      padding: 40px 30px;
+      box-shadow: 0 0 30px gold;
+      flex-shrink: 0;
     }
-
+    h1 {
+      color: gold;
+      text-shadow: 0 0 12px gold;
+      margin-bottom: 30px;
+      font-size: 36px;
+    }
     .wallet-address {
-      font-size: 20px;
-      margin: 12px 0;
+      font-size: 22px;
+      margin: 15px 0 30px 0;
       word-wrap: break-word;
       border-bottom: 1px solid gold;
-      padding-bottom: 8px;
+      padding-bottom: 12px;
     }
-
     a.button {
       display: block;
-      margin: 10px auto;
-      padding: 12px 20px;
+      margin: 15px auto;
+      padding: 14px 24px;
       color: gold;
-      border: 1.5px solid gold;
-      border-radius: 8px;
+      border: 2px solid gold;
+      border-radius: 10px;
       text-decoration: none;
       width: 80%;
-      max-width: 250px;
+      max-width: 280px;
+      font-weight: bold;
+      font-size: 18px;
+      box-shadow: inset 0 0 8px gold;
       transition: all 0.3s ease;
-      box-shadow: inset 0 0 6px gold;
     }
-
     a.button:hover {
       background-color: gold;
       color: #000;
-      box-shadow: 0 0 12px gold;
+      box-shadow: 0 0 20px gold;
     }
-
     .qr {
-      margin-top: 20px;
+      margin: 30px auto 0 auto;
       border: 2px solid gold;
-      border-radius: 10px;
+      border-radius: 14px;
       width: 180px;
       height: 180px;
-      box-shadow: 0 0 10px gold;
+      box-shadow: 0 0 15px gold;
+      display: block;
     }
-
     .contact-section {
-      margin-top: 40px;
+      margin-top: 50px;
     }
-
     .contact-links {
-      margin-top: 10px;
+      margin-top: 15px;
     }
-
     a.contact-button {
       display: inline-block;
-      margin: 8px 12px;
-      padding: 10px 16px;
+      margin: 12px 18px;
+      padding: 12px 20px;
       color: gold;
-      border: 1.5px solid gold;
-      border-radius: 8px;
+      border: 2px solid gold;
+      border-radius: 10px;
       text-decoration: none;
+      font-weight: bold;
+      font-size: 18px;
+      box-shadow: inset 0 0 8px gold;
       transition: all 0.3s ease;
-      box-shadow: inset 0 0 6px gold;
-      font-size: 16px;
     }
-
     a.contact-button:hover {
       background-color: gold;
       color: #000;
-      box-shadow: 0 0 12px gold;
+      box-shadow: 0 0 20px gold;
+    }
+
+    /* كتابة ديناميكية في الأسفل */
+    #dynamicTextContainer {
+      position: fixed;
+      bottom: 10px;
+      width: 100%;
+      text-align: center;
+      font-size: 18px;
+      color: #ffd700;
+      text-shadow: 0 0 8px #ffd700;
+      font-family: 'Courier New', monospace;
+      user-select: none;
+    }
+    #dynamicText {
+      display: inline-block;
+      border-right: 2px solid #ffd700;
+      padding-right: 5px;
+      white-space: nowrap;
+      animation: blinkCaret 1s step-end infinite;
+    }
+    @keyframes blinkCaret {
+      50% { border-color: transparent; }
     }
   </style>
 </head>
 <body>
-  <h1>👑 Support & Donate 👑</h1>
-  <div class="wallet-section">
+
+  <div class="container">
+    <h1>👑 Support & Donate 👑</h1>
     <p><strong>My Ethereum Address (ENS):</strong></p>
     <p class="wallet-address">123696321.eth</p>
 
@@ -105,14 +130,63 @@
     <a class="button" href="https://etherscan.io/address/123696321.eth" target="_blank" title="View on Etherscan">🔎 View on Etherscan</a>
 
     <img class="qr" src="https://api.qrserver.com/v1/create-qr-code/?data=123696321.eth&size=180x180" alt="Wallet QR Code">
-  </div>
 
-  <div class="contact-section">
-    <h2>Contact Me</h2>
-    <div class="contact-links">
-      <a class="contact-button" href="mailto:hi@rafat.world" title="Send Email">📧 Email: hi@rafat.world</a>
-      <a class="contact-button" href="https://wa.me/31644367518" target="_blank" title="Chat on WhatsApp">💬 WhatsApp: 0644367518</a>
+    <div class="contact-section">
+      <h2>Contact Me</h2>
+      <div class="contact-links">
+        <a class="contact-button" href="mailto:hi@rafat.world" title="Send Email">📧 Email: hi@rafat.world</a>
+        <a class="contact-button" href="https://wa.me/31644367518" target="_blank" title="Chat on WhatsApp">💬 WhatsApp: 0644367518</a>
+      </div>
     </div>
   </div>
+
+  <div id="dynamicTextContainer">
+    <span id="dynamicText"></span>
+  </div>
+<audio id="backgroundMusic" src="song.mp3" autoplay loop></audio>
+<script>
+
+  const texts = [
+    "I am working on a groundbreaking research project called MirrorNote.",
+    "It is an experimental digital framework that touches the core of symbolic structure,",
+    "recursive logic, and digital identity within contemporary systems."
+  ];
+
+  let index = 0;
+  let charIndex = 0;
+  const typingSpeed = 50;
+  const erasingSpeed = 30;
+  const delayBetweenTexts = 3000;
+
+  const dynamicTextElem = document.getElementById("dynamicText");
+
+  function typeText() {
+    if (charIndex < texts[index].length) {
+      dynamicTextElem.textContent += texts[index].charAt(charIndex);
+      charIndex++;
+      setTimeout(typeText, typingSpeed);
+    } else {
+      setTimeout(eraseText, delayBetweenTexts);
+    }
+  }
+
+  function eraseText() {
+    if (charIndex > 0) {
+      dynamicTextElem.textContent = texts[index].substring(0, charIndex -1);
+      charIndex--;
+      setTimeout(eraseText, erasingSpeed);
+    } else {
+      index++;
+      if (index >= texts.length) index = 0;
+      setTimeout(typeText, typingSpeed);
+    }
+  }
+
+  // ابدأ بالكتابة مباشرة عند تحميل الصفحة
+  document.addEventListener("DOMContentLoaded", function() {
+    typeText();
+  });
+</script>
+
 </body>
 </html>
