@@ -44,6 +44,18 @@
   z-index: 0;
   pointer-events: none;
 }
+#overlayImage {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  max-width: 180px;
+  pointer-events: none;
+  background-color: transparent;
+  border: 2px solid rgba(255, 215, 0, 0.3);
+  border-radius: 12px;
+}
     .container {
       width: 90%;
       max-width: 500px;
@@ -127,9 +139,9 @@
       bottom: 10px;
       width: 100%;
       text-align: center;
-      font-size: 18px;
-      color: #ffd700;
-      text-shadow: 0 0 8px #ffd700;
+      font-size: 24px;
+      color: #cc0000;
+      text-shadow: 0 0 20px #cc0000;
       font-family: 'Courier New', monospace;
       user-select: none;
     }
@@ -148,6 +160,7 @@
 <body>
   <div id="pageOverlay"></div>
    <div id="particles-js"></div>
+  <img src="IMG_9055.jpeg" alt="Overlay Image" id="overlayImage" />
   <div class="container">
     <h1>👑 Support & Donate 👑</h1>
     <p><strong>My Ethereum Address (ENS):</strong></p>
@@ -169,7 +182,6 @@
   <div id="dynamicTextContainer">
     <span id="dynamicText"></span>
   </div>
-<audio id="backgroundMusic" src="song.mp3" autoplay loop></audio>
 <script>
 
   const texts = [
