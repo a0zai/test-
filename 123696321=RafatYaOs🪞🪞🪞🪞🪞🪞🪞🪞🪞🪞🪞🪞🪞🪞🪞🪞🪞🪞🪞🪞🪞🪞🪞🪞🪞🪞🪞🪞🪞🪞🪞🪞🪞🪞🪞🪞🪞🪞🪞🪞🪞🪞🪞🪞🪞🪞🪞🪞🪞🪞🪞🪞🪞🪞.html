@@ -25,17 +25,8 @@
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 0;  /* تحت */
-}
-
-#overlayImage {
-  position: fixed;  /* ثابت فوق */
-  top: 20px;        /* مثلاً مكان الصورة */
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 10;      /* فوق particles */
-  max-width: 300px; /* الحجم */
-  pointer-events: none; /* حتى لا تمنع النقر على العناصر تحت */
+  z-index: 0;
+  pointer-events: none;
 }
     .container {
       width: 90%;
@@ -139,13 +130,11 @@
   </style>
 </head>
 <body>
-
+   <div id="particles-js"></div>
   <div class="container">
     <h1>👑 Support & Donate 👑</h1>
     <p><strong>My Ethereum Address (ENS):</strong></p>
     <p class="wallet-address">123696321.eth</p>
-   <div id="particles-js"></div>
-  <img src="IMG_9055.jpeg" alt="Overlay Image" id="overlayImage" />
     <a class="button" href="ethereum:123696321.eth" title="Open in Wallet">💰 Send via Wallet</a>
     <a class="button" href="https://etherscan.io/address/123696321.eth" target="_blank" title="View on Etherscan">🔎 View on Etherscan</a>
 
