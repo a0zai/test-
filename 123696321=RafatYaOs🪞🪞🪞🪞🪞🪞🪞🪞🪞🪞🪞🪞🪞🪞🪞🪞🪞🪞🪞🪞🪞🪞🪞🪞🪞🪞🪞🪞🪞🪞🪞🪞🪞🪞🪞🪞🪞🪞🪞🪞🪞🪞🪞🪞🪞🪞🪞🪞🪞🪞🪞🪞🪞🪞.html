@@ -117,6 +117,12 @@
     "Response: Live signal online.",
     "Awaiting world🚀..."
   ];
+  
+  const commandMap = {
+  "hi": "Hello, Rafat here! 👋",
+  "help": "Available commands: hi, help, about, learn, recall, clear",
+  "about": "This is Mirror Terminal, a symbolic AI interface by Rafat."
+};
 
   // استدعاء الخطوط تدريجياً عند بداية التشغيل
   let i = 0;
@@ -148,11 +154,7 @@
     }
     return null;
   }
-const commandMap = {
-  "hi": "Hello, Rafat here! 👋",
-  "help": "Available commands: hi, help, about, learn, recall, clear",
-  "about": "This is Mirror Terminal, a symbolic AI interface by Rafat."
-};
+
   // تفسير الإدخال
   function interpretInput(input) {
     const lowerInput = input.toLowerCase();
