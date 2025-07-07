@@ -2,57 +2,58 @@
 <html lang="ar">
 <head>
   <meta charset="UTF-8">
-  <title>Rekenmachine</title>
+  <title>rekenmachine</title>
   <style>
     body {
-      background-color: #f0f0f0;
+      margin: 0;
+      height: 100vh;
+      background: linear-gradient(135deg, #89f7fe, #66a6ff);
       font-family: Arial, sans-serif;
-      direction: rtl;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      margin: 0;
+      direction: rtl;
     }
 
     .calculator {
-      background-color: #fff;
-      border-radius: 12px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
-      width: 320px;
-      padding: 20px;
+      background-color: #ffffff;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 12px 24px rgba(0,0,0,0.2);
+      width: 400px;
+      max-width: 90vw;
     }
 
     .display {
       width: 100%;
-      height: 50px;
-      font-size: 24px;
+      height: 60px;
+      font-size: 28px;
       text-align: right;
-      padding: 10px;
-      margin-bottom: 15px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
+      padding: 12px;
+      margin-bottom: 20px;
+      border: 2px solid #ccc;
+      border-radius: 8px;
       background-color: #f9f9f9;
     }
 
     .buttons {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
+      gap: 12px;
     }
 
     button {
-      padding: 15px;
-      font-size: 20px;
+      padding: 20px;
+      font-size: 22px;
       border: none;
-      border-radius: 6px;
+      border-radius: 8px;
       background-color: #eeeeee;
       cursor: pointer;
       transition: background-color 0.2s;
     }
 
     button:hover {
-      background-color: #dcdcdc;
+      background-color: #dddddd;
     }
 
     button.operator {
@@ -76,6 +77,9 @@
       color: white;
     }
 
+    button.big {
+      font-size: 24px;
+    }
   </style>
 </head>
 <body>
@@ -84,32 +88,32 @@
   <input type="text" id="display" class="display" disabled placeholder="0">
 
   <div class="buttons">
-    <button onclick="append('7')">7</button>
-    <button onclick="append('8')">8</button>
-    <button onclick="append('9')">9</button>
-    <button class="operator" onclick="append('/')">÷</button>
+    <button class="big" onclick="append('7')">7</button>
+    <button class="big" onclick="append('8')">8</button>
+    <button class="big" onclick="append('9')">9</button>
+    <button class="operator big" onclick="append('/')">÷</button>
 
-    <button onclick="append('4')">4</button>
-    <button onclick="append('5')">5</button>
-    <button onclick="append('6')">6</button>
-    <button class="operator" onclick="append('*')">×</button>
+    <button class="big" onclick="append('4')">4</button>
+    <button class="big" onclick="append('5')">5</button>
+    <button class="big" onclick="append('6')">6</button>
+    <button class="operator big" onclick="append('*')">×</button>
 
-    <button onclick="append('1')">1</button>
-    <button onclick="append('2')">2</button>
-    <button onclick="append('3')">3</button>
-    <button class="operator" onclick="append('-')">−</button>
+    <button class="big" onclick="append('1')">1</button>
+    <button class="big" onclick="append('2')">2</button>
+    <button class="big" onclick="append('3')">3</button>
+    <button class="operator big" onclick="append('-')">−</button>
 
-    <button onclick="append('0')">0</button>
-    <button onclick="append('.')">.</button>
-    <button class="equals" onclick="calculate()">=</button>
-    <button class="operator" onclick="append('+')">+</button>
+    <button class="big" onclick="append('0')">0</button>
+    <button class="big" onclick="append('.')">.</button>
+    <button class="equals big" onclick="calculate()">=</button>
+    <button class="operator big" onclick="append('+')">+</button>
 
-    <button class="operator" onclick="append('**')">^</button>
-    <button class="operator" onclick="append('%')">%</button>
-    <button class="special" onclick="squareRoot()">√</button>
-    <button class="clear" onclick="clearDisplay()">C</button>
+    <button class="operator big" onclick="append('**')">^</button>
+    <button class="operator big" onclick="append('%')">%</button>
+    <button class="special big" onclick="squareRoot()">√</button>
+    <button class="clear big" onclick="clearDisplay()">C</button>
 
-    <button class="special" onclick="deleteLast()">⌫</button>
+    <button class="special big" onclick="deleteLast()">⌫</button>
   </div>
 </div>
 
@@ -132,7 +136,7 @@
     try {
       display.value = eval(display.value);
     } catch {
-      display.value = 'fout';
+      display.value = 'dat kan niet🙂';
     }
   }
 
@@ -140,10 +144,11 @@
     try {
       display.value = Math.sqrt(eval(display.value));
     } catch {
-      display.value = 'fout';
+      display.value = 'wat is dat?🤣';
     }
   }
 
+  // دعم لوحة المفاتيح
   document.addEventListener('keydown', (e) => {
     if (e.key.match(/[0-9+\-*/%.^]/)) {
       append(e.key);
