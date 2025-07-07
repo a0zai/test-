@@ -2,37 +2,24 @@
 <html lang="ar">
 <head>
   <meta charset="UTF-8">
-  <title>Elegante rekenmachine</title>
+  <title>آلة حاسبة علمية بخلفية سوداء</title>
   <style>
     html, body {
       margin: 0;
       height: 100%;
-      overflow: hidden;
+      background-color: #000;
       font-family: Arial, sans-serif;
       direction: rtl;
-    }
-
-    body {
-      background: linear-gradient(270deg, #89f7fe, #66a6ff, #fbc2eb, #a6c1ee);
-      background-size: 800% 800%;
-      animation: gradientAnimation 20s ease infinite;
       display: flex;
       justify-content: center;
       align-items: center;
     }
 
-    @keyframes gradientAnimation {
-      0% {background-position: 0% 50%;}
-      50% {background-position: 100% 50%;}
-      100% {background-position: 0% 50%;}
-    }
-
     .calculator {
-      background-color: #ffffffcc;
-      backdrop-filter: blur(10px);
+      background-color: #ffffff;
       padding: 30px;
       border-radius: 16px;
-      box-shadow: 0 12px 24px rgba(0,0,0,0.3);
+      box-shadow: 0 12px 24px rgba(255,255,255,0.2);
       width: 400px;
       max-width: 95vw;
     }
@@ -46,7 +33,8 @@
       margin-bottom: 20px;
       border: 2px solid #ccc;
       border-radius: 8px;
-      background-color: #f9f9f9;
+      background-color: #f0f0f0;
+      color: #333;
     }
 
     .buttons {
@@ -61,6 +49,7 @@
       border: none;
       border-radius: 8px;
       background-color: #eeeeee;
+      color: #111;
       cursor: pointer;
       transition: background-color 0.2s;
     }
@@ -152,7 +141,7 @@
     try {
       display.value = eval(display.value);
     } catch {
-      display.value = 'wat is dat😒';
+      display.value = 'خطأ';
     }
   }
 
@@ -160,7 +149,7 @@
     try {
       display.value = Math.sqrt(eval(display.value));
     } catch {
-      display.value = 'Dat kan nooit😹';
+      display.value = 'خطأ';
     }
   }
 
@@ -168,7 +157,7 @@
     try {
       display.value = Math.pow(eval(display.value), 2);
     } catch {
-      display.value = 'Tuurlijk kan niet🤦🏻‍♂️';
+      display.value = 'خطأ';
     }
   }
 
@@ -176,19 +165,16 @@
     try {
       display.value = 1 / eval(display.value);
     } catch {
-      display.value = 'ben je serieus?;
+      display.value = 'خطأ';
     }
   }
 
   function toggleSign() {
-    try {
-      if (display.value.startsWith('-')) {
-        display.value = display.value.substring(1);
-      } else {
-        display.value = '-' + display.value;
-      }
-    } catch {
-      display.value = 'kan niet🥲';
+    if (!display.value) return;
+    if (display.value.startsWith('-')) {
+      display.value = display.value.substring(1);
+    } else {
+      display.value = '-' + display.value;
     }
   }
 
