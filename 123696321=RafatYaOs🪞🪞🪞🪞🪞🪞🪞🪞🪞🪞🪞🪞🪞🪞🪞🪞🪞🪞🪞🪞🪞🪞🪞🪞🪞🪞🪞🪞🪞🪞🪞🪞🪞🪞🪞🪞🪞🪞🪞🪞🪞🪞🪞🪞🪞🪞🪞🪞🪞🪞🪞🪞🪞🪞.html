@@ -3,62 +3,51 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Bootstrap Style Docs Page</title>
-
-  <!-- Bootstrap 5 CSS -->
+  <title>My Bootstrap-Style Docs</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-
   <style>
-    html {
-      scroll-behavior: smooth;
-    }
     body {
       font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     }
     .navbar-brand {
       font-weight: bold;
     }
-    header.hero {
-      background-color: #563d7c;
-      color: #fff;
-      padding: 100px 20px 80px;
-      text-align: center;
-    }
-    header.hero h1 {
-      font-size: 3rem;
-      font-weight: 700;
-    }
-    header.hero p {
-      font-size: 1.25rem;
-      margin-top: 20px;
-    }
-    section {
-      padding: 80px 20px;
-    }
-    section:nth-child(even) {
+    .sidebar {
+      position: fixed;
+      top: 56px;
+      left: 0;
+      width: 240px;
+      height: 100%;
+      padding-top: 1rem;
       background-color: #f8f9fa;
+      border-right: 1px solid #ddd;
+      overflow-y: auto;
     }
-    .section-title {
-      color: #563d7c;
-      font-weight: 700;
-      margin-bottom: 20px;
+    .sidebar a {
+      display: block;
+      padding: 0.5rem 1rem;
+      color: #212529;
+      text-decoration: none;
     }
-    .section-description {
-      max-width: 800px;
-      margin: 0 auto 30px;
-      font-size: 1.1rem;
-      color: #555;
+    .sidebar a:hover, .sidebar a.active {
+      background-color: #e9ecef;
+      color: #0d6efd;
     }
-    footer {
-      background-color: #212529;
-      color: #aaa;
-      padding: 20px 0;
-      text-align: center;
+    .content {
+      margin-left: 240px;
+      padding: 2rem 1rem;
+      margin-top: 56px;
+    }
+    pre {
+      background-color: #f8f9fa;
+      padding: 1rem;
+      border-radius: 0.25rem;
+      overflow-x: auto;
     }
   </style>
 </head>
-<body data-bs-spy="scroll" data-bs-target="#navbar" data-bs-offset="70">
+<body data-bs-spy="scroll" data-bs-target="#sidebar-nav" data-bs-offset="70">
 
   <!-- Navbar -->
   <nav id="navbar" class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow">
@@ -84,95 +73,85 @@
     </div>
   </nav>
 
-  <!-- Hero Section -->
-  <header class="hero">
-    <div class="container">
-      <h1>Welcome to MyBootstrapDoc</h1>
-      <p class="lead">A beautifully structured single-page template inspired by Bootstrap's own docs.</p>
-      <a href="#gettingstarted" class="btn btn-light btn-lg mt-3">Get Started</a>
-    </div>
-  </header>
-
-  <!-- Sections -->
-  <section id="gettingstarted">
-    <div class="container text-center">
-      <h2 class="section-title">Getting Started</h2>
-      <p class="section-description">Learn how to quickly start using this framework. Include it via CDN or NPM, and begin building responsive sites in no time.</p>
-      <p><code>&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"&gt;</code></p>
-    </div>
-  </section>
-
-  <section id="customize">
-    <div class="container text-center">
-      <h2 class="section-title">Customize</h2>
-      <p class="section-description">Easily customize colors, fonts, and components with our powerful variables and SASS support. Create your unique brand style effortlessly.</p>
-    </div>
-  </section>
-
-  <section id="layout">
-    <div class="container text-center">
-      <h2 class="section-title">Layout</h2>
-      <p class="section-description">Leverage our flexible grid system and layout utilities to craft any design you imagine. Responsive, intuitive, and mobile-first.</p>
-    </div>
-  </section>
-
-  <section id="content">
-    <div class="container text-center">
-      <h2 class="section-title">Content</h2>
-      <p class="section-description">Style your typography, images, tables, and more with consistent, accessible content classes designed to look great on all devices.</p>
-    </div>
-  </section>
-
-  <section id="forms">
-    <div class="container text-center">
-      <h2 class="section-title">Forms</h2>
-      <p class="section-description">Build accessible, attractive forms with our wide variety of form controls and layouts. Validation included out of the box.</p>
-    </div>
-  </section>
-
-  <section id="components">
-    <div class="container text-center">
-      <h2 class="section-title">Components</h2>
-      <p class="section-description">Choose from a vast library of pre-styled UI components: buttons, navbars, modals, carousels, alerts, and many more ready to drop in.</p>
-    </div>
-  </section>
-
-  <section id="helpers">
-    <div class="container text-center">
-      <h2 class="section-title">Helpers</h2>
-      <p class="section-description">Simplify your development with helper classes for positioning, spacing, text, colors, and more — all designed to be intuitive and flexible.</p>
-    </div>
-  </section>
-
-  <section id="utilities">
-    <div class="container text-center">
-      <h2 class="section-title">Utilities</h2>
-      <p class="section-description">Use our utility API to quickly tweak and adjust your designs without leaving your HTML. Control layout, spacing, colors, and much more.</p>
-    </div>
-  </section>
-
-  <section id="extend">
-    <div class="container text-center">
-      <h2 class="section-title">Extend</h2>
-      <p class="section-description">Expand Bootstrap’s functionality with custom plugins, your own components, or third-party integrations. Fully open source and extensible.</p>
-    </div>
-  </section>
-
-  <section id="about">
-    <div class="container text-center">
-      <h2 class="section-title">About</h2>
-      <p class="section-description">This page is inspired by Bootstrap's official documentation, reimagined as a single-page template to showcase structure and style in one view.</p>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer>
-    <div class="container">
-      &copy; 2025 MyBootstrapDoc. All rights reserved. | Designed with ❤️ for learning and inspiration
-    </div>
-  </footer>
-
-  <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Sidebar -->
+  <nav class="sidebar" id="sidebar-nav">
+    <a href="#gettingstarted">Getting Started</a>
+    <a href="#customize">Customize</a>
+    <a href="#layout">Layout</a>
+    <a href="#content">Content</a>
+    <a href="#forms">Forms</a>
+    <a href="#components">Components</a>
+    <a href="#helpers">Helpers</a>
+    <a href="#utilities">Utilities</a>
+    <a href="#extend">Extend</a>
+    <a href="#about">About</a>
+  </nav>
+    <!-- Main Content -->
+  <div class="content">
+    <section id="gettingstarted">
+      <h2>Getting Started</h2>
+      <p>Include Bootstrap's CSS and JS via CDN:</p>
+      <pre>&lt;link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"&gt;
+&lt;script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"&gt;&lt;/script&gt;</pre>
+    </section>
+    <hr>
+    <section id="customize">
+      <h2>Customize</h2>
+      <p>Adjust variables and use SASS for custom builds:</p>
+      <pre>$primary: #563d7c;
+$font-family-sans-serif: "Helvetica Neue", Arial;</pre>
+    </section>
+    <hr>
+    <section id="layout">
+      <h2>Layout</h2>
+      <p>Build responsive grids using rows and columns:</p>
+      <pre>&lt;div class="row"&gt;
+  &lt;div class="col-md-6"&gt;Column 1&lt;/div&gt;
+  &lt;div class="col-md-6"&gt;Column 2&lt;/div&gt;
+&lt;/div&gt;</pre>
+    </section>
+    <hr>
+    <section id="content">
+      <h2>Content</h2>
+      <p>Style headings, paragraphs, and images:</p>
+      <pre>&lt;h1 class="display-4"&gt;Hello, world!&lt;/h1&gt;</pre>
+    </section>
+    <hr>
+    <section id="forms">
+      <h2>Forms</h2>
+      <p>Create modern forms with validation:</p>
+      <pre>&lt;input type="email" class="form-control" placeholder="Enter email"&gt;</pre>
+    </section>
+    <hr>
+    <section id="components">
+      <h2>Components</h2>
+      <p>Use buttons, alerts, navbars, and more:</p>
+      <pre>&lt;button class="btn btn-primary"&gt;Click me&lt;/button&gt;</pre>
+    </section>
+    <hr>
+    <section id="helpers">
+      <h2>Helpers</h2>
+      <p>Use helper classes for spacing and text:</p>
+      <pre>.text-center .m-3 .p-2</pre>
+    </section>
+    <hr>
+    <section id="utilities">
+      <h2>Utilities</h2>
+      <p>Quickly adjust layout with utility classes:</p>
+      <pre>.bg-primary .text-white .d-flex</pre>
+    </section>
+    <hr>
+    <section id="extend">
+      <h2>Extend</h2>
+      <p>Extend Bootstrap with custom components:</p>
+      <pre>import 'bootstrap/dist/css/bootstrap.css';</pre>
+    </section>
+    <hr>
+    <section id="about">
+      <h2>About</h2>
+      <p>This page mimics Bootstrap's documentation layout for educational purposes.</p>
+    </section>
+  </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
