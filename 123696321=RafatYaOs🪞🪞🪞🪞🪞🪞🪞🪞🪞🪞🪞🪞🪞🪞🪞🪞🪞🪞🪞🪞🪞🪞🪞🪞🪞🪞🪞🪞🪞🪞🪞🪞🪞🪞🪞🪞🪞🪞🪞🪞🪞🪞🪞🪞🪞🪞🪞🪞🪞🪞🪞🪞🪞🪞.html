@@ -1,196 +1,292 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>آلة حاسبة علمية بخلفية سوداء</title>
+  <meta charset="UTF-8" />
+  <title>Support & Contact with Dynamic Text</title>
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <style>
     html, body {
-      margin: 0;
       height: 100%;
+      margin: 0;
+      padding: 0;
       background-color: #000;
-      font-family: Arial, sans-serif;
-      direction: rtl;
+      color: gold;
+      font-family: 'Courier New', monospace;
+      overflow: hidden;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
+      text-align: center;
+    }
+    #pageOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(12px);  /* تأثير ضبابي */
+  background-color: rgba(0, 0, 0, 0.6);  /* لون شفاف داكن */
+  z-index: 9999;  /* فوق كل شيء */
+  opacity: 1;
+  transition: opacity 3s ease;
+}
+#pageOverlay.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+#particles-js {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+    .container {
+      width: 90%;
+      max-width: 500px;
+      background: rgba(255, 215, 0, 0.08);
+      border: 2px solid gold;
+      border-radius: 12px;
+      padding: 40px 30px;
+      box-shadow: 0 0 30px gold;
+      flex-shrink: 0;
+    }
+    h1 {
+      color: gold;
+      text-shadow: 0 0 12px gold;
+      margin-bottom: 30px;
+      font-size: 36px;
+    }
+    .wallet-address {
+      font-size: 22px;
+      margin: 15px 0 30px 0;
+      word-wrap: break-word;
+      border-bottom: 1px solid gold;
+      padding-bottom: 12px;
+    }
+    a.button {
+      display: block;
+      margin: 15px auto;
+      padding: 14px 24px;
+      color: gold;
+      border: 2px solid gold;
+      border-radius: 10px;
+      text-decoration: none;
+      width: 80%;
+      max-width: 280px;
+      font-weight: bold;
+      font-size: 18px;
+      box-shadow: inset 0 0 8px gold;
+      transition: all 0.3s ease;
+    }
+    a.button:hover {
+      background-color: gold;
+      color: #000;
+      box-shadow: 0 0 20px gold;
+    }
+    .qr {
+      margin: 30px auto 0 auto;
+      border: 2px solid gold;
+      border-radius: 14px;
+      width: 180px;
+      height: 180px;
+      box-shadow: 0 0 15px gold;
+      display: block;
+    }
+    .contact-section {
+      margin-top: 50px;
+    }
+    .contact-links {
+      margin-top: 15px;
+    }
+    a.contact-button {
+      display: inline-block;
+      margin: 12px 18px;
+      padding: 12px 20px;
+      color: gold;
+      border: 2px solid gold;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 18px;
+      box-shadow: inset 0 0 8px gold;
+      transition: all 0.3s ease;
+    }
+    a.contact-button:hover {
+      background-color: gold;
+      color: #000;
+      box-shadow: 0 0 20px gold;
     }
 
-    .calculator {
-      background-color: #ffffff;
-      padding: 30px;
-      border-radius: 16px;
-      box-shadow: 0 12px 24px rgba(255,255,255,0.2);
-      width: 400px;
-      max-width: 95vw;
-    }
-
-    .display {
+    #dynamicTextContainer {
+      position: fixed;
+      bottom: 10px;
       width: 100%;
-      height: 60px;
-      font-size: 28px;
-      text-align: right;
-      padding: 12px;
-      margin-bottom: 20px;
-      border: 2px solid #ccc;
-      border-radius: 8px;
-      background-color: #f0f0f0;
-      color: #333;
+      text-align: center;
+      font-size: 33px;
+      color: #cc0000;
+      text-shadow: 0 0 20px #cc0000;
+      font-family: 'Courier New', monospace;
+      user-select: none;
     }
-
-    .buttons {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
+    #dynamicText {
+      display: inline-block;
+      border-right: 2px solid #ffd700;
+      padding-right: 5px;
+      white-space: nowrap;
+      animation: blinkCaret 1s step-end infinite;
     }
-
-    button {
-      padding: 18px;
-      font-size: 20px;
-      border: none;
-      border-radius: 8px;
-      background-color: #eeeeee;
-      color: #111;
-      cursor: pointer;
-      transition: background-color 0.2s;
-    }
-
-    button:hover {
-      background-color: #dddddd;
-    }
-
-    button.operator {
-      background-color: #4CAF50;
-      color: white;
-    }
-
-    button.equals {
-      background-color: #FF5722;
-      color: white;
-      grid-column: span 2;
-    }
-
-    button.clear {
-      background-color: #f44336;
-      color: white;
-    }
-
-    button.special {
-      background-color: #3F51B5;
-      color: white;
+    @keyframes blinkCaret {
+      50% { border-color: transparent; }
     }
   </style>
 </head>
 <body>
+  <div id="pageOverlay"></div>
+   <div id="particles-js"></div>
+  <div class="container">
+    <h1>👑 Support & Contact 👑</h1>
+    <p><strong>My Ethereum Address (ENS):</strong></p>
+    <p class="wallet-address">123696321.eth</p>
+    <a class="button" href="ethereum:123696321.eth" title="Open in Wallet">💰 Send via Wallet</a>
+    <a class="button" href="https://etherscan.io/address/123696321.eth" target="_blank" title="View on Etherscan">🔎 View on Etherscan</a>
 
-<div class="calculator">
-  <input type="text" id="display" class="display" disabled placeholder="0">
+    <img class="qr" src="https://api.qrserver.com/v1/create-qr-code/?data=123696321.eth&size=180x180" alt="Wallet QR Code">
 
-  <div class="buttons">
-    <button class="clear" onclick="clearDisplay()">AC</button>
-    <button class="special" onclick="deleteLast()">⌫</button>
-    <button class="special" onclick="append('(')">(</button>
-    <button class="special" onclick="append(')')">)</button>
-
-    <button class="special" onclick="toggleSign()">±</button>
-    <button class="special" onclick="append('Math.PI')">π</button>
-    <button class="special" onclick="squareRoot()">√</button>
-    <button class="special" onclick="square()">x²</button>
-
-    <button class="special" onclick="reciprocal()">1/x</button>
-    <button class="operator" onclick="append('**')">^</button>
-    <button class="operator" onclick="append('%')">%</button>
-    <button class="operator" onclick="append('/')">÷</button>
-
-    <button onclick="append('7')">7</button>
-    <button onclick="append('8')">8</button>
-    <button onclick="append('9')">9</button>
-    <button class="operator" onclick="append('*')">×</button>
-
-    <button onclick="append('4')">4</button>
-    <button onclick="append('5')">5</button>
-    <button onclick="append('6')">6</button>
-    <button class="operator" onclick="append('-')">−</button>
-
-    <button onclick="append('1')">1</button>
-    <button onclick="append('2')">2</button>
-    <button onclick="append('3')">3</button>
-    <button class="operator" onclick="append('+')">+</button>
-
-    <button onclick="append('0')">0</button>
-    <button onclick="append('.')">.</button>
-    <button class="equals" onclick="calculate()">=</button>
-  </div>
+    <div class="contact-section">
+      <h2>Contact Me</h2>
+      <div class="contact-links">
+  <a class="contact-button" href="mailto:hi@rafat.world" title="Send Email">📧 Email: hi@rafat.world</a>
+  <a class="contact-button" href="https://wa.me/31644367518" target="_blank" title="Chat on WhatsApp">💬 WhatsApp: 0644367518</a>
+  <a class="contact-button" href="https://www.linkedin.com/in/a0zai?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app" target="_blank" title="View my LinkedIn">💼 LinkedIn: A0ZAI</a>
 </div>
+    </div>
+  </div>
 
+  <div id="dynamicTextContainer">
+    <span id="dynamicText"></span>
+  </div>
+  <audio id="backgroundMusic" src="🌀🎶.mp3" loop></audio>
 <script>
-  const display = document.getElementById('display');
 
-  function append(value) {
-    display.value += value;
-  }
+  const texts = [
+    "I am working on a groundbreaking research project called MirrorNote.",
+    "It is an experimental digital framework that touches the core of symbolic structure,",
+    "recursive logic, and digital identity within contemporary systems."
+  ];
 
-  function clearDisplay() {
-    display.value = '';
-  }
+  let index = 0;
+  let charIndex = 0;
+  const typingSpeed = 50;
+  const erasingSpeed = 30;
+  const delayBetweenTexts = 3000;
 
-  function deleteLast() {
-    display.value = display.value.slice(0, -1);
-  }
+  const dynamicTextElem = document.getElementById("dynamicText");
 
-  function calculate() {
-    try {
-      display.value = eval(display.value);
-    } catch {
-      display.value = 'خطأ';
-    }
-  }
-
-  function squareRoot() {
-    try {
-      display.value = Math.sqrt(eval(display.value));
-    } catch {
-      display.value = 'خطأ';
-    }
-  }
-
-  function square() {
-    try {
-      display.value = Math.pow(eval(display.value), 2);
-    } catch {
-      display.value = 'خطأ';
-    }
-  }
-
-  function reciprocal() {
-    try {
-      display.value = 1 / eval(display.value);
-    } catch {
-      display.value = 'خطأ';
-    }
-  }
-
-  function toggleSign() {
-    if (!display.value) return;
-    if (display.value.startsWith('-')) {
-      display.value = display.value.substring(1);
+  function typeText() {
+    if (charIndex < texts[index].length) {
+      dynamicTextElem.textContent += texts[index].charAt(charIndex);
+      charIndex++;
+      setTimeout(typeText, typingSpeed);
     } else {
-      display.value = '-' + display.value;
+      setTimeout(eraseText, delayBetweenTexts);
     }
   }
 
-  document.addEventListener('keydown', (e) => {
-    if (e.key.match(/[0-9+\-*/%.()]/)) {
-      append(e.key);
-    } else if (e.key === 'Enter') {
-      e.preventDefault();
-      calculate();
-    } else if (e.key === 'Backspace') {
-      deleteLast();
-    } else if (e.key === 'Escape') {
-      clearDisplay();
+  function eraseText() {
+    if (charIndex > 0) {
+      dynamicTextElem.textContent = texts[index].substring(0, charIndex -1);
+      charIndex--;
+      setTimeout(eraseText, erasingSpeed);
+    } else {
+      index++;
+      if (index >= texts.length) index = 0;
+      setTimeout(typeText, typingSpeed);
     }
+  }
+
+  // ابدأ بالكتابة مباشرة عند تحميل الصفحة
+  document.addEventListener("DOMContentLoaded", function() {
+    typeText();
   });
 </script>
-
+<script>
+  particlesJS("particles-js", {
+    particles: {
+      number: { value: 70, density: { enable: true, value_area: 800 } },
+      color: { value: "#00ffcc" },
+      shape: {
+        type: "circle",
+        stroke: { width: 0, color: "#000000" },
+        polygon: { nb_sides: 5 },
+      },
+      opacity: {
+        value: 0.5,
+        random: true,
+        anim: { enable: true, speed: 1, opacity_min: 0.1, sync: false }
+      },
+      size: {
+        value: 3,
+        random: true,
+        anim: { enable: false }
+      },
+      line_linked: {
+        enable: true,
+        distance: 150,
+        color: "#00ffcc",
+        opacity: 0.3,
+        width: 1
+      },
+      move: {
+        enable: true,
+        speed: 1,
+        direction: "none",
+        random: true,
+        straight: false,
+        out_mode: "out",
+        bounce: false,
+        attract: { enable: false }
+      }
+    },
+    interactivity: {
+      detect_on: "canvas",
+      events: {
+        onhover: { enable: true, mode: "grab" },
+        onclick: { enable: true, mode: "push" },
+        resize: true
+      },
+      modes: {
+        grab: { distance: 200, line_linked: { opacity: 0.5 } },
+        bubble: { distance: 200, size: 6, duration: 2, opacity: 0.8 },
+        repulse: { distance: 100 },
+        push: { particles_nb: 4 },
+        remove: { particles_nb: 2 }
+      }
+    },
+    retina_detect: true
+  });
+</script>
+<script>
+  window.addEventListener('load', () => {
+    const overlay = document.getElementById('pageOverlay');
+    overlay.classList.add('fade-out');
+  });
+</script>
+<script>
+window.addEventListener('DOMContentLoaded', () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('playAudio') === '1') {
+    const audio = document.getElementById('backgroundMusic');
+    if (audio) {
+      audio.play().catch(err => {
+        console.log('Audio play failed:', err);
+      });
+    }
+  }
+});
+</script>
 </body>
 </html>
