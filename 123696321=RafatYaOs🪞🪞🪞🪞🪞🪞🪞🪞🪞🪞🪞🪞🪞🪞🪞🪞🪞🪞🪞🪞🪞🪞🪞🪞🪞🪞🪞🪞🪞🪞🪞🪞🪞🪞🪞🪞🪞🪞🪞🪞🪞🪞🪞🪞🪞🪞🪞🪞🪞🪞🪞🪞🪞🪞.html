@@ -58,43 +58,60 @@
       border-radius: 0.25rem;
       overflow-x: auto;
     }
+      .custom-navbar {
+    background-color: #6f42c1;
+  }
+
+  .navbar .form-control {
+    min-width: 150px;
+  }
+
+  @media (min-width: 992px) {
+    .navbar .form-control {
+      min-width: 300px;
+    }
+  }
   </style>
 </head>
 <body data-bs-spy="scroll" data-bs-target="#sidebar-nav" data-bs-offset="70">
 
   <!-- Navbar -->
-  <!-- Navbar -->
-  <nav class="navbar navbar-dark bg-dark fixed-top navbar-expand-lg shadow">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">MyBootstrapDocs</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link" href="https://getbootstrap.com/docs/5.3/getting-started/introduction/" target="_blank">
-              Docs
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="https://themes.getbootstrap.com/" target="_blank">
-              Themes
-            </a>
-          </li>
-        </ul>
-        <form class="d-flex me-3" role="search">
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-light" type="submit">
-            <i class="bi bi-search"></i>
-          </button>
-        </form>
-        <a class="btn btn-outline-light" href="https://github.com/twbs/bootstrap" target="_blank">
-          <i class="bi bi-github"></i> GitHub
-        </a>
-      </div>
+<nav class="navbar navbar-dark custom-navbar fixed-top navbar-expand-lg shadow">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">
+      <i class="bi bi-bootstrap"></i> MyBootstrapDocs
+    </a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-3">
+        <li class="nav-item">
+          <a class="nav-link" href="#">Docs</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Themes</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Icons</a>
+        </li>
+      </ul>
+
+      <form class="d-flex mx-auto w-50" role="search">
+        <input class="form-control me-2" type="search" placeholder="Search docs..." aria-label="Search">
+        <button class="btn btn-outline-light" type="submit">
+          <i class="bi bi-search"></i>
+        </button>
+      </form>
+
+      <a class="btn btn-outline-light ms-3" href="https://github.com/twbs/bootstrap" target="_blank">
+        <i class="bi bi-github"></i>
+      </a>
     </div>
-  </nav>
+  </div>
+</nav>
   <!-- Sidebar -->
   <nav class="sidebar" id="sidebar-nav">
     <a href="#gettingstarted"><i class="bi bi-house"></i> Getting Started</a>
