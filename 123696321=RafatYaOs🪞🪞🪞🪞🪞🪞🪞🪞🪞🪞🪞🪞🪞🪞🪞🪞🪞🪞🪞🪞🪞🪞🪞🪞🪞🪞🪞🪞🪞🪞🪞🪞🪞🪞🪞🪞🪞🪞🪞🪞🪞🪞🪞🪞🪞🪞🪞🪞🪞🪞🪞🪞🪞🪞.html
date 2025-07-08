@@ -526,5 +526,23 @@ $font-family-sans-serif: "Helvetica Neue", Arial;</pre>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+  document.querySelectorAll('.sidebar a[data-bs-toggle="collapse"]').forEach(toggler => {
+    toggler.addEventListener('click', () => {
+      const icon = toggler.querySelector('.bi-chevron-down, .bi-chevron-up');
+      if (!icon) return;
+      setTimeout(() => {
+        const expanded = toggler.getAttribute('aria-expanded') === 'true';
+        if (expanded) {
+          icon.classList.remove('bi-chevron-down');
+          icon.classList.add('bi-chevron-up');
+        } else {
+          icon.classList.remove('bi-chevron-up');
+          icon.classList.add('bi-chevron-down');
+        }
+      }, 150);
+    });
+  });
+</script>
 </body>
 </html>
