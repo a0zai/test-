@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>MyBootstrapStyle Page</title>
+  <title>Bootstrap Style Docs Page</title>
+
+  <!-- Bootstrap 5 CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 
@@ -11,195 +13,166 @@
     html {
       scroll-behavior: smooth;
     }
-
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
     .navbar-brand {
       font-weight: bold;
-      font-size: 1.5rem;
     }
-
-    .hero {
+    header.hero {
       background-color: #563d7c;
       color: #fff;
-      padding: 120px 0 80px 0;
+      padding: 100px 20px 80px;
       text-align: center;
     }
-
-    .hero h1 {
+    header.hero h1 {
       font-size: 3rem;
       font-weight: 700;
     }
-
-    .hero p {
+    header.hero p {
       font-size: 1.25rem;
-      margin-bottom: 30px;
+      margin-top: 20px;
     }
-
-    .feature-icon {
-      font-size: 3rem;
-      color: #563d7c;
+    section {
+      padding: 80px 20px;
     }
-
-    .cta-section {
+    section:nth-child(even) {
       background-color: #f8f9fa;
-      text-align: center;
-      padding: 60px 20px;
     }
-
-    .examples-section {
-      padding: 60px 0;
+    .section-title {
+      color: #563d7c;
+      font-weight: 700;
+      margin-bottom: 20px;
     }
-
+    .section-description {
+      max-width: 800px;
+      margin: 0 auto 30px;
+      font-size: 1.1rem;
+      color: #555;
+    }
     footer {
       background-color: #212529;
       color: #aaa;
       padding: 20px 0;
       text-align: center;
     }
-
-    footer a {
-      color: #00ffcc;
-      text-decoration: none;
-    }
-
-    footer a:hover {
-      text-decoration: underline;
-    }
   </style>
 </head>
-<body>
+<body data-bs-spy="scroll" data-bs-target="#navbar" data-bs-offset="70">
 
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+  <nav id="navbar" class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow">
     <div class="container">
-      <a class="navbar-brand" href="#">MyBrand</a>
+      <a class="navbar-brand" href="#">MyBootstrapDoc</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
-          <li class="nav-item"><a class="nav-link" href="#examples">Examples</a></li>
-          <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+          <li class="nav-item"><a class="nav-link" href="#gettingstarted">Getting Started</a></li>
+          <li class="nav-item"><a class="nav-link" href="#customize">Customize</a></li>
+          <li class="nav-item"><a class="nav-link" href="#layout">Layout</a></li>
+          <li class="nav-item"><a class="nav-link" href="#content">Content</a></li>
+          <li class="nav-item"><a class="nav-link" href="#forms">Forms</a></li>
+          <li class="nav-item"><a class="nav-link" href="#components">Components</a></li>
+          <li class="nav-item"><a class="nav-link" href="#helpers">Helpers</a></li>
+          <li class="nav-item"><a class="nav-link" href="#utilities">Utilities</a></li>
+          <li class="nav-item"><a class="nav-link" href="#extend">Extend</a></li>
+          <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
         </ul>
       </div>
     </div>
   </nav>
 
-  <!-- Hero -->
-  <section class="hero" id="home">
+  <!-- Hero Section -->
+  <header class="hero">
     <div class="container">
-      <h1>Build fast, responsive sites</h1>
-      <p class="lead">Beautifully designed components and ready-to-use templates for your next project.</p>
-      <a href="#features" class="btn btn-light btn-lg">Get Started</a>
+      <h1>Welcome to MyBootstrapDoc</h1>
+      <p class="lead">A beautifully structured single-page template inspired by Bootstrap's own docs.</p>
+      <a href="#gettingstarted" class="btn btn-light btn-lg mt-3">Get Started</a>
+    </div>
+  </header>
+
+  <!-- Sections -->
+  <section id="gettingstarted">
+    <div class="container text-center">
+      <h2 class="section-title">Getting Started</h2>
+      <p class="section-description">Learn how to quickly start using this framework. Include it via CDN or NPM, and begin building responsive sites in no time.</p>
+      <p><code>&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"&gt;</code></p>
     </div>
   </section>
 
-  <!-- Features -->
-  <section id="features" class="py-5 bg-light text-center">
-    <div class="container">
-      <h2 class="mb-4">Features</h2>
-      <div class="row">
-        <div class="col-md-4 mb-4">
-          <i class="bi bi-lightning-charge-fill feature-icon mb-3"></i>
-          <h4>Fast Development</h4>
-          <p>Speed up your workflow with reusable components and consistent styles.</p>
-        </div>
-        <div class="col-md-4 mb-4">
-          <i class="bi bi-grid-fill feature-icon mb-3"></i>
-          <h4>Responsive Grid</h4>
-          <p>Adapt your layouts to any screen size effortlessly with our grid system.</p>
-        </div>
-        <div class="col-md-4 mb-4">
-          <i class="bi bi-palette-fill feature-icon mb-3"></i>
-          <h4>Customizable</h4>
-          <p>Easy to customize with variables and utility classes to fit your brand.</p>
-        </div>
-      </div>
+  <section id="customize">
+    <div class="container text-center">
+      <h2 class="section-title">Customize</h2>
+      <p class="section-description">Easily customize colors, fonts, and components with our powerful variables and SASS support. Create your unique brand style effortlessly.</p>
     </div>
   </section>
 
-  <!-- CTA Section -->
-  <section class="cta-section">
-    <div class="container">
-      <h2 class="mb-3">Ready to get started?</h2>
-      <p class="mb-4">Download the framework and start building amazing websites today!</p>
-      <a href="#" class="btn btn-primary btn-lg">Download Now</a>
+  <section id="layout">
+    <div class="container text-center">
+      <h2 class="section-title">Layout</h2>
+      <p class="section-description">Leverage our flexible grid system and layout utilities to craft any design you imagine. Responsive, intuitive, and mobile-first.</p>
     </div>
   </section>
 
-  <!-- Examples Section -->
-  <section id="examples" class="examples-section bg-light">
-    <div class="container">
-      <h2 class="text-center mb-5">Example Components</h2>
-      <div class="row">
-        <div class="col-md-4 mb-4">
-          <div class="card shadow-sm">
-            <img src="https://source.unsplash.com/600x400/?code,website" class="card-img-top" alt="...">
-            <div class="card-body">
-              <h5 class="card-title">Landing Page</h5>
-              <p class="card-text">Build a modern landing page with responsive components.</p>
-              <a href="#" class="btn btn-outline-primary">View Example</a>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4 mb-4">
-          <div class="card shadow-sm">
-            <img src="https://source.unsplash.com/600x400/?app,design" class="card-img-top" alt="...">
-            <div class="card-body">
-              <h5 class="card-title">Admin Dashboard</h5>
-              <p class="card-text">Manage content with a clean and functional dashboard.</p>
-              <a href="#" class="btn btn-outline-primary">View Example</a>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4 mb-4">
-          <div class="card shadow-sm">
-            <img src="https://source.unsplash.com/600x400/?mobile,ui" class="card-img-top" alt="...">
-            <div class="card-body">
-              <h5 class="card-title">Mobile App UI</h5>
-              <p class="card-text">Design intuitive mobile experiences with ready-to-use patterns.</p>
-              <a href="#" class="btn btn-outline-primary">View Example</a>
-            </div>
-          </div>
-        </div>
-      </div>
+  <section id="content">
+    <div class="container text-center">
+      <h2 class="section-title">Content</h2>
+      <p class="section-description">Style your typography, images, tables, and more with consistent, accessible content classes designed to look great on all devices.</p>
     </div>
   </section>
 
-  <!-- Contact Section -->
-  <section id="contact" class="py-5 text-center">
-    <div class="container">
-      <h2 class="mb-4">Contact Us</h2>
-      <p class="lead mb-4">Have questions or need help? Drop us a message!</p>
-      <div class="row justify-content-center">
-        <div class="col-lg-8">
-          <form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
-            <div class="mb-3">
-              <label for="name" class="form-label">Your Name</label>
-              <input type="text" name="name" class="form-control" id="name" required>
-            </div>
-            <div class="mb-3">
-              <label for="email" class="form-label">Email address</label>
-              <input type="email" name="_replyto" class="form-control" id="email" required>
-            </div>
-            <div class="mb-3">
-              <label for="message" class="form-label">Message</label>
-              <textarea name="message" class="form-control" id="message" rows="5" required></textarea>
-            </div>
-            <button type="submit" class="btn btn-success btn-lg">Send Message</button>
-          </form>
-        </div>
-      </div>
+  <section id="forms">
+    <div class="container text-center">
+      <h2 class="section-title">Forms</h2>
+      <p class="section-description">Build accessible, attractive forms with our wide variety of form controls and layouts. Validation included out of the box.</p>
+    </div>
+  </section>
+
+  <section id="components">
+    <div class="container text-center">
+      <h2 class="section-title">Components</h2>
+      <p class="section-description">Choose from a vast library of pre-styled UI components: buttons, navbars, modals, carousels, alerts, and many more ready to drop in.</p>
+    </div>
+  </section>
+
+  <section id="helpers">
+    <div class="container text-center">
+      <h2 class="section-title">Helpers</h2>
+      <p class="section-description">Simplify your development with helper classes for positioning, spacing, text, colors, and more — all designed to be intuitive and flexible.</p>
+    </div>
+  </section>
+
+  <section id="utilities">
+    <div class="container text-center">
+      <h2 class="section-title">Utilities</h2>
+      <p class="section-description">Use our utility API to quickly tweak and adjust your designs without leaving your HTML. Control layout, spacing, colors, and much more.</p>
+    </div>
+  </section>
+
+  <section id="extend">
+    <div class="container text-center">
+      <h2 class="section-title">Extend</h2>
+      <p class="section-description">Expand Bootstrap’s functionality with custom plugins, your own components, or third-party integrations. Fully open source and extensible.</p>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="container text-center">
+      <h2 class="section-title">About</h2>
+      <p class="section-description">This page is inspired by Bootstrap's official documentation, reimagined as a single-page template to showcase structure and style in one view.</p>
     </div>
   </section>
 
   <!-- Footer -->
   <footer>
     <div class="container">
-      &copy; 2025 MyBrand. All rights reserved. | Designed with ❤️ by You
+      &copy; 2025 MyBootstrapDoc. All rights reserved. | Designed with ❤️ for learning and inspiration
     </div>
   </footer>
 
+  <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
