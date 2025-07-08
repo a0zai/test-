@@ -57,7 +57,9 @@
         margin-left: 0;
       }
     }
-  
+  .custom-navbar {
+  background-color: #6f42c1;
+}
   </style>
 </head>
 <body data-bs-spy="scroll" data-bs-target="#sidebar-nav" data-bs-offset="70">
@@ -77,40 +79,6 @@
     body {
       font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     }
-
-  <!-- Navbar -->
-  <nav class="navbar navbar-dark bg-dark fixed-top navbar-expand-lg shadow">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">MyBootstrapDocs</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link" href="https://getbootstrap.com/docs/5.3/getting-started/introduction/" target="_blank">
-              Docs
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="https://themes.getbootstrap.com/" target="_blank">
-              Themes
-            </a>
-          </li>
-        </ul>
-        <form class="d-flex me-3" role="search">
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-light" type="submit">
-            <i class="bi bi-search"></i>
-          </button>
-        </form>
-        <a class="btn btn-outline-light" href="https://github.com/twbs/bootstrap" target="_blank">
-          <i class="bi bi-github"></i> GitHub
-        </a>
-      </div>
-    </div>
-  </nav>
-
     .sidebar {
       position: fixed;
       top: 56px;
@@ -156,36 +124,189 @@
 <body data-bs-spy="scroll" data-bs-target="#sidebar-nav" data-bs-offset="70">
 
   <!-- Navbar -->
-  <nav class="navbar navbar-dark bg-dark fixed-top navbar-expand-lg shadow">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">MyBootstrapDocs</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <form class="d-flex ms-auto mt-2 mt-lg-0" role="search">
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-light" type="submit">
-            <i class="bi bi-search"></i>
-          </button>
-        </form>
-      </div>
+ <nav class="navbar navbar-dark custom-navbar fixed-top navbar-expand-lg shadow">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">
+      <i class="bi bi-bootstrap"></i> MyBootstrapDocs
+    </a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-3">
+        <li class="nav-item">
+          <a class="nav-link" href="#">Docs</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Themes</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Icons</a>
+        </li>
+      </ul>
+
+      <form class="d-flex mx-auto w-50" role="search">
+        <input class="form-control me-2" type="search" placeholder="Search docs..." aria-label="Search">
+        <button class="btn btn-outline-light" type="submit">
+          <i class="bi bi-search"></i>
+        </button>
+      </form>
+
+      <a class="btn btn-outline-light ms-3" href="https://github.com/twbs/bootstrap" target="_blank">
+        <i class="bi bi-github"></i>
+      </a>
     </div>
-  </nav>
+  </div>
+</nav>
 
   <!-- Sidebar -->
-  <nav class="sidebar" id="sidebar-nav">
-    <a href="#gettingstarted"><i class="bi bi-house"></i> Getting Started</a>
-    <a href="#customize"><i class="bi bi-gear"></i> Customize</a>
-    <a href="#layout"><i class="bi bi-grid"></i> Layout</a>
-    <a href="#content"><i class="bi bi-file-earmark-text"></i> Content</a>
-    <a href="#forms"><i class="bi bi-ui-checks"></i> Forms</a>
-    <a href="#components"><i class="bi bi-box"></i> Components</a>
-    <a href="#helpers"><i class="bi bi-tools"></i> Helpers</a>
-    <a href="#utilities"><i class="bi bi-arrows-expand"></i> Utilities</a>
-    <a href="#extend"><i class="bi bi-layers"></i> Extend</a>
-    <a href="#about"><i class="bi bi-info-circle"></i> About</a>
-  </nav>
+<nav class="sidebar" id="sidebar-nav">
+  <div class="list-group list-group-flush">
+
+    <a href="#gettingstarted" class="list-group-item list-group-item-action fw-bold">Getting started</a>
+    <div class="ms-3">
+      <a href="#introduction" class="list-group-item list-group-item-action">Introduction</a>
+      <a href="#download" class="list-group-item list-group-item-action">Download</a>
+      <a href="#contents" class="list-group-item list-group-item-action">Contents</a>
+      <a href="#browsers" class="list-group-item list-group-item-action">Browsers & devices</a>
+      <a href="#javascript" class="list-group-item list-group-item-action">JavaScript</a>
+      <a href="#webpack" class="list-group-item list-group-item-action">Webpack</a>
+      <a href="#parcel" class="list-group-item list-group-item-action">Parcel</a>
+      <a href="#vite" class="list-group-item list-group-item-action">Vite</a>
+      <a href="#accessibility" class="list-group-item list-group-item-action">Accessibility</a>
+      <a href="#rfs" class="list-group-item list-group-item-action">RFS</a>
+      <a href="#rtl" class="list-group-item list-group-item-action">RTL</a>
+      <a href="#contribute" class="list-group-item list-group-item-action">Contribute</a>
+    </div>
+
+    <a href="#customize" class="list-group-item list-group-item-action fw-bold">Customize</a>
+    <div class="ms-3">
+      <a href="#overview" class="list-group-item list-group-item-action">Overview</a>
+      <a href="#sass" class="list-group-item list-group-item-action">Sass</a>
+      <a href="#options" class="list-group-item list-group-item-action">Options</a>
+      <a href="#color" class="list-group-item list-group-item-action">Color</a>
+      <a href="#components" class="list-group-item list-group-item-action">Components</a>
+      <a href="#cssvariables" class="list-group-item list-group-item-action">CSS variables</a>
+      <a href="#optimize" class="list-group-item list-group-item-action">Optimize</a>
+    </div>
+
+    <a href="#layout" class="list-group-item list-group-item-action fw-bold">Layout</a>
+    <div class="ms-3">
+      <a href="#breakpoints" class="list-group-item list-group-item-action">Breakpoints</a>
+      <a href="#containers" class="list-group-item list-group-item-action">Containers</a>
+      <a href="#grid" class="list-group-item list-group-item-action">Grid</a>
+      <a href="#columns" class="list-group-item list-group-item-action">Columns</a>
+      <a href="#gutters" class="list-group-item list-group-item-action">Gutters</a>
+      <a href="#utilities" class="list-group-item list-group-item-action">Utilities</a>
+      <a href="#zindex" class="list-group-item list-group-item-action">Z-index</a>
+      <a href="#cssgrid" class="list-group-item list-group-item-action">CSS Grid</a>
+    </div>
+
+    <a href="#content" class="list-group-item list-group-item-action fw-bold">Content</a>
+    <div class="ms-3">
+      <a href="#reboot" class="list-group-item list-group-item-action">Reboot</a>
+      <a href="#typography" class="list-group-item list-group-item-action">Typography</a>
+      <a href="#images" class="list-group-item list-group-item-action">Images</a>
+      <a href="#tables" class="list-group-item list-group-item-action">Tables</a>
+      <a href="#figures" class="list-group-item list-group-item-action">Figures</a>
+    </div>
+
+    <a href="#forms" class="list-group-item list-group-item-action fw-bold">Forms</a>
+    <div class="ms-3">
+      <a href="#formoverview" class="list-group-item list-group-item-action">Overview</a>
+      <a href="#formcontrol" class="list-group-item list-group-item-action">Form control</a>
+      <a href="#select" class="list-group-item list-group-item-action">Select</a>
+      <a href="#checksradios" class="list-group-item list-group-item-action">Checks & radios</a>
+      <a href="#range" class="list-group-item list-group-item-action">Range</a>
+      <a href="#inputgroup" class="list-group-item list-group-item-action">Input group</a>
+      <a href="#floatinglabels" class="list-group-item list-group-item-action">Floating labels</a>
+      <a href="#formlayout" class="list-group-item list-group-item-action">Layout</a>
+      <a href="#validation" class="list-group-item list-group-item-action">Validation</a>
+    </div>
+
+    <a href="#components" class="list-group-item list-group-item-action fw-bold">Components</a>
+    <div class="ms-3">
+      <a href="#accordion" class="list-group-item list-group-item-action">Accordion</a>
+      <a href="#alerts" class="list-group-item list-group-item-action">Alerts</a>
+      <a href="#badge" class="list-group-item list-group-item-action">Badge</a>
+      <a href="#breadcrumb" class="list-group-item list-group-item-action">Breadcrumb</a>
+      <a href="#buttons" class="list-group-item list-group-item-action">Buttons</a>
+      <a href="#buttongroup" class="list-group-item list-group-item-action">Button group</a>
+      <a href="#card" class="list-group-item list-group-item-action">Card</a>
+      <a href="#carousel" class="list-group-item list-group-item-action">Carousel</a>
+      <a href="#closebutton" class="list-group-item list-group-item-action">Close button</a>
+      <a href="#collapse" class="list-group-item list-group-item-action">Collapse</a>
+      <a href="#dropdowns" class="list-group-item list-group-item-action">Dropdowns</a>
+      <a href="#listgroup" class="list-group-item list-group-item-action">List group</a>
+      <a href="#modal" class="list-group-item list-group-item-action">Modal</a>
+      <a href="#navbar" class="list-group-item list-group-item-action">Navbar</a>
+      <a href="#navtabs" class="list-group-item list-group-item-action">Navs & tabs</a>
+      <a href="#offcanvas" class="list-group-item list-group-item-action">Offcanvas</a>
+      <a href="#pagination" class="list-group-item list-group-item-action">Pagination</a>
+      <a href="#placeholders" class="list-group-item list-group-item-action">Placeholders</a>
+      <a href="#popovers" class="list-group-item list-group-item-action">Popovers</a>
+      <a href="#progress" class="list-group-item list-group-item-action">Progress</a>
+      <a href="#scrollspy" class="list-group-item list-group-item-action">Scrollspy</a>
+      <a href="#spinners" class="list-group-item list-group-item-action">Spinners</a>
+      <a href="#toasts" class="list-group-item list-group-item-action">Toasts</a>
+      <a href="#tooltips" class="list-group-item list-group-item-action">Tooltips</a>
+    </div>
+
+    <a href="#helpers" class="list-group-item list-group-item-action fw-bold">Helpers</a>
+    <div class="ms-3">
+      <a href="#clearfix" class="list-group-item list-group-item-action">Clearfix</a>
+      <a href="#colorbg" class="list-group-item list-group-item-action">Color & background</a>
+      <a href="#coloredlinks" class="list-group-item list-group-item-action">Colored links</a>
+      <a href="#position" class="list-group-item list-group-item-action">Position</a>
+      <a href="#ratio" class="list-group-item list-group-item-action">Ratio</a>
+      <a href="#stacks" class="list-group-item list-group-item-action">Stacks</a>
+      <a href="#stretchedlink" class="list-group-item list-group-item-action">Stretched link</a>
+      <a href="#texttruncation" class="list-group-item list-group-item-action">Text truncation</a>
+      <a href="#verticalrule" class="list-group-item list-group-item-action">Vertical rule</a>
+      <a href="#visuallyhidden" class="list-group-item list-group-item-action">Visually hidden</a>
+    </div>
+
+    <a href="#utilities" class="list-group-item list-group-item-action fw-bold">Utilities</a>
+    <div class="ms-3">
+      <a href="#api" class="list-group-item list-group-item-action">API</a>
+      <a href="#background" class="list-group-item list-group-item-action">Background</a>
+      <a href="#borders" class="list-group-item list-group-item-action">Borders</a>
+      <a href="#colors" class="list-group-item list-group-item-action">Colors</a>
+      <a href="#display" class="list-group-item list-group-item-action">Display</a>
+      <a href="#flex" class="list-group-item list-group-item-action">Flex</a>
+      <a href="#float" class="list-group-item list-group-item-action">Float</a>
+      <a href="#interactions" class="list-group-item list-group-item-action">Interactions</a>
+      <a href="#opacity" class="list-group-item list-group-item-action">Opacity</a>
+      <a href="#overflow" class="list-group-item list-group-item-action">Overflow</a>
+      <a href="#positionutil" class="list-group-item list-group-item-action">Position</a>
+      <a href="#shadows" class="list-group-item list-group-item-action">Shadows</a>
+      <a href="#sizing" class="list-group-item list-group-item-action">Sizing</a>
+      <a href="#spacing" class="list-group-item list-group-item-action">Spacing</a>
+      <a href="#textutil" class="list-group-item list-group-item-action">Text</a>
+      <a href="#verticalalign" class="list-group-item list-group-item-action">Vertical align</a>
+      <a href="#visibility" class="list-group-item list-group-item-action">Visibility</a>
+    </div>
+
+    <a href="#extend" class="list-group-item list-group-item-action fw-bold">Extend</a>
+    <div class="ms-3">
+      <a href="#approach" class="list-group-item list-group-item-action">Approach</a>
+      <a href="#icons" class="list-group-item list-group-item-action">Icons</a>
+    </div>
+
+    <a href="#about" class="list-group-item list-group-item-action fw-bold">About</a>
+    <div class="ms-3">
+      <a href="#overviewabout" class="list-group-item list-group-item-action">Overview</a>
+      <a href="#team" class="list-group-item list-group-item-action">Team</a>
+      <a href="#brand" class="list-group-item list-group-item-action">Brand</a>
+      <a href="#license" class="list-group-item list-group-item-action">License</a>
+      <a href="#translations" class="list-group-item list-group-item-action">Translations</a>
+    </div>
+
+    <a href="#migration" class="list-group-item list-group-item-action fw-bold">Migration</a>
+  </div>
+</nav>
 
   <!-- Content -->
   <div class="content">
