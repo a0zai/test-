@@ -125,68 +125,82 @@ pre {
 <nav class="navbar navbar-dark custom-navbar fixed-top navbar-expand-lg shadow">
   <div class="container-fluid">
     <!-- الهاتف فقط -->
-    <div class="d-flex w-100 justify-content-center align-items-center d-lg-none">
+    <div class="d-flex w-100 justify-content-between align-items-center d-lg-none">
+      
+      <!-- يسار: همبرغر -->
       <button class="btn btn-outline-light" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasMenu" aria-controls="offcanvasMenu">
         <i class="bi bi-list"></i>
       </button>
+      
+      <!-- الوسط: B -->
       <span class="navbar-brand small-brand m-0">B</span>
+      
+      <!-- اليمين: بحث -->
       <button id="searchToggleMobile" class="btn btn-outline-light">
         <i class="bi bi-search"></i>
       </button>
     </div>
   </div>
 </nav>
-
-<!-- شريط أزرق في الأعلى فقط للديسكتوب -->
-<nav class="navbar navbar-dark bg-primary py-1 d-none d-lg-flex justify-content-center">
+<!-- شريط أزرق في الأعلى فقط للديسكتوب --><!-- الشريط الأزرق في الأعلى -->
+<nav class="navbar navbar-dark bg-primary py-2 d-none d-lg-flex justify-content-center">
   <span class="navbar-brand mb-0 h1 text-white">A0Z!</span>
 </nav>
 
-<!-- شريط بنفسجي تحته، للديسكتوب فقط -->
-<nav class="navbar navbar-dark d-none d-lg-flex align-items-center" style="background-color:#6f42c1; padding: 0.5rem 1rem;">
-  <a class="navbar-brand fs-3 fw-bold me-4" href="#">B</a>
+<!-- الشريط البنفسجي تحته -->
+<nav class="navbar navbar-dark d-none d-lg-flex" style="background-color:#6f42c1; padding: 0.75rem 0;">
+  <div class="container-fluid d-flex align-items-center justify-content-between">
 
-  <ul class="navbar-nav flex-row flex-wrap mb-0">
-    <li class="nav-item mx-2">
-      <a class="nav-link text-white" href="https://getbootstrap.com/docs/5.3/getting-started/introduction/" target="_blank">Docs</a>
-    </li>
-    <li class="nav-item mx-2">
-      <a class="nav-link text-white" href="https://getbootstrap.com/docs/5.3/examples/" target="_blank">Examples</a>
-    </li>
-    <li class="nav-item mx-2">
-      <a class="nav-link text-white" href="https://icons.getbootstrap.com/" target="_blank">Icons</a>
-    </li>
-    <li class="nav-item mx-2">
-      <a class="nav-link text-white" href="https://themes.getbootstrap.com/" target="_blank">Themes</a>
-    </li>
-    <li class="nav-item mx-2">
-      <a class="nav-link text-white" href="https://blog.getbootstrap.com/" target="_blank">Blog</a>
-    </li>
-  </ul>
+    <!-- يسار: B + الروابط -->
+    <div class="d-flex align-items-center">
+      <a class="navbar-brand fs-3 fw-bold me-4" href="#">B</a>
 
-  <!-- زر البحث -->
-  <div class="ms-auto d-flex align-items-center">
-    <button id="searchToggle" class="btn btn-outline-light me-2">
-      <i class="bi bi-search"></i>
-    </button>
-    <input id="searchInput" class="form-control d-none" type="search" placeholder="Search docs...">
+      <ul class="navbar-nav flex-row flex-wrap mb-0">
+        <li class="nav-item mx-2">
+          <a class="nav-link text-white" href="https://getbootstrap.com/docs/5.3/getting-started/introduction/" target="_blank">Docs</a>
+        </li>
+        <li class="nav-item mx-2">
+          <a class="nav-link text-white" href="https://getbootstrap.com/docs/5.3/examples/" target="_blank">Examples</a>
+        </li>
+        <li class="nav-item mx-2">
+          <a class="nav-link text-white" href="https://icons.getbootstrap.com/" target="_blank">Icons</a>
+        </li>
+        <li class="nav-item mx-2">
+          <a class="nav-link text-white" href="https://themes.getbootstrap.com/" target="_blank">Themes</a>
+        </li>
+        <li class="nav-item mx-2">
+          <a class="nav-link text-white" href="https://blog.getbootstrap.com/" target="_blank">Blog</a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- وسط: البحث في المنتصف -->
+    <div class="d-flex align-items-center flex-grow-1 justify-content-center">
+      <button id="searchToggle" class="btn btn-outline-light me-2">
+        <i class="bi bi-search"></i>
+      </button>
+      <input id="searchInput" class="form-control d-none" type="search" placeholder="Search docs...">
+    </div>
+
+    <!-- يمين: الإصدارات + GitHub -->
+    <div class="d-flex align-items-center">
+      <div class="btn-group me-2">
+        <button type="button" class="btn btn-outline-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+          v5.2
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end">
+          <li><a class="dropdown-item" href="#">v5.3 (Latest)</a></li>
+          <li><a class="dropdown-item" href="#">v5.2</a></li>
+          <li><a class="dropdown-item" href="#">v5.1</a></li>
+          <li><a class="dropdown-item" href="#">v4.6</a></li>
+        </ul>
+      </div>
+
+      <a href="https://github.com/twbs/bootstrap" target="_blank" class="btn" style="background-color:#6f42c1; color:#fff;">
+        <i class="bi bi-github"></i>
+      </a>
+    </div>
   </div>
-
-  <div class="btn-group ms-3">
-    <button type="button" class="btn btn-outline-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-      v5.2
-    </button>
-    <ul class="dropdown-menu dropdown-menu-end">
-      <li><a class="dropdown-item" href="https://getbootstrap.com/docs/5.3/" target="_blank">v5.3 (Latest)</a></li>
-      <li><a class="dropdown-item" href="https://getbootstrap.com/docs/5.2/" target="_blank">v5.2</a></li>
-      <li><a class="dropdown-item" href="https://getbootstrap.com/docs/5.1/" target="_blank">v5.1</a></li>
-      <li><a class="dropdown-item" href="https://getbootstrap.com/docs/4.6/" target="_blank">v4.6</a></li>
-    </ul>
-  </div>
-
-  <a href="https://github.com/twbs/bootstrap" target="_blank" class="btn ms-2" style="background-color:#6f42c1; color:#fff;">
-    <i class="bi bi-github"></i>
-  </a>
 </nav>
   <!-- Sidebar -->
 <nav class="sidebar d-none d-lg-block" id="sidebar-nav">
