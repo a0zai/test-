@@ -147,27 +147,40 @@
     </button>
 
     <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav me-3">
-        <li class="nav-item">
-          <a class="nav-link" href="#">Docs</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Themes</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Icons</a>
-        </li>
-      </ul>
-
-<form class="d-flex mx-auto w-50" role="search">
-  <button type="button" class="form-control text-start d-flex align-items-center search-button">
-    <i class="bi bi-search me-2"></i> Search docs...
+<ul class="navbar-nav me-3">
+  <li class="nav-item">
+    <a class="nav-link" href="https://getbootstrap.com/docs/5.3/getting-started/introduction/" target="_blank">Docs</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="https://getbootstrap.com/docs/5.3/examples/" target="_blank">Examples</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="https://icons.getbootstrap.com/" target="_blank">Icons</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="https://themes.getbootstrap.com/" target="_blank">Themes</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="https://blog.getbootstrap.com/" target="_blank">Blog</a>
+  </li>
+</ul>
+<div class="search-container ms-auto">
+  <button id="searchToggle" class="btn btn-outline-light">
+    <i class="bi bi-search"></i>
   </button>
-</form>
-
-      <a class="btn btn-outline-light ms-3" href="https://github.com/twbs/bootstrap" target="_blank">
-        <i class="bi bi-github"></i>
-      </a>
+  <input id="searchInput" class="form-control d-none" type="search" placeholder="Search docs...">
+</div>
+  <div class="btn-group">
+  <button type="button" class="btn btn-outline-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+    v5.2
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><a class="dropdown-item" href="https://getbootstrap.com/docs/5.3/" target="_blank">v5.3 (Latest)</a></li>
+    <li><a class="dropdown-item" href="https://getbootstrap.com/docs/5.2/" target="_blank">v5.2</a></li>
+    <li><a class="dropdown-item" href="https://getbootstrap.com/docs/5.1/" target="_blank">v5.1</a></li>
+    <li><a class="dropdown-item" href="https://getbootstrap.com/docs/4.6/" target="_blank">v4.6</a></li>
+  </ul>
+</div>
     </div>
   </div>
 </nav>
@@ -723,5 +736,16 @@ $font-family-sans-serif: "Helvetica Neue", Arial;</pre>
     <li><a href="https://www.reddit.com/r/bootstrap/" target="_blank">Bootstrap subreddit</a></li>
     <li><a href="https://stackoverflow.com/questions/tagged/bootstrap-5" target="_blank">Stack Overflow (bootstrap-5 tag)</a></li>
   </ul>
+  <script>
+  const toggleBtn = document.getElementById('searchToggle');
+  const searchInput = document.getElementById('searchInput');
+
+  toggleBtn.addEventListener('click', function() {
+    searchInput.classList.toggle('d-none');
+    if (!searchInput.classList.contains('d-none')) {
+      searchInput.focus();
+    }
+  });
+</script>
 </body>
 </html>
