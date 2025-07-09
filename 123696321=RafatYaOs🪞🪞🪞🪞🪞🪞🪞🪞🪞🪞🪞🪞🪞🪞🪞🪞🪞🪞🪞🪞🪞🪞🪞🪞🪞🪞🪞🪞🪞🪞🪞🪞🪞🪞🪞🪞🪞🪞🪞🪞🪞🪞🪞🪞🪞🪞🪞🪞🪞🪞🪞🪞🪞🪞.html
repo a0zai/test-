@@ -91,7 +91,10 @@ pre {
     .navbar-brand {
       font-size: 1rem;
     }
-
+.small-brand {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
     .navbar-toggler {
       padding: 0.25rem 0.5rem;
       font-size: 0.9rem;
@@ -107,58 +110,62 @@ pre {
 <body data-bs-spy="scroll" data-bs-target="#sidebar-nav" data-bs-offset="70">
 
   <!-- Navbar -->
- <nav class="navbar navbar-dark custom-navbar fixed-top navbar-expand-lg shadow">
-  <div class="container-fluid">
-      <a class="navbar-brand d-none d-lg-block" href="#">
-      <i class="bi bi-bootstrap"></i> MyBootstrapDocs
-    </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasMenu">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+<nav class="navbar navbar-dark custom-navbar fixed-top shadow px-2">
+  <div class="container-fluid justify-content-between">
 
-<div class="collapse navbar-collapse d-flex align-items-center" id="navbarNav">
-<ul class="navbar-nav me-3">
-  <li class="nav-item">
-    <a class="nav-link" href="https://getbootstrap.com/docs/5.3/getting-started/introduction/" target="_blank">Docs</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="https://getbootstrap.com/docs/5.3/examples/" target="_blank">Examples</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="https://icons.getbootstrap.com/" target="_blank">Icons</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="https://themes.getbootstrap.com/" target="_blank">Themes</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="https://blog.getbootstrap.com/" target="_blank">Blog</a>
-  </li>
-</ul>
- <div class="search-container mx-auto d-flex align-items-center" style="max-width: 300px; width: 100%;">
-  <button id="searchToggle" class="btn btn-outline-light">
-    <i class="bi bi-search"></i>
-  </button>
-  <input id="searchInput" class="form-control d-none" type="search" placeholder="Search docs...">
-</div>
-<div class="btn-group ms-auto">
-  <button type="button" class="btn btn-outline-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-    v5.2
-  </button>
-  <ul class="dropdown-menu dropdown-menu-end">
-    <li><a class="dropdown-item" href="https://getbootstrap.com/docs/5.3/" target="_blank">v5.3 (Latest)</a></li>
-    <li><a class="dropdown-item" href="https://getbootstrap.com/docs/5.2/" target="_blank">v5.2</a></li>
-    <li><a class="dropdown-item" href="https://getbootstrap.com/docs/5.1/" target="_blank">v5.1</a></li>
-    <li><a class="dropdown-item" href="https://getbootstrap.com/docs/4.6/" target="_blank">v4.6</a></li>
-  </ul>
-    <div class="d-flex align-items-center ms-auto">
-      <button id="searchToggle" class="btn btn-outline-light me-2">
-        <i class="bi bi-search"></i>
+    <!-- ✅ الهاتف فقط -->
+    <div class="d-flex w-100 justify-content-between align-items-center d-lg-none">
+      <!-- يسار: الهامبرغر -->
+      <button class="btn btn-outline-light" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasMenu">
+        <i class="bi bi-list"></i>
       </button>
-    <a href="https://github.com/twbs/bootstrap" target="_blank" class="btn ms-2" style="background-color:#6f42c1; color:#fff;">
-  <i class="bi bi-github"></i>
-</a>
-</div>
+
+      <!-- وسط: حرف B -->
+      <span class="navbar-brand small-brand mx-auto">B</span>
+
+      <!-- يمين: بحث وثلاث نقاط -->
+      <div class="d-flex align-items-center">
+        <button class="btn btn-outline-light me-2" type="button">
+          <i class="bi bi-search"></i>
+        </button>
+        <button class="btn btn-outline-light" type="button">
+          <i class="bi bi-three-dots"></i>
+        </button>
+      </div>
     </div>
+
+    <!-- ✅ الديسكتوب فقط -->
+    <div class="d-none d-lg-flex w-100 justify-content-between align-items-center">
+      <a class="navbar-brand" href="#">
+        <i class="bi bi-bootstrap"></i> MyBootstrapDocs
+      </a>
+      <ul class="navbar-nav flex-row me-3">
+        <li class="nav-item">
+          <a class="nav-link" href="https://getbootstrap.com/docs/5.3/getting-started/introduction/" target="_blank">Docs</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://getbootstrap.com/docs/5.3/examples/" target="_blank">Examples</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://icons.getbootstrap.com/" target="_blank">Icons</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://themes.getbootstrap.com/" target="_blank">Themes</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://blog.getbootstrap.com/" target="_blank">Blog</a>
+        </li>
+      </ul>
+      <div class="d-flex align-items-center">
+        <button class="btn btn-outline-light me-2" id="searchToggle">
+          <i class="bi bi-search"></i>
+        </button>
+        <a href="https://github.com/twbs/bootstrap" target="_blank" class="btn" style="background-color:#6f42c1; color:#fff;">
+          <i class="bi bi-github"></i>
+        </a>
+      </div>
+    </div>
+
   </div>
 </nav>
   <!-- Sidebar -->
@@ -425,21 +432,6 @@ ads via Carbon"&gt;
       <a href="#utilities" class="list-group-item list-group-item-action py-3 px-4 fs-5">Utilities</a>
       <a href="#extend" class="list-group-item list-group-item-action py-3 px-4 fs-5">Extend</a>
       <a href="#about" class="list-group-item list-group-item-action py-3 px-4 fs-5">About</a>
-          <button class="btn btn-outline-light d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasMenu">
-      <i class="bi bi-list"></i>
-    </button>
-
-    <!-- وسط: حرف B في الهاتف -->
-    <span class="navbar-brand mx-auto d-lg-none small-brand">B</span>
-
-    <!-- يمين: البحث والثلاث نقاط في الهاتف -->
-    <div class="d-flex align-items-center d-lg-none">
-      <button class="btn btn-outline-light me-2" type="button">
-        <i class="bi bi-search"></i>
-      </button>
-      <button class="btn btn-outline-light" type="button">
-        <i class="bi bi-three-dots"></i>
-      </button>
     </div>
   </div>
 </div>
