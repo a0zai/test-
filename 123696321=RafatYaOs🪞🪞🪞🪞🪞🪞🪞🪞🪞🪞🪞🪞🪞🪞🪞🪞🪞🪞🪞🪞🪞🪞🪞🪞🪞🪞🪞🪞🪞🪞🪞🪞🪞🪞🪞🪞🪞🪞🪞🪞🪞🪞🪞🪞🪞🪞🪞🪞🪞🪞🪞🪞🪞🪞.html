@@ -20,7 +20,7 @@
 
 .sidebar {
   position: fixed;
-  top: 96;
+  top: 96px;
   left: 0;
   width: 260px;
   height: calc(100vh - 96px);
@@ -56,12 +56,26 @@
 .sidebar .nav-link {
   color: #212529;
 }
-
+.top-bar-blue {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 40px;           
+  background-color: #0d6efd; /* أزرق Bootstrap */
+  color: white;
+  display: flex;
+  justify-content: center; /* لمحاذاة أفقية بالمنتصف */
+  align-items: center;     /* لمحاذاة رأسية بالمنتصف */
+  font-weight: bold;
+  font-size: 1.25rem;
+  z-index: 1100;
+}
 
 .content {
   margin-left: 260px;
   padding: 2rem 1rem;
-  margin-top: 56px;
+  margin-top: 96px;
 }
 
 .search-button {
@@ -141,6 +155,9 @@ pre {
       </button>
     </div>
   </div>
+</nav>
+<nav class="top-bar-blue">
+  <div class="top-bar-content">A0Z!</div>
 </nav>
 <!-- شريط بنفسجي كامل لسطح المكتب فقط -->
 <nav class="navbar navbar-dark d-none d-lg-flex navbar-expand-lg shadow" style="background-color:#6f42c1; padding: 0.39rem 1rem;">
