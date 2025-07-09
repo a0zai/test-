@@ -14,30 +14,16 @@
       font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     }
 
-.top-bar-blue {
-  background-color: #0d6efd; /* أزرق Bootstrap */
-  color: white;
-  height: 40px; /* ارتفاع الشريط */
-  line-height: 40px; /* لمحاذاة النص عمودياً */
-  font-weight: bold;
-  font-size: 1.25rem;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1050; /* أعلى من navbar */
-  text-align: center;
-  user-select: none;
-}
-
 .custom-navbar {
   background-color: #6f42c1;
+}
+
 .sidebar {
   position: fixed;
-  top: 96px; /* 40 (الشريط الأزرق) + 56 (الشريط البنفسجي) */
+  top: 56px;
   left: 0;
   width: 260px;
-  height: calc(100vh - 96px);
+  height: calc(100vh - 56px);
   padding-top: 1rem;
   background-color: #fff;
   border-right: 1px solid #ddd;
@@ -59,11 +45,9 @@
   text-decoration: none;
   font-size: 16px;
 }
-
 .sidebar a:hover {
   background-color: rgba(0, 0, 0, 0.05);
 }
-
 .sidebar a.active {
   background-color: #fff;
   font-weight: bold;
@@ -73,10 +57,11 @@
   color: #212529;
 }
 
+
 .content {
   margin-left: 260px;
   padding: 2rem 1rem;
-  margin-top: 96px; /* يبدأ المحتوى تحت الشريطين */
+  margin-top: 56px;
 }
 
 .search-button {
@@ -97,7 +82,19 @@
 .search-button i {
   font-size: 1rem;
 }
-
+.top-bar-blue {
+  background-color: #0d6efd; /* أزرق Bootstrap */
+  color: white;
+  height: 40px; /* ارتفاع الشريط */
+  line-height: 40px; /* لمحاذاة النص عمودياً */
+  font-weight: bold;
+  font-size: 1.25rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1050; /* أعلى من navbar */
+}
 pre {
   background-color: #0d6efd;
   padding: 1rem;
@@ -105,38 +102,37 @@ pre {
   overflow-x: auto;
 }
 
-@media (max-width: 768px) {
-  .navbar {
-    padding-top: 0.25rem;
-    padding-bottom: 0.25rem;
-  }
+  @media (max-width: 768px) {
+    .navbar {
+      padding-top: 0.25rem;
+      padding-bottom: 0.25rem;
+    }
 
-  .navbar-brand {
-    font-size: 1rem;
-  }
-  .small-brand {
-    font-size: 2.5rem;
-    font-weight: bold;
-    line-height: 1;
-  }
-
-  .navbar-toggler {
-    padding: 0.25rem 0.5rem;
-    font-size: 0.9rem;
-  }
+    .navbar-brand {
+      font-size: 1rem;
+    }
+    .small-brand {
+  font-size: 2.5rem;
+  font-weight: bold;
+  line-height: 1;
 }
 
-@media (max-width: 992px) {
+    .navbar-toggler {
+      padding: 0.25rem 0.5rem;
+      font-size: 0.9rem;
+    }
+  }
+  @media (max-width: 992px) {
   .content {
     margin-left: 0;
     padding: 1rem 0.5rem;
-    margin-top: 96px; /* حافظ على المسافة عند التبديل */
   }
 }
 </style>
+
 </head>
 <body data-bs-spy="scroll" data-bs-target="#sidebar-nav" data-bs-offset="70">
-<div class="top-bar-blue">A0Z!</div>
+
 <!-- Navbar الرئيسي (الهاتف فقط) -->
 <nav class="navbar navbar-dark custom-navbar fixed-top navbar-expand-lg shadow">
   <div class="container-fluid">
