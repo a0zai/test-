@@ -121,32 +121,29 @@ pre {
 </style>
 </head>
 <body data-bs-spy="scroll" data-bs-target="#sidebar-nav" data-bs-offset="70">
-
-  <!-- Navbar -->
-
+<!-- Navbar الرئيسي (الهاتف فقط) -->
 <nav class="navbar navbar-dark custom-navbar fixed-top navbar-expand-lg shadow">
   <div class="container-fluid">
-
     <!-- الهاتف فقط -->
     <div class="d-flex w-100 justify-content-center align-items-center d-lg-none">
-        <button class="btn btn-outline-light" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasMenu" aria-controls="offcanvasMenu">
-    <i class="bi bi-list"></i>
-  </button>
-
+      <button class="btn btn-outline-light" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasMenu" aria-controls="offcanvasMenu">
+        <i class="bi bi-list"></i>
+      </button>
       <span class="navbar-brand small-brand m-0">B</span>
-      
-        <button id="searchToggleMobile" class="btn btn-outline-light">
-    <i class="bi bi-search"></i>
-  </button>
+      <button id="searchToggleMobile" class="btn btn-outline-light">
+        <i class="bi bi-search"></i>
+      </button>
     </div>
+  </div>
+</nav>
 
-        <!-- الديسكتوب فقط -->
+<!-- شريط أزرق في الأعلى فقط للديسكتوب -->
 <nav class="navbar navbar-dark bg-primary py-1 d-none d-lg-flex justify-content-center">
   <span class="navbar-brand mb-0 h1 text-white">A0Z!</span>
 </nav>
 
-<!-- الشريط البنفسجي مع B والروابط -->
-<nav class="navbar navbar-dark" style="background-color:#6f42c1; padding: 0.5rem 1rem; d-none d-lg-flex align-items-center">
+<!-- شريط بنفسجي تحته، للديسكتوب فقط -->
+<nav class="navbar navbar-dark d-none d-lg-flex align-items-center" style="background-color:#6f42c1; padding: 0.5rem 1rem;">
   <a class="navbar-brand fs-3 fw-bold me-4" href="#">B</a>
 
   <ul class="navbar-nav flex-row flex-wrap mb-0">
@@ -175,22 +172,21 @@ pre {
     <input id="searchInput" class="form-control d-none" type="search" placeholder="Search docs...">
   </div>
 
-<div class="btn-group ms-auto">
-  <button type="button" class="btn btn-outline-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-    v5.2
-  </button>
-  <ul class="dropdown-menu dropdown-menu-end">
-    <li><a class="dropdown-item" href="https://getbootstrap.com/docs/5.3/" target="_blank">v5.3 (Latest)</a></li>
-    <li><a class="dropdown-item" href="https://getbootstrap.com/docs/5.2/" target="_blank">v5.2</a></li>
-    <li><a class="dropdown-item" href="https://getbootstrap.com/docs/5.1/" target="_blank">v5.1</a></li>
-    <li><a class="dropdown-item" href="https://getbootstrap.com/docs/4.6/" target="_blank">v4.6</a></li>
-  </ul>
-    <a href="https://github.com/twbs/bootstrap" target="_blank" class="btn ms-2" style="background-color:#6f42c1; color:#fff;">
-  <i class="bi bi-github"></i>
-</a>
-</div>
-    </div>
+  <div class="btn-group ms-3">
+    <button type="button" class="btn btn-outline-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+      v5.2
+    </button>
+    <ul class="dropdown-menu dropdown-menu-end">
+      <li><a class="dropdown-item" href="https://getbootstrap.com/docs/5.3/" target="_blank">v5.3 (Latest)</a></li>
+      <li><a class="dropdown-item" href="https://getbootstrap.com/docs/5.2/" target="_blank">v5.2</a></li>
+      <li><a class="dropdown-item" href="https://getbootstrap.com/docs/5.1/" target="_blank">v5.1</a></li>
+      <li><a class="dropdown-item" href="https://getbootstrap.com/docs/4.6/" target="_blank">v4.6</a></li>
+    </ul>
   </div>
+
+  <a href="https://github.com/twbs/bootstrap" target="_blank" class="btn ms-2" style="background-color:#6f42c1; color:#fff;">
+    <i class="bi bi-github"></i>
+  </a>
 </nav>
   <!-- Sidebar -->
 <nav class="sidebar d-none d-lg-block" id="sidebar-nav">
