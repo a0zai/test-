@@ -81,7 +81,10 @@
 .search-button i {
   font-size: 1rem;
 }
-
+.navbar.bg-purple {
+  margin-top: 8px; /* مثلاً */
+  background-color: #6f42c1; /* البنفسجي */
+}
 pre {
   background-color: #0d6efd;
   padding: 1rem;
@@ -138,25 +141,15 @@ pre {
     </div>
 
         <!-- الديسكتوب فقط -->
-    <nav class="navbar navbar-dark bg-primary py-1 d-none d-lg-flex justify-content-center">
+<nav class="navbar navbar-dark bg-primary py-1 d-none d-lg-flex justify-content-center">
   <span class="navbar-brand mb-0 h1 text-white">A0Z!</span>
 </nav>
-    <div class="collapse navbar-collapse d-none d-lg-flex align-items-center" id="navbarNav">
 
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">
-    </a>
-
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
-<nav class="navbar navbar-dark bg-primary py-2 d-none d-lg-flex align-items-center px-3">
-  <!-- حرف B على اليسار -->
+<!-- الشريط البنفسجي مع B والروابط -->
+<nav class="navbar navbar-dark" style="background-color:#6f42c1; padding: 0.5rem 1rem; d-none d-lg-flex align-items-center">
   <a class="navbar-brand fs-3 fw-bold me-4" href="#">B</a>
 
-  <!-- الروابط أفقياً -->
-  <ul class="navbar-nav flex-row flex-wrap">
+  <ul class="navbar-nav flex-row flex-wrap mb-0">
     <li class="nav-item mx-2">
       <a class="nav-link text-white" href="https://getbootstrap.com/docs/5.3/getting-started/introduction/" target="_blank">Docs</a>
     </li>
