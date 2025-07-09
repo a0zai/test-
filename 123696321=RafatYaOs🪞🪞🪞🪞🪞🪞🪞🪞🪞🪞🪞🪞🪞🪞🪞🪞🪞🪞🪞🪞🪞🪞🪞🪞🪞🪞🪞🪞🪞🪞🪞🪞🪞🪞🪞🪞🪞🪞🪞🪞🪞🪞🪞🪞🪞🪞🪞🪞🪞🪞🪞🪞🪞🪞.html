@@ -74,6 +74,10 @@
 .search-button i {
   font-size: 1rem;
 }
+#searchInput {
+  width: 200px;
+  transition: all 0.3s ease;
+}
 
 pre {
   background-color: #0d6efd;
@@ -135,39 +139,63 @@ pre {
     </div>
 
     <!-- ✅ الديسكتوب فقط -->
-    <div class="d-none d-lg-flex w-100 justify-content-between align-items-center">
-      <a class="navbar-brand" href="#">
-        <i class="bi bi-bootstrap"></i> MyBootstrapDocs
-      </a>
-      <ul class="navbar-nav flex-row me-3">
-        <li class="nav-item">
-          <a class="nav-link" href="https://getbootstrap.com/docs/5.3/getting-started/introduction/" target="_blank">Docs</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="https://getbootstrap.com/docs/5.3/examples/" target="_blank">Examples</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="https://icons.getbootstrap.com/" target="_blank">Icons</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="https://themes.getbootstrap.com/" target="_blank">Themes</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="https://blog.getbootstrap.com/" target="_blank">Blog</a>
-        </li>
-      </ul>
-      <div class="d-flex align-items-center">
-        <button class="btn btn-outline-light me-2" id="searchToggle">
-          <i class="bi bi-search"></i>
-        </button>
-        <a href="https://github.com/twbs/bootstrap" target="_blank" class="btn" style="background-color:#6f42c1; color:#fff;">
-          <i class="bi bi-github"></i>
-        </a>
-      </div>
-    </div>
+<!-- ديسكتوب فقط -->
+<div class="d-none d-lg-flex w-100 align-items-center">
 
+  <!-- يسار: الشعار -->
+  <a class="navbar-brand me-3" href="#">
+    <i class="bi bi-bootstrap"></i> MyBootstrapDocs
+  </a>
+
+  <!-- وسط: روابط التنقل + زر البحث -->
+  <ul class="navbar-nav flex-row flex-wrap align-items-center">
+    <li class="nav-item me-3">
+      <a class="nav-link" href="#">Docs</a>
+    </li>
+    <li class="nav-item me-3">
+      <a class="nav-link" href="#">Examples</a>
+    </li>
+    <li class="nav-item me-3">
+      <a class="nav-link" href="#">Icons</a>
+    </li>
+    <li class="nav-item me-3">
+      <a class="nav-link" href="#">Themes</a>
+    </li>
+    <li class="nav-item me-3">
+      <a class="nav-link" href="#">Blog</a>
+    </li>
+
+    <!-- زر البحث -->
+    <li class="nav-item">
+      <button id="searchToggle" class="btn btn-outline-light btn-sm">
+        <i class="bi bi-search"></i>
+      </button>
+    </li>
+
+    <!-- حقل البحث (يظهر عند الضغط) -->
+    <li class="nav-item ms-2" id="searchContainer" style="display: none;">
+      <input id="searchInput" class="form-control form-control-sm" type="search" placeholder="Search docs...">
+    </li>
+  </ul>
+
+  <!-- يمين: v5.2 + GitHub -->
+  <div class="d-flex align-items-center ms-auto">
+    <div class="btn-group me-2">
+      <button type="button" class="btn btn-outline-light btn-sm dropdown-toggle" data-bs-toggle="dropdown">
+        v5.2
+      </button>
+      <ul class="dropdown-menu dropdown-menu-end">
+        <li><a class="dropdown-item" href="#">v5.3 (Latest)</a></li>
+        <li><a class="dropdown-item" href="#">v5.2</a></li>
+        <li><a class="dropdown-item" href="#">v5.1</a></li>
+        <li><a class="dropdown-item" href="#">v4.6</a></li>
+      </ul>
+    </div>
+    <a href="https://github.com/twbs/bootstrap" target="_blank" class="btn btn-sm" style="background-color:#6f42c1; color:#fff;">
+      <i class="bi bi-github"></i>
+    </a>
   </div>
-</nav>
+</div>
   <!-- Sidebar -->
 <nav class="sidebar d-none d-lg-block" id="sidebar-nav">
   <div class="list-group list-group-flush">
@@ -438,14 +466,17 @@ ads via Carbon"&gt;
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-  <script>
-  const toggleBtn = document.getElementById('searchToggle');
+<script>
+  const searchToggle = document.getElementById('searchToggle');
+  const searchContainer = document.getElementById('searchContainer');
   const searchInput = document.getElementById('searchInput');
 
-  toggleBtn.addEventListener('click', function() {
-    searchInput.classList.toggle('d-none');
-    if (!searchInput.classList.contains('d-none')) {
+  searchToggle.addEventListener('click', function () {
+    if (searchContainer.style.display === 'none') {
+      searchContainer.style.display = 'inline-block';
       searchInput.focus();
+    } else {
+      searchContainer.style.display = 'none';
     }
   });
 </script>
