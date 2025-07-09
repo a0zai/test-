@@ -102,46 +102,19 @@ pre {
     margin-left: 0;
   }
 }
-.small-brand {
-  font-size: 1rem;
-  font-weight: bold;
-}
-
-@media (max-width: 768px) {
-  .navbar {
-    padding-top: 0.25rem;
-    padding-bottom: 0.25rem;
-  }
-  .navbar .btn, .navbar .navbar-brand {
-    font-size: 0.9rem;
-    padding: 0.25rem 0.5rem;
-  }
-}
 </style>
 </head>
 <body data-bs-spy="scroll" data-bs-target="#sidebar-nav" data-bs-offset="70">
 
   <!-- Navbar -->
-<nav class="navbar navbar-dark custom-navbar fixed-top shadow px-2">
-  <div class="container-fluid justify-content-between">
-
-    <!-- يسار: زر الهامبرغر في الهاتف -->
-    <button class="btn btn-outline-light d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasMenu">
-      <i class="bi bi-list"></i>
+ <nav class="navbar navbar-dark custom-navbar fixed-top navbar-expand-lg shadow">
+  <div class="container-fluid">
+      <a class="navbar-brand d-none d-lg-block" href="#">
+      <i class="bi bi-bootstrap"></i> MyBootstrapDocs
+    </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasMenu">
+      <span class="navbar-toggler-icon"></span>
     </button>
-
-    <!-- وسط: حرف B في الهاتف -->
-    <span class="navbar-brand mx-auto d-lg-none small-brand">B</span>
-
-    <!-- يمين: البحث والثلاث نقاط في الهاتف -->
-    <div class="d-flex align-items-center d-lg-none">
-      <button class="btn btn-outline-light me-2" type="button">
-        <i class="bi bi-search"></i>
-      </button>
-      <button class="btn btn-outline-light" type="button">
-        <i class="bi bi-three-dots"></i>
-      </button>
-    </div>
 
 <div class="collapse navbar-collapse d-flex align-items-center" id="navbarNav">
 <ul class="navbar-nav me-3">
@@ -188,7 +161,7 @@ pre {
     </div>
   </div>
 </nav>
- <!-- Sidebar -->
+  <!-- Sidebar -->
 <nav class="sidebar d-none d-lg-block" id="sidebar-nav">
   <div class="list-group list-group-flush">
 
@@ -452,6 +425,21 @@ ads via Carbon"&gt;
       <a href="#utilities" class="list-group-item list-group-item-action py-3 px-4 fs-5">Utilities</a>
       <a href="#extend" class="list-group-item list-group-item-action py-3 px-4 fs-5">Extend</a>
       <a href="#about" class="list-group-item list-group-item-action py-3 px-4 fs-5">About</a>
+          <button class="btn btn-outline-light d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasMenu">
+      <i class="bi bi-list"></i>
+    </button>
+
+    <!-- وسط: حرف B في الهاتف -->
+    <span class="navbar-brand mx-auto d-lg-none small-brand">B</span>
+
+    <!-- يمين: البحث والثلاث نقاط في الهاتف -->
+    <div class="d-flex align-items-center d-lg-none">
+      <button class="btn btn-outline-light me-2" type="button">
+        <i class="bi bi-search"></i>
+      </button>
+      <button class="btn btn-outline-light" type="button">
+        <i class="bi bi-three-dots"></i>
+      </button>
     </div>
   </div>
 </div>
