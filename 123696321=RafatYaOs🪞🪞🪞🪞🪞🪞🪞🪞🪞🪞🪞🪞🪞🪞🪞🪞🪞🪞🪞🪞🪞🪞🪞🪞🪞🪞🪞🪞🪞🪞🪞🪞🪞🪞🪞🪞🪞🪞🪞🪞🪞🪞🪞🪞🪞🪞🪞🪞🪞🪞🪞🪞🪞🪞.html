@@ -14,10 +14,6 @@
       font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     }
 
-.navbar-brand {
-  font-weight: bold;
-}
-
 .custom-navbar {
   background-color: #6f42c1;
 }
@@ -86,15 +82,22 @@ pre {
   overflow-x: auto;
 }
 
-@media (max-width: 768px) {
-  .sidebar {
-    display: none;
+  @media (max-width: 768px) {
+    .navbar {
+      padding-top: 0.25rem;
+      padding-bottom: 0.25rem;
+    }
+
+    .navbar-brand {
+      font-size: 1rem;
+    }
+
+    .navbar-toggler {
+      padding: 0.25rem 0.5rem;
+      font-size: 0.9rem;
+    }
   }
-  .content {
-    margin-left: 0;
-  }
-}
-  </style>
+</style>
 </head>
 <body data-bs-spy="scroll" data-bs-target="#sidebar-nav" data-bs-offset="70">
 
