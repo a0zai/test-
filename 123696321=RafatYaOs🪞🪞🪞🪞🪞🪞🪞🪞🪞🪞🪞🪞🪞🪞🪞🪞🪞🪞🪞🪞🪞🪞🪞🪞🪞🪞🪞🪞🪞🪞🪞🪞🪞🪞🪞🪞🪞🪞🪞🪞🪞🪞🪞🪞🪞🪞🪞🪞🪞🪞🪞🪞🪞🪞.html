@@ -34,12 +34,30 @@ let shouldSpeak = true;
 const startBtn = document.getElementById('startBtn');
 const output = document.getElementById('output');
 
+// انتظار تحميل أصوات النظام
+function loadVoices() {
+  return new Promise(resolve => {
+    let voices = speechSynthesis.getVoices();
+    if (voices.length) {
+      resolve(voices);
+    } else {
+      speechSynthesis.onvoiceschanged = () => {
+        voices = speechSynthesis.getVoices();
+        resolve(voices);
+      };
+    }
+  });
+}
+
 function speakLine(text) {
-  if (!shouldSpeak) return;
+  if (!shouldSpeak || !text) return;
+
+  speechSynthesis.cancel(); // أوقف أي نطق سابق
+
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = 'en-US';
-  utterance.rate = 0.6;
-  utterance.pitch = 0.5;
+  utterance.rate = 0.7;    // سرعة معقولة
+  utterance.pitch = 0.3;   // نبرة منخفضة تعطي صوت روبوتي أكثر
   speechSynthesis.speak(utterance);
 }
 
@@ -90,13 +108,16 @@ async function getGeolocation() {
 
 async function main() {
   startBtn.disabled = true;
+
+  await loadVoices(); // انتظر الأصوات لتحميلها
+
   let ipInfo = await getIPData();
   let gpsCoords = null;
 
   try {
     gpsCoords = await getGeolocation();
   } catch (e) {
-    // GPS denied or error
+    // خطأ أو رفض الإذن
   }
 
   const now = new Date();
