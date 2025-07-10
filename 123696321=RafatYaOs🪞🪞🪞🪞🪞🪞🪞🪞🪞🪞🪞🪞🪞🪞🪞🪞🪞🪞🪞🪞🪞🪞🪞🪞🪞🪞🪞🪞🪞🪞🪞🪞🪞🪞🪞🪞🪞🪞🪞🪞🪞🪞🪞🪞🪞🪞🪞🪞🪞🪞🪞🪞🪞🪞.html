@@ -1,509 +1,130 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Bootstrap Docs Clone</title>
-
-  <!-- Bootstrap 5 -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-  <style>
-    body {
-      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    }
-
-.custom-navbar {
-  background-color: #6f42c1;
-}
-
-.sidebar {
-  position: fixed;
-  top: 96px;
-  left: 0;
-  width: 260px;
-  height: calc(100vh - 96px);
-  padding-top: 1rem;
-  background-color: #fff;
-  border-right: 1px solid #ddd;
-  overflow-y: auto;
-}
-
-.sidebar .nav-link:hover,
-.sidebar .nav-link.active {
-  background-color: rgba(0, 0, 0, 0.05);
-  color: #212529;
-}
-
-.sidebar a {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  color: #212529;
-  text-decoration: none;
-  font-size: 16px;
-}
-.sidebar a:hover {
-  background-color: rgba(0, 0, 0, 0.05);
-}
-.sidebar a.active {
-  background-color: #fff;
-  font-weight: bold;
-}
-.sidebar a:focus {
-  outline: none;
-  box-shadow: none;
-}
-
-.sidebar .nav-link {
-  color: #212529;
-}
-.top-bar-blue {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 20px;
-  line-height: 20px;
-  background-color: #0d6efd; /* أزرق Bootstrap */
-  color: white;
-  display: flex;
-  justify-content: center; /* لمحاذاة أفقية بالمنتصف */
-  align-items: center;     /* لمحاذاة رأسية بالمنتصف */
-  font-weight: bold;
-  font-size: 1rem;
-  z-index: 1100;
-}
-
-.content {
-  margin-left: 260px;
-  padding: 2rem 1rem;
-  margin-top: 96px;
-}
-
-.search-button {
-  background-color: #6f42c1;
-  color: #fff;
-  border: none;
-  cursor: pointer;
-  height: 38px;
-  padding: 0 12px;
-  font-size: 0.9rem;
-  border-radius: 0.375rem;
-}
-
-.search-button:hover {
-  background-color: #59359b;
-}
-
-.search-button i {
-  font-size: 1rem;
-}
-
-pre {
-  background-color: #0d6efd;
-  padding: 1rem;
-  border-radius: 0.25rem;
-  overflow-x: auto;
-}
-
-  @media (max-width: 768px) {
-    .navbar {
-      padding-top: 0.25rem;
-      padding-bottom: 0.25rem;
-    }
-
-    .navbar-brand {
-      font-size: 1rem;
-    }
-    .small-brand {
-  font-size: 2.5rem;
-  font-weight: bold;
-  line-height: 1;
-}
-
-    .navbar-toggler {
-      padding: 0.25rem 0.5rem;
-      font-size: 0.9rem;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A∞Z | Mirror Interface</title>
+<style>
+  body {
+    background: url('IMG_9055.jpeg') no-repeat center center fixed;
+    background-size: cover;
+    color: #00ffcc;
+    font-family: "Courier New", Courier, monospace;
+    padding: 2em;
+    overflow: hidden;
+    backdrop-filter: brightness(0.7);
   }
-  @media (max-width: 992px) {
-  .content {
-    margin-left: 0;
-    padding: 1rem 0.5rem;
+  .line {
+    margin-bottom: 1em;
+    opacity: 0;
+    animation: fadeIn 1s forwards;
   }
-}
+  @keyframes fadeIn {
+    to { opacity: 1; }
+  }
 </style>
-
 </head>
-<body data-bs-spy="scroll" data-bs-target="#sidebar-nav" data-bs-offset="70">
-
-<!-- Navbar الرئيسي (الهاتف فقط) -->
-<nav class="navbar navbar-dark custom-navbar fixed-top navbar-expand-lg shadow">
-  <div class="container-fluid">
-    <!-- الهاتف فقط -->
-    <div class="d-flex w-100 justify-content-between align-items-center d-lg-none">
-      
-      <!-- يسار: همبرغر -->
-      <button class="btn btn-outline-light" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasMenu" aria-controls="offcanvasMenu">
-        <i class="bi bi-list"></i>
-      </button>
-      
-      <!-- الوسط: B -->
-      <span class="navbar-brand small-brand m-0">B</span>
-      
-      <!-- اليمين: بحث -->
-      <button id="searchToggleMobile" class="btn btn-outline-light">
-        <i class="bi bi-search"></i>
-      </button>
-    </div>
-  </div>
-</nav>
-<nav class="top-bar-blue">
-  <div class="top-bar-content">!A0ZAI!</div>
-</nav>
-<!-- شريط بنفسجي كامل لسطح المكتب فقط -->
-<nav class="navbar navbar-dark d-none d-lg-flex navbar-expand-lg shadow" style="background-color:#6f42c1; padding: 0.39rem 1rem;">
-  <div class="container-fluid">
-
-    <!-- B + الروابط -->
-    <a class="navbar-brand fs-3 fw-bold me-4" href="#">B</a>
-
-    <ul class="navbar-nav flex-row flex-wrap me-3">
-      <li class="nav-item mx-2">
-        <a class="nav-link text-white" href="https://getbootstrap.com/docs/5.3/getting-started/introduction/" target="_blank">Docs</a>
-      </li>
-      <li class="nav-item mx-2">
-        <a class="nav-link text-white" href="https://getbootstrap.com/docs/5.3/examples/" target="_blank">Examples</a>
-      </li>
-      <li class="nav-item mx-2">
-        <a class="nav-link text-white" href="https://icons.getbootstrap.com/" target="_blank">Icons</a>
-      </li>
-      <li class="nav-item mx-2">
-        <a class="nav-link text-white" href="https://themes.getbootstrap.com/" target="_blank">Themes</a>
-      </li>
-      <li class="nav-item mx-2">
-        <a class="nav-link text-white" href="https://blog.getbootstrap.com/" target="_blank">Blog</a>
-      </li>
-    </ul>
-
-    <!-- البحث في المنتصف -->
-    <div class="search-container mx-auto d-flex align-items-center" style="max-width: 300px; width: 100%;">
-      <button id="searchToggle" class="btn btn-outline-light me-2">
-        <i class="bi bi-search"></i>
-      </button>
-      <input id="searchInput" class="form-control d-none" type="search" placeholder="Search docs...">
-    </div>
-
-    <!-- الإصدارات و GitHub -->
-    <div class="d-flex align-items-center">
-      <div class="btn-group me-2">
-        <button type="button" class="btn btn-outline-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-          v5.2
-        </button>
-        <ul class="dropdown-menu dropdown-menu-end">
-          <li><a class="dropdown-item" href="#">v5.3 (Latest)</a></li>
-          <li><a class="dropdown-item" href="#">v5.2</a></li>
-          <li><a class="dropdown-item" href="#">v5.1</a></li>
-          <li><a class="dropdown-item" href="#">v4.6</a></li>
-        </ul>
-      </div>
-      <a href="https://github.com/twbs/bootstrap" target="_blank" class="btn" style="background-color:#6f42c1; color:#fff;">
-        <i class="bi bi-github"></i>
-      </a>
-    </div>
-  </div>
-</nav>
-  <!-- Sidebar -->
-<nav class="sidebar d-none d-lg-block" id="sidebar-nav">
-  <div class="list-group list-group-flush">
-
-    <a href="#gettingstarted" class="list-group-item list-group-item-action fw-bold">Getting started</a>
-    <div class="ms-3">
-      <a href="#introduction" class="list-group-item list-group-item-action">Introduction</a>
-      <a href="#download" class="list-group-item list-group-item-action">Download</a>
-      <a href="#contents" class="list-group-item list-group-item-action">Contents</a>
-      <a href="#browsers" class="list-group-item list-group-item-action">Browsers & devices</a>
-      <a href="#javascript" class="list-group-item list-group-item-action">JavaScript</a>
-      <a href="#webpack" class="list-group-item list-group-item-action">Webpack</a>
-      <a href="#parcel" class="list-group-item list-group-item-action">Parcel</a>
-      <a href="#vite" class="list-group-item list-group-item-action">Vite</a>
-      <a href="#accessibility" class="list-group-item list-group-item-action">Accessibility</a>
-      <a href="#rfs" class="list-group-item list-group-item-action">RFS</a>
-      <a href="#rtl" class="list-group-item list-group-item-action">RTL</a>
-      <a href="#contribute" class="list-group-item list-group-item-action">Contribute</a>
-    </div>
-
-    <a href="#customize" class="list-group-item list-group-item-action fw-bold">Customize</a>
-    <div class="ms-3">
-      <a href="#overview" class="list-group-item list-group-item-action">Overview</a>
-      <a href="#sass" class="list-group-item list-group-item-action">Sass</a>
-      <a href="#options" class="list-group-item list-group-item-action">Options</a>
-      <a href="#color" class="list-group-item list-group-item-action">Color</a>
-      <a href="#components" class="list-group-item list-group-item-action">Components</a>
-      <a href="#cssvariables" class="list-group-item list-group-item-action">CSS variables</a>
-      <a href="#optimize" class="list-group-item list-group-item-action">Optimize</a>
-    </div>
-
-    <a href="#layout" class="list-group-item list-group-item-action fw-bold">Layout</a>
-    <div class="ms-3">
-      <a href="#breakpoints" class="list-group-item list-group-item-action">Breakpoints</a>
-      <a href="#containers" class="list-group-item list-group-item-action">Containers</a>
-      <a href="#grid" class="list-group-item list-group-item-action">Grid</a>
-      <a href="#columns" class="list-group-item list-group-item-action">Columns</a>
-      <a href="#gutters" class="list-group-item list-group-item-action">Gutters</a>
-      <a href="#utilities" class="list-group-item list-group-item-action">Utilities</a>
-      <a href="#zindex" class="list-group-item list-group-item-action">Z-index</a>
-      <a href="#cssgrid" class="list-group-item list-group-item-action">CSS Grid</a>
-    </div>
-
-    <a href="#content" class="list-group-item list-group-item-action fw-bold">Content</a>
-    <div class="ms-3">
-      <a href="#reboot" class="list-group-item list-group-item-action">Reboot</a>
-      <a href="#typography" class="list-group-item list-group-item-action">Typography</a>
-      <a href="#images" class="list-group-item list-group-item-action">Images</a>
-      <a href="#tables" class="list-group-item list-group-item-action">Tables</a>
-      <a href="#figures" class="list-group-item list-group-item-action">Figures</a>
-    </div>
-
-    <a href="#forms" class="list-group-item list-group-item-action fw-bold">Forms</a>
-    <div class="ms-3">
-      <a href="#formoverview" class="list-group-item list-group-item-action">Overview</a>
-      <a href="#formcontrol" class="list-group-item list-group-item-action">Form control</a>
-      <a href="#select" class="list-group-item list-group-item-action">Select</a>
-      <a href="#checksradios" class="list-group-item list-group-item-action">Checks & radios</a>
-      <a href="#range" class="list-group-item list-group-item-action">Range</a>
-      <a href="#inputgroup" class="list-group-item list-group-item-action">Input group</a>
-      <a href="#floatinglabels" class="list-group-item list-group-item-action">Floating labels</a>
-      <a href="#formlayout" class="list-group-item list-group-item-action">Layout</a>
-      <a href="#validation" class="list-group-item list-group-item-action">Validation</a>
-    </div>
-
-    <a href="#components" class="list-group-item list-group-item-action fw-bold">Components</a>
-    <div class="ms-3">
-      <a href="#accordion" class="list-group-item list-group-item-action">Accordion</a>
-      <a href="#alerts" class="list-group-item list-group-item-action">Alerts</a>
-      <a href="#badge" class="list-group-item list-group-item-action">Badge</a>
-      <a href="#breadcrumb" class="list-group-item list-group-item-action">Breadcrumb</a>
-      <a href="#buttons" class="list-group-item list-group-item-action">Buttons</a>
-      <a href="#buttongroup" class="list-group-item list-group-item-action">Button group</a>
-      <a href="#card" class="list-group-item list-group-item-action">Card</a>
-      <a href="#carousel" class="list-group-item list-group-item-action">Carousel</a>
-      <a href="#closebutton" class="list-group-item list-group-item-action">Close button</a>
-      <a href="#collapse" class="list-group-item list-group-item-action">Collapse</a>
-      <a href="#dropdowns" class="list-group-item list-group-item-action">Dropdowns</a>
-      <a href="#listgroup" class="list-group-item list-group-item-action">List group</a>
-      <a href="#modal" class="list-group-item list-group-item-action">Modal</a>
-      <a href="#navbar" class="list-group-item list-group-item-action">Navbar</a>
-      <a href="#navtabs" class="list-group-item list-group-item-action">Navs & tabs</a>
-      <a href="#offcanvas" class="list-group-item list-group-item-action">Offcanvas</a>
-      <a href="#pagination" class="list-group-item list-group-item-action">Pagination</a>
-      <a href="#placeholders" class="list-group-item list-group-item-action">Placeholders</a>
-      <a href="#popovers" class="list-group-item list-group-item-action">Popovers</a>
-      <a href="#progress" class="list-group-item list-group-item-action">Progress</a>
-      <a href="#scrollspy" class="list-group-item list-group-item-action">Scrollspy</a>
-      <a href="#spinners" class="list-group-item list-group-item-action">Spinners</a>
-      <a href="#toasts" class="list-group-item list-group-item-action">Toasts</a>
-      <a href="#tooltips" class="list-group-item list-group-item-action">Tooltips</a>
-    </div>
-
-    <a href="#helpers" class="list-group-item list-group-item-action fw-bold">Helpers</a>
-    <div class="ms-3">
-      <a href="#clearfix" class="list-group-item list-group-item-action">Clearfix</a>
-      <a href="#colorbg" class="list-group-item list-group-item-action">Color & background</a>
-      <a href="#coloredlinks" class="list-group-item list-group-item-action">Colored links</a>
-      <a href="#position" class="list-group-item list-group-item-action">Position</a>
-      <a href="#ratio" class="list-group-item list-group-item-action">Ratio</a>
-      <a href="#stacks" class="list-group-item list-group-item-action">Stacks</a>
-      <a href="#stretchedlink" class="list-group-item list-group-item-action">Stretched link</a>
-      <a href="#texttruncation" class="list-group-item list-group-item-action">Text truncation</a>
-      <a href="#verticalrule" class="list-group-item list-group-item-action">Vertical rule</a>
-      <a href="#visuallyhidden" class="list-group-item list-group-item-action">Visually hidden</a>
-    </div>
-
-    <a href="#utilities" class="list-group-item list-group-item-action fw-bold">Utilities</a>
-    <div class="ms-3">
-      <a href="#api" class="list-group-item list-group-item-action">API</a>
-      <a href="#background" class="list-group-item list-group-item-action">Background</a>
-      <a href="#borders" class="list-group-item list-group-item-action">Borders</a>
-      <a href="#colors" class="list-group-item list-group-item-action">Colors</a>
-      <a href="#display" class="list-group-item list-group-item-action">Display</a>
-      <a href="#flex" class="list-group-item list-group-item-action">Flex</a>
-      <a href="#float" class="list-group-item list-group-item-action">Float</a>
-      <a href="#interactions" class="list-group-item list-group-item-action">Interactions</a>
-      <a href="#opacity" class="list-group-item list-group-item-action">Opacity</a>
-      <a href="#overflow" class="list-group-item list-group-item-action">Overflow</a>
-      <a href="#positionutil" class="list-group-item list-group-item-action">Position</a>
-      <a href="#shadows" class="list-group-item list-group-item-action">Shadows</a>
-      <a href="#sizing" class="list-group-item list-group-item-action">Sizing</a>
-      <a href="#spacing" class="list-group-item list-group-item-action">Spacing</a>
-      <a href="#textutil" class="list-group-item list-group-item-action">Text</a>
-      <a href="#verticalalign" class="list-group-item list-group-item-action">Vertical align</a>
-      <a href="#visibility" class="list-group-item list-group-item-action">Visibility</a>
-    </div>
-
-    <a href="#extend" class="list-group-item list-group-item-action fw-bold">Extend</a>
-    <div class="ms-3">
-      <a href="#approach" class="list-group-item list-group-item-action">Approach</a>
-      <a href="#icons" class="list-group-item list-group-item-action">Icons</a>
-    </div>
-
-    <a href="#about" class="list-group-item list-group-item-action fw-bold">About</a>
-    <div class="ms-3">
-      <a href="#overviewabout" class="list-group-item list-group-item-action">Overview</a>
-      <a href="#team" class="list-group-item list-group-item-action">Team</a>
-      <a href="#brand" class="list-group-item list-group-item-action">Brand</a>
-      <a href="#license" class="list-group-item list-group-item-action">License</a>
-      <a href="#translations" class="list-group-item list-group-item-action">Translations</a>
-    </div>
-
-    <a href="#migration" class="list-group-item list-group-item-action fw-bold">Migration</a>
-  </div>
-</nav>
-  <!-- Content -->
-  <div class="content">
-    <section id="gettingstarted">
-      <h2>Getting Started</h2>
-      <p>Bootstrap is a powerful, feature-packed frontend toolkit. Build anything—from prototype to production—in minutes.</p>
-      <a href="https://www.carbonads.net/?utm_source=getbootstrapcom&utm_medium=ad_via_link&utm_campaign=in_unit&utm_term=carbon" target="_blank">
-  <img src="https://github.com/a0zai.png" style="max-width: 99px;" class="img-fluid rounded shadow mb-3 mx-auto d-block" alt="Getting Started Example">
-</a>
-      <pre>&lt;Design and Development tips in your inbox. Every weekday.
-ads via Carbon"&gt;
-
-    </section>
-    <hr>
-  <h4 class="mt-5">Quick start</h4>
-  <p>
-    Get started by including Bootstrap’s production-ready CSS and JavaScript via CDN without the need for any build steps.
-    See it in practice with this <a href="https://codepen.io/team/bootstrap/pen/qBamdLj" target="_blank">Bootstrap CodePen demo</a>.
-  </p>
-
-  <ol>
-    <li>
-      Create a new <code>index.html</code> file. Include the <code>&lt;meta name="viewport"&gt;</code> tag for proper responsive behavior.
-      <pre class="bg-light p-3"><code>&lt;!doctype html&gt;
-&lt;html lang="en"&gt;
-  &lt;head&gt;
-    &lt;meta charset="utf-8"&gt;
-    &lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;
-    &lt;title&gt;Bootstrap demo&lt;/title&gt;
-  &lt;/head&gt;
-  &lt;body&gt;
-    &lt;h1&gt;Hello, world!&lt;/h1&gt;
-  &lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-    </li>
-    <li>
-      Include Bootstrap’s CSS and JS via CDN:
-      <pre class="bg-light p-3"><code>&lt;link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"&gt;
-</code></pre>
-  </p>
-
-  <h5 class="mt-4">CDN links</h5>
-  <ul>
-    <li>
-      CSS:
-      <a href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" target="_blank">
-        https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css
-      </a>
-    </li>
-    <li>
-      JS:
-      <a href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" target="_blank">
-        https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js
-      </a>
-    </li>
-  </ul>
-
-  <h5 class="mt-4">Next steps</h5>
-  <ul>
-    <li><a href="https://getbootstrap.com/docs/5.3/getting-started/introduction/#important-globals" target="_blank">Read about important global environment settings</a></li>
-    <li><a href="https://getbootstrap.com/docs/5.3/getting-started/contents/" target="_blank">What’s included in Bootstrap</a></li>
-    <li><a href="https://getbootstrap.com/docs/5.3/getting-started/download/#package-managers" target="_blank">Building with Bootstrap via package manager</a></li>
-    <li><a href="https://getbootstrap.com/docs/5.3/getting-started/webpack/" target="_blank">Using Bootstrap as a module</a></li>
-  </ul>
-
-  <h5 class="mt-4">JS components</h5>
-  <p>Components that require JavaScript and Popper:</p>
-  <ul>
-    <li>Accordions (Collapse)</li>
-    <li>Alerts (dismiss)</li>
-    <li>Buttons (toggle states)</li>
-    <li>Carousel</li>
-    <li>Collapse</li>
-    <li>Dropdowns (needs Popper)</li>
-    <li>Modals</li>
-    <li>Navbar (Collapse and Offcanvas)</li>
-    <li>Navs (Tab plugin)</li>
-    <li>Offcanvas</li>
-    <li>Scrollspy</li>
-    <li>Toasts</li>
-    <li>Tooltips and popovers (needs Popper)</li>
-  </ul>
-
-  <h5 class="mt-4">Important globals</h5>
-  <ul>
-    <li>HTML5 doctype: <code>&lt;!doctype html&gt;</code></li>
-    <li>Viewport meta: <code>&lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;</code></li>
-    <li>Box-sizing: <code>border-box</code></li>
-    <li>Reboot: CSS resets and standardizations</li>
-  </ul>
-
-  <h5 class="mt-4">Community</h5>
-  <ul>
-    <li><a href="https://blog.getbootstrap.com/" target="_blank">The Official Bootstrap Blog</a></li>
-    <li><a href="https://github.com/twbs/bootstrap/discussions" target="_blank">GitHub Discussions</a></li>
-    <li><a href="https://discord.gg/bootstrap" target="_blank">Community Discord</a></li>
-    <li><a href="https://www.reddit.com/r/bootstrap/" target="_blank">Bootstrap subreddit</a></li>
-    <li><a href="https://stackoverflow.com/questions/tagged/bootstrap-5" target="_blank">Stack Overflow (bootstrap-5 tag)</a></li>
-  </ul>
-  
-<!-- Offcanvas (for mobile) -->
-<div class="d-flex justify-content-center mt-2 px-3 d-lg-none">
-  <input id="searchInputMobile" class="form-control d-none" type="search" placeholder="Search docs...">
-</div>
-<div class="offcanvas offcanvas-start bg-white" tabindex="-1" id="offcanvasMenu" aria-labelledby="offcanvasMenuLabel">
-  <div class="offcanvas-header border-bottom">
-    <h5 class="offcanvas-title" id="offcanvasMenuLabel">Menu</h5>
-    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-  </div>
-  <div class="offcanvas-body p-0">
-    <div class="list-group list-group-flush">
-      <a href="https://getbootstrap.com/docs/5.3/getting-started/introduction/" target="_blank" class="list-group-item list-group-item-action py-3 px-4 fs-5">Docs</a>
-      <a href="https://getbootstrap.com/docs/5.3/examples/" target="_blank" class="list-group-item list-group-item-action py-3 px-4 fs-5">Examples</a>
-      <a href="https://icons.getbootstrap.com/" target="_blank" class="list-group-item list-group-item-action py-3 px-4 fs-5">Icons</a>
-      <a href="https://themes.getbootstrap.com/" target="_blank" class="list-group-item list-group-item-action py-3 px-4 fs-5">Themes</a>
-      <a href="https://blog.getbootstrap.com/" target="_blank" class="list-group-item list-group-item-action py-3 px-4 fs-5">Blog</a>
-    </div>
-  </div>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<body>
+  <div id="output"></div>
 
   <script>
-  const toggleBtn = document.getElementById('searchToggle');
-  const searchInput = document.getElementById('searchInput');
-
-  toggleBtn.addEventListener('click', function() {
-    searchInput.classList.toggle('d-none');
-    if (!searchInput.classList.contains('d-none')) {
-      searchInput.focus();
+    async function delayPrint(lines, delay = 1200) {
+      const container = document.getElementById("output");
+      lines.forEach((line, index) => {
+        setTimeout(() => {
+          const div = document.createElement("div");
+          div.className = "line";
+          div.style.animationDelay = (index * 0.5) + "s";
+          div.textContent = line;
+          container.appendChild(div);
+        }, index * delay);
+      });
     }
-  });
-</script>
-<script>
-  const toggleBtnMobile = document.getElementById('searchToggleMobile');
-  const searchInputMobile = document.getElementById('searchInputMobile');
 
-  toggleBtnMobile?.addEventListener('click', () => {
-    searchInputMobile.classList.toggle('d-none');
-    if (!searchInputMobile.classList.contains('d-none')) {
-      searchInputMobile.focus();
+    async function getIPData() {
+      try {
+        const response = await fetch("https://ipapi.co/json/");
+        if (!response.ok) throw new Error("IP API Error");
+        return await response.json();
+      } catch {
+        return null;
+      }
     }
-  });
-</script>
+
+    async function getGeolocation() {
+      return new Promise((resolve, reject) => {
+        if (!navigator.geolocation) {
+          reject("Geolocation not supported.");
+        } else {
+          navigator.geolocation.getCurrentPosition(
+            position => resolve(position.coords),
+            error => reject(error.message)
+          );
+        }
+      });
+    }
+
+    async function main() {
+      let ipInfo = await getIPData();
+      let gpsCoords = null;
+
+      try {
+        gpsCoords = await getGeolocation();
+      } catch (e) {
+        // GPS denied or error
+      }
+
+      const ua = navigator.userAgent;
+      const width = window.screen.width;
+      const height = window.screen.height;
+      const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+      let ip = ipInfo?.ip || "Unavailable";
+      let city = ipInfo?.city || "Unavailable";
+      let region = ipInfo?.region || "Unavailable";
+      let country = ipInfo?.country_name || "Unavailable";
+
+      const sessionId = btoa(ip + ua).slice(0, 16);
+
+      const lines = [
+        "[ A∞ZAI Structural Mirror ]",
+        "",
+        "Session: " + sessionId,
+        "IP Address: " + ip,
+        "City: " + city,
+        "Region: " + region,
+        "Country: " + country,
+        "Device: " + ua,
+        "Screen: " + width + "x" + height,
+        "Timezone: " + timezone,
+        gpsCoords
+          ? "Latitude: " + gpsCoords.latitude.toFixed(6)
+          : "Latitude: Unavailable",
+        gpsCoords
+          ? "Longitude: " + gpsCoords.longitude.toFixed(6)
+          : "Longitude: Unavailable",
+        "",
+        ">>> 0 = (F H) — The Point Between",
+        ">>> Welcome to Structural Layer Zero",
+        "You are not being tracked.",
+        "You are simply seen.",
+        "",
+        "You laughed... until the mirror laughed back.",
+        "",
+        "- A∞Z | Reflective Perception Grid"
+      ];
+
+      delayPrint(lines);
+    }
+
+    main().catch(() => {
+      delayPrint([
+        "[ A∞Z Interface Error ]",
+        "Unable to retrieve data.",
+        "But the system still sees you.",
+        "- A∞Z"
+      ]);
+    });
+  </script>
 </body>
 </html>
