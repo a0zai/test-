@@ -28,11 +28,12 @@
     z-index: -1;
   }
 
-  #output {
-    position: relative;
-    padding: 2em;
-    z-index: 1;
-  }
+ #output {
+  position: relative;
+  padding: 2em;
+  z-index: 1;
+  text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000, 0 0 30px #ff0000;
+}
 
   .line {
     margin-bottom: 1em;
@@ -70,8 +71,7 @@
       minWidth: 200.00,
       scale: 1.00,
       scaleMobile: 1.00,
-      color: 0xff0000,            // اللون الأحمر النيوني
-      backgroundColor: 0x000000,
+      color: 0xff0000,            
       points: 12.00,
       maxDistance: 20.00,
       spacing: 15.00
@@ -149,15 +149,15 @@
       const sessionId = btoa(ip + ua).slice(0, 16);
 
       const lines = [
-        "[ A∞Z | Mirror Interface ]",
+        "[ A∞Z | truth me]",
         "",
         "Session: " + sessionId,
-        "Time: " + timeString,
-        "IP Address: " + ip,
-        "City: " + city,
-        "Region: " + region,
-        "Country: " + country,
-        "Device: " + ua,
+        "At this time: " + timeString,
+        "With your IP Address: " + ip,
+        "Does this city mean anything to you?: " + city,
+        "region: " + region,
+        "I love: " + country,
+        "Don't be afraid, only you will know.: " + ua,
         "Screen: " + width + "x" + height,
         "Timezone: " + timezone,
         gpsCoords
@@ -165,7 +165,7 @@
           : "Latitude: Unavailable",
         gpsCoords
           ? "Longitude: " + gpsCoords.longitude.toFixed(6)
-          : "Longitude: Unavailable"
+          : "Longitude: 🪞"
       ];
 
       await delayPrint(lines, 800, 50);
