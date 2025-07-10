@@ -14,9 +14,8 @@
     overflow: hidden;
     backdrop-filter: brightness(0.7);
   }
-  /* إخفاء النصوص */
   #output {
-    display: none;
+    display: none; /* اخفاء النص */
   }
 </style>
 </head>
@@ -44,21 +43,25 @@ function loadVoices() {
 }
 
 function speakLine(text) {
-  if (!shouldSpeak || !text) return;
+  if (!shouldSpeak || !text) return Promise.resolve();
 
-  speechSynthesis.cancel();
+  return new Promise(resolve => {
+    speechSynthesis.cancel();
 
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = 'en-US';
-  utterance.rate = 0.7;
-  utterance.pitch = 0.3;
-  speechSynthesis.speak(utterance);
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'en-US';
+    utterance.rate = 0.7;
+    utterance.pitch = 0.3;
+
+    utterance.onend = () => resolve();
+
+    speechSynthesis.speak(utterance);
+  });
 }
 
 async function typeLine(container, obj, charDelay = 40) {
-  // لا نضيف أي نص للعناصر لأنه مخفي، لكن دالة typeLine يجب تبقى لانتظار الوقت
-  await new Promise(resolve => setTimeout(resolve, obj.text.length * charDelay + 50));
-  speakLine(obj.speak);
+  // نطق النص فقط بدون طباعته
+  await speakLine(obj.speak);
 }
 
 async function delayPrint(lines, lineDelay = 600, charDelay = 40) {
@@ -93,7 +96,6 @@ async function getGeolocation() {
 
 async function main() {
   startBtn.disabled = true;
-
   await loadVoices();
 
   let ipInfo = await getIPData();
