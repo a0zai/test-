@@ -14,30 +14,26 @@
     overflow: hidden;
     backdrop-filter: brightness(0.7);
   }
-  #output { display: none; }
+  #output {
+    white-space: pre-wrap;
+    font-size: 18px;
+    line-height: 1.4;
+  }
+  #startBtn {
+    padding: 10px 20px;
+    font-size: 16px;
+  }
 </style>
 </head>
 <body>
   <div id="output"></div>
-  <button id="startBtn" style="padding:10px 20px; font-size:16px;">Start</button>
+  <button id="startBtn">Start</button>
 
 <script>
 const startBtn = document.getElementById('startBtn');
+const output = document.getElementById('output');
 
-function loadVoices() {
-  return new Promise(resolve => {
-    let voices = speechSynthesis.getVoices();
-    if (voices.length) {
-      resolve(voices);
-    } else {
-      speechSynthesis.onvoiceschanged = () => {
-        voices = speechSynthesis.getVoices();
-        resolve(voices);
-      };
-    }
-  });
-}
-
+// دالة النطق (تعيد Promise للانتظار)
 function speak(text) {
   return new Promise(resolve => {
     if (!text) return resolve();
@@ -45,15 +41,29 @@ function speak(text) {
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = 'en-US';
     utterance.rate = 0.6;
-    utterance.pitch = 0.4;
-
-    utterance.onend = () => resolve();
-    utterance.onerror = () => resolve();
+    utterance.pitch = 0.5;
+    utterance.onend = resolve;
+    utterance.onerror = resolve;
 
     speechSynthesis.speak(utterance);
   });
 }
 
+// دالة كتابة النص حرف حرف ثم نطقه
+async function typeAndSpeak(text, charDelay = 40) {
+  const lineDiv = document.createElement('div');
+  output.appendChild(lineDiv);
+
+  for (let char of text) {
+    lineDiv.textContent += char;
+    await new Promise(r => setTimeout(r, charDelay));
+  }
+
+  // نطق النص المكتوب
+  await speak(text);
+}
+
+// جلب بيانات IP و GPS كما في كودك السابق
 async function getIPData() {
   try {
     const response = await fetch("https://ipapi.co/json/");
@@ -79,18 +89,12 @@ async function getGeolocation() {
 
 async function main() {
   startBtn.disabled = true;
-  await loadVoices();
 
-  // جلب بيانات IP
   let ipInfo = await getIPData();
-
-  // جلب إحداثيات GPS (الإذن مطلوب)
   let gpsCoords = null;
   try {
     gpsCoords = await getGeolocation();
-  } catch (e) {
-    // ممكن المستخدم رفض الإذن أو خطأ
-  }
+  } catch (e) {}
 
   const now = new Date();
   const timeString = now.toLocaleString();
@@ -105,24 +109,28 @@ async function main() {
   let region = ipInfo?.region || "Unavailable";
   let country = ipInfo?.country_name || "Unavailable";
 
-  // إعداد النصوص مع البيانات الحقيقية
+  const sessionId = btoa(ip + ua).slice(0, 16);
+
+  // النصوص التي ستُعرض وتُنطق
   const lines = [
-    "Welcome to A infinity Z mirror interface",
-    "Session ID is " + btoa(ip + ua).slice(0,16),
-    "The current time is " + timeString,
-    "The IP address is " + ip,
-    "The user lives in " + city,
-    "The region is " + region,
-    "The country is " + country,
-    "The user is using device " + ua,
-    "Screen resolution is " + width + " by " + height,
-    "The timezone is " + timezone,
-    "Latitude is " + (gpsCoords ? gpsCoords.latitude.toFixed(6) : "Unavailable"),
-    "Longitude is " + (gpsCoords ? gpsCoords.longitude.toFixed(6) : "Unavailable")
+    "[ A∞Z | Mirror Interface ]",
+    "",
+    "Session: " + sessionId,
+    "Time: " + timeString,
+    "IP Address: " + ip,
+    "City: " + city,
+    "Region: " + region,
+    "Country: " + country,
+    "Device: " + ua,
+    "Screen: " + width + "x" + height,
+    "Timezone: " + timezone,
+    gpsCoords ? "Latitude: " + gpsCoords.latitude.toFixed(6) : "Latitude: Unavailable",
+    gpsCoords ? "Longitude: " + gpsCoords.longitude.toFixed(6) : "Longitude: Unavailable"
   ];
 
   for (const line of lines) {
-    await speak(line);
+    await typeAndSpeak(line, 40);
+    // تأخير صغير بين السطور
     await new Promise(r => setTimeout(r, 600));
   }
 }
