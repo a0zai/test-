@@ -47,7 +47,7 @@
   }
 
   .fade-out {
-    animation: fadeOut 2s forwards;
+    animation: fadeOut 5s forwards;
   }
 
   @keyframes fadeOut {
@@ -149,7 +149,7 @@
       const sessionId = btoa(ip + ua).slice(0, 16);
 
       const lines = [
-        "[ A∞Z | truth me]",
+        "[ A∞Z | truth🪞me]",
         "",
         "Session: " + sessionId,
         "At this time: " + timeString,
@@ -165,16 +165,22 @@
           : "Latitude: Unavailable",
         gpsCoords
           ? "Longitude: " + gpsCoords.longitude.toFixed(6)
-          : "Longitude: 🪞"
+          : "Longitude: 👁️‍🗨️"
       ];
 
       await delayPrint(lines, 800, 50);
+const speechText = "To communicate with the leadership";
 
-      document.body.classList.add('fade-out');
-      setTimeout(() => {
-        window.location.href = "ORIGIN.html";
-      }, 2000);
-    }
+const utterance = new SpeechSynthesisUtterance(speechText);
+
+utterance.onend = () => {
+  document.body.classList.add('fade-out');
+  setTimeout(() => {
+    window.location.href = "ORIGIN.html";
+  }, 5000); 
+};
+
+window.speechSynthesis.speak(utterance);
 
     main().catch(() => {
       delayPrint([
