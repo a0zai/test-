@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Support & Contact with Dynamic Text</title>
+  <title>Support & Contact</title>
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <style>
     html, body {
@@ -45,16 +45,6 @@
   pointer-events: none;
 }
 
-    .container {
-      width: 90%;
-      max-width: 500px;
-      background: rgba(255, 215, 0, 0.08);
-      border: 2px solid gold;
-      border-radius: 12px;
-      padding: 40px 30px;
-      box-shadow: 0 0 30px gold;
-      flex-shrink: 0;
-    }
     h1 {
       color: gold;
       text-shadow: 0 0 12px gold;
@@ -91,30 +81,7 @@
       box-shadow: 0 0 15px gold;
       display: block;
     }
-    .contact-section {
-      margin-top: 50px;
-    }
-    .contact-links {
-      margin-top: 15px;
-    }
-    a.contact-button {
-      display: inline-block;
-      margin: 12px 18px;
-      padding: 12px 20px;
-      color: gold;
-      border: 2px solid gold;
-      border-radius: 10px;
-      text-decoration: none;
-      font-weight: bold;
-      font-size: 18px;
-      box-shadow: inset 0 0 8px gold;
-      transition: all 0.3s ease;
-    }
-    a.contact-button:hover {
-      background-color: gold;
-      color: #000;
-      box-shadow: 0 0 20px gold;
-    }
+    
 
     #dynamicTextContainer {
       position: fixed;
@@ -143,17 +110,6 @@
   <div id="pageOverlay"></div>
    <div id="particles-js"></div>
   <img src="IMG_9055.jpeg" alt="Overlay Image" id="overlayImage" />
-  <div class="container">
-    <h1>👑 Contact 👑</h1>
-
-    <img class="qr" src="https://api.qrserver.com/v1/create-qr-code/?data=123696321.eth&size=180x180" alt="Wallet QR Code">
- 
-      <div class="contact-links">
-  <a class="contact-button" href="mailto:hi@rafat.world" title="Send Email">📧 Email: hi@rafat.world</a>
-  <a class="contact-button" href="https://wa.me/31644367518" target="_blank" title="Chat on WhatsApp">💬 WhatsApp: 0644367518</a>
-  <a class="contact-button" href="https://www.linkedin.com/in/a0zai?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app" target="_blank" title="View my LinkedIn">💼 LinkedIn: A0ZAI</a>
-</div>
-    </div>
   </div>
 
   <div id="dynamicTextContainer">
@@ -264,18 +220,6 @@
     overlay.classList.add('fade-out');
   });
 </script>
-<script>
-window.addEventListener('DOMContentLoaded', () => {
-  const urlParams = new URLSearchParams(window.location.search);
-  if (urlParams.get('playAudio') === '1') {
-    const audio = document.getElementById('backgroundMusic');
-    if (audio) {
-      audio.play().catch(err => {
-        console.log('Audio play failed:', err);
-      });
-    }
-  }
-});
-</script>
+
 </body>
 </html>
