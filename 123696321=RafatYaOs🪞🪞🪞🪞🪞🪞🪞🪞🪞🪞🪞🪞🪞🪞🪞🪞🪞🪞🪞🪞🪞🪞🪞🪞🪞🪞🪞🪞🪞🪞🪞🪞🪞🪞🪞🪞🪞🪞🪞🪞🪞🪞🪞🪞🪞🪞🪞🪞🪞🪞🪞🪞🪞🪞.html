@@ -14,14 +14,9 @@
     overflow: hidden;
     backdrop-filter: brightness(0.7);
   }
-  .line {
-    margin-bottom: 1em;
-    white-space: pre-wrap;
-    opacity: 0;
-    animation: fadeIn 0.5s forwards;
-  }
-  @keyframes fadeIn {
-    to { opacity: 1; }
+  /* إخفاء النصوص */
+  #output {
+    display: none;
   }
 </style>
 </head>
@@ -34,7 +29,6 @@ let shouldSpeak = true;
 const startBtn = document.getElementById('startBtn');
 const output = document.getElementById('output');
 
-// انتظار تحميل أصوات النظام
 function loadVoices() {
   return new Promise(resolve => {
     let voices = speechSynthesis.getVoices();
@@ -52,27 +46,18 @@ function loadVoices() {
 function speakLine(text) {
   if (!shouldSpeak || !text) return;
 
-  speechSynthesis.cancel(); // أوقف أي نطق سابق
+  speechSynthesis.cancel();
 
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = 'en-US';
-  utterance.rate = 0.7;    // سرعة معقولة
-  utterance.pitch = 0.3;   // نبرة منخفضة تعطي صوت روبوتي أكثر
+  utterance.rate = 0.7;
+  utterance.pitch = 0.3;
   speechSynthesis.speak(utterance);
 }
 
 async function typeLine(container, obj, charDelay = 40) {
-  const div = document.createElement("div");
-  div.className = "line";
-  container.appendChild(div);
-  await new Promise(resolve => setTimeout(resolve, 50));
-  div.style.opacity = 1;
-
-  for (let char of obj.text) {
-    div.textContent += char;
-    await new Promise(resolve => setTimeout(resolve, charDelay));
-  }
-
+  // لا نضيف أي نص للعناصر لأنه مخفي، لكن دالة typeLine يجب تبقى لانتظار الوقت
+  await new Promise(resolve => setTimeout(resolve, obj.text.length * charDelay + 50));
   speakLine(obj.speak);
 }
 
@@ -109,7 +94,7 @@ async function getGeolocation() {
 async function main() {
   startBtn.disabled = true;
 
-  await loadVoices(); // انتظر الأصوات لتحميلها
+  await loadVoices();
 
   let ipInfo = await getIPData();
   let gpsCoords = null;
