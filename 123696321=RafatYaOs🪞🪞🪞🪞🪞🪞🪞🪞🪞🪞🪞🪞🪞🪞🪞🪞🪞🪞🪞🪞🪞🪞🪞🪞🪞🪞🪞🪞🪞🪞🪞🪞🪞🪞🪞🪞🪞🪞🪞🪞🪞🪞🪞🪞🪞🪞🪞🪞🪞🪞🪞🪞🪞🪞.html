@@ -169,9 +169,6 @@
       ];
 
       await delayPrint(lines, 800, 50);
-const speechText = "To communicate with the leadership";
-
-const utterance = new SpeechSynthesisUtterance(speechText);
 
 utterance.onend = () => {
   document.body.classList.add('fade-out');
@@ -180,9 +177,6 @@ utterance.onend = () => {
   }, 5000); 
 };
 
-window.speechSynthesis.speak(utterance);
-</script>
-<script>
     main().catch(() => {
       delayPrint([
         "[ A∞Z | Mirror Interface Error ]",
