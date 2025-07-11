@@ -66,7 +66,7 @@
     margin-bottom: 1em;
     white-space: pre-wrap;
     opacity: 0;
-    animation: fadeIn 0.5s forwards;
+    animation: fadeIn 0.9s forwards;
   }
 
   @keyframes fadeIn {
@@ -122,7 +122,25 @@
     box-shadow: 0 0 20px #ff0000, inset 0 0 40px #ff0000;
     text-shadow: 0 0 8px #ff0000;
   }
-
+#countdown {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 6rem;
+  color: #ff0000; /* اللون الأحمر */
+  text-shadow: 0 0 20px #ff0000;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  z-index: 10;
+  user-select: none;
+}
+#countdown.show {
+  opacity: 1;
+}
+#countdown.hide {
+  opacity: 0;
+}
   @keyframes pulse {
     0% {
       box-shadow: 0 0 10px #00ffcc, inset 0 0 20px #00ffcc;
@@ -146,7 +164,7 @@
   <div id="vanta-bg"></div>
 <video id="cameraView" autoplay playsinline style="display: none;"></video>
 <div id="output"></div>
-
+<div id="countdown"></div>
   <script>
     // VANTA.NET خلفية كهربائية
     VANTA.NET({
@@ -257,11 +275,28 @@
 
       await delayPrint(lines, 800, 140);
 
-      document.body.classList.add('fade-out');
-      setTimeout(() => {
-        window.location.href = "ORIGIN.html";
-      }, 5000);
-    }
+async function startCountdown(seconds) {
+  const countdownEl = document.getElementById('countdown');
+  const overlay = document.getElementById('countdownOverlay');
+
+  overlay.style.display = 'block';
+
+  for (let i = seconds; i >= 0; i--) {
+    countdownEl.textContent = i;
+    countdownEl.classList.add('show');
+    countdownEl.classList.remove('hide');
+    await new Promise(resolve => setTimeout(resolve, 700));  // يظهر الرقم 700ms
+    countdownEl.classList.remove('show');
+    countdownEl.classList.add('hide');
+    await new Promise(resolve => setTimeout(resolve, 300));  // يختفي 300ms
+  }
+
+  countdownEl.classList.remove('show');
+  countdownEl.classList.add('hide');
+  overlay.style.display = 'none';
+
+  window.location.href = "ORIGIN.html";
+}
 
 const startButton = document.getElementById('startButton');
 const bgMusic = document.getElementById('bgMusic');
