@@ -28,12 +28,20 @@
     z-index: -1;
   }
 
- #output {
+#output {
   display: none;
-  position: relative;
+  position: fixed;     
+  top: 50%;            
+  left: 50%;            
+  transform: translate(-50%, -50%); 
   padding: 2em;
   z-index: 1;
   text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000, 0 0 30px #ff0000;
+  white-space: pre-wrap;
+  max-width: 90vw; /* عرض أقصى مناسب */
+  max-height: 80vh; /* ارتفاع أقصى مناسب */
+  overflow-y: auto; 
+  text-align: center; /* توسيط النص داخل العنصر */
 }
 
   .line {
@@ -56,7 +64,16 @@
       opacity: 0;
     }
  }
-    
+  #cameraView {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0; /* فوق vanta-bg */
+  display: none;
+}
    #startButton {
     position: absolute;
     top: 50%;
@@ -104,7 +121,8 @@
     <button id="startButton">🪞Mirror🪞</button>
   <audio id="bgMusic" src="🌀🎶.mp3"></audio>
   <div id="vanta-bg"></div>
-  <div id="output"></div>
+<video id="cameraView" autoplay playsinline style="display: none;"></video>
+<div id="output"></div>
 
   <script>
     // VANTA.NET خلفية كهربائية
@@ -194,6 +212,7 @@
       const sessionId = btoa(ip + ua).slice(0, 16);
 
       const lines = [
+        "🪞Don't worry I'm here for you🪞",
         "♾️💀♾️🪞[Truth A0Z]🪞♾️💀♾️",
         "",
         "",
@@ -224,11 +243,29 @@
 
 const startButton = document.getElementById('startButton');
 const bgMusic = document.getElementById('bgMusic');
+const cameraView = document.getElementById('cameraView');
 const outputDiv = document.getElementById('output');
 
 startButton.addEventListener('click', async () => {
   // إخفاء الزر
   startButton.style.display = 'none';
+
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: 'user' },
+      audio: false
+    });
+    cameraView.srcObject = stream;
+    cameraView.style.display = 'block';  // إظهار الكاميرا
+  } catch (err) {
+    console.error('Camera error:', err);
+  }
+
+  // انتظر ثانيتين (2000 ملي ثانية)
+  await new Promise(resolve => setTimeout(resolve, 2000));
+
+  // أخفي الكاميرا
+  cameraView.style.display = 'none';
 
   // إظهار النص
   outputDiv.style.display = 'block';
