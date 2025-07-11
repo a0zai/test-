@@ -69,15 +69,16 @@
     to { opacity: 1; }
   }
 
-  .fade-out {
-    animation: fadeOut 3s forwards;
-  }
+ #vanta-bg.fade-out {
+  animation: fadeOut 3s forwards;
+}
 
-  @keyframes fadeOut {
-    to {
-      opacity: 0;
-    }
- }
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
   #cameraView {
   display: none;
   width: 99px;
@@ -232,9 +233,7 @@
       const sessionId = btoa(ip + ua).slice(0, 16);
 
       const lines = [
-        "🪞Don't worry I'm here for you🪞",
         "♾️💀♾️🪞[Truth A0Z]🪞♾️💀♾️",
-        "",
         "",
         "Session: " + sessionId,
         "At this time: " + timeString,
@@ -255,7 +254,7 @@
 
       await delayPrint(lines, 800, 140);
 
-      document.body.classList.add('fade-out');
+document.getElementById('vanta-bg').classList.add('fade-out');
       setTimeout(() => {
         window.location.href = "ORIGIN.html";
       }, 3000);
