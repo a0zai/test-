@@ -81,42 +81,53 @@
       box-shadow: 0 0 15px gold;
       display: block;
     }
-    #topBar {
+#topBar {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  padding: 10px 20px;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: rgba(0,0,0,0.7);
-  z-index: 99999;
+  gap: 20px;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 12px 20px;
+  border-radius: 20px;
+  box-shadow: 0 0 20px #00ffcc;
+  z-index: 9999;
+}
+
+.topButton {
+  padding: 10px 20px;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: bold;
   font-family: 'Courier New', monospace;
+  transition: all 0.3s ease;
+  box-shadow: inset 0 0 10px rgba(255,255,255,0.2);
 }
 
-#emailLink {
+/* بريد أزرق */
+.topButton.email {
+  background-color: #001f33;
   color: #00ccff;
-  text-decoration: none;
-  font-weight: bold;
-  transition: color 0.3s ease;
+  border: 2px solid #00ccff;
 }
-#emailLink:hover {
-  color: #66e0ff;
-  text-shadow: 0 0 8px #00ccff;
+.topButton.email:hover {
+  background-color: #00ccff;
+  color: black;
+  box-shadow: 0 0 15px #00ccff;
 }
 
-#whatsappLink {
+/* واتساب أحمر */
+.topButton.whatsapp {
+  background-color: #330000;
   color: #ff3333;
-  text-decoration: none;
-  font-weight: bold;
-  transition: color 0.3s ease;
+  border: 2px solid #ff3333;
 }
-#whatsappLink:hover {
-  color: #ff6666;
-  text-shadow: 0 0 8px #ff3333;
+.topButton.whatsapp:hover {
+  background-color: #ff3333;
+  color: black;
+  box-shadow: 0 0 15px #ff3333;
 }
-
     #dynamicTextContainer {
       position: fixed;
       bottom: 10px;
@@ -146,8 +157,8 @@
   <img src="IMG_9055.jpeg" alt="Overlay Image" id="overlayImage" />
   </div>
 <div id="topBar">
-  <a id="emailLink" href="mailto:hi@rafat.world">hi@rafat.world</a>
-  <a id="whatsappLink" href="https://wa.me/31644367518" target="_blank">Whatsapp</a>
+  <a class="topButton email" href="mailto:hi@rafat.world">📧 email</a>
+  <a class="topButton whatsapp" href="https://wa.me/31644367518" target="_blank">💬 whatsapp</a>
 </div>
   <div id="dynamicTextContainer">
     <span id="dynamicText"></span>
