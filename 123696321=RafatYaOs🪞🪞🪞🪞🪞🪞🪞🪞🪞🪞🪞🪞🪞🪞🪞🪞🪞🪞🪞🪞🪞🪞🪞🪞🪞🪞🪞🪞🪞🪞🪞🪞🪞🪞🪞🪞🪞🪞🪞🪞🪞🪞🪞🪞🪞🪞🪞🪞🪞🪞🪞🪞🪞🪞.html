@@ -279,8 +279,6 @@ async function startCountdown(seconds) {
   const countdownEl = document.getElementById('countdown');
   const overlay = document.getElementById('countdownOverlay');
 
-  overlay.style.display = 'block';
-
   for (let i = seconds; i >= 0; i--) {
     countdownEl.textContent = i;
     countdownEl.classList.add('show');
@@ -293,7 +291,6 @@ async function startCountdown(seconds) {
 
   countdownEl.classList.remove('show');
   countdownEl.classList.add('hide');
-  overlay.style.display = 'none';
 
   window.location.href = "ORIGIN.html";
 }
@@ -329,7 +326,7 @@ startButton.addEventListener('click', async () => {
 
   // تشغيل الموسيقى
   bgMusic.play();
-
+await startCountdown(10)
   // بدء الكتابة
   try {
     await main();
