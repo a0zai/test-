@@ -81,52 +81,34 @@
       box-shadow: 0 0 15px gold;
       display: block;
     }
-#topBar {
+.topLink {
   position: fixed;
   top: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 40px;
-  background-color: rgba(0, 0, 0, 0.7);
   padding: 12px 20px;
-  border-radius: 20px;
-  box-shadow: 0 0 20px #00ffcc;
-  z-index: 9999;
-}
-
-.topButton {
-  padding: 10px 20px;
+  font-weight: bold;
   border-radius: 12px;
   text-decoration: none;
-  font-weight: bold;
   font-family: 'Courier New', monospace;
+  box-shadow: 0 0 12px currentColor;
   transition: all 0.3s ease;
-  box-shadow: inset 0 0 10px rgba(255,255,255,0.2);
+  z-index: 10000;
 }
 
-/* بريد أزرق */
-.topButton.email {
-  background-color: #001f33;
-  color: #00ccff;
-  border: 2px solid #00ccff;
-}
-.topButton.email:hover {
-  background-color: #00ccff;
-  color: black;
-  box-shadow: 0 0 15px #00ccff;
+.topLink.right {
+  right: 20px;
+  background-color: #007bff;
+  color: white;
 }
 
-/* واتساب أحمر */
-.topButton.whatsapp {
-  background-color: #330000;
-  color: #ff3333;
-  border: 2px solid #ff3333;
+.topLink.left {
+  left: 20px;
+  background-color: #cc0000;
+  color: white;
 }
-.topButton.whatsapp:hover {
-  background-color: #ff3333;
-  color: black;
-  box-shadow: 0 0 15px #ff3333;
+
+.topLink:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 20px gold;
 }
     #dynamicTextContainer {
       position: fixed;
@@ -156,11 +138,8 @@
    <div id="particles-js"></div>
   <img src="IMG_9055.jpeg" alt="Overlay Image" id="overlayImage" />
   </div>
-<div id="topBar">
-  <a class="topButton email" href="mailto:hi@rafat.world">📧 email</a>
-  <a class="topButton whatsapp" href="https://wa.me/31644367518" target="_blank">💬 whatsapp</a>
-</div>
-  <div id="dynamicTextContainer">
+<a href="mailto:hi@rafat.world" class="topLink right">📧 ~Email~</a>
+<a href="https://wa.me/31644367518" class="topLink left" target="_blank">📱 WhatsApp</a>  <div id="dynamicTextContainer">
     <span id="dynamicText"></span>
   </div>
 <script>
