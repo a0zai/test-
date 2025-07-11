@@ -19,78 +19,49 @@
     background-color: black;
   }
 
-  #vanta-bg {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: -1;
-    pointer-events: none;
-    opacity: 1;
-    transition: opacity 2s ease;
-  }
+#vanta-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  pointer-events: none; 
+}
+#startImage {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 3px solid #00ffcc;
+  box-shadow: 0 0 10px #00ffcc, inset 0 0 20px #00ffcc;
+  object-fit: cover;
+  transition: all 0.4s ease;
+}
 
-  #vanta-bg.fade-out {
-    opacity: 0;
-  }
-
-  #startButton {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 20px 50px;
-    font-size: 2rem;
-    color: #00ffcc;
-    background-color: black;
-    border: 2px solid #00ffcc;
-    border-radius: 12px;
-    cursor: pointer;
-    text-shadow: 0 0 8px #00ffcc;
-    box-shadow: 0 0 10px #00ffcc, inset 0 0 20px #00ffcc;
-    transition: all 0.4s ease;
-    animation: pulse 2s infinite;
-    z-index: 2;
-  }
-
-  #startImage {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    border: 3px solid #00ffcc;
-    box-shadow: 0 0 10px #00ffcc, inset 0 0 20px #00ffcc;
-    object-fit: cover;
-    transition: all 0.4s ease;
-  }
-
-  #startButton:hover #startImage {
-    border-color: #ff0000;
-    box-shadow: 0 0 20px #ff0000, inset 0 0 40px #ff0000;
-  }
-
-  @keyframes pulse {
-    0% { box-shadow: 0 0 10px #00ffcc, inset 0 0 20px #00ffcc; }
-    50% { box-shadow: 0 0 20px #00ffcc, inset 0 0 40px #00ffcc; }
-    100% { box-shadow: 0 0 10px #00ffcc, inset 0 0 20px #00ffcc; }
-  }
-
-  #output {
-    display: none;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 2em;
-    z-index: 1;
-    text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000, 0 0 30px #ff0000;
-    white-space: pre-wrap;
-    max-width: 90vw;
-    max-height: 80vh;
-    overflow-y: auto;
-    text-align: center;
-  }
-
+#startButton:hover #startImage {
+  border-color: #ff0000;
+  box-shadow: 0 0 20px #ff0000, inset 0 0 40px #ff0000;
+}
+#output {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 2em;
+  z-index: 1;
+  text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000, 0 0 30px #ff0000;
+  white-space: pre-wrap;
+  max-width: 95vw;     /* يسمح بالتوسع حتى 95% من عرض الشاشة */
+  max-height: 90vh;    /* يسمح بالتوسع حتى 90% من ارتفاع الشاشة */
+  width: auto;         /* عرض تلقائي حسب المحتوى */
+  height: auto;        /* ارتفاع تلقائي حسب المحتوى */
+  min-width: 300px;    /* عرض أدنى مناسب */
+  overflow-y: auto;
+  overflow-x: hidden;  /* لمنع ظهور شريط تمرير أفقي */
+  text-align: center;
+  box-sizing: border-box; /* ليشمل الحشوة ضمن العرض */
+}
   .line {
     margin-bottom: 1em;
     white-space: pre-wrap;
@@ -102,35 +73,84 @@
     to { opacity: 1; }
   }
 
-  #cameraView {
-    display: none;
-    width: 99px;
-    height: 99px;
-    margin: 40px auto 20px auto;
-    border-radius: 50% / 40%;
-    border: 5px solid #00ffcc;
-    box-shadow: 0 0 20px #00ffcc, inset 0 0 30px #ff00ff;
-    background-color: black;
-    object-fit: cover;
-    z-index: 2;
+  .fade-out {
+    animation: fadeOut 3s forwards;
   }
+
+  @keyframes fadeOut {
+    to {
+      opacity: 0;
+    }
+ }
+  #cameraView {
+  display: none;
+  width: 99px;
+  height: 99;
+  margin: 40px auto 20px auto;
+  border-radius: 50% / 40%;
+  border: 5px solid #00ffcc;
+  box-shadow: 0 0 20px #00ffcc, inset 0 0 30px #ff00ff;
+  background-color: black;
+  object-fit: cover;
+  z-index: 2;
+}
+   #startButton {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
+    padding: 20px 50px;
+    font-size: 2rem;
+    color: #00ffcc;
+    background-color: black;
+    border: 2px solid #00ffcc;
+    border-radius: 12px;
+    cursor: pointer;
+    
+    text-shadow: 0 0 8px #00ffcc;
+    box-shadow: 0 0 10px #00ffcc, inset 0 0 20px #00ffcc;
+    transition: all 0.4s ease;
+    
+    animation: pulse 5s infinite;
+  }
+
+  #startButton:hover {
+    background-color: #00ffcc;
+    color: black;
+    border-color: #ff0000;
+    box-shadow: 0 0 20px #ff0000, inset 0 0 40px #ff0000;
+    text-shadow: 0 0 8px #ff0000;
+  }
+
+  @keyframes pulse {
+    0% {
+      box-shadow: 0 0 10px #00ffcc, inset 0 0 20px #00ffcc;
+    }
+    50% {
+      box-shadow: 0 0 20px #00ffcc, inset 0 0 40px #00ffcc;
+    }
+    100% {
+      box-shadow: 0 0 10px #00ffcc, inset 0 0 20px #00ffcc;
+    }
+  }
+
 </style>
 </head>
 <body>
-  <div id="vanta-bg"></div>
-
-  <button id="startButton">
-    <img src="https://avatars.githubusercontent.com/u/201962374?v=4&size=64" alt="Mirror Button" id="startImage">
-  </button>
-
+<button id="startButton">
+  <img src="https://avatars.githubusercontent.com/u/201962374?v=4&size=64" alt="Mirror Button" id="startImage">
+</button>
+</button>
   <audio id="bgMusic" src="🌀🎶.mp3"></audio>
-  <video id="cameraView" autoplay playsinline></video>
-  <div id="output"></div>
+  <div id="vanta-bg"></div>
+<video id="cameraView" autoplay playsinline style="display: none;"></video>
+<div id="output"></div>
 
   <script>
-    const vantaEl = document.getElementById('vanta-bg');
-    let vantaEffectInstance = VANTA.NET({
-      el: vantaEl,
+    // VANTA.NET خلفية كهربائية
+    VANTA.NET({
+      el: "#vanta-bg",
       mouseControls: true,
       touchControls: true,
       minHeight: 200.00,
@@ -143,18 +163,16 @@
       maxDistance: 20.00,
       spacing: 15.00
     });
+  </script>
 
-    const startButton = document.getElementById('startButton');
-    const bgMusic = document.getElementById('bgMusic');
-    const cameraView = document.getElementById('cameraView');
-    const outputDiv = document.getElementById('output');
-
+  <script>
     async function typeLine(container, text, charDelay = 40) {
       const div = document.createElement("div");
       div.className = "line";
       container.appendChild(div);
       await new Promise(resolve => setTimeout(resolve, 50));
       div.style.opacity = 1;
+
       for (let char of text) {
         div.textContent += char;
         await new Promise(resolve => setTimeout(resolve, charDelay));
@@ -195,20 +213,26 @@
     async function main() {
       let ipInfo = await getIPData();
       let gpsCoords = null;
+
       try {
         gpsCoords = await getGeolocation();
-      } catch (e) {}
+      } catch (e) {
+        // GPS denied or error
+      }
 
       const now = new Date();
       const timeString = now.toLocaleString();
+
       const ua = navigator.userAgent;
       const width = window.screen.width;
       const height = window.screen.height;
       const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
       let ip = ipInfo?.ip || "Unavailable";
       let city = ipInfo?.city || "Unavailable";
       let region = ipInfo?.region || "Unavailable";
       let country = ipInfo?.country_name || "Unavailable";
+
       const sessionId = btoa(ip + ua).slice(0, 16);
 
       const lines = [
@@ -233,36 +257,54 @@
 
       await delayPrint(lines, 800, 140);
 
-      // Fade-out animation
-      vantaEl.classList.add('fade-out');
-      startButton.classList.add('fade-out');
-
+      document.body.classList.add('fade-out');
       setTimeout(() => {
-        if (vantaEffectInstance) vantaEffectInstance.destroy();
         window.location.href = "ORIGIN.html";
-      }, 3000);
+      }, 5000);
     }
 
-    startButton.addEventListener('click', async () => {
-      startButton.disabled = true;
-      startButton.style.display = 'none';
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: 'user' },
-          audio: false
-        });
-        cameraView.srcObject = stream;
-        cameraView.style.display = 'block';
-      } catch (err) {
-        console.error('Camera error:', err);
-      }
+const startButton = document.getElementById('startButton');
+const bgMusic = document.getElementById('bgMusic');
+const cameraView = document.getElementById('cameraView');
+const outputDiv = document.getElementById('output');
 
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      cameraView.style.display = 'none';
-      outputDiv.style.display = 'block';
-      bgMusic.play();
-      await main();
+startButton.addEventListener('click', async () => {
+  // إخفاء الزر
+  startButton.style.display = 'none';
+
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: 'user' },
+      audio: false
     });
+    cameraView.srcObject = stream;
+    cameraView.style.display = 'block';  // إظهار الكاميرا
+  } catch (err) {
+    console.error('Camera error:', err);
+  }
+
+  // انتظر ثانيتين (2000 ملي ثانية)
+  await new Promise(resolve => setTimeout(resolve, 2000));
+
+  // أخفي الكاميرا
+  cameraView.style.display = 'none';
+
+  // إظهار النص
+  outputDiv.style.display = 'block';
+
+  // تشغيل الموسيقى
+  bgMusic.play();
+
+  // بدء الكتابة
+  try {
+    await main();
+  } catch {
+    delayPrint([
+      "[ A∞Z | Mirror Interface Error ]",
+      "Unable to retrieve data."
+    ], 800, 140);
+  }
+});
   </script>
 </body>
 </html>
