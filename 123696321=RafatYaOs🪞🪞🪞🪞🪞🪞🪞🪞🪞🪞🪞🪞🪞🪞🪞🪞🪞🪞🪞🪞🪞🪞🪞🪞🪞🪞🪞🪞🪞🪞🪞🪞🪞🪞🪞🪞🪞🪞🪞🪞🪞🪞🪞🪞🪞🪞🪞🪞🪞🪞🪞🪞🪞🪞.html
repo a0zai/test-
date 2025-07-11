@@ -66,7 +66,7 @@
     margin-bottom: 1em;
     white-space: pre-wrap;
     opacity: 0;
-    animation: fadeIn 0.5s forwards;
+    animation: fadeIn 0.3s forwards;
   }
 
   @keyframes fadeIn {
@@ -285,7 +285,7 @@ async function showCountdown(seconds) {
       document.body.classList.add('fade-out');
       setTimeout(() => {
         window.location.href = "ORIGIN.html";
-      }, 5000);
+      }, 3000);
     }
 
 const startButton = document.getElementById('startButton');
@@ -308,8 +308,7 @@ startButton.addEventListener('click', async () => {
     console.error('Camera error:', err);
   }
 
-  // انتظر ثانيتين (2000 ملي ثانية)
-  await new Promise(resolve => setTimeout(resolve, 4000));
+  await new Promise(resolve => setTimeout(resolve, 1000));
 
   // أخفي الكاميرا
   cameraView.style.display = 'none';
@@ -320,7 +319,7 @@ startButton.addEventListener('click', async () => {
   // تشغيل الموسيقى
   bgMusic.play();
   
-  showCountdown(1);
+  showCountdown(0);
   // بدء الكتابة
   try {
     await main();
