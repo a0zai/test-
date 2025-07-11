@@ -66,7 +66,7 @@
     margin-bottom: 1em;
     white-space: pre-wrap;
     opacity: 0;
-    animation: fadeIn 0.9s forwards;
+    animation: fadeIn 0.5s forwards;
   }
 
   @keyframes fadeIn {
@@ -128,18 +128,15 @@
   left: 50%;
   transform: translate(-50%, -50%);
   font-size: 6rem;
-  color: #ff0000; /* اللون الأحمر */
+  color: #ff0000;
   text-shadow: 0 0 20px #ff0000;
-  opacity: 0;
-  transition: opacity 0.5s ease;
   z-index: 10;
   user-select: none;
+  opacity: 0;
+  transition: opacity 0.9s ease;
 }
 #countdown.show {
   opacity: 1;
-}
-#countdown.hide {
-  opacity: 0;
 }
   @keyframes pulse {
     0% {
@@ -214,7 +211,17 @@
         return null;
       }
     }
+async function showCountdown(seconds) {
+  const el = document.getElementById('countdown');
+  el.classList.add('show');
 
+  for (let i = seconds; i > 0; i--) {
+    el.textContent = i;
+    await new Promise(resolve => setTimeout(resolve, 1000));
+  }
+
+  el.classList.remove('show');
+}
     async function getGeolocation() {
       return new Promise((resolve, reject) => {
         if (!navigator.geolocation) {
@@ -275,25 +282,11 @@
 
       await delayPrint(lines, 800, 140);
 
-async function startCountdown(seconds) {
-  const countdownEl = document.getElementById('countdown');
-  const overlay = document.getElementById('countdownOverlay');
-
-  for (let i = seconds; i >= 0; i--) {
-    countdownEl.textContent = i;
-    countdownEl.classList.add('show');
-    countdownEl.classList.remove('hide');
-    await new Promise(resolve => setTimeout(resolve, 700));  // يظهر الرقم 700ms
-    countdownEl.classList.remove('show');
-    countdownEl.classList.add('hide');
-    await new Promise(resolve => setTimeout(resolve, 300));  // يختفي 300ms
-  }
-
-  countdownEl.classList.remove('show');
-  countdownEl.classList.add('hide');
-
-  window.location.href = "ORIGIN.html";
-}
+      document.body.classList.add('fade-out');
+      setTimeout(() => {
+        window.location.href = "ORIGIN.html";
+      }, 9000);
+    }
 
 const startButton = document.getElementById('startButton');
 const bgMusic = document.getElementById('bgMusic');
@@ -326,7 +319,8 @@ startButton.addEventListener('click', async () => {
 
   // تشغيل الموسيقى
   bgMusic.play();
-await startCountdown(10)
+  
+  showCountdown(9);
   // بدء الكتابة
   try {
     await main();
