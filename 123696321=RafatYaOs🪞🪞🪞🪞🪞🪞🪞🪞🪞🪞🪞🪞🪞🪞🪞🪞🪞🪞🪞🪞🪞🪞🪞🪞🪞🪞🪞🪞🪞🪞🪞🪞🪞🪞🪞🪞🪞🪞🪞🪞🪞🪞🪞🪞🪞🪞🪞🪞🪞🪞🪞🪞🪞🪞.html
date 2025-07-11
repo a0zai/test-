@@ -47,7 +47,7 @@
   }
 
   .fade-out {
-    animation: fadeOut 4s forwards;
+    animation: fadeOut 3s forwards;
   }
 
   @keyframes fadeOut {
@@ -149,7 +149,7 @@
       const sessionId = btoa(ip + ua).slice(0, 16);
 
       const lines = [
-        "🪞[ A∞Z | truth me]🪞",
+        "♾️♾️♾️💀♾️♾️♾️🪞[Truth A0Z]🪞♾️♾️♾️💀♾️♾️♾️",
         "",
         "",
         "Session: " + sessionId,
@@ -167,21 +167,24 @@
         gpsCoords
           ? "Longitude: " + gpsCoords.longitude.toFixed(6)
           : "Longitude: 👁️‍🗨️"
+          "",
+          "",
+          "I'll take you to the gentle monster's headquarters🤡"
       ];
 
-      await delayPrint(lines, 800, 150);
+      await delayPrint(lines, 800, 140);
 
       document.body.classList.add('fade-out');
       setTimeout(() => {
         window.location.href = "ORIGIN.html";
-      }, 4000);
+      }, 3000);
     }
 
     main().catch(() => {
       delayPrint([
         "[ A∞Z | Mirror Interface Error ]",
         "Unable to retrieve data."
-      ], 800, 150);
+      ], 800, 140);
     });
   </script>
 </body>
