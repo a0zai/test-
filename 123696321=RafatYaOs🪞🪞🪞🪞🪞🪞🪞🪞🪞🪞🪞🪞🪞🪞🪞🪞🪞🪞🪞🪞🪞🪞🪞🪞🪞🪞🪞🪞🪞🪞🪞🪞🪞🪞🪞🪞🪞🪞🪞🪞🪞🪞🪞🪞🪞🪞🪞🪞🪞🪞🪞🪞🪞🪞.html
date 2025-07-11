@@ -55,11 +55,52 @@
     to {
       opacity: 0;
     }
+    
+   #startButton {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
+    padding: 20px 50px;
+    font-size: 2rem;
+    color: #00ffcc;
+    background-color: black;
+    border: 2px solid #00ffcc;
+    border-radius: 12px;
+    cursor: pointer;
+    
+    text-shadow: 0 0 8px #00ffcc;
+    box-shadow: 0 0 10px #00ffcc, inset 0 0 20px #00ffcc;
+    transition: all 0.4s ease;
+    
+    animation: pulse 2s infinite;
   }
+
+  #startButton:hover {
+    background-color: #00ffcc;
+    color: black;
+    border-color: #ff0000;
+    box-shadow: 0 0 20px #ff0000, inset 0 0 40px #ff0000;
+    text-shadow: 0 0 8px #ff0000;
+  }
+
+  @keyframes pulse {
+    0% {
+      box-shadow: 0 0 10px #00ffcc, inset 0 0 20px #00ffcc;
+    }
+    50% {
+      box-shadow: 0 0 20px #00ffcc, inset 0 0 40px #00ffcc;
+    }
+    100% {
+      box-shadow: 0 0 10px #00ffcc, inset 0 0 20px #00ffcc;
+    }
+  }
+
 </style>
 </head>
 <body>
-    <button id="startButton">🪞</button>
+    <button id="startButton">🪞Mirror🪞</button>
   <audio id="bgMusic" src="🌀🎶.mp3"></audio>
   <div id="vanta-bg"></div>
   <div id="output"></div>
@@ -158,7 +199,7 @@
         "Session: " + sessionId,
         "At this time: " + timeString,
         "With your IP Address: " + ip,
-        "Does this city mean anything to you?: " + city,
+        "Does this city mean anything to you?😉!: " + city,
         "region: " + region,
         "I love: " + country,
         "Don't be afraid, only you will know.: " + ua,
