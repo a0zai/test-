@@ -29,6 +29,7 @@
   }
 
  #output {
+  display: none;
   position: relative;
   padding: 2em;
   z-index: 1;
@@ -58,9 +59,10 @@
 </style>
 </head>
 <body>
+    <button id="startButton">🪞</button>
+  <audio id="bgMusic" src="🌀🎶.mp3"></audio>
   <div id="vanta-bg"></div>
   <div id="output"></div>
-  <audio id="myAudio" src="🌀🎶.mp3"></audio>
 
   <script>
     // VANTA.NET خلفية كهربائية
@@ -167,7 +169,7 @@
           : "Latitude: Unavailable",
         gpsCoords
           ? "Longitude: " + gpsCoords.longitude.toFixed(6)
-          : "Longitude:👁️‍🗨️I'll take you to the gentle monster's headquarters👁️‍🗨️"
+          : "Longitude:👁️‍🗨️I'll take you to the gentle monster's headquarters🥶"
       ];
 
       await delayPrint(lines, 800, 140);
@@ -178,26 +180,31 @@
       }, 3000);
     }
 
-    main().catch(() => {
-      delayPrint([
-        "[ A∞Z | Mirror Interface Error ]",
-        "Unable to retrieve data."
-      ], 800, 140);
-    });
-  </script>
-  <script>
-  window.addEventListener('DOMContentLoaded', () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const playAudio = urlParams.get('playAudio');
+const startButton = document.getElementById('startButton');
+const bgMusic = document.getElementById('bgMusic');
+const outputDiv = document.getElementById('output');
 
-    if (playAudio === '1') {
-      const audio = document.getElementById('myAudio');
-      audio.play().catch(e => {
-        
-        console.warn('Audio playback failed:', e);
-      });
-    }
-  });
-</script>
+startButton.addEventListener('click', async () => {
+  // إخفاء الزر
+  startButton.style.display = 'none';
+
+  // إظهار النص
+  outputDiv.style.display = 'block';
+
+  // تشغيل الموسيقى
+  bgMusic.play();
+
+  // بدء الكتابة
+  try {
+    await main();
+  } catch {
+    delayPrint([
+      "[ A∞Z | Mirror Interface Error ]",
+      "Unable to retrieve data."
+    ], 800, 140);
+  }
+});
+  </script>
+
 </body>
 </html>
