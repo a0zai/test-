@@ -81,7 +81,41 @@
       box-shadow: 0 0 15px gold;
       display: block;
     }
-    
+    #topBar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: rgba(0,0,0,0.7);
+  z-index: 99999;
+  font-family: 'Courier New', monospace;
+}
+
+#emailLink {
+  color: #00ccff;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+#emailLink:hover {
+  color: #66e0ff;
+  text-shadow: 0 0 8px #00ccff;
+}
+
+#whatsappLink {
+  color: #ff3333;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+#whatsappLink:hover {
+  color: #ff6666;
+  text-shadow: 0 0 8px #ff3333;
+}
 
     #dynamicTextContainer {
       position: fixed;
@@ -111,14 +145,17 @@
    <div id="particles-js"></div>
   <img src="IMG_9055.jpeg" alt="Overlay Image" id="overlayImage" />
   </div>
-
+<div id="topBar">
+  <a id="emailLink" href="mailto:hi@rafat.world">hi@rafat.world</a>
+  <a id="whatsappLink" href="https://wa.me/31644367518" target="_blank">Whatsapp</a>
+</div>
   <div id="dynamicTextContainer">
     <span id="dynamicText"></span>
   </div>
 <script>
 
   const texts = [
-    "I am working on a groundbreaking research project called MirrorNote.",
+    "I am working on a groundbreaking research project.",
     "It is an experimental digital framework that touches the core of symbolic structure,",
     "recursive logic, and digital identity within contemporary systems."
   ];
