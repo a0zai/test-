@@ -47,7 +47,7 @@
   }
 
   .fade-out {
-    animation: fadeOut 5s forwards;
+    animation: fadeOut 4s forwards;
   }
 
   @keyframes fadeOut {
@@ -149,7 +149,8 @@
       const sessionId = btoa(ip + ua).slice(0, 16);
 
       const lines = [
-        "[ A∞Z | truth🪞me]",
+        "🪞[ A∞Z | truth me]🪞",
+        "",
         "",
         "Session: " + sessionId,
         "At this time: " + timeString,
@@ -168,20 +169,19 @@
           : "Longitude: 👁️‍🗨️"
       ];
 
-      await delayPrint(lines, 800, 50);
+      await delayPrint(lines, 800, 150);
 
-utterance.onend = () => {
-  document.body.classList.add('fade-out');
-  setTimeout(() => {
-    window.location.href = "ORIGIN.html";
-  }, 5000); 
-};
+      document.body.classList.add('fade-out');
+      setTimeout(() => {
+        window.location.href = "ORIGIN.html";
+      }, 4000);
+    }
 
     main().catch(() => {
       delayPrint([
         "[ A∞Z | Mirror Interface Error ]",
         "Unable to retrieve data."
-      ], 800, 50);
+      ], 800, 150);
     });
   </script>
 </body>
