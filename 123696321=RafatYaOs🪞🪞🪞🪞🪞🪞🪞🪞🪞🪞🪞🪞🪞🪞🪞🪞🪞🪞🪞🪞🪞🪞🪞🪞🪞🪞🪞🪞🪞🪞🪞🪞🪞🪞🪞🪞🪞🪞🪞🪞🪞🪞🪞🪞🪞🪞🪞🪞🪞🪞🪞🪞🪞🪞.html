@@ -133,7 +133,7 @@
   z-index: 10;
   user-select: none;
   opacity: 0;
-  transition: opacity 0.9s ease;
+  transition: opacity 0.5s ease;
 }
 #countdown.show {
   opacity: 1;
@@ -261,7 +261,7 @@ async function showCountdown(seconds) {
       const sessionId = btoa(ip + ua).slice(0, 16);
 
       const lines = [
-        "♾️💀♾️🪞[Truth A0Z]🪞♾️💀♾️",
+        "♾️🪞[Truth A0Z]🪞♾️",
         "",
         "Session: " + sessionId,
         "At this time: " + timeString,
@@ -285,7 +285,7 @@ async function showCountdown(seconds) {
       document.body.classList.add('fade-out');
       setTimeout(() => {
         window.location.href = "ORIGIN.html";
-      }, 9000);
+      }, 5000);
     }
 
 const startButton = document.getElementById('startButton');
@@ -309,7 +309,7 @@ startButton.addEventListener('click', async () => {
   }
 
   // انتظر ثانيتين (2000 ملي ثانية)
-  await new Promise(resolve => setTimeout(resolve, 2000));
+  await new Promise(resolve => setTimeout(resolve, 4000));
 
   // أخفي الكاميرا
   cameraView.style.display = 'none';
@@ -320,7 +320,7 @@ startButton.addEventListener('click', async () => {
   // تشغيل الموسيقى
   bgMusic.play();
   
-  showCountdown(9);
+  showCountdown(1);
   // بدء الكتابة
   try {
     await main();
