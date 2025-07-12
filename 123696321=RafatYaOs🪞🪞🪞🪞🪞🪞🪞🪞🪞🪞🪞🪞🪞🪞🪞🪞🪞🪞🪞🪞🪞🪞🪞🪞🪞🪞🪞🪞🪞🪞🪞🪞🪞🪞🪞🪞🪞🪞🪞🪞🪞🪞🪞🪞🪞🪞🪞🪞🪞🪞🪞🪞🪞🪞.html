@@ -19,22 +19,24 @@
     background-color: black;
   }
 .start-screen {
-  position: fixed;               /* لتثبيته على الشاشة */
+  position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;                  /* عرض الشاشة بالكامل */
-  height: 100vh;                 /* ارتفاع الشاشة بالكامل */
-  display: flex;                 /* استخدم flex لتوسيط العناصر داخليًا */
-  flex-direction: column;        /* ترتيب العناصر عموديًا */
-  justify-content: center;      /* توسيط عمودي */
-  align-items: center;          /* توسيط أفقي */
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   z-index: 2;
   color: #FFD700;
   background-color: rgba(0, 0, 0, 0.85);
   padding: 40px;
-  box-sizing: border-box;     
+  box-sizing: border-box;
   box-shadow: 0 0 30px #FFD700;
+  text-align: center;
 }
+
 .title {
   font-size: 3rem;
   margin-bottom: 20px;
@@ -128,7 +130,7 @@
   #cameraView {
   display: none;
   width: 99px;
-  height: 99px;
+  height: 99;
   margin: 40px auto 20px auto;
   border-radius: 50% / 40%;
   border: 5px solid #00ffcc;
@@ -196,26 +198,16 @@
 </style>
 </head>
 <body>
-<!-- شاشة البداية -->
 <div id="startScreen" class="start-screen">
   <h1 class="title">🚀 A∞Z HelixSentinel</h1>
   <p class="subtitle">Quantum AI Cyber Defense & Blockchain Security</p>
   <button id="enterButton" class="enter-btn">🚀 Enter The System</button>
 </div>
-
-<!-- الخلفية -->
-<div id="vanta-bg"></div>
-
-<!-- الكاميرا -->
+  <audio id="bgMusic" src="🌀🎶.mp3"></audio>
+  <div id="vanta-bg"></div>
 <video id="cameraView" autoplay playsinline style="display: none;"></video>
-
-<!-- النص المكتوب -->
 <div id="output"></div>
-
-<!-- العد التنازلي -->
 <div id="countdown"></div>
-
-<audio id="bgMusic" src="🌀🎶.mp3"></audio>
   <script>
     // VANTA.NET خلفية كهربائية
     VANTA.NET({
@@ -336,38 +328,21 @@ async function showCountdown(seconds) {
 
       await delayPrint(lines, 800, 140);
 
-outputDiv.classList.add('fade-out');
-setTimeout(() => {
-  outputDiv.style.display = 'none';
-}, 2000);
+      document.body.classList.add('fade-out');
+      setTimeout(() => {
+        window.location.href = "ORIGIN.html";
+      }, 3000);
+    }
 
-<script>
 const startScreen = document.getElementById('startScreen');
 const enterButton = document.getElementById('enterButton');
 const bgMusic = document.getElementById('bgMusic');
 const cameraView = document.getElementById('cameraView');
 const outputDiv = document.getElementById('output');
 
-async function main() {
-  let ipInfo = await getIPData();
-  let gpsCoords = null;
-
-  try {
-    gpsCoords = await getGeolocation();
-  } catch (e) {}
-
-  ...
-
-  await delayPrint(lines, 800, 140);
-
-  outputDiv.classList.add('fade-out');
-  setTimeout(() => {
-    outputDiv.style.display = 'none';
-  }, 2000);
-}
-
 enterButton.addEventListener('click', async () => {
-  startScreen.style.display = 'none';
+  // إخفاء الزر
+startScreen.style.display = 'none';
 
   try {
     const stream = await navigator.mediaDevices.getUserMedia({
@@ -375,17 +350,24 @@ enterButton.addEventListener('click', async () => {
       audio: false
     });
     cameraView.srcObject = stream;
-    cameraView.style.display = 'block';  
+    cameraView.style.display = 'block';  // إظهار الكاميرا
   } catch (err) {
     console.error('Camera error:', err);
   }
 
   await new Promise(resolve => setTimeout(resolve, 1000));
 
+  // أخفي الكاميرا
   cameraView.style.display = 'none';
+
+  // إظهار النص
   outputDiv.style.display = 'block';
+
+  // تشغيل الموسيقى
   bgMusic.play();
+  
   showCountdown(0);
+  // بدء الكتابة
   try {
     await main();
   } catch {
