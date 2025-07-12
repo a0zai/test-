@@ -52,7 +52,7 @@
   .subtitle {
     font-size: 1.5rem;
     margin-bottom: 30px;
-    color: #ccc;
+    color: #e6f7ff;
   }
 
   .enter-btn {
@@ -155,41 +155,7 @@
   #countdown.show {
     opacity: 1;
   }
-  @keyframes glitch {
-  0% {
-    clip: rect(44px, 9999px, 56px, 0);
-    transform: translate(-3px, -3px);
-  }
-  20% {
-    clip: rect(85px, 9999px, 140px, 0);
-    transform: translate(3px, 3px);
-  }
-  40% {
-    clip: rect(50px, 9999px, 100px, 0);
-    transform: translate(-3px, 3px);
-  }
-  60% {
-    clip: rect(20px, 9999px, 80px, 0);
-    transform: translate(3px, -3px);
-  }
-  80% {
-    clip: rect(60px, 9999px, 120px, 0);
-    transform: translate(-3px, -3px);
-  }
-  100% {
-    clip: rect(44px, 9999px, 56px, 0);
-    transform: translate(0);
-  }
-}
 
-.glitch-effect {
-  animation: glitch 0.5s linear infinite;
-  color: #8e44ad;
-  text-shadow:
-    2px 0 #ff00ff,
-    -2px 0 #00ffff;
-  opacity: 0.7;
-}
 </style>
 </head>
 <body>
