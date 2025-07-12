@@ -387,12 +387,7 @@ window.addEventListener('load', () => {
 
     await delayPrint(lines, 800, 140);
 
-outputDiv.classList.add('glitch-effect'); // تفعيل التأثير الكهربائي
-
-setTimeout(() => {
-  outputDiv.classList.remove('glitch-effect'); // إيقاف التأثير قبل التحويل
-  outputDiv.classList.add('fade-out');        // بدء التلاشي
-}, 1500);
+outputDiv.classList.add('fade-out');
 
 setTimeout(() => {
   window.location.href = "ORIGIN.html";
