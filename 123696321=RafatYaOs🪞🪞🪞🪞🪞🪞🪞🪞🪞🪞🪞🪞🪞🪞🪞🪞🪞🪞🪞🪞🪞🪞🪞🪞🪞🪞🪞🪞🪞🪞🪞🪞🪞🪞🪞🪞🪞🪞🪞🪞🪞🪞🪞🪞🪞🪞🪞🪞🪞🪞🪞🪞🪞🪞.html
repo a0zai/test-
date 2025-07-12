@@ -18,6 +18,15 @@
     font-family: "Courier New", Courier, monospace;
     background-color: black;
   }
+  #matrix {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -2;
+  pointer-events: none;
+}
 .start-screen {
   position: fixed;
   top: 0;
@@ -46,7 +55,7 @@
 .title {
   font-size: 3rem;
   margin-bottom: 20px;
-  color: #FFD700;
+  color: #BA55D3;
 }
 
 /* الوصف */
@@ -208,8 +217,9 @@
 </style>
 </head>
 <body>
+ <canvas id="matrix"></canvas>
 <div id="startScreen" class="start-screen">
-  <h1 class="title">🚀 A∞Z HelixAi</h1>
+  <h1 class="title">A∞Z 🚀 HelixAi</h1>
   <p class="subtitle">Quantum AI Cyber Defense & Blockchain Security</p>
   <button id="enterButton" class="enter-btn">🚀 Enter The System</button>
 </div>
@@ -388,5 +398,45 @@ startScreen.style.display = 'none';
   }
 });
   </script>
+  <script>
+  const canvas = document.getElementById("matrix");
+  const ctx = canvas.getContext("2d");
+
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const letters = "010101 AI QUANTUM BLOCKCHAIN SECURITY ";
+  const lettersArray = letters.split("");
+
+  const fontSize = 14;
+  const columns = canvas.width / fontSize;
+  const drops = Array(Math.floor(columns)).fill(1);
+
+  function drawMatrix() {
+    ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = "#00FF00";
+    ctx.font = fontSize + "px monospace";
+
+    for (let i = 0; i < drops.length; i++) {
+      const text = lettersArray[Math.floor(Math.random() * lettersArray.length)];
+      ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+      if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+        drops[i] = 0;
+      }
+      drops[i]++;
+    }
+  }
+
+  setInterval(drawMatrix, 50);
+
+  // Optional: Resize handler
+  window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  });
+</script>
 </body>
 </html>
