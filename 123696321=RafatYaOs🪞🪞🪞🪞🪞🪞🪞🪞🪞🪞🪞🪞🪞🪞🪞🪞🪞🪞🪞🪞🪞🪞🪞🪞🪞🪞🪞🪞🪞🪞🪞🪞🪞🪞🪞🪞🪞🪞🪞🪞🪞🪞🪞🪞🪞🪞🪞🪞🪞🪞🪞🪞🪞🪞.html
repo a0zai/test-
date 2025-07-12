@@ -398,7 +398,8 @@ startScreen.style.display = 'none';
   }
 });
   </script>
-  <script>
+<script>
+window.addEventListener('DOMContentLoaded', () => {
   const canvas = document.getElementById("matrix");
   const ctx = canvas.getContext("2d");
 
@@ -432,11 +433,11 @@ startScreen.style.display = 'none';
 
   setInterval(drawMatrix, 50);
 
-  // Optional: Resize handler
   window.addEventListener('resize', () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
   });
+});
 </script>
 </body>
 </html>
