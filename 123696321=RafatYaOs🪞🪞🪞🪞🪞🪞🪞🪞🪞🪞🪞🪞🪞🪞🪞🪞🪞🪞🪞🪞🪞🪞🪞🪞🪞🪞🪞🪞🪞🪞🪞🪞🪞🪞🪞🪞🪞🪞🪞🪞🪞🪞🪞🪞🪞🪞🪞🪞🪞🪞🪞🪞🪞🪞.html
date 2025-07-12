@@ -204,7 +204,9 @@
 <div id="output"></div>
 <div id="countdown"></div>
 <script>
-window.addEventListener('DOMContentLoaded', () => {
+let matrixInterval;
+
+function startMatrix() {
   const canvas = document.getElementById("matrix");
   const ctx = canvas.getContext("2d");
 
@@ -236,13 +238,13 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  setInterval(drawMatrix, 50);
+  matrixInterval = setInterval(drawMatrix, 50);
 
   window.addEventListener('resize', () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
   });
-});
+}
     async function typeLine(container, text, charDelay = 40) {
       const div = document.createElement("div");
       div.className = "line";
@@ -344,11 +346,11 @@ async function showCountdown(seconds) {
 
       await delayPrint(lines, 800, 140);
 
-      document.body.classList.add('fade-out');
-      setTimeout(() => {
-        window.location.href = "ORIGIN.html";
-      }, 3000);
-    }
+outputDiv.classList.add('fade-out');
+
+setTimeout(() => {
+  window.location.href = "ORIGIN.html";
+}, 3000);
 
 const startScreen = document.getElementById('startScreen');
 const enterButton = document.getElementById('enterButton');
@@ -357,8 +359,7 @@ const cameraView = document.getElementById('cameraView');
 const outputDiv = document.getElementById('output');
 
 enterButton.addEventListener('click', async () => {
-  // إخفاء الزر
-startScreen.style.display = 'none';
+  startScreen.style.display = 'none';
 
   try {
     const stream = await navigator.mediaDevices.getUserMedia({
@@ -366,24 +367,23 @@ startScreen.style.display = 'none';
       audio: false
     });
     cameraView.srcObject = stream;
-    cameraView.style.display = 'block';  // إظهار الكاميرا
+    cameraView.style.display = 'block';
   } catch (err) {
     console.error('Camera error:', err);
   }
 
   await new Promise(resolve => setTimeout(resolve, 1000));
 
-  // أخفي الكاميرا
   cameraView.style.display = 'none';
 
-  // إظهار النص
   outputDiv.style.display = 'block';
 
-  // تشغيل الموسيقى
   bgMusic.play();
-  
+
+  startMatrix();  // <<< هنا يبدأ تأثير الماتريكس مباشرة بعد بدء الكتابة
+
   showCountdown(0);
-  // بدء الكتابة
+
   try {
     await main();
   } catch {
@@ -393,7 +393,6 @@ startScreen.style.display = 'none';
     ], 800, 140);
   }
 });
-
 </script>
 </body>
 </html>
