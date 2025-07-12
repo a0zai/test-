@@ -16,7 +16,7 @@
     font-family: "Courier New", Courier, monospace;
     background-color: black;
   }
-  #matrix {
+#matrix {
   position: fixed;
   top: 0;
   left: 0;
@@ -25,6 +25,7 @@
   z-index: -1;
   pointer-events: none;
 }
+
 .start-screen {
   position: fixed;
   top: 0;
@@ -37,10 +38,9 @@
   align-items: center;
   z-index: 2;
   
-  /* خلفية متدرجة */
-  background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+  /* غير الخلفية المتدرجة إلى شفافة نصفية */
+  background: rgba(0, 0, 0, 0.6);
   
-  /* الخط واللون */
   font-family: 'Arial', sans-serif;
   color: #f5f5f5;
   
@@ -203,7 +203,46 @@
 <video id="cameraView" autoplay playsinline style="display: none;"></video>
 <div id="output"></div>
 <div id="countdown"></div>
-  <script>
+<script>
+window.addEventListener('DOMContentLoaded', () => {
+  const canvas = document.getElementById("matrix");
+  const ctx = canvas.getContext("2d");
+
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const letters = "010101 AI QUANTUM BLOCKCHAIN SECURITY ";
+  const lettersArray = letters.split("");
+
+  const fontSize = 14;
+  const columns = canvas.width / fontSize;
+  const drops = Array(Math.floor(columns)).fill(1);
+
+  function drawMatrix() {
+    ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = "#00FF00";
+    ctx.font = fontSize + "px monospace";
+
+    for (let i = 0; i < drops.length; i++) {
+      const text = lettersArray[Math.floor(Math.random() * lettersArray.length)];
+      ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+      if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+        drops[i] = 0;
+      }
+      drops[i]++;
+    }
+  }
+
+  setInterval(drawMatrix, 50);
+
+  window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  });
+});
     async function typeLine(container, text, charDelay = 40) {
       const div = document.createElement("div");
       div.className = "line";
@@ -354,47 +393,7 @@ startScreen.style.display = 'none';
     ], 800, 140);
   }
 });
-  </script>
-<script>
-window.addEventListener('DOMContentLoaded', () => {
-  const canvas = document.getElementById("matrix");
-  const ctx = canvas.getContext("2d");
 
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-
-  const letters = "010101 AI QUANTUM BLOCKCHAIN SECURITY ";
-  const lettersArray = letters.split("");
-
-  const fontSize = 14;
-  const columns = canvas.width / fontSize;
-  const drops = Array(Math.floor(columns)).fill(1);
-
-  function drawMatrix() {
-    ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    ctx.fillStyle = "#00FF00";
-    ctx.font = fontSize + "px monospace";
-
-    for (let i = 0; i < drops.length; i++) {
-      const text = lettersArray[Math.floor(Math.random() * lettersArray.length)];
-      ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
-      if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-        drops[i] = 0;
-      }
-      drops[i]++;
-    }
-  }
-
-  setInterval(drawMatrix, 50);
-
-  window.addEventListener('resize', () => {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-  });
-});
 </script>
 </body>
 </html>
