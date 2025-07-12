@@ -19,19 +19,22 @@
     background-color: black;
   }
 .start-screen {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
+  position: fixed;               /* لتثبيته على الشاشة */
+  top: 0;
+  left: 0;
+  width: 100vw;                  /* عرض الشاشة بالكامل */
+  height: 100vh;                 /* ارتفاع الشاشة بالكامل */
+  display: flex;                 /* استخدم flex لتوسيط العناصر داخليًا */
+  flex-direction: column;        /* ترتيب العناصر عموديًا */
+  justify-content: center;      /* توسيط عمودي */
+  align-items: center;          /* توسيط أفقي */
   z-index: 2;
   color: #FFD700;
   background-color: rgba(0, 0, 0, 0.85);
   padding: 40px;
-  border-radius: 20px;
+  box-sizing: border-box;     
   box-shadow: 0 0 30px #FFD700;
 }
-
 .title {
   font-size: 3rem;
   margin-bottom: 20px;
@@ -125,7 +128,7 @@
   #cameraView {
   display: none;
   width: 99px;
-  height: 99;
+  height: 99px;
   margin: 40px auto 20px auto;
   border-radius: 50% / 40%;
   border: 5px solid #00ffcc;
@@ -338,14 +341,32 @@ setTimeout(() => {
   outputDiv.style.display = 'none';
 }, 2000);
 
+<script>
 const startScreen = document.getElementById('startScreen');
 const enterButton = document.getElementById('enterButton');
 const bgMusic = document.getElementById('bgMusic');
 const cameraView = document.getElementById('cameraView');
 const outputDiv = document.getElementById('output');
 
+async function main() {
+  let ipInfo = await getIPData();
+  let gpsCoords = null;
+
+  try {
+    gpsCoords = await getGeolocation();
+  } catch (e) {}
+
+  ...
+
+  await delayPrint(lines, 800, 140);
+
+  outputDiv.classList.add('fade-out');
+  setTimeout(() => {
+    outputDiv.style.display = 'none';
+  }, 2000);
+}
+
 enterButton.addEventListener('click', async () => {
-  // أخفي شاشة البداية
   startScreen.style.display = 'none';
 
   try {
