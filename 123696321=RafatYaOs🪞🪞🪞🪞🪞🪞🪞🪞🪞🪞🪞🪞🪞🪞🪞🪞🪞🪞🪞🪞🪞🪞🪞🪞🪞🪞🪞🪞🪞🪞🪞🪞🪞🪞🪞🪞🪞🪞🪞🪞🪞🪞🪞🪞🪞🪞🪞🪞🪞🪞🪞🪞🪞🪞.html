@@ -78,7 +78,7 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    z-index: 1;
+    z-index: 0;
     pointer-events: none;
   }
 
@@ -155,14 +155,13 @@
   #countdown.show {
     opacity: 1;
   }
-
 </style>
 </head>
 <body>
  <div id="vanta-bg"></div>
  <canvas id="matrix"></canvas>
  <div id="startScreen" class="start-screen">
-   <h1 class="title">A∞Z 🚀 HelixAi</h1>
+   <h1 class="title">A∞Z  🔮  HelixAi</h1>
    <p class="subtitle">Quantum AI Cyber Defense & Blockchain Security</p>
    <button id="enterButton" class="enter-btn">🚀 Enter The System</button>
  </div>
@@ -353,11 +352,12 @@ window.addEventListener('load', () => {
 
     await delayPrint(lines, 800, 140);
 
-outputDiv.classList.add('fade-out');
+    outputDiv.classList.add('fade-out');
 
-setTimeout(() => {
-  window.location.href = "ORIGIN.html";
-}, 3000);
+    setTimeout(() => {
+      window.location.href = "ORIGIN.html";
+    }, 3000);
+  }
 
   enterButton.addEventListener('click', async () => {
     stopVanta();
