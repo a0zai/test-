@@ -29,40 +29,50 @@
   justify-content: center;
   align-items: center;
   z-index: 2;
-  color: #FFD700;
-  background-color: rgba(0, 0, 0, 0.85);
+  
+  /* خلفية متدرجة */
+  background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+  
+  /* الخط واللون */
+  font-family: 'Arial', sans-serif;
+  color: #f5f5f5;
+  
   padding: 40px;
   box-sizing: border-box;
-  box-shadow: 0 0 30px #FFD700;
   text-align: center;
 }
 
+/* العنوان */
 .title {
   font-size: 3rem;
   margin-bottom: 20px;
+  color: #FFD700;
 }
 
+/* الوصف */
 .subtitle {
   font-size: 1.5rem;
   margin-bottom: 30px;
   color: #ccc;
 }
 
+/* الزر */
 .enter-btn {
+  padding: 12px 24px;
   font-size: 1.5rem;
-  padding: 15px 40px;
-  border: 2px solid #FFD700;
-  background-color: black;
-  color: #FFD700;
-  cursor: pointer;
+  background: #ff5733;
+  border: none;
+  color: white;
+  font-weight: bold;
   border-radius: 10px;
+  cursor: pointer;
   transition: all 0.4s ease;
+  box-shadow: 0 0 10px #ff5733;
 }
 
 .enter-btn:hover {
-  background-color: #FFD700;
-  color: black;
-  box-shadow: 0 0 20px #FFD700;
+  background-color: #e64a2e;
+  opacity: 0.9;
 }
 #vanta-bg {
   position: fixed;
@@ -199,7 +209,7 @@
 </head>
 <body>
 <div id="startScreen" class="start-screen">
-  <h1 class="title">🚀 A∞Z HelixSentinel</h1>
+  <h1 class="title">🚀 A∞Z HelixAi</h1>
   <p class="subtitle">Quantum AI Cyber Defense & Blockchain Security</p>
   <button id="enterButton" class="enter-btn">🚀 Enter The System</button>
 </div>
