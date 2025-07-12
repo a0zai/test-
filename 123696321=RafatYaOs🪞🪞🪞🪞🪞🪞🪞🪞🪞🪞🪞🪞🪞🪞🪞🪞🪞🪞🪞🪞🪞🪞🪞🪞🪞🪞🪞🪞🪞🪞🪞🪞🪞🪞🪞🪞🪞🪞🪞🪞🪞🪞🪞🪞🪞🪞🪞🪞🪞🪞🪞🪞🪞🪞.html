@@ -5,8 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>A∞Z | Mirror Interface</title>
 
-<!-- مكتبات التأثير -->
-
 <style>
   html, body {
     margin: 0;
@@ -16,92 +14,86 @@
     font-family: "Courier New", Courier, monospace;
     background-color: black;
   }
-#matrix {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: -1;
-  pointer-events: none;
-}
+  #matrix {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    pointer-events: none;
+  }
 
-.start-screen {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  z-index: 2;
-  
-  /* غير الخلفية المتدرجة إلى شفافة نصفية */
-  background: rgba(0, 0, 0, 0.6);
-  
-  font-family: 'Arial', sans-serif;
-  color: #f5f5f5;
-  
-  padding: 40px;
-  box-sizing: border-box;
-  text-align: center;
-}
+  .start-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+    background: rgba(0, 0, 0, 0.6);
+    font-family: 'Arial', sans-serif;
+    color: #f5f5f5;
+    padding: 40px;
+    box-sizing: border-box;
+    text-align: center;
+  }
 
-/* العنوان */
-.title {
-  font-size: 3rem;
-  margin-bottom: 20px;
-  color: #BA55D3;
-}
+  .title {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    color: #BA55D3;
+  }
 
-/* الوصف */
-.subtitle {
-  font-size: 1.5rem;
-  margin-bottom: 30px;
-  color: #ccc;
-}
+  .subtitle {
+    font-size: 1.5rem;
+    margin-bottom: 30px;
+    color: #ccc;
+  }
 
-/* الزر */
-.enter-btn {
-  padding: 12px 24px;
-  font-size: 1.5rem;
-  background: #ff5733;
-  border: none;
-  color: white;
-  font-weight: bold;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all 0.4s ease;
-  box-shadow: 0 0 10px #ff5733;
-}
+  .enter-btn {
+    padding: 12px 24px;
+    font-size: 1.5rem;
+    background: #ff5733;
+    border: none;
+    color: white;
+    font-weight: bold;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    box-shadow: 0 0 10px #ff5733;
+  }
 
-.enter-btn:hover {
-  background-color: #e64a2e;
-  opacity: 0.9;
-}
+  .enter-btn:hover {
+    background-color: #e64a2e;
+    opacity: 0.9;
+  }
 
-#output {
-  display: none;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  padding: 2em;
-  z-index: 1;
-  text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000, 0 0 30px #ff0000;
-  white-space: pre-wrap;
-  max-width: 95vw;     /* يسمح بالتوسع حتى 95% من عرض الشاشة */
-  max-height: 90vh;    /* يسمح بالتوسع حتى 90% من ارتفاع الشاشة */
-  width: auto;         /* عرض تلقائي حسب المحتوى */
-  height: auto;        /* ارتفاع تلقائي حسب المحتوى */
-  min-width: 300px;    /* عرض أدنى مناسب */
-  overflow-y: auto;
-  overflow-x: hidden;  /* لمنع ظهور شريط تمرير أفقي */
-  text-align: center;
-  box-sizing: border-box; /* ليشمل الحشوة ضمن العرض */
-}
+  #output {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 2em;
+    z-index: 1;
+    text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000, 0 0 30px #ff0000;
+    white-space: pre-wrap;
+    max-width: 95vw;
+    max-height: 90vh;
+    width: auto;
+    height: auto;
+    min-width: 300px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    text-align: center;
+    box-sizing: border-box;
+  }
+
   .line {
     margin-bottom: 1em;
     white-space: pre-wrap;
@@ -121,278 +113,246 @@
     to {
       opacity: 0;
     }
- }
+  }
+
   #cameraView {
-  display: none;
-  width: 99px;
-  height: 99;
-  margin: 40px auto 20px auto;
-  border-radius: 50% / 40%;
-  border: 5px solid #00ffcc;
-  box-shadow: 0 0 20px #00ffcc, inset 0 0 30px #ff00ff;
-  background-color: black;
-  object-fit: cover;
-  z-index: 2;
-}
-   #startButton {
-    position: absolute;
+    display: none;
+    width: 99px;
+    height: 99px;
+    margin: 40px auto 20px auto;
+    border-radius: 50% / 40%;
+    border: 5px solid #00ffcc;
+    box-shadow: 0 0 20px #00ffcc, inset 0 0 30px #ff00ff;
+    background-color: black;
+    object-fit: cover;
+    z-index: 2;
+  }
+
+  #countdown {
+    position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    
-    padding: 20px 50px;
-    font-size: 2rem;
-    color: #00ffcc;
-    background-color: black;
-    border: 2px solid #00ffcc;
-    border-radius: 12px;
-    cursor: pointer;
-    
-    text-shadow: 0 0 8px #00ffcc;
-    box-shadow: 0 0 10px #00ffcc, inset 0 0 20px #00ffcc;
-    transition: all 0.4s ease;
-    
-    animation: pulse 5s infinite;
+    font-size: 6rem;
+    color: #ff0000;
+    text-shadow: 0 0 20px #ff0000;
+    z-index: 10;
+    user-select: none;
+    opacity: 0;
+    transition: opacity 0.5s ease;
   }
 
-  #startButton:hover {
-    background-color: #00ffcc;
-    color: black;
-    border-color: #ff0000;
-    box-shadow: 0 0 20px #ff0000, inset 0 0 40px #ff0000;
-    text-shadow: 0 0 8px #ff0000;
+  #countdown.show {
+    opacity: 1;
   }
-#countdown {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 6rem;
-  color: #ff0000;
-  text-shadow: 0 0 20px #ff0000;
-  z-index: 10;
-  user-select: none;
-  opacity: 0;
-  transition: opacity 0.5s ease;
-}
-#countdown.show {
-  opacity: 1;
-}
-  @keyframes pulse {
-    0% {
-      box-shadow: 0 0 10px #00ffcc, inset 0 0 20px #00ffcc;
-    }
-    50% {
-      box-shadow: 0 0 20px #00ffcc, inset 0 0 40px #00ffcc;
-    }
-    100% {
-      box-shadow: 0 0 10px #00ffcc, inset 0 0 20px #00ffcc;
-    }
-  }
-
 </style>
 </head>
 <body>
  <canvas id="matrix"></canvas>
-<div id="startScreen" class="start-screen">
-  <h1 class="title">A∞Z 🚀 HelixAi</h1>
-  <p class="subtitle">Quantum AI Cyber Defense & Blockchain Security</p>
-  <button id="enterButton" class="enter-btn">🚀 Enter The System</button>
-</div>
-  <audio id="bgMusic" src="🌀🎶.mp3"></audio>
-<video id="cameraView" autoplay playsinline style="display: none;"></video>
-<div id="output"></div>
-<div id="countdown"></div>
+ <div id="startScreen" class="start-screen">
+   <h1 class="title">A∞Z 🚀 HelixAi</h1>
+   <p class="subtitle">Quantum AI Cyber Defense & Blockchain Security</p>
+   <button id="enterButton" class="enter-btn">🚀 Enter The System</button>
+ </div>
+ <audio id="bgMusic" src="🌀🎶.mp3"></audio>
+ <video id="cameraView" autoplay playsinline></video>
+ <div id="output"></div>
+ <div id="countdown"></div>
+ 
 <script>
-let matrixInterval;
+  // تعريف المتغيرات DOM كلها في الأعلى
+  const startScreen = document.getElementById('startScreen');
+  const enterButton = document.getElementById('enterButton');
+  const bgMusic = document.getElementById('bgMusic');
+  const cameraView = document.getElementById('cameraView');
+  const outputDiv = document.getElementById('output');
+  const countdown = document.getElementById('countdown');
 
-function startMatrix() {
-  const canvas = document.getElementById("matrix");
-  const ctx = canvas.getContext("2d");
+  let matrixInterval;
 
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+  function startMatrix() {
+    const canvas = document.getElementById("matrix");
+    const ctx = canvas.getContext("2d");
 
-  const letters = "010101 AI QUANTUM BLOCKCHAIN SECURITY ";
-  const lettersArray = letters.split("");
-
-  const fontSize = 14;
-  const columns = canvas.width / fontSize;
-  const drops = Array(Math.floor(columns)).fill(1);
-
-  function drawMatrix() {
-    ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    ctx.fillStyle = "#00FF00";
-    ctx.font = fontSize + "px monospace";
-
-    for (let i = 0; i < drops.length; i++) {
-      const text = lettersArray[Math.floor(Math.random() * lettersArray.length)];
-      ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
-      if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-        drops[i] = 0;
-      }
-      drops[i]++;
-    }
-  }
-
-  matrixInterval = setInterval(drawMatrix, 50);
-
-  window.addEventListener('resize', () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-  });
-}
-    async function typeLine(container, text, charDelay = 40) {
-      const div = document.createElement("div");
-      div.className = "line";
-      container.appendChild(div);
-      await new Promise(resolve => setTimeout(resolve, 50));
-      div.style.opacity = 1;
 
-      for (let char of text) {
-        div.textContent += char;
-        await new Promise(resolve => setTimeout(resolve, charDelay));
-      }
-    }
+    const letters = "010101 AI QUANTUM BLOCKCHAIN SECURITY ";
+    const lettersArray = letters.split("");
 
-    async function delayPrint(lines, lineDelay = 600, charDelay = 40) {
-      const container = document.getElementById("output");
-      for (let line of lines) {
-        await typeLine(container, line, charDelay);
-        await new Promise(resolve => setTimeout(resolve, lineDelay));
-      }
-    }
+    const fontSize = 14;
+    const columns = canvas.width / fontSize;
+    const drops = Array(Math.floor(columns)).fill(1);
 
-    async function getIPData() {
-      try {
-        const response = await fetch("https://ipapi.co/json/");
-        if (!response.ok) throw new Error("IP API Error");
-        return await response.json();
-      } catch {
-        return null;
-      }
-    }
-async function showCountdown(seconds) {
-  const el = document.getElementById('countdown');
-  el.classList.add('show');
+    function drawMatrix() {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  for (let i = seconds; i > 0; i--) {
-    el.textContent = i;
-    await new Promise(resolve => setTimeout(resolve, 1000));
-  }
+      ctx.fillStyle = "#00FF00";
+      ctx.font = fontSize + "px monospace";
 
-  el.classList.remove('show');
-}
-    async function getGeolocation() {
-      return new Promise((resolve, reject) => {
-        if (!navigator.geolocation) {
-          reject("Geolocation not supported.");
-        } else {
-          navigator.geolocation.getCurrentPosition(
-            position => resolve(position.coords),
-            error => reject(error.message)
-          );
+      for (let i = 0; i < drops.length; i++) {
+        const text = lettersArray[Math.floor(Math.random() * lettersArray.length)];
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
         }
-      });
+        drops[i]++;
+      }
     }
 
-    async function main() {
-      let ipInfo = await getIPData();
-      let gpsCoords = null;
+    matrixInterval = setInterval(drawMatrix, 50);
 
-      try {
-        gpsCoords = await getGeolocation();
-      } catch (e) {
-        // GPS denied or error
-      }
-
-      const now = new Date();
-      const timeString = now.toLocaleString();
-
-      const ua = navigator.userAgent;
-      const width = window.screen.width;
-      const height = window.screen.height;
-      const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-
-      let ip = ipInfo?.ip || "Unavailable";
-      let city = ipInfo?.city || "Unavailable";
-      let region = ipInfo?.region || "Unavailable";
-      let country = ipInfo?.country_name || "Unavailable";
-
-      const sessionId = btoa(ip + ua).slice(0, 16);
-
-      const lines = [
-        "♾️🪞[Truth A0Z]🪞♾️",
-        "",
-        "Session: " + sessionId,
-        "At this time: " + timeString,
-        "With your IP Address: " + ip,
-        "Does this city mean anything to you?😉!: " + city,
-        "region: " + region,
-        "I love: " + country,
-        "Don't be afraid, only you will know.: " + ua,
-        "Screen: " + width + "x" + height,
-        "Timezone: " + timezone,
-        gpsCoords
-          ? "Latitude: " + gpsCoords.latitude.toFixed(6)
-          : "Latitude: Unavailable",
-        gpsCoords
-          ? "Longitude: " + gpsCoords.longitude.toFixed(6)
-          : "Longitude:👁️‍🗨️I'll take you to the gentle monster's headquarters🥶"
-      ];
-
-      await delayPrint(lines, 800, 140);
-
-outputDiv.classList.add('fade-out');
-
-setTimeout(() => {
-  window.location.href = "ORIGIN.html";
-}, 3000);
-
-const startScreen = document.getElementById('startScreen');
-const enterButton = document.getElementById('enterButton');
-const bgMusic = document.getElementById('bgMusic');
-const cameraView = document.getElementById('cameraView');
-const outputDiv = document.getElementById('output');
-
-enterButton.addEventListener('click', async () => {
-  startScreen.style.display = 'none';
-
-  try {
-    const stream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: 'user' },
-      audio: false
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
     });
-    cameraView.srcObject = stream;
-    cameraView.style.display = 'block';
-  } catch (err) {
-    console.error('Camera error:', err);
   }
 
-  await new Promise(resolve => setTimeout(resolve, 1000));
+  async function typeLine(container, text, charDelay = 40) {
+    const div = document.createElement("div");
+    div.className = "line";
+    container.appendChild(div);
+    await new Promise(resolve => setTimeout(resolve, 50));
+    div.style.opacity = 1;
 
-  cameraView.style.display = 'none';
-
-  outputDiv.style.display = 'block';
-
-  bgMusic.play();
-
-  startMatrix();  // <<< هنا يبدأ تأثير الماتريكس مباشرة بعد بدء الكتابة
-
-  showCountdown(0);
-
-  try {
-    await main();
-  } catch {
-    delayPrint([
-      "[ A∞Z | Mirror Interface Error ]",
-      "Unable to retrieve data."
-    ], 800, 140);
+    for (let char of text) {
+      div.textContent += char;
+      await new Promise(resolve => setTimeout(resolve, charDelay));
+    }
   }
-});
+
+  async function delayPrint(lines, lineDelay = 600, charDelay = 40) {
+    for (let line of lines) {
+      await typeLine(outputDiv, line, charDelay);
+      await new Promise(resolve => setTimeout(resolve, lineDelay));
+    }
+  }
+
+  async function getIPData() {
+    try {
+      const response = await fetch("https://ipapi.co/json/");
+      if (!response.ok) throw new Error("IP API Error");
+      return await response.json();
+    } catch {
+      return null;
+    }
+  }
+
+  async function showCountdown(seconds) {
+    countdown.classList.add('show');
+
+    for (let i = seconds; i > 0; i--) {
+      countdown.textContent = i;
+      await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+
+    countdown.classList.remove('show');
+  }
+
+  async function getGeolocation() {
+    return new Promise((resolve, reject) => {
+      if (!navigator.geolocation) {
+        reject("Geolocation not supported.");
+      } else {
+        navigator.geolocation.getCurrentPosition(
+          position => resolve(position.coords),
+          error => reject(error.message)
+        );
+      }
+    });
+  }
+
+  async function main() {
+    let ipInfo = await getIPData();
+    let gpsCoords = null;
+
+    try {
+      gpsCoords = await getGeolocation();
+    } catch (e) {
+      // GPS denied or error
+    }
+
+    const now = new Date();
+    const timeString = now.toLocaleString();
+
+    const ua = navigator.userAgent;
+    const width = window.screen.width;
+    const height = window.screen.height;
+    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+    let ip = ipInfo?.ip || "Unavailable";
+    let city = ipInfo?.city || "Unavailable";
+    let region = ipInfo?.region || "Unavailable";
+    let country = ipInfo?.country_name || "Unavailable";
+
+    const sessionId = btoa(ip + ua).slice(0, 16);
+
+    const lines = [
+      "♾️🪞[Truth A0Z]🪞♾️",
+      "",
+      "Session: " + sessionId,
+      "At this time: " + timeString,
+      "With your IP Address: " + ip,
+      "Does this city mean anything to you?😉!: " + city,
+      "region: " + region,
+      "I love: " + country,
+      "Don't be afraid, only you will know.: " + ua,
+      "Screen: " + width + "x" + height,
+      "Timezone: " + timezone,
+      gpsCoords
+        ? "Latitude: " + gpsCoords.latitude.toFixed(6)
+        : "Latitude: Unavailable",
+      gpsCoords
+        ? "Longitude: " + gpsCoords.longitude.toFixed(6)
+        : "Longitude:👁️‍🗨️I'll take you to the gentle monster's headquarters🥶"
+    ];
+
+    await delayPrint(lines, 800, 140);
+
+    outputDiv.classList.add('fade-out');
+
+    setTimeout(() => {
+      window.location.href = "ORIGIN.html";
+    }, 3000);
+  }
+
+  enterButton.addEventListener('click', async () => {
+    startScreen.style.display = 'none';
+
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: 'user' },
+        audio: false
+      });
+      cameraView.srcObject = stream;
+      cameraView.style.display = 'block';
+    } catch (err) {
+      console.error('Camera error:', err);
+    }
+
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
+    cameraView.style.display = 'none';
+
+    outputDiv.style.display = 'block';
+
+    bgMusic.play();
+
+    startMatrix();  // بدء تأثير الماتريكس بعد الضغط
+
+    showCountdown(0);
+
+    try {
+      await main();
+    } catch {
+      await delayPrint([
+        "[ A∞Z | Mirror Interface Error ]",
+        "Unable to retrieve data."
+      ], 800, 140);
+    }
+  });
 </script>
 </body>
 </html>
