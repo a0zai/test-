@@ -67,7 +67,7 @@
   z-index: 10;
   background-color: rgba(0, 0, 0, 0.25); /* شفاف داكن */
   border: 1.5px solid rgba(255, 215, 0, 0);
-  color: gold;                           /* لون الخط ذهبي */
+  color: #bb00ff;                           /* لون الخط ذهبي */
   outline: none;
   font-size: 18px;                       /* حجم خط أنعم */
   text-align: center;
@@ -92,7 +92,7 @@
       white-space: pre-wrap;
     }
     .cmd-user {
-      color: #ffaa00;
+      color: #bb00ff;
     }
     #supportButton {
   display: inline-block;
@@ -2738,6 +2738,7 @@ RAFAT 366
 
 
         // تعليم أوامر جديدة
+
     function handleLearningCommand(input) {
       if (input.startsWith("learn ")) {
         const parts = input.split(" ");
@@ -2765,20 +2766,20 @@ RAFAT 366
       // 3. أوامر محددة
       if (commandActions[lowerInput]) {
         commandActions[lowerInput]();
-        return 🔧 Command "${lowerInput}" executed.;
+        return `🔧 Command "${lowerInput}" executed.`;
       }
 
       // 4. ردود على الأسئلة
       if (questionResponses[lowerInput]) {
         const answers = questionResponses[lowerInput];
-        return Answer 1: ${answers[0]}\nAnswer 2: ${answers[1]};
+        return `Answer 1: ${answers[0]}\nAnswer 2: ${answers[1]}`;
       }
 
       // 5. recall
       if (lowerInput === "recall") {
         let res = "🧠 Learned commands:\n";
         for (let key in symbolicMemory) {
-          res += ${key} → ${symbolicMemory[key]}\n;
+          res += `${key} → ${symbolicMemory[key]}\n`;
         }
         return res.trim();
       }
@@ -2791,9 +2792,9 @@ RAFAT 366
         const mapped = grammarMapping[word] || mathMapping[word] || emojiResponseMap[word];
         if (mapped) {
           if (emojiResponseMap[word]) {
-            result.push(${word} → Feeling: ${mapped.feeling}, Opposite: ${mapped.opposite});
+            result.push(`${word} → Feeling: ${mapped.feeling}, Opposite: ${mapped.opposite}`);
           } else {
-            result.push(${word} → ${mapped});
+            result.push(`${word} → ${mapped}`);
           }
         }
       });
@@ -2804,15 +2805,15 @@ if (numbers) {
   numbers.forEach(num => {
     if (numToLetter[num]) {
       const info = numToLetter[num];
-      result.push(${num} → Letter: ${info.letter}, Binary: ${info.binary});
+      result.push(`${num} → Letter: ${info.letter}, Binary: ${info.binary}`);
     } else {
-      result.push(${num} → ⚠️ Not mapped);
+      result.push(`${num} → ⚠️ Not mapped`);
     }
   });
 }
       if (result.length) return result.join(" | ");
 
-      return ⚠️ Unknown command: "${input}";
+      return `⚠️ Unknown command: "${input}"`;
     }
 
     // عرض سطر جديد
@@ -2868,6 +2869,7 @@ if (numbers) {
       input.value = "";
     }
   });
+
     // تشغيل الرسائل التمهيدية
     showBaseLines();
   </script>
