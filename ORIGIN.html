@@ -2,43 +2,50 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Realtime Open Chat with Username & Links</title>
+  <title>Support & Contact</title>
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <style>
     html, body {
+      height: 100%;
       margin: 0;
       padding: 0;
-      height: 100%;
       background-color: #000;
-      color: #00ffcc;
-      font-family: monospace;
+      color: gold;
+      font-family: 'Courier New', monospace;
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      position: relative;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
     }
+    #pageOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(12px);  /* تأثير ضبابي */
+  background-color: rgba(0, 0, 0, 0.6);  /* لون شفاف داكن */
+  z-index: 9999;  /* فوق كل شيء */
+  opacity: 1;
+  transition: opacity 3s ease;
+}
+#pageOverlay.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+#particles-js {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
 
-    body::before {
-      content: "";
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: url('IMG_9055.jpeg') no-repeat center center fixed;
-      background-size: cover;
-      opacity: 0.15;
-      z-index: -2;
-      pointer-events: none;
-    }
-
-    #particles-js {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-      pointer-events: none;
-    }
-
-    #chatWrapper {
+ #chatWrapper {
       position: relative;
       z-index: 1;
       max-width: 600px;
@@ -51,162 +58,17 @@
       flex-direction: column;
     }
 
-    /* شريط الروابط أعلى التيرمينال */
-    #linksBar {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 10px;
-      padding: 5px 10px;
-      user-select: none;
-      font-weight: bold;
-      font-size: 14px;
-    }
-    #linksBar a {
-      text-decoration: none;
-      padding: 6px 12px;
-      border-radius: 6px;
-      box-shadow: 0 0 8px currentColor;
-      transition: all 0.3s ease;
-    }
-    #linksBar a.email {
-      color: #007bff; /* أزرق */
-      background-color: rgba(0,123,255,0.1);
-    }
-    #linksBar a.email:hover {
-      background-color: #007bff;
-      color: #fff;
-      box-shadow: 0 0 15px #007bff;
-    }
-    #linksBar a.whatsapp {
-      color: #cc0000; /* أحمر */
-      background-color: rgba(204,0,0,0.1);
-    }
-    #linksBar a.whatsapp:hover {
-      background-color: #cc0000;
-      color: #fff;
-      box-shadow: 0 0 15px #cc0000;
-    }
-
-    #namePrompt {
-      background-color: rgba(0, 0, 0, 0.8);
-      border: 1px solid #00ffcc;
-      border-radius: 8px;
-      padding: 20px;
-      margin-bottom: 10px;
-      text-align: center;
-      flex-shrink: 0;
-    }
-
-    #nameInput {
-      width: 80%;
-      max-width: 300px;
-      padding: 10px;
-      border: 1px solid #00ffcc;
-      border-radius: 6px;
-      background-color: #111;
-      color: #00ffcc;
-      font-family: monospace;
-      outline: none;
-    }
-
-    #joinBtn {
-      margin-top: 10px;
-      padding: 10px 20px;
-      border: none;
-      background-color: #00ffcc;
-      color: #000;
-      font-weight: bold;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      user-select: none;
-    }
-    #joinBtn:hover {
-      background-color: #00bbaa;
-    }
-
-    /* تخفيض ارتفاع التيرمينال هنا */
-    #messages {
-      flex: none; /* منع التمدد */
-      height: 300px; /* يمكنك تعديل الارتفاع حسب رغبتك */
-      padding: 10px;
-      overflow-y: auto;
-      border: 1px solid #00ffcc;
-      border-radius: 6px;
-      background-color: rgba(0, 0, 0, 0.7);
-      word-wrap: break-word;
-      display: none;
-      margin-bottom: 10px;
-    }
-
-    #inputBar {
-      display: flex;
-      margin-top: 0;
-      display: none;
-      flex-shrink: 0;
-    }
-
-    #input {
-      flex: 1;
-      padding: 10px;
-      border: 1px solid #00ffcc;
-      border-radius: 6px 0 0 6px;
-      background-color: #111;
-      color: #00ffcc;
-      font-family: monospace;
-      outline: none;
-    }
-
-    #sendButton {
-      background-color: #00ffcc;
-      color: #000;
-      border: none;
-      padding: 10px 20px;
-      cursor: pointer;
-      font-weight: bold;
-      border-radius: 0 6px 6px 0;
-      user-select: none;
-      transition: background-color 0.3s ease;
-    }
-    #sendButton:hover {
-      background-color: #00bbaa;
-    }
-
-    .msg {
-      margin-bottom: 10px;
-    }
-    .msg .username {
-      font-weight: bold;
-      color: #00ffcc;
-      margin-right: 6px;
-    }
-
-    #viewersCount {
-      position: fixed;
-      top: 10px;
-      right: 10px;
-      color: #00ffcc;
-      font-size: 18px;
-      font-weight: bold;
-      user-select: none;
-      z-index: 10000;
-      text-shadow: 0 0 5px #00ffcc;
+    @keyframes blinkCaret {
+      50% { border-color: transparent; }
     }
   </style>
 </head>
 <body>
-
-  <div id="particles-js"></div>
-
-  <div id="chatWrapper">
-
-    <!-- شريط الروابط -->
-    <div id="linksBar">
-      <a href="mailto:hi@rafat.world" class="email" target="_blank" rel="noopener noreferrer">📧 Email</a>
-      <a href="https://wa.me/31644367518" class="whatsapp" target="_blank" rel="noopener noreferrer">📱 WhatsApp</a>
-    </div>
-
-    <div id="namePrompt">
+  <div id="pageOverlay"></div>
+   <div id="particles-js"></div>
+  <img src="IMG_9055.jpeg" alt="Overlay Image" id="overlayImage" />
+  </div>
+  <div id="namePrompt">
       <h2>Enter your name to join the chat</h2>
       <input id="nameInput" placeholder="Your name" autocomplete="off" />
       <button id="joinBtn">Join Chat</button>
@@ -302,63 +164,68 @@
       }
     });
 
-  </script>
-
-  <script>
-particlesJS("particles-js", {
-  particles: {
-    number: { value: 70, density: { enable: true, value_area: 800 } },
-    color: { value: "#ff3333" },
-    shape: {
-      type: "circle",
-      stroke: { width: 0, color: "#000000" },
-      polygon: { nb_sides: 5 },
+</script>
+<script>
+  particlesJS("particles-js", {
+    particles: {
+      number: { value: 70, density: { enable: true, value_area: 800 } },
+      color: { value: "#ff3333" },
+      shape: {
+        type: "circle",
+        stroke: { width: 0, color: "#000000" },
+        polygon: { nb_sides: 5 },
+      },
+      opacity: {
+        value: 0.5,
+        random: true,
+        anim: { enable: true, speed: 1, opacity_min: 0.1, sync: false }
+      },
+      size: {
+        value: 3,
+        random: true,
+        anim: { enable: false }
+      },
+      line_linked: {
+        enable: true,
+        distance: 150,
+        color: "#ff3333",
+        opacity: 0.3,
+        width: 1
+      },
+      move: {
+        enable: true,
+        speed: 1,
+        direction: "none",
+        random: true,
+        straight: false,
+        out_mode: "out",
+        bounce: false,
+        attract: { enable: false }
+      }
     },
-    opacity: {
-      value: 0.5,
-      random: true,
-      anim: { enable: true, speed: 1, opacity_min: 0.1, sync: false }
+    interactivity: {
+      detect_on: "canvas",
+      events: {
+        onhover: { enable: true, mode: "grab" },
+        onclick: { enable: true, mode: "push" },
+        resize: true
+      },
+      modes: {
+        grab: { distance: 200, line_linked: { opacity: 0.5 } },
+        bubble: { distance: 200, size: 6, duration: 2, opacity: 0.8 },
+        repulse: { distance: 100 },
+        push: { particles_nb: 4 },
+        remove: { particles_nb: 2 }
+      }
     },
-    size: {
-      value: 3,
-      random: true,
-      anim: { enable: false }
-    },
-    line_linked: {
-      enable: true,
-      distance: 150,
-      color: "#ff3333",
-      opacity: 0.3,
-      width: 1
-    },
-    move: {
-      enable: true,
-      speed: 1,
-      direction: "none",
-      random: true,
-      straight: false,
-      out_mode: "out",
-      bounce: false,
-      attract: { enable: false, rotateX: 600, rotateY: 1200 }
-    }
-  },
-  interactivity: {
-    detect_on: "canvas",
-    events: {
-      onhover: { enable: true, mode: "grab" },
-      onclick: { enable: true, mode: "push" },
-      resize: true
-    },
-    modes: {
-      grab: { distance: 200, line_linked: { opacity: 0.5 } },
-      bubble: { distance: 200, size: 6, duration: 2, opacity: 0.8 },
-      repulse: { distance: 100 },
-      push: { particles_nb: 4 },
-      remove: { particles_nb: 2 }
-    }
-  },
-  retina_detect: true
-});
+    retina_detect: true
+  });
+</script>
+<script>
+  window.addEventListener('load', () => {
+    const overlay = document.getElementById('pageOverlay');
+    overlay.classList.add('fade-out');
+  });
 </script>
 
 </body>
