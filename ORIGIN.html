@@ -5,36 +5,46 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Terminal Chat with Clear Button</title>
   <style>
-    html, body {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-      background-color: #000;
-      color: #00ffcc;
-      font-family: monospace;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-    body::before {
-      content: "";
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: url('IMG_9055.jpeg') no-repeat center center fixed;
-      background-size: cover;
-      opacity: 0.15;
-      z-index: -2;
-      pointer-events: none;
-    }
-    #particles-js {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      z-index: -1;
-      pointer-events: none;
-    }
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: url('IMG_9055.jpeg') no-repeat center center fixed;
+  background-size: cover;
+  color: gold;
+  font-family: 'Courier New', monospace;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+  #pageOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(12px);  /* تأثير ضبابي */
+  background-color: rgba(0, 0, 0, 0.6);  /* لون شفاف داكن */
+  z-index: 9999;  /* فوق كل شيء */
+  opacity: 1;
+  transition: opacity 3s ease;
+}
+#pageOverlay.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+#particles-js {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
  
     #namePrompt {
       flex-shrink: 0;
@@ -161,6 +171,8 @@
   </style>
 </head>
 <body>
+  <div id="pageOverlay"></div>
+   <div id="particles-js"></div>
 
   <div id="particles-js"></div>
 
@@ -277,60 +289,60 @@
   </script>
 
   <script>
-    particlesJS("particles-js", {
-      particles: {
-        number: { value: 70, density: { enable: true, value_area: 800 } },
-        color: { value: "#ff3333" },
-        shape: {
-          type: "circle",
-          stroke: { width: 0, color: "#000000" },
-          polygon: { nb_sides: 5 },
-        },
-        opacity: {
-          value: 0.5,
-          random: true,
-          anim: { enable: true, speed: 1, opacity_min: 0.1, sync: false }
-        },
-        size: {
-          value: 3,
-          random: true,
-          anim: { enable: false }
-        },
-        line_linked: {
-          enable: true,
-          distance: 150,
-          color: "#ff3333",
-          opacity: 0.3,
-          width: 1
-        },
-        move: {
-          enable: true,
-          speed: 1,
-          direction: "none",
-          random: true,
-          straight: false,
-          out_mode: "out",
-          bounce: false,
-          attract: { enable: false }
-        }
+particlesJS("particles-js", {
+    particles: {
+      number: { value: 70, density: { enable: true, value_area: 800 } },
+      color: { value: "#ff3333" },
+      shape: {
+        type: "circle",
+        stroke: { width: 0, color: "#000000" },
+        polygon: { nb_sides: 5 },
       },
-      interactivity: {
-        detect_on: "canvas",
-        events: {
-          onhover: { enable: true, mode: "grab" },
-          onclick: { enable: true, mode: "push" },
-          resize: true
-        },
-        modes: {
-          grab: { distance: 200, line_linked: { opacity: 0.5 } },
-          bubble: { distance: 200, size: 6, duration: 2, opacity: 0.8 },
-          repulse: { distance: 100 },
-          push: { particles_nb: 4 },
-          remove: { particles_nb: 2 }
-        }
+      opacity: {
+        value: 0.5,
+        random: true,
+        anim: { enable: true, speed: 1, opacity_min: 0.1, sync: false }
       },
-      retina_detect: true
-    });
+      size: {
+        value: 3,
+        random: true,
+        anim: { enable: false }
+      },
+      line_linked: {
+        enable: true,
+        distance: 150,
+        color: "#ff3333",
+        opacity: 0.3,
+        width: 1
+      },
+      move: {
+        enable: true,
+        speed: 1,
+        direction: "none",
+        random: true,
+        straight: false,
+        out_mode: "out",
+        bounce: false,
+        attract: { enable: false }
+      }
+    },
+    interactivity: {
+      detect_on: "canvas",
+      events: {
+        onhover: { enable: true, mode: "grab" },
+        onclick: { enable: true, mode: "push" },
+        resize: true
+      },
+      modes: {
+        grab: { distance: 200, line_linked: { opacity: 0.5 } },
+        bubble: { distance: 200, size: 6, duration: 2, opacity: 0.8 },
+        repulse: { distance: 100 },
+        push: { particles_nb: 4 },
+        remove: { particles_nb: 2 }
+      }
+    },
+    retina_detect: true
+  });
   </script>
 
 </body>
