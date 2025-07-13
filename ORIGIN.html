@@ -35,20 +35,7 @@
       z-index: -1;
       pointer-events: none;
     }
-    #chatWrapper {
-      position: relative;
-      z-index: 1;
-      width: 600px;
-      max-width: 95vw;
-      height: 400px;
-      display: flex;
-      flex-direction: column;
-      border: 1px solid #00ffcc;
-      border-radius: 8px;
-      background: rgba(0,0,0,0.7);
-      padding: 10px;
-      box-sizing: border-box;
-    }
+ 
     #namePrompt {
       flex-shrink: 0;
       text-align: center;
@@ -80,17 +67,7 @@
     #joinBtn:hover {
       background-color: #00bbaa;
     }
-    #messages {
-      flex: 1;
-      overflow-y: auto;
-      padding: 10px;
-      border: 1px solid #00ffcc;
-      border-radius: 6px;
-      word-wrap: break-word;
-      display: none;
-      background-color: rgba(0,0,0,0.9);
-      margin-bottom: 5px;
-    }
+
     .msg {
       margin-bottom: 10px;
     }
@@ -158,6 +135,29 @@
       z-index: 10000;
       text-shadow: 0 0 5px #00ffcc;
     }
+    #chatWrapper {
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(5px);
+  border: 1px solid #00ffcc;
+  border-radius: 8px;
+  padding: 10px;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 1;
+}
+
+#messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+  border: 1px solid #00ffcc;
+  border-radius: 6px;
+  word-wrap: break-word;
+  display: none;
+  background-color: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(5px);
+  margin-bottom: 5px;
+}
   </style>
 </head>
 <body>
