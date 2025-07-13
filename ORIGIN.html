@@ -2,107 +2,394 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Realtime Open Chat</title>
+  <title>Support & Contact</title>
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <style>
-    body {
+    html, body {
+      height: 100%;
       margin: 0;
+      padding: 0;
       background-color: #000;
-      color: #00ffcc;
-      font-family: monospace;
+      color: gold;
+      font-family: 'Courier New', monospace;
+      overflow: hidden;
       display: flex;
       flex-direction: column;
-      height: 100vh;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
     }
-    #messages {
-      flex: 1;
-      padding: 10px;
-      overflow-y: auto;
-      border-bottom: 1px solid #00ffcc;
-    }
-    #inputBar {
-      display: flex;
-      border-top: 1px solid #00ffcc;
-    }
-    #input {
-      flex: 1;
-      padding: 10px;
-      border: none;
-      background-color: #111;
-      color: #00ffcc;
-      font-family: monospace;
-    }
-    #sendButton {
-      background-color: #00ffcc;
-      color: #000;
-      border: none;
-      padding: 10px 20px;
-      cursor: pointer;
+    #pageOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(12px);  /* تأثير ضبابي */
+  background-color: rgba(0, 0, 0, 0.6);  /* لون شفاف داكن */
+  z-index: 9999;  /* فوق كل شيء */
+  opacity: 1;
+  transition: opacity 3s ease;
+}
+#pageOverlay.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+#particles-js {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+#chatContainer {
+  background-color: rgba(0, 0, 0, 0.8);
+  border: 2px solid gold;
+  border-radius: 12px;
+  padding: 10px;
+  width: 90%;
+  max-width: 600px;
+  margin: 20px auto;
+  color: gold;
+  font-family: 'Courier New', monospace;
+  overflow-y: auto;
+  max-height: 400px;
+}
+#namePrompt {
+  background-color: rgba(0, 0, 0, 0.85);
+  border: 2px solid gold;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  margin: 20px auto;
+  max-width: 400px;
+  color: gold;
+  font-family: 'Courier New', monospace;
+}
+
+#namePrompt input, #namePrompt button {
+  padding: 10px;
+  margin-top: 10px;
+  width: 80%;
+  max-width: 300px;
+  border: 1px solid gold;
+  border-radius: 6px;
+  background-color: #111;
+  color: gold;
+  font-family: 'Courier New', monospace;
+}
+
+#namePrompt button:hover {
+  background-color: gold;
+  color: #000;
+  cursor: pointer;
+}
+#terminal {
+  height: 250px;
+  overflow-y: auto;
+  border: 1px solid gold;
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #000;
+}
+
+#commandInput {
+  width: calc(100% - 20px);
+  padding: 8px;
+  background-color: #111;
+  color: gold;
+  border: 1px solid gold;
+  border-radius: 6px;
+  font-family: 'Courier New', monospace;
+}
+h1 {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  padding: 10px 20px;
+  color: gold;
+  font-family: 'Courier New', monospace;
+  font-size: 36px;
+  text-shadow: 0 0 12px gold;
+  z-index: 9999;
+}
+    a.button {
+      display: block;
+      margin: 15px auto;
+      padding: 14px 24px;
+      color: gold;
+      border: 2px solid gold;
+      border-radius: 10px;
+      text-decoration: none;
+      width: 80%;
+      max-width: 280px;
       font-weight: bold;
+      font-size: 18px;
+      box-shadow: inset 0 0 8px gold;
+      transition: all 0.3s ease;
     }
-    .msg {
-      margin-bottom: 10px;
-      word-wrap: break-word;
+    a.button:hover {
+      background-color: gold;
+      color: #000;
+      box-shadow: 0 0 20px gold;
+    }
+    .qr {
+      margin: 30px auto 0 auto;
+      border: 2px solid gold;
+      border-radius: 14px;
+      width: 180px;
+      height: 180px;
+      box-shadow: 0 0 15px gold;
+      display: block;
+    }
+.topLink {
+  position: fixed;
+  top: 20px;
+  padding: 12px 20px;
+  font-weight: bold;
+  border-radius: 12px;
+  text-decoration: none;
+  font-family: 'Courier New', monospace;
+  box-shadow: 0 0 12px currentColor;
+  transition: all 0.3s ease;
+  z-index: 10000;
+}
+
+.topLink.right {
+  right: 20px;
+  background-color: #007bff;
+  color: white;
+}
+
+.topLink.left {
+  left: 20px;
+  background-color: #cc0000;
+  color: white;
+}
+
+.topLink:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 20px gold;
+}
+    #dynamicTextContainer {
+      position: fixed;
+      bottom: 10px;
+      width: 100%;
+      text-align: center;
+      font-size: 33px;
+      color: #cc0000;
+      text-shadow: 0 0 20px #cc0000;
+      font-family: 'Courier New', monospace;
+      user-select: none;
+    }
+    #dynamicText {
+      display: inline-block;
+      border-right: 2px solid #ffd700;
+      padding-right: 5px;
+      white-space: nowrap;
+      animation: blinkCaret 1s step-end infinite;
+    }
+    @keyframes blinkCaret {
+      50% { border-color: transparent; }
     }
   </style>
 </head>
 <body>
-  <div id="messages"></div>
-  <div id="inputBar">
-    <input id="input" placeholder="Type a message..." />
-    <button id="sendButton">Send</button>
+  <div id="namePrompt">
+    <h2 style="color:gold;">Enter your name to join the chat</h2>
+    <input type="text" id="nameInput" placeholder="Your Name" />
+    <button id="joinChatButton">Join Chat</button>
   </div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-    import { getDatabase, ref, push, onChildAdded, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+  <div id="chatContainer" style="display:none;">
+    <div id="terminal"></div>
+    <input type="text" id="commandInput" placeholder="Type a message and press Enter" />
+  </div>
 
-    // ✅ استخدم نفس config الذي أعطيتني إياه
-    const firebaseConfig = {
-      apiKey: "AIzaSyA7Pu0DJOWmdoDYUUVP1J9aqhxh4f3wyfA",
-      authDomain: "a0zai-56c3a.firebaseapp.com",
-      databaseURL: "https://a0zai-56c3a-default-rtdb.europe-west1.firebasedatabase.app",
-      projectId: "a0zai-56c3a",
-      storageBucket: "a0zai-56c3a.firebasestorage.app",
-      messagingSenderId: "198838438266",
-      appId: "1:198838438266:web:379e782653f014a32a2ec3",
-      measurementId: "G-85PDXY00J4"
-    };
+  <div id="pageOverlay"></div>
+  <div id="particles-js"></div>
+  <img src="IMG_9055.jpeg" alt="Overlay Image" id="overlayImage" />
 
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-    const chatRef = ref(db, "chat");
+  <h1>👑 Contact 👑</h1>
+  <a href="mailto:hi@rafat.world" class="topLink right">📧 ~Email~</a>
+  <a href="https://wa.me/31644367518" class="topLink left" target="_blank">📱 WhatsApp</a>
 
-    const messagesDiv = document.getElementById("messages");
-    const input = document.getElementById("input");
-    const sendButton = document.getElementById("sendButton");
+  <div id="dynamicTextContainer">
+    <span id="dynamicText"></span>
+  </div>
+<script>
 
-    // إرسال رسالة
-    sendButton.addEventListener("click", () => {
-      const text = input.value.trim();
-      if (text) {
-        push(chatRef, { text, timestamp: serverTimestamp() });
+  const texts = [
+    "I am working on a groundbreaking research project.",
+    "It is an experimental digital framework that touches the core of symbolic structure,",
+    "recursive logic, and digital identity within contemporary systems."
+  ];
+
+  let index = 0;
+  let charIndex = 0;
+  const typingSpeed = 50;
+  const erasingSpeed = 30;
+  const delayBetweenTexts = 3000;
+
+  const dynamicTextElem = document.getElementById("dynamicText");
+
+  function typeText() {
+    if (charIndex < texts[index].length) {
+      dynamicTextElem.textContent += texts[index].charAt(charIndex);
+      charIndex++;
+      setTimeout(typeText, typingSpeed);
+    } else {
+      setTimeout(eraseText, delayBetweenTexts);
+    }
+  }
+
+  function eraseText() {
+    if (charIndex > 0) {
+      dynamicTextElem.textContent = texts[index].substring(0, charIndex -1);
+      charIndex--;
+      setTimeout(eraseText, erasingSpeed);
+    } else {
+      index++;
+      if (index >= texts.length) index = 0;
+      setTimeout(typeText, typingSpeed);
+    }
+  }
+
+  //الكتابة مباشرة عند تحميل الصفحة
+  document.addEventListener("DOMContentLoaded", function() {
+    typeText();
+  });
+</script>
+<script>
+  particlesJS("particles-js", {
+    particles: {
+      number: { value: 70, density: { enable: true, value_area: 800 } },
+      color: { value: "#ff3333" },
+      shape: {
+        type: "circle",
+        stroke: { width: 0, color: "#000000" },
+        polygon: { nb_sides: 5 },
+      },
+      opacity: {
+        value: 0.5,
+        random: true,
+        anim: { enable: true, speed: 1, opacity_min: 0.1, sync: false }
+      },
+      size: {
+        value: 3,
+        random: true,
+        anim: { enable: false }
+      },
+      line_linked: {
+        enable: true,
+        distance: 150,
+        color: "#ff3333",
+        opacity: 0.3,
+        width: 1
+      },
+      move: {
+        enable: true,
+        speed: 1,
+        direction: "none",
+        random: true,
+        straight: false,
+        out_mode: "out",
+        bounce: false,
+        attract: { enable: false }
+      }
+    },
+    interactivity: {
+      detect_on: "canvas",
+      events: {
+        onhover: { enable: true, mode: "grab" },
+        onclick: { enable: true, mode: "push" },
+        resize: true
+      },
+      modes: {
+        grab: { distance: 200, line_linked: { opacity: 0.5 } },
+        bubble: { distance: 200, size: 6, duration: 2, opacity: 0.8 },
+        repulse: { distance: 100 },
+        push: { particles_nb: 4 },
+        remove: { particles_nb: 2 }
+      }
+    },
+    retina_detect: true
+  });
+</script>
+<script>
+  window.addEventListener('load', () => {
+    const overlay = document.getElementById('pageOverlay');
+    overlay.classList.add('fade-out');
+  });
+</script><script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+  import { getDatabase, ref, push, onChildAdded } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyA7Pu0DJOWmdoDYUUVP1J9aqhxh4f3wyfA",
+    authDomain: "a0zai-56c3a.firebaseapp.com",
+    databaseURL: "https://a0zai-56c3a-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "a0zai-56c3a",
+    storageBucket: "a0zai-56c3a.appspot.com",
+    messagingSenderId: "198838438266",
+    appId: "1:198838438266:web:379e782653f014a32a2ec3",
+    measurementId: "G-85PDXY00J4"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  const terminal = document.getElementById("terminal");
+  const input = document.getElementById("commandInput");
+  const namePrompt = document.getElementById("namePrompt");
+  const nameInput = document.getElementById("nameInput");
+  const joinChatButton = document.getElementById("joinChatButton");
+  const chatContainer = document.getElementById("chatContainer");
+
+  let userName = "";
+
+  // عند الضغط على زر Join
+  joinChatButton.addEventListener("click", () => {
+    const val = nameInput.value.trim();
+    if (val) {
+      userName = val;
+      namePrompt.style.display = "none";
+      chatContainer.style.display = "block";
+    } else {
+      alert("Please enter your name!");
+    }
+  });
+
+  // الدردشة مع Firebase
+  const commandsRef = ref(db, "terminalCommands");
+  onChildAdded(commandsRef, (snapshot) => {
+    const data = snapshot.val();
+    if (data && data.text && data.user) {
+      const div = document.createElement("div");
+      div.className = "cmd-line";
+      div.innerHTML = `<span class="username" style="color:gold; font-weight:bold;">${data.user}:</span> ${data.text}`;
+      terminal.appendChild(div);
+      terminal.scrollTop = terminal.scrollHeight;
+    }
+  });
+
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      const val = input.value.trim();
+      if (val && userName) {
+        push(commandsRef, {
+          text: val,
+          user: userName,
+          timestamp: Date.now()
+        });
         input.value = "";
       }
-    });
-
-    input.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") {
-        sendButton.click();
-      }
-    });
-
-    // استقبال الرسائل
-    onChildAdded(chatRef, (snapshot) => {
-      const msg = snapshot.val();
-      if (msg && msg.text) {
-        const div = document.createElement("div");
-        div.className = "msg";
-        div.textContent = msg.text;
-        messagesDiv.appendChild(div);
-        messagesDiv.scrollTop = messagesDiv.scrollHeight;
-      }
-    });
-  </script>
+    }
+  });
+</script>
 </body>
 </html>
