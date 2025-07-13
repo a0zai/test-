@@ -120,24 +120,24 @@
       box-shadow: 0 0 8px gold;
     }
 
-    #chatWrapper {
-      width: 96%;
-      max-width: 900px;        /* أكبر عرض */
-      max-height: 90vh;
-      background: rgba(0, 0, 0, 0.6);
-      backdrop-filter: blur(8px);
-      border: 2px solid #00ffcc;
-      border-radius: 12px;
-      padding: 20px;
-      box-sizing: border-box;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 10;
-      display: flex;
-      flex-direction: column;
-    }
+#chatWrapper {
+  width: 96%;
+  max-width: 900px;
+  max-height: 90vh;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  border: 2px solid #00ffcc;
+  border-radius: 12px;
+  padding: 20px;
+  box-sizing: border-box;
+  position: fixed;
+  bottom: 20px;       /* بدل top */
+  left: 50%;
+  transform: translateX(-50%);  /* حذف translateY */
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+}
 #nameInput {
   width: 250px;         /* حجم العرض */
   padding: 15px 20px;   /* مساحة داخلية أكبر لارتفاع الحقل */
