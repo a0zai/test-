@@ -14,88 +14,156 @@
       font-family: 'Courier New', monospace;
       overflow: hidden;
       display: flex;
-      flex-direction: column;
       justify-content: center;
       align-items: center;
       text-align: center;
     }
     #pageOverlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  backdrop-filter: blur(12px);  /* تأثير ضبابي */
-  background-color: rgba(0, 0, 0, 0.6);  /* لون شفاف داكن */
-  z-index: 9999;  /* فوق كل شيء */
-  opacity: 1;
-  transition: opacity 3s ease;
-}
-#pageOverlay.fade-out {
-  opacity: 0;
-  pointer-events: none;
-}
-#particles-js {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-  pointer-events: none;
-}
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      backdrop-filter: blur(12px);
+      background-color: rgba(0, 0, 0, 0.6);
+      z-index: 9999;
+      opacity: 1;
+      transition: opacity 3s ease;
+    }
+    #pageOverlay.fade-out {
+      opacity: 0;
+      pointer-events: none;
+    }
+    #particles-js {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+    #overlayImage {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+      opacity: 0.9;
+      pointer-events: none;
+    }
 
-#chatWrapper {
-  width: 90%;
-  max-width: 600px;              /* أكبر وأعرض */
-  max-height: 80vh;
-  overflow-y: auto;
+    /* عداد المشاهدين ثابت في الأعلى يمين */
+    #viewersCount {
+      position: fixed;
+      top: 15px;
+      right: 20px;
+      font-size: 20px;
+      font-weight: bold;
+      color: gold;
+      z-index: 10000;
+      user-select: none;
+      background: rgba(0,0,0,0.5);
+      padding: 6px 12px;
+      border-radius: 12px;
+      box-shadow: 0 0 8px gold;
+    }
 
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(8px);
-  border: 2px solid #00ffcc;
-  border-radius: 12px;
-  padding: 20px;
-  box-sizing: border-box;
+    #chatWrapper {
+      width: 90%;
+      max-width: 700px;        /* أكبر عرض */
+      max-height: 80vh;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(8px);
+      border: 2px solid #00ffcc;
+      border-radius: 12px;
+      padding: 20px;
+      box-sizing: border-box;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+    }
 
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 1;
-}
-#messages {
-  flex: 1;
-  overflow-y: auto;
-  padding: 20px;
-  border: 1px solid #00ffcc;
-  border-radius: 8px;
-  word-wrap: break-word;
-  display: none;
-  background-color: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(6px);
-  margin-bottom: 10px;
-  max-height: 50vh;
-}
-#overlayImage {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: -1;
-  opacity: 1; 
-  pointer-events: none;
-  filter: brightness(1.1) contrast(1.2);
-}
+    #messages {
+      flex: 1;                 /* يشغل أكبر مساحة ممكنة */
+      overflow-y: auto;
+      padding: 20px;
+      border: 1px solid #00ffcc;
+      border-radius: 8px;
+      word-wrap: break-word;
+      display: none;
+      background-color: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(6px);
+      margin-bottom: 10px;
+      max-height: 55vh;        /* ارتفاع مناسب للرسائل */
+      color: #00ffcc;
+      font-size: 16px;
+      text-align: left;
+    }
+
+    #inputBar {
+      display: none;
+      gap: 10px;
+      margin-top: 10px;
+      align-items: center;
+    }
+    #inputBar input {
+      flex-grow: 1;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: 1px solid #00ffcc;
+      background-color: #111;
+      color: gold;
+      font-family: 'Courier New', monospace;
+    }
+    #inputBar button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: 2px solid gold;
+      background: transparent;
+      color: gold;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+    #inputBar button:hover {
+      background-color: gold;
+      color: black;
+    }
+
+    /* زر مسح الرسائل */
+    #clearButton {
+      margin-top: 10px;
+      align-self: flex-end;
+      padding: 8px 16px;
+      font-size: 14px;
+      border-radius: 8px;
+      border: 2px solid #ff5555;
+      background: transparent;
+      color: #ff5555;
+      cursor: pointer;
+      font-weight: bold;
+      user-select: none;
+      transition: background-color 0.3s ease;
+    }
+    #clearButton:hover {
+      background-color: #ff5555;
+      color: black;
+    }
+
   </style>
 </head>
 <body>
   <div id="pageOverlay"></div>
-   <div id="particles-js"></div>
+  <div id="particles-js"></div>
   <img src="IMG_9055.jpeg" alt="Overlay Image" id="overlayImage" />
-   <div id="chatWrapper">
+
+  <div id="viewersCount">👁️‍🗨️ 0</div>
+
+  <div id="chatWrapper">
     <div id="namePrompt">
       <h2>Enter your name to join the chat</h2>
       <input id="nameInput" placeholder="Your name" autocomplete="off" />
@@ -108,13 +176,13 @@
       <input id="input" placeholder="Type a message..." autocomplete="off" />
       <button id="sendButton">Send</button>
     </div>
+
+    <button id="clearButton" title="Clear chat messages">مسح الرسائل</button>
   </div>
 
-  <div id="viewersCount">👁️‍🗨️ 0</div>
-
   <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-    import { getDatabase, ref, push, onChildAdded, onValue, set, onDisconnect, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+    import { getDatabase, ref, push, onChildAdded, onValue, set, onDisconnect, serverTimestamp, remove } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyA7Pu0DJOWmdoDYUUVP1J9aqhxh4f3wyfA",
@@ -139,6 +207,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/fireba
     const sendButton = document.getElementById("sendButton");
     const inputBar = document.getElementById("inputBar");
     const viewersCountDiv = document.getElementById("viewersCount");
+    const clearButton = document.getElementById("clearButton");
 
     let userName = "";
 
@@ -152,6 +221,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/fireba
       namePrompt.style.display = "none";
       messagesDiv.style.display = "block";
       inputBar.style.display = "flex";
+      clearButton.style.display = "inline-block";
       input.focus();
 
       // تسجيل الزائر ضمن المشاهدين
@@ -193,69 +263,83 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/fireba
       }
     });
 
-</script>
-<script>
-  particlesJS("particles-js", {
-    particles: {
-      number: { value: 70, density: { enable: true, value_area: 800 } },
-      color: { value: "#ff3333" },
-      shape: {
-        type: "circle",
-        stroke: { width: 0, color: "#000000" },
-        polygon: { nb_sides: 5 },
-      },
-      opacity: {
-        value: 0.5,
-        random: true,
-        anim: { enable: true, speed: 1, opacity_min: 0.1, sync: false }
-      },
-      size: {
-        value: 3,
-        random: true,
-        anim: { enable: false }
-      },
-      line_linked: {
-        enable: true,
-        distance: 150,
-        color: "#ff3333",
-        opacity: 0.3,
-        width: 1
-      },
-      move: {
-        enable: true,
-        speed: 1,
-        direction: "none",
-        random: true,
-        straight: false,
-        out_mode: "out",
-        bounce: false,
-        attract: { enable: false }
+    // مسح الرسائل عند الضغط على الزر
+    clearButton.addEventListener("click", () => {
+      if(confirm("هل تريد مسح جميع الرسائل؟")) {
+        // مسح قاعدة البيانات كاملة تحت المفتاح "chat"
+        remove(chatRef)
+          .then(() => {
+            messagesDiv.innerHTML = "";
+          })
+          .catch(err => alert("حدث خطأ أثناء المسح: " + err.message));
       }
-    },
-    interactivity: {
-      detect_on: "canvas",
-      events: {
-        onhover: { enable: true, mode: "grab" },
-        onclick: { enable: true, mode: "push" },
-        resize: true
+    });
+
+  </script>
+
+  <script>
+    particlesJS("particles-js", {
+      particles: {
+        number: { value: 70, density: { enable: true, value_area: 800 } },
+        color: { value: "#ff3333" },
+        shape: {
+          type: "circle",
+          stroke: { width: 0, color: "#000000" },
+          polygon: { nb_sides: 5 },
+        },
+        opacity: {
+          value: 0.5,
+          random: true,
+          anim: { enable: true, speed: 1, opacity_min: 0.1, sync: false }
+        },
+        size: {
+          value: 3,
+          random: true,
+          anim: { enable: false }
+        },
+        line_linked: {
+          enable: true,
+          distance: 150,
+          color: "#ff3333",
+          opacity: 0.3,
+          width: 1
+        },
+        move: {
+          enable: true,
+          speed: 1,
+          direction: "none",
+          random: true,
+          straight: false,
+          out_mode: "out",
+          bounce: false,
+          attract: { enable: false }
+        }
       },
-      modes: {
-        grab: { distance: 200, line_linked: { opacity: 0.5 } },
-        bubble: { distance: 200, size: 6, duration: 2, opacity: 0.8 },
-        repulse: { distance: 100 },
-        push: { particles_nb: 4 },
-        remove: { particles_nb: 2 }
-      }
-    },
-    retina_detect: true
-  });
-</script>
-<script>
-  window.addEventListener('load', () => {
-    const overlay = document.getElementById('pageOverlay');
-    overlay.classList.add('fade-out');
-  });
-</script>
+      interactivity: {
+        detect_on: "canvas",
+        events: {
+          onhover: { enable: true, mode: "grab" },
+          onclick: { enable: true, mode: "push" },
+          resize: true
+        },
+        modes: {
+          grab: { distance: 200, line_linked: { opacity: 0.5 } },
+          bubble: { distance: 200, size: 6, duration: 2, opacity: 0.8 },
+          repulse: { distance: 100 },
+          push: { particles_nb: 4 },
+          remove: { particles_nb: 2 }
+        }
+      },
+      retina_detect: true
+    });
+  </script>
+
+  <script>
+    window.addEventListener('load', () => {
+      const overlay = document.getElementById('pageOverlay');
+      overlay.classList.add('fade-out');
+    });
+  </script>
 
 </body>
 </html>
