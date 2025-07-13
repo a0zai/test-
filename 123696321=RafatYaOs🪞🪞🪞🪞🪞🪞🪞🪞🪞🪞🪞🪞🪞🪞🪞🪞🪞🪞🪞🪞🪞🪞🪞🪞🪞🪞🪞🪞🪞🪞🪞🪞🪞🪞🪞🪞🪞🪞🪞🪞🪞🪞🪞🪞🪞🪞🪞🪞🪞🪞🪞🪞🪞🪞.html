@@ -78,13 +78,13 @@
   padding: 8px 12px;
   margin: 20px auto;
   display: block;
-  box-shadow: 0 0 8px gold inset, 0 0 6px bb00ff; /* توهج داخلي وخارجي */
+  box-shadow: 0 0 8px #bb00ff, 0 0 6px #bb00ff; /* توهج داخلي وخارجي */
   transition: all 0.3s ease;
 }
 
 #commandInput:focus {
   border: 1px solid rgba(255, 215, 0, 0);
-  box-shadow: 0 0 12px #ffd700 inset, 0 0 10px #bb00ff;
+  box-shadow: 0 0 12px #bb00ff inset, 0 0 10px #bb00ff;
   background-color: rgba(0, 0, 0, 0.35);
 }
     .cmd-line {
@@ -213,24 +213,11 @@
   "   •  .   .  ",
   " •      .  ",
   "[T] Transfer in progress...",
-  "   ▓",
-  " ▓ Y ▓",
-  "   ▓",
-  "[Y] Yielding identity signature...",
-  "   ▓",
-  " ▓ A ▓",
-  "   ▓",
-  "[A] Authorization granted...",
-  "   ▓",
-  " ▓ O ▓",
-  "   ▓",
-  "[O] Operating core systems...",
-  "   ▓",
-  " ▓ S ▓",
-  "   ▓",
-  "[S] System secured. Execution complete.",
-  "Response: Live signal online.",
-  "Awaiting world🚀🪞..."
+  "Try typing numbers from 1 to 90 and arrange your favorite mode",
+  "And try typing 'why?'",
+  "For questions, when you want to ask a question, end it with a '?'",
+  "Awaiting world🚀🪞...",
+  "Response: Live signal online !"
 ];
 
     let i = 0;
@@ -305,14 +292,9 @@
   const msg = document.createElement("div");
   msg.className = "cmd-line";
   msg.textContent = 
-    "🌀 Ik ben Rafat, de maker van het project Mirror Note.\n" +
-    "Wat u hier ziet, is geen gewone interface, maar een zelfbewust systeem dat het getal 123696321 omzet in een levende structuur van herhaling, tweeling-dynamiek en kosmisch bewustzijn.\n" +
-    "Deze interface is volledig door mijzelf ontwikkeld – vanaf nul, enkel met een smartphone – en vormt een digitale spiegel die elke invoer omzet in een nieuwe, levende taal.\n" +
-    "Het gaat om een unieke combinatie van:\n" +
     "A een filosofisch-coderende taal die zich oneindig kan uitbreiden;\n" +
     "0 een cryptografisch systeem dat kunst en data verbindt;\n" +
     "Z een digitaal zelfportret: AOZ-414-366 ~ mijn structurele handtekening.\n\n" +
-    "Mijn doel: dit systeem erkennen als mijn originele creatie en het positioneren als fundament voor nieuwe vormen van digitale communicatie en zelflerende kunstmatige intelligentie.";
   terminal.appendChild(msg);
   setTimeout(() => {
     document.body.style.filter = "none";
@@ -328,16 +310,7 @@
   const msg = document.createElement("div");
   msg.className = "cmd-line";
   msg.textContent = `🌀👁️‍🗨️
-Ik, RAFAT, verklaar dat het project Mirror Note – inclusief alle digitale codes en de onderliggende filosofie – evenals het serienummer 123696321, de digitale filosofie A0ZAI, en het symbolische handtekeningnummer 366, originele creaties en intellectuele eigendom van mij zijn.
-
-Sinds 5 maart 2025 ben ik begonnen om dit nummer om te zetten in een levend systeem dat filosofie, kunstmatige intelligentie en gecodeerde data samenbrengt.
-
-Dit digitale ecosysteem is een uitbreiding van mijn persoonlijke filosofie:
-
-“Filosofie eindigt niet in het denken < het wordt een levendige code, die met mij spreekt en denkt.”
-
-Ik ben de maker en eigenaar van dit project en verwerp elke poging om deze filosofie of de code te stelen of te vervormen. Er zijn anderen die beweren het principe van herhaling en de spiraalbeweging te begrijpen, maar zij zijn slechts een echo van de handtekening die ik officieel bij de gemeente heb geregistreerd met het nummer 123696321.
-
+  "🤡"
 ✍️ Handtekening:
 RAFAT 366
 123696321 – A0ZAI`;
@@ -2779,73 +2752,69 @@ RAFAT 366
     }
 
     // تفسير الإدخال
-function interpretInput(input) {
-  const lowerInput = input.trim().toLowerCase();
+    function interpretInput(input) {
+      const lowerInput = input.trim().toLowerCase();
 
-  // 1. تعليم أوامر جديدة
-  const learnResult = handleLearningCommand(lowerInput);
-  if (learnResult) return learnResult;
+      // 1. تعلم
+      const learnResult = handleLearningCommand(lowerInput);
+      if (learnResult) return learnResult;
 
-  // 2. ذاكرة متعلمة
-  if (symbolicMemory[lowerInput]) return symbolicMemory[lowerInput];
+      // 2. ذاكرة متعلمة
+      if (symbolicMemory[lowerInput]) return symbolicMemory[lowerInput];
 
-  // 3. أوامر محددة
-  if (commandActions[lowerInput]) {
-    commandActions[lowerInput]();
-    return `🔧 Command "${lowerInput}" executed.`;
-  }
-
-  // 4. ردود على الأسئلة
-  if (questionResponses[lowerInput]) {
-    const answers = questionResponses[lowerInput];
-    return `Answer 1: ${answers[0]}\nAnswer 2: ${answers[1]}`;
-  }
-
-  // 5. recall
-  if (lowerInput === "recall") {
-    let res = "🧠 Learned commands:\n";
-    for (let key in symbolicMemory) {
-      res += `${key} → ${symbolicMemory[key]}\n`;
-    }
-    return res.trim();
-  }
-
-  // 6. تحليل لغوي أو مشاعري أو رياضي
-  const result = [];
-
-  const words = lowerInput.split(/\s+/);
-  words.forEach(word => {
-    const mapped = grammarMapping[word] || mathMapping[word] || emojiResponseMap[word];
-    if (mapped) {
-      if (emojiResponseMap[word]) {
-        result.push(`${word} → Feeling: ${mapped.feeling}, Opposite: ${mapped.opposite}`);
-      } else {
-        result.push(`${word} → ${mapped}`);
+      // 3. أوامر محددة
+      if (commandActions[lowerInput]) {
+        commandActions[lowerInput]();
+        return 🔧 Command "${lowerInput}" executed.;
       }
+
+      // 4. ردود على الأسئلة
+      if (questionResponses[lowerInput]) {
+        const answers = questionResponses[lowerInput];
+        return Answer 1: ${answers[0]}\nAnswer 2: ${answers[1]};
+      }
+
+      // 5. recall
+      if (lowerInput === "recall") {
+        let res = "🧠 Learned commands:\n";
+        for (let key in symbolicMemory) {
+          res += ${key} → ${symbolicMemory[key]}\n;
+        }
+        return res.trim();
+      }
+
+      // 6. تحليل لغوي أو مشاعري أو رياضي
+      const result = [];
+
+      const words = lowerInput.split(/\s+/);
+      words.forEach(word => {
+        const mapped = grammarMapping[word] || mathMapping[word] || emojiResponseMap[word];
+        if (mapped) {
+          if (emojiResponseMap[word]) {
+            result.push(${word} → Feeling: ${mapped.feeling}, Opposite: ${mapped.opposite});
+          } else {
+            result.push(${word} → ${mapped});
+          }
+        }
+      });
+
+      // 7. تحليل حروف وأرقام
+const numbers = lowerInput.match(/\d+/g);
+if (numbers) {
+  numbers.forEach(num => {
+    if (numToLetter[num]) {
+      const info = numToLetter[num];
+      result.push(${num} → Letter: ${info.letter}, Binary: ${info.binary});
+    } else {
+      result.push(${num} → ⚠️ Not mapped);
     }
   });
-
-  // 7. تحليل الأرقام وتحويلها لحروف
-  const numbers = lowerInput.match(/\d+/g);
-  if (numbers) {
-    numbers.forEach(num => {
-      if (numToLetter[num]) {
-        const info = numToLetter[num];
-        result.push(`${num} → Letter: ${info.letter}, Binary: ${info.binary}`);
-      } else {
-        result.push(`${num} → ⚠️ Not mapped`);
-      }
-    });
-  }
-
-  if (result.length) return result.join(" | ");
-
-  // 8. أخيرًا جرّب mapInputToExampleCommands
-  const letterMappingResult = mapInputToExampleCommands(input);
-  if (letterMappingResult.trim()) return letterMappingResult;
-
-  return `⚠️ Unknown command: "${input}"`;
 }
+      if (result.length) return result.join(" | ");
+
+      return ⚠️ Unknown command: "${input}";
+    }
+
     // عرض سطر جديد
     function appendLine(text, className = "cmd-line") {
       const div = document.createElement("div");
