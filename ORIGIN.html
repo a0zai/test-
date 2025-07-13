@@ -68,51 +68,81 @@
   <div id="terminal"></div>
   <input type="text" id="commandInput" placeholder="Type a command and press Enter">
 
-  <script type="module">
-    // Firebase imports
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-    import { getDatabase, ref, push, onChildAdded, onValue, set, remove } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+  import { getDatabase, ref, push, onChildAdded, onValue, set, remove } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+  import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
 
-    // Your Firebase config
-    const firebaseConfig = {
-      apiKey: "AIzaSyBxBBwVwzk0ys5JzVexzdkBCO6vF9F-2iA",
-      authDomain: "a0zai-4308a.firebaseapp.com",
-      databaseURL: "https://a0zai-4308a-default-rtdb.europe-west1.firebasedatabase.app",
-      projectId: "a0zai-4308a",
-      storageBucket: "a0zai-4308a.appspot.com",
-      messagingSenderId: "703923912545",
-      appId: "1:703923912545:web:7d429e0bac48b02a3b0f20",
-      measurementId: "G-MHBBCJQJHE"
-    };
+  // Firebase config
+  const firebaseConfig = {
+    apiKey: "AIzaSyBxBBwVwzk0ys5JzVexzdkBCO6vF9F-2iA",
+    authDomain: "a0zai-4308a.firebaseapp.com",
+    databaseURL: "https://a0zai-4308a-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "a0zai-4308a",
+    storageBucket: "a0zai-4308a.appspot.com",
+    messagingSenderId: "703923912545",
+    appId: "1:703923912545:web:7d429e0bac48b02a3b0f20",
+    measurementId: "G-MHBBCJQJHE"
+  };
 
-    // Initialize
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
+  // Initialize
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+  const auth = getAuth(app);
+  const provider = new GoogleAuthProvider();
 
-    // DOM Elements
-    const terminal = document.getElementById("terminal");
-    const input = document.getElementById("commandInput");
-    const viewerCount = document.getElementById("viewerCount");
-    const clearChat = document.getElementById("clearChat");
+  // Elements
+  const terminal = document.getElementById("terminal");
+  const input = document.getElementById("commandInput");
+  const viewerCount = document.getElementById("viewerCount");
+  const clearChat = document.getElementById("clearChat");
 
-    // User
-    let username = localStorage.getItem("username");
-    if (!username) {
-      username = prompt("Choose a username:") || "Anonymous";
-      localStorage.setItem("username", username);
+  // Sign-in UI
+  if (!document.getElementById("loginButton")) {
+    const loginButton = document.createElement("button");
+    loginButton.id = "loginButton";
+    loginButton.textContent = "🔑 Sign in with Google";
+    loginButton.style.padding = "12px 20px";
+    loginButton.style.margin = "20px";
+    loginButton.style.fontSize = "16px";
+    loginButton.style.cursor = "pointer";
+    document.body.insertBefore(loginButton, terminal);
+
+    loginButton.addEventListener("click", () => {
+      signInWithPopup(auth, provider).catch(console.error);
+    });
+  }
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      document.getElementById("loginButton").style.display = "none";
+      startChat(user);
+    } else {
+      terminal.innerHTML = "<p style='padding:20px;'>Please sign in to join the chat.</p>";
+      input.style.display = "none";
+      viewerCount.style.display = "none";
+      clearChat.style.display = "none";
     }
+  });
+
+  function startChat(user) {
+    // Show UI
+    input.style.display = "";
+    viewerCount.style.display = "";
+    clearChat.style.display = "";
+
+    const username = user.displayName || user.email || "Anonymous";
+    const userId = user.uid;
 
     // Viewer tracking
-    const viewersRef = ref(db, 'viewers');
-    const userId = Math.random().toString(36).substring(2);
-    set(ref(db, 'viewers/' + userId), { username, joined: Date.now() });
-
+    const viewersRef = ref(db, 'viewers/' + userId);
+    set(viewersRef, { username, joined: Date.now() });
     window.addEventListener('beforeunload', () => {
-      remove(ref(db, 'viewers/' + userId));
+      remove(viewersRef);
     });
 
-    // Update viewer count
-    onValue(viewersRef, (snapshot) => {
+    // Viewer count
+    onValue(ref(db, 'viewers'), (snapshot) => {
       const val = snapshot.val();
       const count = val ? Object.keys(val).length : 0;
       viewerCount.textContent = `👁️ ${count}`;
@@ -123,26 +153,13 @@
       const div = document.createElement("div");
       div.className = "cmd-line";
       div.setAttribute('data-user', user);
-      
-      // Highlight @mentions
       const withMentions = text.replace(/@(\w+)/g, '<span class="mention">@$1</span>');
       div.innerHTML = `<span class="username">${user}:</span> ${withMentions}`;
-      
       terminal.appendChild(div);
       terminal.scrollTop = terminal.scrollHeight;
     }
 
-    // Send command to Firebase
-    function sendCommand(text) {
-      const commandsRef = ref(db, "terminalCommands");
-      push(commandsRef, {
-        text,
-        user: username,
-        timestamp: Date.now()
-      });
-    }
-
-    // Listen for new commands
+    // Listen for messages
     const commandsRef = ref(db, "terminalCommands");
     onChildAdded(commandsRef, (snapshot) => {
       const data = snapshot.val();
@@ -151,12 +168,16 @@
       }
     });
 
-    // Handle input
-    input.addEventListener("keydown", e => {
+    // Send message
+    input.addEventListener("keydown", (e) => {
       if (e.key === "Enter") {
         const val = input.value.trim();
         if (val) {
-          sendCommand(val);
+          push(commandsRef, {
+            text: val,
+            user: username,
+            timestamp: Date.now()
+          });
           input.value = "";
         }
       }
@@ -170,7 +191,7 @@
       }
     });
 
-    // Reply with @
+    // Mention reply
     terminal.addEventListener('click', (e) => {
       const line = e.target.closest('.cmd-line');
       if (line) {
@@ -181,6 +202,7 @@
         }
       }
     });
-  </script>
+  }
+</script>
 </body>
 </html>
