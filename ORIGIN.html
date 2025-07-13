@@ -36,6 +36,7 @@
       background-color: #000;
       border: 2px solid #00ffcc;
       margin: 10px;
+      white-space: pre-wrap;
     }
     #commandInput {
       width: calc(100% - 24px);
@@ -45,6 +46,7 @@
       color: #00ffcc;
       border: 1px solid #00ffcc;
       font-family: monospace;
+      display: none; /* Hide by default */
     }
     .cmd-line {
       margin-bottom: 8px;
@@ -58,28 +60,39 @@
       color: #00ffcc;
       font-weight: bold;
     }
+    #loginButton {
+      padding: 12px 20px;
+      margin: 20px;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: #111;
+      border: 1px solid #00ffcc;
+      color: #00ffcc;
+      border-radius: 6px;
+    }
+    #loginButton:hover {
+      background-color: #222;
+    }
   </style>
 </head>
 <body>
   <div id="header">
     <div id="viewerCount">👁️ 0</div>
-    <div id="clearChat">🗑️ Clear Chat</div>
+    <div id="clearChat" style="display:none; cursor:pointer;">🗑️ Clear Chat</div>
   </div>
-  <div id="terminal"></div>
-  <input type="text" id="commandInput" placeholder="Type a command and press Enter" style="display:none">
 
-  <button id="loginButton" style="
-    padding: 12px 20px;
-    margin: 20px;
-    font-size: 16px;
-    cursor: pointer;
-  ">🔑 Sign in with Google</button>
+  <div id="terminal"></div>
+
+  <input type="text" id="commandInput" placeholder="Type a command and press Enter" autocomplete="off">
+
+  <button id="loginButton">🔑 Sign in with Google</button>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
     import { getDatabase, ref, push, onChildAdded, onValue, set, remove } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
-    import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+    import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
 
+    // Firebase config - تأكد أن الإعدادات صحيحة لديك
     const firebaseConfig = {
       apiKey: "AIzaSyBxBBwVwzk0ys5JzVexzdkBCO6vF9F-2iA",
       authDomain: "a0zai-4308a.firebaseapp.com",
@@ -91,87 +104,87 @@
       measurementId: "G-MHBBCJQJHE"
     };
 
+    // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
     const auth = getAuth(app);
     const provider = new GoogleAuthProvider();
 
+    // DOM Elements
     const terminal = document.getElementById("terminal");
     const input = document.getElementById("commandInput");
     const viewerCount = document.getElementById("viewerCount");
     const clearChat = document.getElementById("clearChat");
     const loginButton = document.getElementById("loginButton");
 
+    // دالة لإضافة رسالة جديدة في التيرمينال
+    function appendLine(user, text) {
+      const div = document.createElement("div");
+      div.className = "cmd-line";
+      div.setAttribute('data-user', user);
+      // تمييز @mention بلون مختلف
+      const withMentions = text.replace(/@(\w+)/g, '<span class="mention">@$1</span>');
+      div.innerHTML = `<span class="username">${user}:</span> ${withMentions}`;
+      terminal.appendChild(div);
+      terminal.scrollTop = terminal.scrollHeight;
+    }
+
     // عند الضغط على زر تسجيل الدخول
     loginButton.addEventListener("click", () => {
-      signInWithRedirect(auth, provider);
+      signInWithPopup(auth, provider)
+        .then((result) => {
+          if (result.user) {
+            loginButton.style.display = "none";
+            input.style.display = "";
+            clearChat.style.display = "";
+            startChat(result.user);
+          }
+        })
+        .catch(error => {
+          console.error("Error during sign in:", error);
+          alert("Error signing in: " + error.message);
+        });
     });
 
-    // التعامل مع نتيجة إعادة التوجيه بعد تسجيل الدخول
-    getRedirectResult(auth)
-      .then((result) => {
-        if (result && result.user) {
-          console.log("Redirect result user:", result.user);
-          loginButton.style.display = "none";
-          input.style.display = "";
-          viewerCount.style.display = "";
-          clearChat.style.display = "";
-          startChat(result.user);
-        }
-      })
-      .catch((error) => {
-        console.error("Redirect error:", error);
-      });
-
-    // مراقبة حالة المصادقة بشكل دائم
+    // مراقبة حالة تسجيل الدخول باستمرار
     onAuthStateChanged(auth, (user) => {
-      console.log("Auth state changed:", user);
       if (user) {
         loginButton.style.display = "none";
         input.style.display = "";
-        viewerCount.style.display = "";
         clearChat.style.display = "";
         startChat(user);
       } else {
         loginButton.style.display = "";
-        terminal.innerHTML = "<p style='padding:20px;'>Please sign in to join the chat.</p>";
         input.style.display = "none";
-        viewerCount.style.display = "none";
         clearChat.style.display = "none";
+        terminal.innerHTML = "<p style='padding:20px;'>Please sign in to join the chat.</p>";
+        viewerCount.textContent = "👁️ 0";
       }
     });
 
+    // بدء الدردشة بعد تسجيل الدخول
     function startChat(user) {
-      terminal.innerHTML = ""; // تنظيف الشاشة
+      terminal.innerHTML = ""; // تنظيف التيرمينال
       const username = user.displayName || user.email || "Anonymous";
       const userId = user.uid;
 
-      // تعقب المشاهدين
+      // حفظ بيانات المشاهد الحالي في Firebase
       const viewersRef = ref(db, 'viewers/' + userId);
       set(viewersRef, { username, joined: Date.now() });
+
+      // إزالة المشاهد عند مغادرة الصفحة
       window.addEventListener('beforeunload', () => {
         remove(viewersRef);
       });
 
-      // تحديث عدد المشاهدين
+      // تحديث عدد المشاهدين تلقائيًا
       onValue(ref(db, 'viewers'), (snapshot) => {
         const val = snapshot.val();
         const count = val ? Object.keys(val).length : 0;
         viewerCount.textContent = `👁️ ${count}`;
       });
 
-      // إضافة رسالة جديدة للواجهة
-      function appendLine(user, text) {
-        const div = document.createElement("div");
-        div.className = "cmd-line";
-        div.setAttribute('data-user', user);
-        const withMentions = text.replace(/@(\w+)/g, '<span class="mention">@$1</span>');
-        div.innerHTML = `<span class="username">${user}:</span> ${withMentions}`;
-        terminal.appendChild(div);
-        terminal.scrollTop = terminal.scrollHeight;
-      }
-
-      // الاستماع للرسائل الجديدة
+      // استماع لرسائل الدردشة من قاعدة البيانات
       const commandsRef = ref(db, "terminalCommands");
       onChildAdded(commandsRef, (snapshot) => {
         const data = snapshot.val();
@@ -195,15 +208,15 @@
         }
       });
 
-      // مسح الدردشة
-      clearChat.addEventListener('click', () => {
+      // زر مسح الدردشة
+      clearChat.onclick = () => {
         if (confirm("Are you sure you want to clear the chat for everyone?")) {
-          remove(commandsRef);
+          remove(ref(db, "terminalCommands"));
           terminal.innerHTML = "";
         }
-      });
+      };
 
-      // النقر على اسم المستخدم للرد @mention
+      // النقر على رسالة لكتابة @mention تلقائياً
       terminal.addEventListener('click', (e) => {
         const line = e.target.closest('.cmd-line');
         if (line) {
