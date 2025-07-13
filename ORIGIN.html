@@ -3,149 +3,104 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>World Triminal | Collaborative Terminal</title>
+  <title>Realtime Open Chat</title>
   <style>
     body {
       margin: 0;
       background-color: #000;
       color: #00ffcc;
       font-family: monospace;
-    }
-    #header {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background-color: #111;
+      flex-direction: column;
+      height: 100vh;
+    }
+    #messages {
+      flex: 1;
       padding: 10px;
+      overflow-y: auto;
       border-bottom: 1px solid #00ffcc;
     }
-    #viewerCount, #clearChat {
-      background-color: #111;
-      padding: 6px 12px;
-      border: 1px solid #00ffcc;
-      border-radius: 4px;
-      color: #00ffcc;
-      font-weight: bold;
-      cursor: pointer;
+    #inputBar {
+      display: flex;
+      border-top: 1px solid #00ffcc;
     }
-    #terminal {
-      padding: 20px;
-      height: 80vh;
-      overflow-y: auto;
-      background-color: #000;
-      border: 2px solid #00ffcc;
-      margin: 10px;
-    }
-    #commandInput {
-      width: calc(100% - 24px);
+    #input {
+      flex: 1;
       padding: 10px;
-      margin: 10px;
+      border: none;
       background-color: #111;
       color: #00ffcc;
-      border: 1px solid #00ffcc;
       font-family: monospace;
     }
-    .cmd-line {
-      margin-bottom: 8px;
-    }
-    .mention {
-      color: #ff00ff;
+    #sendButton {
+      background-color: #00ffcc;
+      color: #000;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
       font-weight: bold;
     }
-    .username {
-      color: #00ffcc;
-      font-weight: bold;
+    .msg {
+      margin-bottom: 10px;
+      word-wrap: break-word;
     }
   </style>
 </head>
 <body>
-  <div id="header">
-    <div id="viewerCount">👁️ 0</div>
-    <div id="clearChat">🗑️ Clear Chat</div>
+  <div id="messages"></div>
+  <div id="inputBar">
+    <input id="input" placeholder="Type a message..." />
+    <button id="sendButton">Send</button>
   </div>
-  <div id="terminal"></div>
-  <input type="text" id="commandInput" placeholder="Type a command and press Enter">
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-    import { getDatabase, ref, push, onChildAdded, onValue, remove, set } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+    import { getDatabase, ref, push, onChildAdded, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
 
-    // Your Firebase config
+    // ✅ استخدم نفس config الذي أعطيتني إياه
     const firebaseConfig = {
-      apiKey: "AIzaSyBxBBwVwzk0ys5JzVexzdkBCO6vF9F-2iA",
-      authDomain: "a0zai-4308a.firebaseapp.com",
-      databaseURL: "https://a0zai-4308a-default-rtdb.europe-west1.firebasedatabase.app",
-      projectId: "a0zai-4308a",
-      storageBucket: "a0zai-4308a.appspot.com",
-      messagingSenderId: "703923912545",
-      appId: "1:703923912545:web:7d429e0bac48b02a3b0f20",
-      measurementId: "G-MHBBCJQJHE"
+      apiKey: "AIzaSyA7Pu0DJOWmdoDYUUVP1J9aqhxh4f3wyfA",
+      authDomain: "a0zai-56c3a.firebaseapp.com",
+      databaseURL: "https://a0zai-56c3a-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "a0zai-56c3a",
+      storageBucket: "a0zai-56c3a.firebasestorage.app",
+      messagingSenderId: "198838438266",
+      appId: "1:198838438266:web:379e782653f014a32a2ec3",
+      measurementId: "G-85PDXY00J4"
     };
 
-    // Init Firebase
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
+    const chatRef = ref(db, "chat");
 
-    const terminal = document.getElementById("terminal");
-    const input = document.getElementById("commandInput");
-    const viewerCount = document.getElementById("viewerCount");
-    const clearChat = document.getElementById("clearChat");
+    const messagesDiv = document.getElementById("messages");
+    const input = document.getElementById("input");
+    const sendButton = document.getElementById("sendButton");
 
-    // Generate random guest name
-    const username = "Guest-" + Math.floor(Math.random() * 10000);
-
-    // Track viewers
-    const viewersRef = ref(db, 'viewers/' + username);
-    set(viewersRef, { username, joined: Date.now() });
-    window.addEventListener('beforeunload', () => {
-      remove(viewersRef);
-    });
-    onValue(ref(db, 'viewers'), (snapshot) => {
-      const val = snapshot.val();
-      const count = val ? Object.keys(val).length : 0;
-      viewerCount.textContent = `👁️ ${count}`;
-    });
-
-    // Listen for new messages
-    const commandsRef = ref(db, "terminalCommands");
-    onChildAdded(commandsRef, (snapshot) => {
-      const data = snapshot.val();
-      if (data && data.text && data.user) {
-        appendLine(data.user, data.text);
+    // إرسال رسالة
+    sendButton.addEventListener("click", () => {
+      const text = input.value.trim();
+      if (text) {
+        push(chatRef, { text, timestamp: serverTimestamp() });
+        input.value = "";
       }
     });
 
-    // Append to terminal
-    function appendLine(user, text) {
-      const div = document.createElement("div");
-      div.className = "cmd-line";
-      div.setAttribute('data-user', user);
-      const withMentions = text.replace(/@(\w+)/g, '<span class="mention">@$1</span>');
-      div.innerHTML = `<span class="username">${user}:</span> ${withMentions}`;
-      terminal.appendChild(div);
-      terminal.scrollTop = terminal.scrollHeight;
-    }
-
-    // Send message
     input.addEventListener("keydown", (e) => {
       if (e.key === "Enter") {
-        const val = input.value.trim();
-        if (val) {
-          push(commandsRef, {
-            text: val,
-            user: username,
-            timestamp: Date.now()
-          });
-          input.value = "";
-        }
+        sendButton.click();
       }
     });
 
-    // Clear chat for everyone
-    clearChat.addEventListener('click', () => {
-      if (confirm("Are you sure you want to clear the chat for everyone?")) {
-        remove(commandsRef);
-        terminal.innerHTML = "";
+    // استقبال الرسائل
+    onChildAdded(chatRef, (snapshot) => {
+      const msg = snapshot.val();
+      if (msg && msg.text) {
+        const div = document.createElement("div");
+        div.className = "msg";
+        div.textContent = msg.text;
+        messagesDiv.appendChild(div);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
       }
     });
   </script>
