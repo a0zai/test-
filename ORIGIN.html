@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>World Triminal | Collaborative Terminal</title>
   <style>
     body {
@@ -66,143 +66,155 @@
     <div id="clearChat">🗑️ Clear Chat</div>
   </div>
   <div id="terminal"></div>
-  <input type="text" id="commandInput" placeholder="Type a command and press Enter">
+  <input type="text" id="commandInput" placeholder="Type a command and press Enter" style="display:none">
 
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-  import { getDatabase, ref, push, onChildAdded, onValue, set, remove } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
-  import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+  <button id="loginButton" style="
+    padding: 12px 20px;
+    margin: 20px;
+    font-size: 16px;
+    cursor: pointer;
+  ">🔑 Sign in with Google</button>
 
-  // Firebase config
-  const firebaseConfig = {
-    apiKey: "AIzaSyBxBBwVwzk0ys5JzVexzdkBCO6vF9F-2iA",
-    authDomain: "a0zai-4308a.firebaseapp.com",
-    databaseURL: "https://a0zai-4308a-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId: "a0zai-4308a",
-    storageBucket: "a0zai-4308a.appspot.com",
-    messagingSenderId: "703923912545",
-    appId: "1:703923912545:web:7d429e0bac48b02a3b0f20",
-    measurementId: "G-MHBBCJQJHE"
-  };
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+    import { getDatabase, ref, push, onChildAdded, onValue, set, remove } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+    import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
 
-  // Initialize
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase(app);
-  const auth = getAuth(app);
-  const provider = new GoogleAuthProvider();
+    const firebaseConfig = {
+      apiKey: "AIzaSyBxBBwVwzk0ys5JzVexzdkBCO6vF9F-2iA",
+      authDomain: "a0zai-4308a.firebaseapp.com",
+      databaseURL: "https://a0zai-4308a-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "a0zai-4308a",
+      storageBucket: "a0zai-4308a.appspot.com",
+      messagingSenderId: "703923912545",
+      appId: "1:703923912545:web:7d429e0bac48b02a3b0f20",
+      measurementId: "G-MHBBCJQJHE"
+    };
 
-  // Elements
-  const terminal = document.getElementById("terminal");
-  const input = document.getElementById("commandInput");
-  const viewerCount = document.getElementById("viewerCount");
-  const clearChat = document.getElementById("clearChat");
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
 
-  // Sign-in UI
-  if (!document.getElementById("loginButton")) {
-    const loginButton = document.createElement("button");
-    loginButton.id = "loginButton";
-    loginButton.textContent = "🔑 Sign in with Google";
-    loginButton.style.padding = "12px 20px";
-    loginButton.style.margin = "20px";
-    loginButton.style.fontSize = "16px";
-    loginButton.style.cursor = "pointer";
-    document.body.insertBefore(loginButton, terminal);
+    const terminal = document.getElementById("terminal");
+    const input = document.getElementById("commandInput");
+    const viewerCount = document.getElementById("viewerCount");
+    const clearChat = document.getElementById("clearChat");
+    const loginButton = document.getElementById("loginButton");
 
+    // عند الضغط على زر تسجيل الدخول
     loginButton.addEventListener("click", () => {
-      signInWithPopup(auth, provider).catch(console.error);
-    });
-  }
-
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      document.getElementById("loginButton").style.display = "none";
-      startChat(user);
-    } else {
-      terminal.innerHTML = "<p style='padding:20px;'>Please sign in to join the chat.</p>";
-      input.style.display = "none";
-      viewerCount.style.display = "none";
-      clearChat.style.display = "none";
-    }
-  });
-
-  function startChat(user) {
-    // Show UI
-    input.style.display = "";
-    viewerCount.style.display = "";
-    clearChat.style.display = "";
-
-    const username = user.displayName || user.email || "Anonymous";
-    const userId = user.uid;
-
-    // Viewer tracking
-    const viewersRef = ref(db, 'viewers/' + userId);
-    set(viewersRef, { username, joined: Date.now() });
-    window.addEventListener('beforeunload', () => {
-      remove(viewersRef);
+      signInWithRedirect(auth, provider);
     });
 
-    // Viewer count
-    onValue(ref(db, 'viewers'), (snapshot) => {
-      const val = snapshot.val();
-      const count = val ? Object.keys(val).length : 0;
-      viewerCount.textContent = `👁️ ${count}`;
-    });
-
-    // Append line
-    function appendLine(user, text) {
-      const div = document.createElement("div");
-      div.className = "cmd-line";
-      div.setAttribute('data-user', user);
-      const withMentions = text.replace(/@(\w+)/g, '<span class="mention">@$1</span>');
-      div.innerHTML = `<span class="username">${user}:</span> ${withMentions}`;
-      terminal.appendChild(div);
-      terminal.scrollTop = terminal.scrollHeight;
-    }
-
-    // Listen for messages
-    const commandsRef = ref(db, "terminalCommands");
-    onChildAdded(commandsRef, (snapshot) => {
-      const data = snapshot.val();
-      if (data && data.text && data.user) {
-        appendLine(data.user, data.text);
-      }
-    });
-
-    // Send message
-    input.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") {
-        const val = input.value.trim();
-        if (val) {
-          push(commandsRef, {
-            text: val,
-            user: username,
-            timestamp: Date.now()
-          });
-          input.value = "";
+    // التعامل مع نتيجة إعادة التوجيه بعد تسجيل الدخول
+    getRedirectResult(auth)
+      .then((result) => {
+        if (result && result.user) {
+          console.log("Redirect result user:", result.user);
+          loginButton.style.display = "none";
+          input.style.display = "";
+          viewerCount.style.display = "";
+          clearChat.style.display = "";
+          startChat(result.user);
         }
+      })
+      .catch((error) => {
+        console.error("Redirect error:", error);
+      });
+
+    // مراقبة حالة المصادقة بشكل دائم
+    onAuthStateChanged(auth, (user) => {
+      console.log("Auth state changed:", user);
+      if (user) {
+        loginButton.style.display = "none";
+        input.style.display = "";
+        viewerCount.style.display = "";
+        clearChat.style.display = "";
+        startChat(user);
+      } else {
+        loginButton.style.display = "";
+        terminal.innerHTML = "<p style='padding:20px;'>Please sign in to join the chat.</p>";
+        input.style.display = "none";
+        viewerCount.style.display = "none";
+        clearChat.style.display = "none";
       }
     });
 
-    // Clear chat
-    clearChat.addEventListener('click', () => {
-      if (confirm("Are you sure you want to clear the chat for everyone?")) {
-        remove(commandsRef);
-        terminal.innerHTML = "";
-      }
-    });
+    function startChat(user) {
+      terminal.innerHTML = ""; // تنظيف الشاشة
+      const username = user.displayName || user.email || "Anonymous";
+      const userId = user.uid;
 
-    // Mention reply
-    terminal.addEventListener('click', (e) => {
-      const line = e.target.closest('.cmd-line');
-      if (line) {
-        const targetUser = line.getAttribute('data-user');
-        if (targetUser) {
-          input.value = `@${targetUser} `;
-          input.focus();
+      // تعقب المشاهدين
+      const viewersRef = ref(db, 'viewers/' + userId);
+      set(viewersRef, { username, joined: Date.now() });
+      window.addEventListener('beforeunload', () => {
+        remove(viewersRef);
+      });
+
+      // تحديث عدد المشاهدين
+      onValue(ref(db, 'viewers'), (snapshot) => {
+        const val = snapshot.val();
+        const count = val ? Object.keys(val).length : 0;
+        viewerCount.textContent = `👁️ ${count}`;
+      });
+
+      // إضافة رسالة جديدة للواجهة
+      function appendLine(user, text) {
+        const div = document.createElement("div");
+        div.className = "cmd-line";
+        div.setAttribute('data-user', user);
+        const withMentions = text.replace(/@(\w+)/g, '<span class="mention">@$1</span>');
+        div.innerHTML = `<span class="username">${user}:</span> ${withMentions}`;
+        terminal.appendChild(div);
+        terminal.scrollTop = terminal.scrollHeight;
+      }
+
+      // الاستماع للرسائل الجديدة
+      const commandsRef = ref(db, "terminalCommands");
+      onChildAdded(commandsRef, (snapshot) => {
+        const data = snapshot.val();
+        if (data && data.text && data.user) {
+          appendLine(data.user, data.text);
         }
-      }
-    });
-  }
-</script>
+      });
+
+      // إرسال رسالة عند الضغط على Enter
+      input.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          const val = input.value.trim();
+          if (val) {
+            push(commandsRef, {
+              text: val,
+              user: username,
+              timestamp: Date.now()
+            });
+            input.value = "";
+          }
+        }
+      });
+
+      // مسح الدردشة
+      clearChat.addEventListener('click', () => {
+        if (confirm("Are you sure you want to clear the chat for everyone?")) {
+          remove(commandsRef);
+          terminal.innerHTML = "";
+        }
+      });
+
+      // النقر على اسم المستخدم للرد @mention
+      terminal.addEventListener('click', (e) => {
+        const line = e.target.closest('.cmd-line');
+        if (line) {
+          const targetUser = line.getAttribute('data-user');
+          if (targetUser) {
+            input.value = `@${targetUser} `;
+            input.focus();
+          }
+        }
+      });
+    }
+  </script>
 </body>
 </html>
