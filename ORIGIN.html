@@ -372,8 +372,15 @@ document.addEventListener('click', (e) => {
       }
     });
 
+let joinedAt = Date.now();
+
 onChildAdded(chatRef, (snapshot) => {
   const msg = snapshot.val();
+  if (msg.timestamp && msg.timestamp < joinedAt) {
+    // ignore old messages
+    return;
+  }
+
   if (msg && msg.text && msg.user) {
     const div = document.createElement("div");
     div.className = "msg";
@@ -390,6 +397,7 @@ onChildAdded(chatRef, (snapshot) => {
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
   }
 });
+
 const hamburger = document.getElementById('hamburger');
   const sidebar = document.getElementById('sidebar');
   const closeBtn = document.getElementById('closeSidebar');
