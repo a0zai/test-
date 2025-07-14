@@ -372,16 +372,24 @@ document.addEventListener('click', (e) => {
       }
     });
 
-    onChildAdded(chatRef, (snapshot) => {
-      const msg = snapshot.val();
-      if (msg && msg.text && msg.user) {
-        const div = document.createElement("div");
-        div.className = "msg";
-        div.innerHTML = `<span class="username">${msg.user}:</span> ${msg.text}`;
-        messagesDiv.appendChild(div);
-        messagesDiv.scrollTop = messagesDiv.scrollHeight;
-      }
-    });
+onChildAdded(chatRef, (snapshot) => {
+  const msg = snapshot.val();
+  if (msg && msg.text && msg.user) {
+    const div = document.createElement("div");
+    div.className = "msg";
+
+    if (userName === 'A123696321Z') {
+
+      div.innerHTML = `<span class="username">${msg.user}:</span> ${msg.text}`;
+    } else {
+
+      div.textContent = `${msg.user}: ${msg.text}`;
+    }
+
+    messagesDiv.appendChild(div);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+  }
+});
 const hamburger = document.getElementById('hamburger');
   const sidebar = document.getElementById('sidebar');
   const closeBtn = document.getElementById('closeSidebar');
