@@ -2,498 +2,508 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Support & Contact</title>
-  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bootstrap Docs Clone</title>
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
   <style>
-    html, body {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-      background-color: #000;
-      color: gold;
-      font-family: 'Courier New', monospace;
-      overflow: hidden;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-    }
-    
-    #pageOverlay {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      backdrop-filter: blur(12px);
-      background-color: rgba(0, 0, 0, 0.6);
-      z-index: 9999;
-      opacity: 1;
-      transition: opacity 3s ease;
-    }
-    #pageOverlay.fade-out {
-      opacity: 0;
-      pointer-events: none;
-    }
-    #particles-js {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      z-index: 0;
-      pointer-events: none;
-    }
-    #overlayImage {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      z-index: -1;
-      opacity: 0.9;
-      pointer-events: none;
-    }
-#hamburger {
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    font-size: 28px;
-    cursor: pointer;
-    color: gold;
-    z-index: 10000;
-    user-select: none;
-  }
-
-  /* القائمة الجانبية */
-  #sidebar {
-    position: fixed;
-    top: 0;
-    left: -250px; /* مخفية خارج الشاشة */
-    width: 250px;
-    height: 100%;
-    background-color: rgba(0,0,0,0.9);
-    backdrop-filter: blur(8px);
-    color: gold;
-    padding: 40px 20px;
-    box-sizing: border-box;
-    transition: left 0.3s ease;
-    z-index: 9999;
-  }
-
-  /* عندما تكون مفتوحة */
-  #sidebar.open {
-    left: 0;
-  }
-
-  #sidebar a {
-    display: block;
-    margin: 15px 0;
-    color: gold;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 18px;
-  }
-
-  #sidebar a:hover {
-    text-decoration: underline;
-  }
-
-  /* زر إغلاق */
-  #closeSidebar {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    font-size: 24px;
-    cursor: pointer;
-  }
-
-    /* عداد المشاهدين ثابت في الأعلى يمين */
-    #viewersCount {
-      position: fixed;
-      top: 15px;
-      right: 20px;
-      font-size: 24px;
-      font-weight: bold;
-      color: gold;
-      z-index: 10000;
-      user-select: none;
-      background: rgba(0,0,0,0.5);
-      padding: 6px 12px;
-      border-radius: 12px;
-      box-shadow: 0 0 8px gold;
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     }
 
-#chatWrapper {
-  width: 96%;
-  max-width: 900px;
-  max-height: 66vh;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(8px);
-  border: 2px solid #00ffcc;
-  border-radius: 12px;
-  padding: 20px;
-  box-sizing: border-box;
-  position: fixed;
-  bottom: 20px;       /* بدل top */
-  left: 50%;
-  transform: translateX(-50%);  /* حذف translateY */
-  z-index: 10;
-  display: flex;
-  flex-direction: column;
+.custom-navbar {
+  background-color: #6f42c1;
 }
-#nameInput {
-  width: 250px;         /* حجم العرض */
-  padding: 15px 20px;   /* مساحة داخلية أكبر لارتفاع الحقل */
-  font-size: 16px;      /* حجم الخط */
-  border-radius: 8px;
-  border: 2px solid gold;
-  background-color: #111;
-  color: gold;
-  font-family: 'Courier New', monospace;
-  box-sizing: border-box;
-}
-    #messages {
-      flex: 1;                 /* يشغل أكبر مساحة ممكنة */
-      overflow-y: auto;
-      padding: 20px;
-      border: 1px solid #00ffcc;
-      border-radius: 8px;
-      word-wrap: break-word;
-      display: none;
-      background-color: rgba(0, 0, 0, 0.4);
-      backdrop-filter: blur(6px);
-      margin-bottom: 10px;
-      max-height: 55vh;        /* ارتفاع مناسب للرسائل */
-      color: #00ffcc;
-      font-size: 16px;
-      text-align: left;
-    }
 
-    #inputBar {
-      display: none;
-      gap: 10px;
-      margin-top: 10px;
-      align-items: center;
-    }
-    #inputBar input {
-      flex-grow: 1;
-      padding: 10px;
-      font-size: 19px;
-      border-radius: 6px;
-      border: 1px solid #00ffcc;
-      background-color: #111;
-      color: gold;
-      font-family: 'Courier New', monospace;
-    }
-    #inputBar button {
-      padding: 10px 20px;
-      font-size: 19px;
-      border-radius: 6px;
-      border: 2px solid gold;
-      background: transparent;
-      color: gold;
-      cursor: pointer;
-      font-weight: bold;
-      transition: background-color 0.3s ease;
-    }
-    #inputBar button:hover {
-      background-color: gold;
-      color: black;
-    }
-
-    /* زر مسح الرسائل */
-    #clearButton {
-      margin-top: 10px;
-      align-self: flex-end;
-      padding: 8px 16px;
-      font-size: 14px;
-      border-radius: 8px;
-      border: 2px solid #ff5555;
-      background: transparent;
-      color: #ff5555;
-      cursor: pointer;
-      font-weight: bold;
-      user-select: none;
-      transition: background-color 0.3s ease;
-    }
-    #clearButton:hover {
-      background-color: #ff5555;
-      color: black;
-    }
-
-  </style>
-</head>
-<body>
-  <div id="pageOverlay"></div>
-  <div id="particles-js"></div>
-  <img src="IMG_9055.jpeg" alt="Overlay Image" id="overlayImage" />
-<div id="hamburger">☰</div>
-<!-- Sidebar menu -->
-<div id="sidebar">
-  <div id="closeSidebar">&times;</div>
-  <h2>👑Contact👑</h2>
-  <a href="mailto:hi@rafat.world" target="_blank">📧 Email</a>
-  <a href="https://wa.me/0644367518" target="_blank">📱 WhatsApp</a>
-  <a href="https://www.linkedin.com/in/a0zai?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app" target="_blank">🔗 LinkedIn</a>
-</div>
-  <div id="viewersCount">👁️‍🗨️ 0</div>
-<div id="viewersListPopup" style="
+.sidebar {
   position: fixed;
-  top: 50px;
-  right: 20px;
-  max-height: 200px;
-  width: 200px;
+  top: 96px;
+  left: 0;
+  width: 260px;
+  height: calc(100vh - 96px);
+  padding-top: 1rem;
+  background-color: #fff;
+  border-right: 1px solid #ddd;
   overflow-y: auto;
-  background: rgba(0,0,0,0.8);
-  color: gold;
-  border: 1px solid gold;
-  border-radius: 8px;
-  padding: 10px;
-  font-size: 14px;
-  display: none;
-  z-index: 10001;
-  user-select: none;
-"></div>
-  <div id="chatWrapper">
-    <div id="namePrompt">
-      <h2>Enter your name to join the chat</h2>
-      <input id="nameInput" placeholder="Your name" autocomplete="off" />
-      <button id="joinBtn">Join Chat</button>
+}
+
+.sidebar .nav-link:hover,
+.sidebar .nav-link.active {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: #212529;
+}
+
+.sidebar a {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  color: #212529;
+  text-decoration: none;
+  font-size: 16px;
+}
+.sidebar a:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+.sidebar a.active {
+  background-color: #fff;
+  font-weight: bold;
+}
+.sidebar a:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.sidebar .nav-link {
+  color: #212529;
+}
+.top-bar-blue {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 20px;
+  line-height: 20px;
+  background-color: #0d6efd; /* أزرق Bootstrap */
+  color: white;
+  display: flex;
+  justify-content: center; /* لمحاذاة أفقية بالمنتصف */
+  align-items: center;     /* لمحاذاة رأسية بالمنتصف */
+  font-weight: bold;
+  font-size: 1rem;
+  z-index: 1100;
+}
+
+.content {
+  margin-left: 260px;
+  padding: 2rem 1rem;
+  margin-top: 96px;
+}
+
+.search-button {
+  background-color: #6f42c1;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  height: 38px;
+  padding: 0 12px;
+  font-size: 0.9rem;
+  border-radius: 0.375rem;
+}
+
+.search-button:hover {
+  background-color: #59359b;
+}
+
+.search-button i {
+  font-size: 1rem;
+}
+
+pre {
+  background-color: #0d6efd;
+  padding: 1rem;
+  border-radius: 0.25rem;
+  overflow-x: auto;
+}
+
+  @media (max-width: 768px) {
+    .navbar {
+      padding-top: 0.25rem;
+      padding-bottom: 0.25rem;
+    }
+
+    .navbar-brand {
+      font-size: 1rem;
+    }
+    .small-brand {
+  font-size: 2.5rem;
+  font-weight: bold;
+  line-height: 1;
+}
+
+    .navbar-toggler {
+      padding: 0.25rem 0.5rem;
+      font-size: 0.9rem;
+    }
+  }
+  @media (max-width: 992px) {
+  .content {
+    margin-left: 0;
+    padding: 1rem 0.5rem;
+  }
+}
+</style>
+
+</head>
+<body data-bs-spy="scroll" data-bs-target="#sidebar-nav" data-bs-offset="70">
+
+<!-- Navbar الرئيسي (الهاتف فقط) -->
+<nav class="navbar navbar-dark custom-navbar fixed-top navbar-expand-lg shadow">
+  <div class="container-fluid">
+    <!-- الهاتف فقط -->
+    <div class="d-flex w-100 justify-content-between align-items-center d-lg-none">
+      
+      <!-- يسار: همبرغر -->
+      <button class="btn btn-outline-light" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasMenu" aria-controls="offcanvasMenu">
+        <i class="bi bi-list"></i>
+      </button>
+      
+      <!-- الوسط: B -->
+      <span class="navbar-brand small-brand m-0">B</span>
+      
+      <!-- اليمين: بحث -->
+      <button id="searchToggleMobile" class="btn btn-outline-light">
+        <i class="bi bi-search"></i>
+      </button>
     </div>
-
-    <div id="messages"></div>
-
-    <div id="inputBar">
-      <input id="input" placeholder="Type a message..." autocomplete="off" />
-      <button id="sendButton">Send</button>
-    </div>
-
-<button id="clearButton" title="Clear chat messages">🗑️ Clear Messages</button>
   </div>
+</nav>
+<nav class="top-bar-blue">
+  <div class="top-bar-content">!A0ZAI!</div>
+</nav>
+<!-- شريط بنفسجي كامل لسطح المكتب فقط -->
+<nav class="navbar navbar-dark d-none d-lg-flex navbar-expand-lg shadow" style="background-color:#6f42c1; padding: 0.39rem 1rem;">
+  <div class="container-fluid">
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-    import { getDatabase, ref, push, onChildAdded, onValue, set, onDisconnect, serverTimestamp, remove } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+    <!-- B + الروابط -->
+    <a class="navbar-brand fs-3 fw-bold me-4" href="#">B</a>
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyA7Pu0DJOWmdoDYUUVP1J9aqhxh4f3wyfA",
-      authDomain: "a0zai-56c3a.firebaseapp.com",
-      databaseURL: "https://a0zai-56c3a-default-rtdb.europe-west1.firebasedatabase.app",
-      projectId: "a0zai-56c3a",
-      storageBucket: "a0zai-56c3a.firebasestorage.app",
-      messagingSenderId: "198838438266",
-      appId: "1:198838438266:web:379e782653f014a32a2ec3",
-      measurementId: "G-85PDXY00J4"
-    };
+    <ul class="navbar-nav flex-row flex-wrap me-3">
+      <li class="nav-item mx-2">
+        <a class="nav-link text-white" href="https://getbootstrap.com/docs/5.3/getting-started/introduction/" target="_blank">Docs</a>
+      </li>
+      <li class="nav-item mx-2">
+        <a class="nav-link text-white" href="https://getbootstrap.com/docs/5.3/examples/" target="_blank">Examples</a>
+      </li>
+      <li class="nav-item mx-2">
+        <a class="nav-link text-white" href="https://icons.getbootstrap.com/" target="_blank">Icons</a>
+      </li>
+      <li class="nav-item mx-2">
+        <a class="nav-link text-white" href="https://themes.getbootstrap.com/" target="_blank">Themes</a>
+      </li>
+      <li class="nav-item mx-2">
+        <a class="nav-link text-white" href="https://blog.getbootstrap.com/" target="_blank">Blog</a>
+      </li>
+    </ul>
 
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-    const chatRef = ref(db, "chat");
+    <!-- البحث في المنتصف -->
+    <div class="search-container mx-auto d-flex align-items-center" style="max-width: 300px; width: 100%;">
+      <button id="searchToggle" class="btn btn-outline-light me-2">
+        <i class="bi bi-search"></i>
+      </button>
+      <input id="searchInput" class="form-control d-none" type="search" placeholder="Search docs...">
+    </div>
 
-    const namePrompt = document.getElementById("namePrompt");
-    const nameInput = document.getElementById("nameInput");
-    const joinBtn = document.getElementById("joinBtn");
-    const messagesDiv = document.getElementById("messages");
-    const input = document.getElementById("input");
-    const sendButton = document.getElementById("sendButton");
-    const inputBar = document.getElementById("inputBar");
-    const viewersCountDiv = document.getElementById("viewersCount");
-    const clearButton = document.getElementById("clearButton");
+    <!-- الإصدارات و GitHub -->
+    <div class="d-flex align-items-center">
+      <div class="btn-group me-2">
+        <button type="button" class="btn btn-outline-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+          v5.2
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end">
+          <li><a class="dropdown-item" href="#">v5.3 (Latest)</a></li>
+          <li><a class="dropdown-item" href="#">v5.2</a></li>
+          <li><a class="dropdown-item" href="#">v5.1</a></li>
+          <li><a class="dropdown-item" href="#">v4.6</a></li>
+        </ul>
+      </div>
+      <a href="https://github.com/twbs/bootstrap" target="_blank" class="btn" style="background-color:#6f42c1; color:#fff;">
+        <i class="bi bi-github"></i>
+      </a>
+    </div>
+  </div>
+</nav>
+  <!-- Sidebar -->
+<nav class="sidebar d-none d-lg-block" id="sidebar-nav">
+  <div class="list-group list-group-flush">
 
-    let userName = "";
+    <a href="#gettingstarted" class="list-group-item list-group-item-action fw-bold">Getting started</a>
+    <div class="ms-3">
+      <a href="#introduction" class="list-group-item list-group-item-action">Introduction</a>
+      <a href="#download" class="list-group-item list-group-item-action">Download</a>
+      <a href="#contents" class="list-group-item list-group-item-action">Contents</a>
+      <a href="#browsers" class="list-group-item list-group-item-action">Browsers & devices</a>
+      <a href="#javascript" class="list-group-item list-group-item-action">JavaScript</a>
+      <a href="#webpack" class="list-group-item list-group-item-action">Webpack</a>
+      <a href="#parcel" class="list-group-item list-group-item-action">Parcel</a>
+      <a href="#vite" class="list-group-item list-group-item-action">Vite</a>
+      <a href="#accessibility" class="list-group-item list-group-item-action">Accessibility</a>
+      <a href="#rfs" class="list-group-item list-group-item-action">RFS</a>
+      <a href="#rtl" class="list-group-item list-group-item-action">RTL</a>
+      <a href="#contribute" class="list-group-item list-group-item-action">Contribute</a>
+    </div>
 
-    joinBtn.addEventListener("click", () => {
-      const name = nameInput.value.trim();
-      if (!name) {
-        alert("Please enter your name");
-        return;
-      }
-      userName = name;
-      namePrompt.style.display = "none";
-      messagesDiv.style.display = "block";
-      inputBar.style.display = "flex";
-      clearButton.style.display = "inline-block";
+    <a href="#customize" class="list-group-item list-group-item-action fw-bold">Customize</a>
+    <div class="ms-3">
+      <a href="#overview" class="list-group-item list-group-item-action">Overview</a>
+      <a href="#sass" class="list-group-item list-group-item-action">Sass</a>
+      <a href="#options" class="list-group-item list-group-item-action">Options</a>
+      <a href="#color" class="list-group-item list-group-item-action">Color</a>
+      <a href="#components" class="list-group-item list-group-item-action">Components</a>
+      <a href="#cssvariables" class="list-group-item list-group-item-action">CSS variables</a>
+      <a href="#optimize" class="list-group-item list-group-item-action">Optimize</a>
+    </div>
 
-      // تسجيل الزائر ضمن المشاهدين
-      const visitorId = Math.random().toString(36).substring(2, 10);
-      const visitorsRef = ref(db, "viewers/" + visitorId);
-      set(visitorsRef, true);
-      onDisconnect(visitorsRef).remove();
+    <a href="#layout" class="list-group-item list-group-item-action fw-bold">Layout</a>
+    <div class="ms-3">
+      <a href="#breakpoints" class="list-group-item list-group-item-action">Breakpoints</a>
+      <a href="#containers" class="list-group-item list-group-item-action">Containers</a>
+      <a href="#grid" class="list-group-item list-group-item-action">Grid</a>
+      <a href="#columns" class="list-group-item list-group-item-action">Columns</a>
+      <a href="#gutters" class="list-group-item list-group-item-action">Gutters</a>
+      <a href="#utilities" class="list-group-item list-group-item-action">Utilities</a>
+      <a href="#zindex" class="list-group-item list-group-item-action">Z-index</a>
+      <a href="#cssgrid" class="list-group-item list-group-item-action">CSS Grid</a>
+    </div>
 
-      const viewersListRef = ref(db, "viewers");
-      onValue(viewersListRef, (snapshot) => {
-        const viewers = snapshot.val();
-        const count = viewers ? Object.keys(viewers).length : 0;
-        viewersCountDiv.textContent = `👁️‍🗨️ ${count}`;
-      });
-    });
-const viewersListPopup = document.getElementById('viewersListPopup');
+    <a href="#content" class="list-group-item list-group-item-action fw-bold">Content</a>
+    <div class="ms-3">
+      <a href="#reboot" class="list-group-item list-group-item-action">Reboot</a>
+      <a href="#typography" class="list-group-item list-group-item-action">Typography</a>
+      <a href="#images" class="list-group-item list-group-item-action">Images</a>
+      <a href="#tables" class="list-group-item list-group-item-action">Tables</a>
+      <a href="#figures" class="list-group-item list-group-item-action">Figures</a>
+    </div>
 
-viewersCountDiv.style.cursor = 'pointer'; // لتغيير المؤشر عند المرور
+    <a href="#forms" class="list-group-item list-group-item-action fw-bold">Forms</a>
+    <div class="ms-3">
+      <a href="#formoverview" class="list-group-item list-group-item-action">Overview</a>
+      <a href="#formcontrol" class="list-group-item list-group-item-action">Form control</a>
+      <a href="#select" class="list-group-item list-group-item-action">Select</a>
+      <a href="#checksradios" class="list-group-item list-group-item-action">Checks & radios</a>
+      <a href="#range" class="list-group-item list-group-item-action">Range</a>
+      <a href="#inputgroup" class="list-group-item list-group-item-action">Input group</a>
+      <a href="#floatinglabels" class="list-group-item list-group-item-action">Floating labels</a>
+      <a href="#formlayout" class="list-group-item list-group-item-action">Layout</a>
+      <a href="#validation" class="list-group-item list-group-item-action">Validation</a>
+    </div>
 
-viewersCountDiv.addEventListener('click', () => {
-  if (viewersListPopup.style.display === 'block') {
-    viewersListPopup.style.display = 'none';
-  } else {
-    const viewersListRef = ref(db, 'viewers');
-    onValue(viewersListRef, (snapshot) => {
-      const viewers = snapshot.val();
-      if (!viewers) {
-        viewersListPopup.textContent = 'No viewers currently.';
-      } else {
-        const names = Object.values(viewers)
-          .map(v => v.name || 'Unknown')
-          .filter(n => n.trim() !== '');
-        if (names.length === 0) {
-          viewersListPopup.textContent = 'No viewers currently.';
-        } else {
-          viewersListPopup.innerHTML = '<strong>Viewers:</strong><br>' + names.join('<br>');
-        }
-      }
-    }, { onlyOnce: true });
-    viewersListPopup.style.display = 'block';
-  }
-});
+    <a href="#components" class="list-group-item list-group-item-action fw-bold">Components</a>
+    <div class="ms-3">
+      <a href="#accordion" class="list-group-item list-group-item-action">Accordion</a>
+      <a href="#alerts" class="list-group-item list-group-item-action">Alerts</a>
+      <a href="#badge" class="list-group-item list-group-item-action">Badge</a>
+      <a href="#breadcrumb" class="list-group-item list-group-item-action">Breadcrumb</a>
+      <a href="#buttons" class="list-group-item list-group-item-action">Buttons</a>
+      <a href="#buttongroup" class="list-group-item list-group-item-action">Button group</a>
+      <a href="#card" class="list-group-item list-group-item-action">Card</a>
+      <a href="#carousel" class="list-group-item list-group-item-action">Carousel</a>
+      <a href="#closebutton" class="list-group-item list-group-item-action">Close button</a>
+      <a href="#collapse" class="list-group-item list-group-item-action">Collapse</a>
+      <a href="#dropdowns" class="list-group-item list-group-item-action">Dropdowns</a>
+      <a href="#listgroup" class="list-group-item list-group-item-action">List group</a>
+      <a href="#modal" class="list-group-item list-group-item-action">Modal</a>
+      <a href="#navbar" class="list-group-item list-group-item-action">Navbar</a>
+      <a href="#navtabs" class="list-group-item list-group-item-action">Navs & tabs</a>
+      <a href="#offcanvas" class="list-group-item list-group-item-action">Offcanvas</a>
+      <a href="#pagination" class="list-group-item list-group-item-action">Pagination</a>
+      <a href="#placeholders" class="list-group-item list-group-item-action">Placeholders</a>
+      <a href="#popovers" class="list-group-item list-group-item-action">Popovers</a>
+      <a href="#progress" class="list-group-item list-group-item-action">Progress</a>
+      <a href="#scrollspy" class="list-group-item list-group-item-action">Scrollspy</a>
+      <a href="#spinners" class="list-group-item list-group-item-action">Spinners</a>
+      <a href="#toasts" class="list-group-item list-group-item-action">Toasts</a>
+      <a href="#tooltips" class="list-group-item list-group-item-action">Tooltips</a>
+    </div>
 
-// إخفاء القائمة عند الضغط في أي مكان خارجها
-document.addEventListener('click', (e) => {
-  if (!viewersListPopup.contains(e.target) && e.target !== viewersCountDiv) {
-    viewersListPopup.style.display = 'none';
-  }
-});
-    sendButton.addEventListener("click", () => {
-      const text = input.value.trim();
-      if (text && userName) {
-        push(chatRef, { text, user: userName, timestamp: serverTimestamp() });
-        input.value = "";
-      }
-    });
+    <a href="#helpers" class="list-group-item list-group-item-action fw-bold">Helpers</a>
+    <div class="ms-3">
+      <a href="#clearfix" class="list-group-item list-group-item-action">Clearfix</a>
+      <a href="#colorbg" class="list-group-item list-group-item-action">Color & background</a>
+      <a href="#coloredlinks" class="list-group-item list-group-item-action">Colored links</a>
+      <a href="#position" class="list-group-item list-group-item-action">Position</a>
+      <a href="#ratio" class="list-group-item list-group-item-action">Ratio</a>
+      <a href="#stacks" class="list-group-item list-group-item-action">Stacks</a>
+      <a href="#stretchedlink" class="list-group-item list-group-item-action">Stretched link</a>
+      <a href="#texttruncation" class="list-group-item list-group-item-action">Text truncation</a>
+      <a href="#verticalrule" class="list-group-item list-group-item-action">Vertical rule</a>
+      <a href="#visuallyhidden" class="list-group-item list-group-item-action">Visually hidden</a>
+    </div>
 
-    input.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") {
-        sendButton.click();
-      }
-    });
+    <a href="#utilities" class="list-group-item list-group-item-action fw-bold">Utilities</a>
+    <div class="ms-3">
+      <a href="#api" class="list-group-item list-group-item-action">API</a>
+      <a href="#background" class="list-group-item list-group-item-action">Background</a>
+      <a href="#borders" class="list-group-item list-group-item-action">Borders</a>
+      <a href="#colors" class="list-group-item list-group-item-action">Colors</a>
+      <a href="#display" class="list-group-item list-group-item-action">Display</a>
+      <a href="#flex" class="list-group-item list-group-item-action">Flex</a>
+      <a href="#float" class="list-group-item list-group-item-action">Float</a>
+      <a href="#interactions" class="list-group-item list-group-item-action">Interactions</a>
+      <a href="#opacity" class="list-group-item list-group-item-action">Opacity</a>
+      <a href="#overflow" class="list-group-item list-group-item-action">Overflow</a>
+      <a href="#positionutil" class="list-group-item list-group-item-action">Position</a>
+      <a href="#shadows" class="list-group-item list-group-item-action">Shadows</a>
+      <a href="#sizing" class="list-group-item list-group-item-action">Sizing</a>
+      <a href="#spacing" class="list-group-item list-group-item-action">Spacing</a>
+      <a href="#textutil" class="list-group-item list-group-item-action">Text</a>
+      <a href="#verticalalign" class="list-group-item list-group-item-action">Vertical align</a>
+      <a href="#visibility" class="list-group-item list-group-item-action">Visibility</a>
+    </div>
 
-let joinedAt = Date.now();
+    <a href="#extend" class="list-group-item list-group-item-action fw-bold">Extend</a>
+    <div class="ms-3">
+      <a href="#approach" class="list-group-item list-group-item-action">Approach</a>
+      <a href="#icons" class="list-group-item list-group-item-action">Icons</a>
+    </div>
 
-onChildAdded(chatRef, (snapshot) => {
-  const msg = snapshot.val();
-  if (msg.timestamp && msg.timestamp < joinedAt) {
-    // ignore old messages
-    return;
-  }
+    <a href="#about" class="list-group-item list-group-item-action fw-bold">About</a>
+    <div class="ms-3">
+      <a href="#overviewabout" class="list-group-item list-group-item-action">Overview</a>
+      <a href="#team" class="list-group-item list-group-item-action">Team</a>
+      <a href="#brand" class="list-group-item list-group-item-action">Brand</a>
+      <a href="#license" class="list-group-item list-group-item-action">License</a>
+      <a href="#translations" class="list-group-item list-group-item-action">Translations</a>
+    </div>
 
-  if (msg && msg.text && msg.user) {
-    const div = document.createElement("div");
-    div.className = "msg";
+    <a href="#migration" class="list-group-item list-group-item-action fw-bold">Migration</a>
+  </div>
+</nav>
+  <!-- Content -->
+  <div class="content">
+    <section id="gettingstarted">
+      <h2>Getting Started</h2>
+      <p>Bootstrap is a powerful, feature-packed frontend toolkit. Build anything—from prototype to production—in minutes.</p>
+      <a href="https://www.carbonads.net/?utm_source=getbootstrapcom&utm_medium=ad_via_link&utm_campaign=in_unit&utm_term=carbon" target="_blank">
+  <img src="https://github.com/a0zai.png" style="max-width: 99px;" class="img-fluid rounded shadow mb-3 mx-auto d-block" alt="Getting Started Example">
+</a>
+      <pre>&lt;Design and Development tips in your inbox. Every weekday.
+ads via Carbon"&gt;
 
-    if (userName === 'A123696321Z') {
+    </section>
+    <hr>
+  <h4 class="mt-5">Quick start</h4>
+  <p>
+    Get started by including Bootstrap’s production-ready CSS and JavaScript via CDN without the need for any build steps.
+    See it in practice with this <a href="https://codepen.io/team/bootstrap/pen/qBamdLj" target="_blank">Bootstrap CodePen demo</a>.
+  </p>
 
-      div.innerHTML = `<span class="username">${msg.user}:</span> ${msg.text}`;
-    } else {
+  <ol>
+    <li>
+      Create a new <code>index.html</code> file. Include the <code>&lt;meta name="viewport"&gt;</code> tag for proper responsive behavior.
+      <pre class="bg-light p-3"><code>&lt;!doctype html&gt;
+&lt;html lang="en"&gt;
+  &lt;head&gt;
+    &lt;meta charset="utf-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;
+    &lt;title&gt;Bootstrap demo&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;h1&gt;Hello, world!&lt;/h1&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+    </li>
+    <li>
+      Include Bootstrap’s CSS and JS via CDN:
+      <pre class="bg-light p-3"><code>&lt;link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"&gt;
+</code></pre>
+  </p>
 
-      div.textContent = `${msg.user}: ${msg.text}`;
-    }
+  <h5 class="mt-4">CDN links</h5>
+  <ul>
+    <li>
+      CSS:
+      <a href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" target="_blank">
+        https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css
+      </a>
+    </li>
+    <li>
+      JS:
+      <a href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" target="_blank">
+        https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js
+      </a>
+    </li>
+  </ul>
 
-    messagesDiv.appendChild(div);
-    messagesDiv.scrollTop = messagesDiv.scrollHeight;
-  }
-});
+  <h5 class="mt-4">Next steps</h5>
+  <ul>
+    <li><a href="https://getbootstrap.com/docs/5.3/getting-started/introduction/#important-globals" target="_blank">Read about important global environment settings</a></li>
+    <li><a href="https://getbootstrap.com/docs/5.3/getting-started/contents/" target="_blank">What’s included in Bootstrap</a></li>
+    <li><a href="https://getbootstrap.com/docs/5.3/getting-started/download/#package-managers" target="_blank">Building with Bootstrap via package manager</a></li>
+    <li><a href="https://getbootstrap.com/docs/5.3/getting-started/webpack/" target="_blank">Using Bootstrap as a module</a></li>
+  </ul>
 
-const hamburger = document.getElementById('hamburger');
-  const sidebar = document.getElementById('sidebar');
-  const closeBtn = document.getElementById('closeSidebar');
+  <h5 class="mt-4">JS components</h5>
+  <p>Components that require JavaScript and Popper:</p>
+  <ul>
+    <li>Accordions (Collapse)</li>
+    <li>Alerts (dismiss)</li>
+    <li>Buttons (toggle states)</li>
+    <li>Carousel</li>
+    <li>Collapse</li>
+    <li>Dropdowns (needs Popper)</li>
+    <li>Modals</li>
+    <li>Navbar (Collapse and Offcanvas)</li>
+    <li>Navs (Tab plugin)</li>
+    <li>Offcanvas</li>
+    <li>Scrollspy</li>
+    <li>Toasts</li>
+    <li>Tooltips and popovers (needs Popper)</li>
+  </ul>
 
-  hamburger.addEventListener('click', () => {
-    sidebar.classList.add('open');
-  });
+  <h5 class="mt-4">Important globals</h5>
+  <ul>
+    <li>HTML5 doctype: <code>&lt;!doctype html&gt;</code></li>
+    <li>Viewport meta: <code>&lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;</code></li>
+    <li>Box-sizing: <code>border-box</code></li>
+    <li>Reboot: CSS resets and standardizations</li>
+  </ul>
 
-  closeBtn.addEventListener('click', () => {
-    sidebar.classList.remove('open');
-  });
-
-
-  document.addEventListener('click', (e) => {
-    if (!sidebar.contains(e.target) && e.target !== hamburger) {
-      sidebar.classList.remove('open');
-    }
-  });
-
-    // مسح الرسائل عند الضغط على الزر
-    clearButton.addEventListener("click", () => {
-      if(confirm("Do you want to clear the conversation?")) {
-        // مسح قاعدة البيانات كاملة تحت المفتاح "chat"
-        remove(chatRef)
-          .then(() => {
-            messagesDiv.innerHTML = "";
-          })
-          .catch(err => alert("حدث خطأ أثناء المسح: " + err.message));
-      }
-    });
-
-  </script>
+  <h5 class="mt-4">Community</h5>
+  <ul>
+    <li><a href="https://blog.getbootstrap.com/" target="_blank">The Official Bootstrap Blog</a></li>
+    <li><a href="https://github.com/twbs/bootstrap/discussions" target="_blank">GitHub Discussions</a></li>
+    <li><a href="https://discord.gg/bootstrap" target="_blank">Community Discord</a></li>
+    <li><a href="https://www.reddit.com/r/bootstrap/" target="_blank">Bootstrap subreddit</a></li>
+    <li><a href="https://stackoverflow.com/questions/tagged/bootstrap-5" target="_blank">Stack Overflow (bootstrap-5 tag)</a></li>
+  </ul>
+  
+<!-- Offcanvas (for mobile) -->
+<div class="d-flex justify-content-center mt-2 px-3 d-lg-none">
+  <input id="searchInputMobile" class="form-control d-none" type="search" placeholder="Search docs...">
+</div>
+<div class="offcanvas offcanvas-start bg-white" tabindex="-1" id="offcanvasMenu" aria-labelledby="offcanvasMenuLabel">
+  <div class="offcanvas-header border-bottom">
+    <h5 class="offcanvas-title" id="offcanvasMenuLabel">Menu</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body p-0">
+    <div class="list-group list-group-flush">
+      <a href="https://getbootstrap.com/docs/5.3/getting-started/introduction/" target="_blank" class="list-group-item list-group-item-action py-3 px-4 fs-5">Docs</a>
+      <a href="https://getbootstrap.com/docs/5.3/examples/" target="_blank" class="list-group-item list-group-item-action py-3 px-4 fs-5">Examples</a>
+      <a href="https://icons.getbootstrap.com/" target="_blank" class="list-group-item list-group-item-action py-3 px-4 fs-5">Icons</a>
+      <a href="https://themes.getbootstrap.com/" target="_blank" class="list-group-item list-group-item-action py-3 px-4 fs-5">Themes</a>
+      <a href="https://blog.getbootstrap.com/" target="_blank" class="list-group-item list-group-item-action py-3 px-4 fs-5">Blog</a>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
-    particlesJS("particles-js", {
-      particles: {
-        number: { value: 70, density: { enable: true, value_area: 800 } },
-        color: { value: "#ff3333" },
-        shape: {
-          type: "circle",
-          stroke: { width: 0, color: "#000000" },
-          polygon: { nb_sides: 5 },
-        },
-        opacity: {
-          value: 0.5,
-          random: true,
-          anim: { enable: true, speed: 1, opacity_min: 0.1, sync: false }
-        },
-        size: {
-          value: 3,
-          random: true,
-          anim: { enable: false }
-        },
-        line_linked: {
-          enable: true,
-          distance: 150,
-          color: "#ff3333",
-          opacity: 0.3,
-          width: 1
-        },
-        move: {
-          enable: true,
-          speed: 1,
-          direction: "none",
-          random: true,
-          straight: false,
-          out_mode: "out",
-          bounce: false,
-          attract: { enable: false }
-        }
-      },
-      interactivity: {
-        detect_on: "canvas",
-        events: {
-          onhover: { enable: true, mode: "grab" },
-          onclick: { enable: true, mode: "push" },
-          resize: true
-        },
-        modes: {
-          grab: { distance: 200, line_linked: { opacity: 0.5 } },
-          bubble: { distance: 200, size: 6, duration: 2, opacity: 0.8 },
-          repulse: { distance: 100 },
-          push: { particles_nb: 4 },
-          remove: { particles_nb: 2 }
-        }
-      },
-      retina_detect: true
-    });
-  </script>
+  const toggleBtn = document.getElementById('searchToggle');
+  const searchInput = document.getElementById('searchInput');
 
-  <script>
-    window.addEventListener('load', () => {
-      const overlay = document.getElementById('pageOverlay');
-      overlay.classList.add('fade-out');
-    });
-  </script>
+  toggleBtn.addEventListener('click', function() {
+    searchInput.classList.toggle('d-none');
+    if (!searchInput.classList.contains('d-none')) {
+      searchInput.focus();
+    }
+  });
+</script>
+<script>
+  const toggleBtnMobile = document.getElementById('searchToggleMobile');
+  const searchInputMobile = document.getElementById('searchInputMobile');
 
+  toggleBtnMobile?.addEventListener('click', () => {
+    searchInputMobile.classList.toggle('d-none');
+    if (!searchInputMobile.classList.contains('d-none')) {
+      searchInputMobile.focus();
+    }
+  });
+</script>
 </body>
 </html>
