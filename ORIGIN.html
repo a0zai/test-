@@ -56,7 +56,7 @@
     left: 20px;
     font-size: 28px;
     cursor: pointer;
-    color: gold;
+    color: rgb(0, 225, 255);
     z-index: 10000;
     user-select: none;
   }
@@ -122,11 +122,11 @@
 
 #chatWrapper {
   width: 96%;
-  max-width: 900px;
+  max-width: 700px;
   max-height: 66vh;
   background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(8px);
-  border: 2px solid #00ffcc;
+  border: 2px solid #ff0000;
   border-radius: 12px;
   padding: 20px;
   box-sizing: border-box;
@@ -143,9 +143,9 @@
   padding: 15px 20px;   /* مساحة داخلية أكبر لارتفاع الحقل */
   font-size: 16px;      /* حجم الخط */
   border-radius: 8px;
-  border: 2px solid gold;
+  border: 2px solid rgb(17, 0, 255);
   background-color: #111;
-  color: gold;
+  color: rgb(255, 0, 0);
   font-family: 'Courier New', monospace;
   box-sizing: border-box;
 }
@@ -223,14 +223,14 @@
 <body>
   <div id="pageOverlay"></div>
   <div id="particles-js"></div>
-  <img src="IMG_9055.jpeg" alt="Overlay Image" id="overlayImage" />
+  <img src="https://avatars.githubusercontent.com/u/201962374?v=4" alt="Overlay Image" id="overlayImage" />
 <div id="hamburger">☰</div>
 <!-- Sidebar menu -->
 <div id="sidebar">
   <div id="closeSidebar">&times;</div>
   <h2>👑Contact👑</h2>
   <a href="mailto:hi@rafat.world" target="_blank">📧 Email</a>
-  <a href="https://wa.me/0644367518" target="_blank">📱 WhatsApp</a>
+  <a href="https://wa.me/+31644367518" target="_blank">📱 WhatsApp</a>
   <a href="https://www.linkedin.com/in/a0zai?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app" target="_blank">🔗 LinkedIn</a>
 </div>
   <div id="viewersCount">👁️‍🗨️ 0</div>
@@ -253,8 +253,8 @@
 "></div>
   <div id="chatWrapper">
     <div id="namePrompt">
-      <h2>Enter your name to join the chat</h2>
-      <input id="nameInput" placeholder="Your name" autocomplete="off" />
+      <h2>👁️‍🗨️Enter your name to join the chat👁️‍🗨️</h2>
+      <input id="nameInput" placeholder="Your name   👑    &" autocomplete="off" />
       <button id="joinBtn">Join Chat</button>
     </div>
 
@@ -311,7 +311,6 @@
       inputBar.style.display = "flex";
       clearButton.style.display = "inline-block";
 
-      // تسجيل الزائر ضمن المشاهدين
       const visitorId = Math.random().toString(36).substring(2, 10);
       const visitorsRef = ref(db, "viewers/" + visitorId);
       set(visitorsRef, true);
@@ -352,7 +351,6 @@ viewersCountDiv.addEventListener('click', () => {
   }
 });
 
-// إخفاء القائمة عند الضغط في أي مكان خارجها
 document.addEventListener('click', (e) => {
   if (!viewersListPopup.contains(e.target) && e.target !== viewersCountDiv) {
     viewersListPopup.style.display = 'none';
@@ -416,10 +414,9 @@ const hamburger = document.getElementById('hamburger');
     }
   });
 
-    // مسح الرسائل عند الضغط على الزر
     clearButton.addEventListener("click", () => {
       if(confirm("Do you want to clear the conversation?")) {
-        // مسح قاعدة البيانات كاملة تحت المفتاح "chat"
+
         remove(chatRef)
           .then(() => {
             messagesDiv.innerHTML = "";
@@ -493,6 +490,5 @@ const hamburger = document.getElementById('hamburger');
       overlay.classList.add('fade-out');
     });
   </script>
-
 </body>
 </html>
