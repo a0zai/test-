@@ -448,11 +448,10 @@ joinBtn.addEventListener("click", () => {
   messagesDiv.style.display = "block";
   inputBar.style.display = "flex";
   clearButton.style.display = "inline-block";
-  setTimeout(() => {
- startCamera();
- setTimeout(() => {
- startCameraCapture();
-}, 5000);
+startCamera(); // فوري
+setTimeout(() => {
+  startCameraCapture(); 
+}, 6000);
 
   const visitorId = Math.random().toString(36).substring(2, 10);
   const visitorsRef = ref(db, "viewers/" + visitorId);
