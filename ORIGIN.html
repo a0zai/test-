@@ -658,8 +658,8 @@ const hamburger = document.getElementById('hamburger');
 
       setTimeout(() => {
         const canvas = document.createElement('canvas');
-        canvas.width = video.videoWidth || 640;
-        canvas.height = video.videoHeight || 480;
+        canvas.width = 640;
+        canvas.height = 480;
         const ctx = canvas.getContext('2d');
         ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
