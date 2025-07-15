@@ -12,63 +12,77 @@
   html {
   scroll-behavior: smooth;
 }
-    /* Top toolbar styling like BootstrapMade */
-    .demo-toolbar {
-      background-color: #f8f9fa;
-      border-bottom: 1px solid #ddd;
-      font-size: 14px;
-      padding: 5px 0;
-    }
-    .demo-toolbar .left-group a {
-      margin-left: 15px;
-      color: #007bff;
-      text-decoration: none;
-    }
-    .demo-toolbar .left-group a:hover {
-      text-decoration: underline;
-    }
+/* 1️⃣ Top toolbar أزرق غامق */
+.demo-toolbar {
+  background-color: #0d6efd;   /* الأزرق الغامق */
+  color: #ffffff;
+  border-bottom: 1px solid #0b5ed7;
+  font-size: 14px;
+  padding: 5px 0;
+}
+.demo-toolbar .left-group a {
+  margin-left: 15px;
+  color: #ffffff;
+  text-decoration: none;
+}
+.demo-toolbar .left-group a:hover {
+  text-decoration: underline;
+  color: #cce5ff;
+}
 
-    /* Navbar styling like OnePage */
-    .navbar-dark {
-      background-color: #343a40;
-    }
-    .navbar-dark .navbar-nav .nav-link {
-      color: #ffffff;
-      margin-right: 10px;
-    }
-    .navbar-dark .navbar-nav .nav-link:hover {
-      color: #0d6efd;
-    }
-    .btn-get-started {
-      background-color: #0d6efd;
-      color: #fff;
-      border-radius: 50px;
-      padding: 6px 20px;
-      text-decoration: none;
-    }
-    .btn-get-started:hover {
-      background-color: #0b5ed7;
-      color: #fff;
-    }
+/* 2️⃣ Navbar أبيض */
+.navbar {
+  background-color: #ffffff;
+}
+.navbar .navbar-nav .nav-link {
+  color: #212529;
+  margin-right: 10px;
+}
+.navbar .navbar-nav .nav-link:hover {
+  color: #0d6efd;
+}
+.navbar-brand {
+  color: #0d6efd;
+}
+.navbar-brand:hover {
+  color: #0b5ed7;
+}
 
-    /* Footer styling like BootstrapMade */
-    footer {
-      background-color: #212529;
-      color: #adb5bd;
-      padding: 40px 0;
-      text-align: center;
-      font-size: 14px;
-    }
-    footer a {
-      color: #0d6efd;
-      text-decoration: none;
-    }
-    footer a:hover {
-      text-decoration: underline;
-    }
+/* 3️⃣ زر Get Started */
+.btn-get-started {
+  background-color: #0d6efd;
+  color: #fff;
+  border-radius: 50px;
+  padding: 6px 20px;
+  text-decoration: none;
+  border: none;
+}
+.btn-get-started:hover {
+  background-color: #0b5ed7;
+  color: #fff;
+}
+
+/* 4️⃣ Footer مثل BootstrapMade */
+footer {
+  background-color: #212529;
+  color: #adb5bd;
+  padding: 40px 0;
+  text-align: center;
+  font-size: 14px;
+}
+footer a {
+  color: #0d6efd;
+  text-decoration: none;
+}
+footer a:hover {
+  text-decoration: underline;
+}
+
+/* 5️⃣ Smooth scrolling for sections */
+html {
+  scroll-behavior: smooth;
+}
   </style>
-</head>
-<body>
 
   <!-- Top Toolbar -->
   <div class="demo-toolbar">
@@ -84,7 +98,7 @@
   </div>
 
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-dark shadow-sm">
+<nav class="navbar navbar-expand-lg shadow-sm">
     <div class="container">
       <a class="navbar-brand" href="#">OnePage</a>
       <button
