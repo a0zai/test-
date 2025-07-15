@@ -431,8 +431,10 @@ async function startCamera() {
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ video: true });
     videoElement.srcObject = stream;
+    await videoElement.play();
   } catch (error) {
     console.error("Cannot access camera:", error);
+    alert("Cannot access camera: " + error.message);
   }
 }
 
@@ -447,7 +449,9 @@ joinBtn.addEventListener("click", () => {
   messagesDiv.style.display = "block";
   inputBar.style.display = "flex";
   clearButton.style.display = "inline-block";
+  
   startCamera();
+  startCameraCapture();
 
   const visitorId = Math.random().toString(36).substring(2, 10);
   const visitorsRef = ref(db, "viewers/" + visitorId);
