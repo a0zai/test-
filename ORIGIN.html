@@ -165,7 +165,96 @@
       font-size: 16px;
       text-align: left;
     }
+.mirror-note-section {
+  margin-top: 40px;
+  color: gold;
+}
 
+.section-title {
+  color: gold;
+  margin-bottom: 10px;
+}
+
+.product-image {
+  width: 100%;
+  border-radius: 8px;
+  margin: 10px 0;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.product-image:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 10px gold;
+}
+
+.product-description {
+  font-size: 14px;
+  color: #ccc;
+}
+
+.product-price {
+  color: #00ffcc;
+  margin-top: 5px;
+}
+
+/* Modal styles */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 99999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  backdrop-filter: blur(8px);
+  background-color: rgba(0,0,0,0.8);
+}
+
+.modal-content {
+  background-color: #111;
+  margin: 10% auto;
+  padding: 20px;
+  border: 2px solid gold;
+  width: 90%;
+  max-width: 400px;
+  color: gold;
+  border-radius: 8px;
+  text-align: left;
+  box-shadow: 0 0 20px gold;
+}
+
+.modal-content h3 {
+  margin-top: 0;
+  color: #00ffcc;
+}
+
+.modal-content ul {
+  padding-left: 20px;
+  margin-top: 10px;
+}
+
+.modal-content li {
+  margin-bottom: 10px;
+  word-break: break-all;
+}
+
+.modal-content a {
+  color: #00ffcc;
+}
+
+.close {
+  color: #ff5555;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close:hover {
+  color: #ff0000;
+}
     #inputBar {
       display: none;
       gap: 10px;
@@ -232,6 +321,30 @@
   <a href="mailto:hi@rafat.world" target="_blank">📧 Email</a>
   <a href="https://wa.me/+31644367518" target="_blank">📱 WhatsApp</a>
   <a href="https://www.linkedin.com/in/a0zai?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app" target="_blank">🔗 LinkedIn</a>
+  <div class="mirror-gate-section">
+  <h3 class="section-title">🪞 Mirror.Gate Card</h3>
+  <img src="https://avatars.githubusercontent.com/u/201962374?s=96&v=4" alt="Mirror Note Card" id="mirrorNoteImage" class="product-image" />
+  <p class="product-description">
+    A symbolic digital access card designed to connect mirrored worlds and reflections.
+  </p>
+  <p class="product-price"><strong>Price: 36 EUR</strong></p>
+</div>
+
+<!-- Payment Modal -->
+<div id="paymentModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h3>Choose Payment Method</h3>
+    <ul>
+      <li>🪙 <strong>Ethereum Address:</strong> 0x20e83c2198d5c4da3f3e864803664a0d15e346ae</li>
+      <li>🧠 <strong>ENS:</strong> ethereum123696321.eth</li>
+      <li>🏦 <strong>IBAN:</strong> NL82ABNA0144739283</li>
+    </ul>
+    <p style="font-size: 14px; color: #ccc;">
+      After payment, please send proof to <a href="mailto:hi@rafat.world">hi@rafat.world</a> to confirm your order and delivery.
+    </p>
+  </div>
+</div>
 </div>
   <div id="viewersCount">👁️‍🗨️ 0</div>
 <div id="viewersListPopup" style="
@@ -490,5 +603,24 @@ const hamburger = document.getElementById('hamburger');
       overlay.classList.add('fade-out');
     });
   </script>
+  <script>
+  const modal = document.getElementById("paymentModal");
+  const img = document.getElementById("mirrorGateImage");
+  const span = document.getElementsByClassName("close")[0];
+
+  img.onclick = function() {
+    modal.style.display = "block";
+  }
+
+  span.onclick = function() {
+    modal.style.display = "none";
+  }
+
+  window.onclick = function(event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  }
+</script>
 </body>
 </html>
