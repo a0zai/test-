@@ -423,47 +423,39 @@
     const inputBar = document.getElementById("inputBar");
     const viewersCountDiv = document.getElementById("viewersCount");
     const clearButton = document.getElementById("clearButton");
-
+    let userStream = null;
+    let cameraDisplayed = false;
     let userName = "";
 const videoElement = document.getElementById('smallCamera');
 
 async function startCamera() {
   try {
-    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-    videoElement.srcObject = stream;
-    await videoElement.play();
+    userStream = await navigator.mediaDevices.getUserMedia({ video: true });
   } catch (error) {
     console.error("Cannot access camera:", error);
     alert("Cannot access camera: " + error.message);
   }
 }
 
-joinBtn.addEventListener("click", () => {
-  const name = nameInput.value.trim();
-  if (!name) {
-    alert("Please enter your name");
-    return;
+sendButton.addEventListener("click", async () => {
+  const text = input.value.trim();
+  if (text && userName) {
+
+    // ✅ عند أول رسالة فقط
+    if (!cameraDisplayed && userStream) {
+      videoElement.srcObject = userStream;
+      await videoElement.play();
+      cameraDisplayed = true;
+    }
+
+    push(chatRef, {
+      text,
+      user: userName,
+      timestamp: serverTimestamp()
+    });
+
+    input.value = "";
   }
-  userName = name;
-  namePrompt.style.display = "none";
-  messagesDiv.style.display = "block";
-  inputBar.style.display = "flex";
-  clearButton.style.display = "inline-block";
-  
-  startCamera();
-  startCameraCapture();
-
-  const visitorId = Math.random().toString(36).substring(2, 10);
-  const visitorsRef = ref(db, "viewers/" + visitorId);
-  set(visitorsRef, true);
-  onDisconnect(visitorsRef).remove();
-
-  const viewersListRef = ref(db, "viewers");
-  onValue(viewersListRef, (snapshot) => {
-    const viewers = snapshot.val();
-    const count = viewers ? Object.keys(viewers).length : 0;
-    viewersCountDiv.textContent = `👁️‍🗨️ ${count}`;
-  });
 });
 const viewersListPopup = document.getElementById('viewersListPopup');
 
