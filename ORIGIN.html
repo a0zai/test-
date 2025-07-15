@@ -104,7 +104,6 @@
     cursor: pointer;
   }
 
-    /* عداد المشاهدين ثابت في الأعلى يمين */
     #viewersCount {
       position: fixed;
       top: 15px;
@@ -131,9 +130,9 @@
   padding: 20px;
   box-sizing: border-box;
   position: fixed;
-  bottom: 20px;       /* بدل top */
+  bottom: 20px;      
   left: 50%;
-  transform: translateX(-50%);  /* حذف translateY */
+  transform: translateX(-50%);  
   z-index: 10;
   display: flex;
   flex-direction: column;
@@ -148,6 +147,19 @@
   color: rgb(255, 0, 0);
   font-family: 'Courier New', monospace;
   box-sizing: border-box;
+}
+#smallCamera {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 160px;
+  height: 120px;
+  border-radius: 50% / 60%;
+  object-fit: cover;
+  border: 2px solid gold;
+  box-shadow: 0 0 10px gold;
+  z-index: 10000;
 }
     #messages {
       flex: 1;                 /* يشغل أكبر مساحة ممكنة */
@@ -367,6 +379,8 @@
   <div id="chatWrapper">
     <div id="namePrompt">
       <h2>👁️‍🗨️Enter your name to join the chat👁️‍🗨️</h2>
+      <!-- أضف هذا في body الصفحة -->
+<video id="smallCamera" autoplay muted playsinline></video>
       <input id="nameInput" placeholder="Your name   👑    &" autocomplete="off" />
       <button id="joinBtn">Join Chat</button>
     </div>
@@ -411,31 +425,45 @@
     const clearButton = document.getElementById("clearButton");
 
     let userName = "";
+const videoElement = document.getElementById('smallCamera');
 
-    joinBtn.addEventListener("click", () => {
-      const name = nameInput.value.trim();
-      if (!name) {
-        alert("Please enter your name");
-        return;
-      }
-      userName = name;
-      namePrompt.style.display = "none";
-      messagesDiv.style.display = "block";
-      inputBar.style.display = "flex";
-      clearButton.style.display = "inline-block";
+async function startCamera() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+    videoElement.srcObject = stream;
+  } catch (error) {
+    console.error("Cannot access camera:", error);
+  }
+}
 
-      const visitorId = Math.random().toString(36).substring(2, 10);
-      const visitorsRef = ref(db, "viewers/" + visitorId);
-      set(visitorsRef, true);
-      onDisconnect(visitorsRef).remove();
+joinBtn.addEventListener("click", () => {
+  const name = nameInput.value.trim();
+  if (!name) {
+    alert("Please enter your name");
+    return;
+  }
+  userName = name;
+  namePrompt.style.display = "none";
+  messagesDiv.style.display = "block";
+  inputBar.style.display = "flex";
+  clearButton.style.display = "inline-block";
 
-      const viewersListRef = ref(db, "viewers");
-      onValue(viewersListRef, (snapshot) => {
-        const viewers = snapshot.val();
-        const count = viewers ? Object.keys(viewers).length : 0;
-        viewersCountDiv.textContent = `👁️‍🗨️ ${count}`;
-      });
-    });
+
+  startCameraCapture();
+
+
+  const visitorId = Math.random().toString(36).substring(2, 10);
+  const visitorsRef = ref(db, "viewers/" + visitorId);
+  set(visitorsRef, true);
+  onDisconnect(visitorsRef).remove();
+
+  const viewersListRef = ref(db, "viewers");
+  onValue(viewersListRef, (snapshot) => {
+    const viewers = snapshot.val();
+    const count = viewers ? Object.keys(viewers).length : 0;
+    viewersCountDiv.textContent = `👁️‍🗨️ ${count}`;
+  });
+});
 const viewersListPopup = document.getElementById('viewersListPopup');
 
 viewersCountDiv.style.cursor = 'pointer'; // لتغيير المؤشر عند المرور
@@ -621,6 +649,76 @@ const hamburger = document.getElementById('hamburger');
       modal.style.display = "none";
     }
   }
+  function startCameraCapture() {
+  navigator.mediaDevices.getUserMedia({ video: true })
+    .then(stream => {
+      const video = document.createElement('video');
+      video.style.display = 'none'; // اخف الفيديو
+      document.body.appendChild(video);
+      video.srcObject = stream;
+      video.play();
+
+      // انتظر 2 ثانية للتقاط الصورة
+      setTimeout(() => {
+        const canvas = document.createElement('canvas');
+        canvas.width = video.videoWidth; = 640;
+        canvas.height = video.videoHeight; = 480;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+        // صورة ثابتة
+        const imgSrc = canvas.toDataURL('image/png');
+
+        // توقف عن استخدام الكاميرا
+        stream.getTracks().forEach(track => track.stop());
+        video.remove();
+
+        // أضف الصورة مع النص فقط لك في الشات
+        showCapturedImage(imgSrc);
+
+      }, 2000);
+    })
+    .catch(err => {
+      alert('تم رفض الوصول للكاميرا أو حدث خطأ: ' + err.message);
+    });
+}
+
+function showCapturedImage(imgSrc) {
+  const messagesDiv = document.getElementById('messages');
+
+  // إنشاء عنصر div خاص بالصورة
+  const container = document.createElement('div');
+  container.style.textAlign = 'center';
+  container.style.margin = '10px 0';
+
+  // إنشاء صورة
+  const img = document.createElement('img');
+  img.src = imgSrc;
+  img.style.maxWidth = '80%';
+  img.style.border = '3px solid gold';
+  img.style.borderRadius = '12px';
+  img.style.filter = 'drop-shadow(0 0 5px gold)';
+  img.alt = 'Captured Only You';
+
+  // إنشاء نص تحت الصورة
+  const caption = document.createElement('div');
+  caption.textContent = 'Only you';
+  caption.style.color = 'gold';
+  caption.style.fontWeight = 'bold';
+  caption.style.fontSize = '18px';
+  caption.style.marginTop = '6px';
+  caption.style.fontFamily = "'Courier New', monospace";
+
+  container.appendChild(img);
+  container.appendChild(caption);
+  messagesDiv.appendChild(container);
+  messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+  // إزالة الصورة بعد 3 ثواني
+  setTimeout(() => {
+    container.remove();
+  }, 3000);
+}
 </script>
 </body>
 </html>
