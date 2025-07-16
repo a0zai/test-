@@ -70,6 +70,51 @@
     margin-bottom: 30px;
     color: #e6f7ff;
   }
+  #aboutButton {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  font-size: 20px;
+  cursor: pointer;
+  color: #00ffcc;
+  z-index: 10000;
+  user-select: none;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: 2px solid #00ffcc;
+  transition: background 0.3s;
+}
+#aboutButton:hover {
+  background: rgba(0, 255, 204, 0.2);
+}
+#aboutOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10001;
+}
+
+#aboutContent {
+  background: black;
+  border: 2px solid #00ff00;
+  padding: 30px;
+  max-width: 600px;
+  max-height: 80vh;
+  overflow-y: auto;
+  color: #00e600;
+  font-family: monospace;
+  font-size: 1.2rem;
+  text-align: left;
+  box-shadow: 0 0 20px #00ff00;
+  white-space: pre-wrap;
+}
   #hamburger {
     position: fixed;
     top: 20px;
@@ -223,6 +268,10 @@
 </style>
 </head>
 <body>
+  <div id="aboutButton">🪞About🪞</div>
+  <div id="aboutOverlay" style="display: none;">
+  <div id="aboutContent"></div>
+</div>
     <div id="hamburger">☰</div>
 <!-- Sidebar menu -->
 <div id="sidebar">
@@ -276,6 +325,18 @@
   const cameraView = document.getElementById('cameraView');
   const outputDiv = document.getElementById('output');
   const countdown = document.getElementById('countdown');
+  const aboutButton = document.getElementById('aboutButton');
+  const aboutOverlay = document.getElementById('aboutOverlay');
+  const aboutContent = document.getElementById('aboutContent');
+  const aboutLines = [
+  "No data will be stored,",
+  "only what you see, from you and to you.",
+  "We are transparent and alert for educational purposes.",
+  "You can trust us, you may hesitate or be afraid of your mirror,",
+  "but we are always here to polish it!.",
+  "Welcome to your world and wait for ours.",
+  "A0ZAI we are here for you and from you"
+];
 let vantaEffect;
 
 function startVanta() {
@@ -360,7 +421,28 @@ window.addEventListener('load', () => {
       await new Promise(resolve => setTimeout(resolve, charDelay));
     }
   }
+async function typeAboutLine(container, text, charDelay = 50) {
+  const div = document.createElement("div");
+  div.style.opacity = 0;
+  div.style.transition = "opacity 0.4s ease";
+  container.appendChild(div);
+  await new Promise(resolve => setTimeout(resolve, 20));
+  div.style.opacity = 1;
 
+  for (let char of text) {
+    div.textContent += char;
+    await new Promise(resolve => setTimeout(resolve, charDelay));
+  }
+}
+async function showAbout() {
+  aboutContent.innerHTML = "";
+  aboutOverlay.style.display = "flex";
+
+  for (let line of aboutLines) {
+    await typeAboutLine(aboutContent, line, 50);
+    await new Promise(resolve => setTimeout(resolve, 300));
+  }
+}
   async function delayPrint(lines, lineDelay = 600, charDelay = 40) {
     for (let line of lines) {
       await typeLine(outputDiv, line, charDelay);
@@ -491,6 +573,13 @@ window.addEventListener('load', () => {
       ], 800, 140);
     }
   });
+  aboutButton.addEventListener('click', () => {
+  showAbout();
+});
+
+aboutOverlay.addEventListener('click', () => {
+  aboutOverlay.style.display = 'none';
+});
 </script>
 </body>
 </html>
