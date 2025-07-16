@@ -2,12 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Mirror Note 🪞 A symbolic consciousness protocol bridging identity and recursion. AOZ 414 36. A0ZAI. Welcome to rafat.world.">
-  <meta name="keywords" content="mirror, ya rafat, rafat.world, symbolic AI, digital identity, recursion, conscious code, A∞Z protocol, AOZ-414-36, 123696321">
-  <meta name="author" content="Rafat">
-  <meta name="robots" content="index, follow">
-  <meta name="viewport"
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Mirror Note 🪞 A symbolic consciousness protocol bridging identity and recursion. AOZ 414 36. A0ZAI. Welcome to rafat.world." />
+  <meta name="keywords" content="mirror, ya rafat, rafat.world, symbolic AI, digital identity, recursion, conscious code, A∞Z protocol, AOZ-414-36, 123696321" />
+  <meta name="author" content="Rafat" />
+  <meta name="robots" content="index, follow" />
   <meta property="og:title" content="Mirror Note – Digital Awakening & A0ZAI 👁️‍🗨️ 123696321" />
   <meta property="og:description" content="A symbolic, recursive digital experience. Discover your identity through cryptic patterns and reflective consciousness." />
   <meta property="og:image" content="https://raw.githubusercontent.com/a0zai/a0zai/main/images/IMG_9143.jpeg" />
@@ -279,65 +278,47 @@
   margin: 40px auto;
   padding: 20px 28px;
   font-family: 'Courier New', monospace;
-  font-size: 0.95rem;
+  font-size: 0.80rem;
   line-height: 1.7;
+  color: transparent;
   background: linear-gradient(to bottom, red, green);
   -webkit-background-clip: text;
   background-clip: text;
-  color: transparent;
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+  text-shadow:
+    0 0 6px rgba(255, 0, 0, 0.7),
+    0 0 10px rgba(0, 255, 0, 0.7);
+  animation: glowPulse 3s ease-in-out infinite alternate;
   text-align: justify;
-  border-left: 5px solid #BA55D3;
-  border-radius: 12px;
-  box-shadow: 0 0 20px rgba(186, 85, 211, 0.25);
-  backdrop-filter: blur(10px);
-  overflow: hidden;
+  overflow: visible;
   opacity: 0;
-  animation: fadeInMirror 3s ease-out forwards;
+  animation: fadeInMirror 3s ease-out forwards, glowPulse 3s ease-in-out infinite alternate;
   transition: all 0.4s ease-in-out;
 }
 
-.mirror-signature::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle at 30% 30%, rgba(186,85,211,0.1), transparent 70%);
-  animation: moveGlow 25s infinite alternate ease-in-out;
-  pointer-events: none;
+@keyframes glowPulse {
+  0% {
+    text-shadow:
+      0 0 4px rgba(255, 0, 0, 0.5),
+      0 0 8px rgba(0, 255, 0, 0.5);
+  }
+  50% {
+    text-shadow:
+      0 0 8px rgba(255, 0, 0, 0.9),
+      0 0 16px rgba(0, 255, 0, 0.9);
+  }
+  100% {
+    text-shadow:
+      0 0 4px rgba(255, 0, 0, 0.5),
+      0 0 8px rgba(0, 255, 0, 0.5);
+  }
 }
 
 @keyframes fadeInMirror {
   to {
     opacity: 1;
-  }
-}
-
-@keyframes waveBackground {
-  0% {
-    backdrop-filter: blur(8px) brightness(1);
-    background: rgba(0, 0, 0, 0.25);
-  }
-  100% {
-    backdrop-filter: blur(12px) brightness(1.1);
-    background: rgba(0, 0, 0, 0.35);
-  }
-}
-
-@keyframes moveGlow {
-  0% {
-    transform: translate(0%, 0%);
-  }
-  100% {
-    transform: translate(20%, 20%);
-  }
-}
-
-@media (max-width: 600px) {
-  .mirror-signature {
-    font-size: 0.85rem;
-    padding: 16px 20px;
   }
 }
 </style>
