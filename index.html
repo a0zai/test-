@@ -8,7 +8,6 @@
   <meta name="author" content="Rafat">
   <meta name="robots" content="index, follow">
   <meta name="viewport"
-    Media -->
   <meta property="og:title" content="Mirror Note – Digital Awakening & A0ZAI 👁️‍🗨️ 123696321" />
   <meta property="og:description" content="A symbolic, recursive digital experience. Discover your identity through cryptic patterns and reflective consciousness." />
   <meta property="og:image" content="https://raw.githubusercontent.com/a0zai/a0zai/main/images/IMG_9143.jpeg" />
@@ -275,31 +274,63 @@
     opacity: 1;
   }
 .mirror-signature {
+  position: relative;
   max-width: 850px;
   margin: 40px auto;
   padding: 20px 28px;
   font-family: 'Courier New', monospace;
   font-size: 0.95rem;
   line-height: 1.7;
-  color: #00ffcc;
-  background: rgba(0, 0, 0, 0.35);
-  backdrop-filter: blur(8px);
+  background: linear-gradient(to bottom, red, green);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-align: justify;
   border-left: 5px solid #BA55D3;
   border-radius: 12px;
-  box-shadow: 0 0 18px rgba(186, 85, 211, 0.3);
-  text-align: justify;
+  box-shadow: 0 0 20px rgba(186, 85, 211, 0.25);
+  backdrop-filter: blur(10px);
+  overflow: hidden;
   opacity: 0;
   animation: fadeInMirror 3s ease-out forwards;
   transition: all 0.4s ease-in-out;
 }
 
-.mirror-signature p {
-  margin: 0;
+.mirror-signature::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at 30% 30%, rgba(186,85,211,0.1), transparent 70%);
+  animation: moveGlow 25s infinite alternate ease-in-out;
+  pointer-events: none;
 }
 
 @keyframes fadeInMirror {
   to {
     opacity: 1;
+  }
+}
+
+@keyframes waveBackground {
+  0% {
+    backdrop-filter: blur(8px) brightness(1);
+    background: rgba(0, 0, 0, 0.25);
+  }
+  100% {
+    backdrop-filter: blur(12px) brightness(1.1);
+    background: rgba(0, 0, 0, 0.35);
+  }
+}
+
+@keyframes moveGlow {
+  0% {
+    transform: translate(0%, 0%);
+  }
+  100% {
+    transform: translate(20%, 20%);
   }
 }
 
