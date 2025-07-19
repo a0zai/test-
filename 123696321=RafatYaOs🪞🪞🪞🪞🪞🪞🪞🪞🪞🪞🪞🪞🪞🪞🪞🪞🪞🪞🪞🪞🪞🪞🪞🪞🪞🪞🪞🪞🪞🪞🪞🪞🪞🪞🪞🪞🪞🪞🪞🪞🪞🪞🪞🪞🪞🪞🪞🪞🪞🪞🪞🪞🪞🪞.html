@@ -1,23 +1,57 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" >
 <head>
   <meta charset="UTF-8" />
-  <title>خريطة رأفت</title>
+  <title>خريطة رافات - تجربة واقع افتراضي</title>
   <link
     rel="stylesheet"
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
     crossorigin=""
   />
   <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      background: #121212;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #eee;
+      overflow: hidden;
+    }
     #map {
-      height: 450px;
-      width: 600px;
-      border: none;
+      height: 100%;
+      width: 100%;
+      filter: drop-shadow(0 0 6px #ff4444cc);
+      border-radius: 12px;
+      box-shadow: 0 0 30px 3px #ff4444aa;
+    }
+    h3 {
+      position: absolute;
+      top: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(30, 30, 30, 0.8);
+      padding: 12px 25px;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 1.6rem;
+      letter-spacing: 1.2px;
+      text-shadow: 0 0 6px #ff4444bb;
+      z-index: 1100;
+      user-select: none;
+      border: 1.5px solid #ff4444cc;
+      box-shadow: 0 0 12px #ff4444cc;
+    }
+    /* توهج المسار */
+    .leaflet-interactive {
+      filter: drop-shadow(0 0 6px #ff4444cc);
+      stroke-linejoin: round;
+      stroke-linecap: round;
     }
   </style>
 </head>
 <body>
-  <h3>RAFAT</h3>
+  <h3>خريطة رافات - تجربة واقع افتراضي</h3>
   <div id="map"></div>
 
   <script
@@ -26,11 +60,35 @@
   ></script>
   <script>
     const rafatCoords = [31.8854, 35.1481];
-    const map = L.map('map').setView(rafatCoords, 14);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    const map = L.map('map', { zoomControl: false, dragging: true, scrollWheelZoom: true }).setView(rafatCoords, 14);
+
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
       maxZoom: 19,
-      attribution: '&copy; OpenStreetMap contributors',
+      attribution: '&copy; <a href="https://carto.com/attributions">CARTO</a>',
     }).addTo(map);
+
+    const flightPathCoords = [
+      [31.8900, 35.1400],
+      [31.8920, 35.1500],
+      [31.8880, 35.1600],
+      [31.8800, 35.1620],
+      [31.8750, 35.1550],
+      [31.8760, 35.1450],
+      [31.8800, 35.1380],
+      [31.8850, 35.1350],
+      [31.8900, 35.1400]
+    ];
+
+    const flightPath = L.polyline(flightPathCoords, {
+      color: '#ff4444',
+      weight: 6,
+      opacity: 0.85,
+      smoothFactor: 1,
+      lineJoin: 'round'
+    }).addTo(map);
+
+    map.fitBounds(flightPath.getBounds(), { padding: [50, 50] });
+
     const marker = L.marker(rafatCoords).addTo(map);
     marker.bindPopup('رافات');
     marker.on('click', () => {
@@ -40,6 +98,45 @@
       });
       marker.openPopup();
     });
+
+    const planeIcon = L.icon({
+      iconUrl: 'https://cdn-icons-png.flaticon.com/512/68/68584.png',
+      iconSize: [40, 40],
+      iconAnchor: [20, 20],
+      className: 'plane-icon'
+    });
+
+    const planeMarker = L.marker(flightPathCoords[0], { icon: planeIcon }).addTo(map);
+
+    function interpolateCoords(start, end, t) {
+      return [
+        start[0] + (end[0] - start[0]) * t,
+        start[1] + (end[1] - start[1]) * t
+      ];
+    }
+
+    let currentIndex = 0;
+    let progress = 0;
+    const speed = 0.0012;
+
+    function animatePlane() {
+      const start = flightPathCoords[currentIndex];
+      const end = flightPathCoords[(currentIndex + 1) % flightPathCoords.length];
+      progress += speed;
+      if (progress >= 1) {
+        progress = 0;
+        currentIndex = (currentIndex + 1) % flightPathCoords.length;
+      }
+      const pos = interpolateCoords(start, end, progress);
+      planeMarker.setLatLng(pos);
+
+      const angle = Math.atan2(end[1] - start[1], end[0] - start[0]) * 180 / Math.PI;
+      planeMarker._icon.style.transform = `rotate(${angle}deg) translate(-50%, -50%)`;
+
+      requestAnimationFrame(animatePlane);
+    }
+
+    animatePlane();
   </script>
 </body>
 </html>
