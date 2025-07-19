@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar" >
+<html lang="ar">
 <head>
   <meta charset="UTF-8" />
   <title>Rafat</title>
@@ -13,38 +13,53 @@
       height: 100%;
       margin: 0;
       padding: 0;
+      background: #222; /* خلفية داكنة ناعمة */
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #eee;
+      overflow: hidden;
     }
     #map {
       height: 100%;
       width: 100%;
-      border: none;
+      border-radius: 12px;
+      box-shadow: 0 0 25px rgba(255, 100, 50, 0.7);
+      transition: box-shadow 0.4s ease;
+    }
+    #map:hover {
+      box-shadow: 0 0 45px rgba(255, 120, 70, 0.9);
     }
     h3 {
       position: absolute;
-      top: 10px;
+      top: 15px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(255,255,255,0.95);
-      padding: 10px 20px;
-      border-radius: 10px;
+      background: rgba(255, 140, 70, 0.9);
+      padding: 14px 30px;
+      border-radius: 25px;
       font-weight: 700;
-      font-size: 1.5rem;
-      color: #222;
-      z-index: 1100;
+      font-size: 1.7rem;
+      text-shadow: 0 0 10px #fff2de;
+      color: #fff;
       user-select: none;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      box-shadow: 0 0 15px #ff8c46aa;
+      z-index: 1100;
+      letter-spacing: 1.1px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
-    /* توهج المسار */
-    .leaflet-interactive {
-      stroke-linejoin: round;
-      stroke-linecap: round;
-      filter: drop-shadow(0 0 6px rgba(255, 69, 0, 0.8));
+    .leaflet-marker-icon {
+      filter: drop-shadow(0 0 6px #ff8c46cc);
+      transition: transform 0.3s ease;
+    }
+    .leaflet-marker-icon:hover {
+      transform: scale(1.3);
+      filter: drop-shadow(0 0 12px #ff8c46ee);
+      cursor: pointer;
+      z-index: 9999 !important;
     }
   </style>
 </head>
 <body>
-  <h3>RAFAT</h3>
+  <h3>خريطة قرية رافات</h3>
   <div id="map"></div>
 
   <script
@@ -53,83 +68,28 @@
   ></script>
   <script>
     const rafatCoords = [31.8854, 35.1481];
-    const map = L.map('map', { zoomControl: true, dragging: true, scrollWheelZoom: true }).setView(rafatCoords, 14);
+    const map = L.map('map', {
+      center: rafatCoords,
+      zoom: 14,
+      zoomAnimation: true,
+      fadeAnimation: true,
+      markerZoomAnimation: true
+    });
 
-    L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
-      maxZoom: 17,
-      attribution: '© OpenTopoMap (CC-BY-SA)',
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap contributors',
     }).addTo(map);
-
-    const flightPathCoords = [
-      [31.8900, 35.1400],
-      [31.8920, 35.1500],
-      [31.8880, 35.1600],
-      [31.8800, 35.1620],
-      [31.8750, 35.1550],
-      [31.8760, 35.1450],
-      [31.8800, 35.1380],
-      [31.8850, 35.1350],
-      [31.8900, 35.1400]
-    ];
-
-    const flightPath = L.polyline(flightPathCoords, {
-      color: '#ff4500',
-      weight: 8,
-      opacity: 1,
-      smoothFactor: 1,
-      lineJoin: 'round'
-    }).addTo(map);
-
-    map.fitBounds(flightPath.getBounds(), { padding: [40, 40] });
 
     const marker = L.marker(rafatCoords).addTo(map);
-    marker.bindPopup('رافات');
+    marker.bindPopup('<b>رافات</b><br>قرية ذات تاريخ عريق.');
     marker.on('click', () => {
-      map.flyTo(rafatCoords, 17, {
+      map.flyTo(rafatCoords, 18, {
         animate: true,
         duration: 2
       });
       marker.openPopup();
     });
-
-    const planeIcon = L.icon({
-      iconUrl: 'https://cdn-icons-png.flaticon.com/512/68/68584.png',
-      iconSize: [48, 48],
-      iconAnchor: [24, 24],
-      className: 'plane-icon'
-    });
-
-    const planeMarker = L.marker(flightPathCoords[0], { icon: planeIcon }).addTo(map);
-
-    function interpolateCoords(start, end, t) {
-      return [
-        start[0] + (end[0] - start[0]) * t,
-        start[1] + (end[1] - start[1]) * t
-      ];
-    }
-
-    let currentIndex = 0;
-    let progress = 0;
-    const speed = 0.0015;
-
-    function animatePlane() {
-      const start = flightPathCoords[currentIndex];
-      const end = flightPathCoords[(currentIndex + 1) % flightPathCoords.length];
-      progress += speed;
-      if (progress >= 1) {
-        progress = 0;
-        currentIndex = (currentIndex + 1) % flightPathCoords.length;
-      }
-      const pos = interpolateCoords(start, end, progress);
-      planeMarker.setLatLng(pos);
-
-      const angle = Math.atan2(end[1] - start[1], end[0] - start[0]) * 180 / Math.PI;
-      planeMarker._icon.style.transform = `rotate(${angle}deg) translate(-50%, -50%)`;
-
-      requestAnimationFrame(animatePlane);
-    }
-
-    animatePlane();
   </script>
 </body>
 </html>
