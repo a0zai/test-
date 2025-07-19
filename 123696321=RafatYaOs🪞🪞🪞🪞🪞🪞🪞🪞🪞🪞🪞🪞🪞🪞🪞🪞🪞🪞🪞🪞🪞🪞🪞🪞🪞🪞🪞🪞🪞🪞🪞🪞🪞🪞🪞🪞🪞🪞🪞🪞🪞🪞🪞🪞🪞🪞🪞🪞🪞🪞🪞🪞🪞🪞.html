@@ -1,1 +1,45 @@
-.
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8" />
+  <title>خريطة رأفت</title>
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    crossorigin=""
+  />
+  <style>
+    #map {
+      height: 450px;
+      width: 600px;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+  <h3>RAFAT</h3>
+  <div id="map"></div>
+
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    crossorigin=""
+  ></script>
+  <script>
+    const rafatCoords = [31.8854, 35.1481];
+    const map = L.map('map').setView(rafatCoords, 14);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap contributors',
+    }).addTo(map);
+    const marker = L.marker(rafatCoords).addTo(map);
+    marker.bindPopup('رافات');
+    marker.on('click', () => {
+      map.flyTo(rafatCoords, 18, {
+        animate: true,
+        duration: 2
+      });
+      marker.openPopup();
+    });
+  </script>
+</body>
+</html>
