@@ -2,7 +2,7 @@
 <html lang="ar" >
 <head>
   <meta charset="UTF-8" />
-  <title>خريطة رافات - تجربة واقع افتراضي</title>
+  <title>Rafat</title>
   <link
     rel="stylesheet"
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -13,45 +13,38 @@
       height: 100%;
       margin: 0;
       padding: 0;
-      background: #121212;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      color: #eee;
-      overflow: hidden;
     }
     #map {
       height: 100%;
       width: 100%;
-      filter: drop-shadow(0 0 6px #ff4444cc);
-      border-radius: 12px;
-      box-shadow: 0 0 30px 3px #ff4444aa;
+      border: none;
     }
     h3 {
       position: absolute;
-      top: 15px;
+      top: 10px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(30, 30, 30, 0.8);
-      padding: 12px 25px;
-      border-radius: 20px;
+      background: rgba(255,255,255,0.95);
+      padding: 10px 20px;
+      border-radius: 10px;
       font-weight: 700;
-      font-size: 1.6rem;
-      letter-spacing: 1.2px;
-      text-shadow: 0 0 6px #ff4444bb;
+      font-size: 1.5rem;
+      color: #222;
       z-index: 1100;
       user-select: none;
-      border: 1.5px solid #ff4444cc;
-      box-shadow: 0 0 12px #ff4444cc;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
     }
     /* توهج المسار */
     .leaflet-interactive {
-      filter: drop-shadow(0 0 6px #ff4444cc);
       stroke-linejoin: round;
       stroke-linecap: round;
+      filter: drop-shadow(0 0 6px rgba(255, 69, 0, 0.8));
     }
   </style>
 </head>
 <body>
-  <h3>خريطة رافات - تجربة واقع افتراضي</h3>
+  <h3>RAFAT</h3>
   <div id="map"></div>
 
   <script
@@ -60,11 +53,11 @@
   ></script>
   <script>
     const rafatCoords = [31.8854, 35.1481];
-    const map = L.map('map', { zoomControl: false, dragging: true, scrollWheelZoom: true }).setView(rafatCoords, 14);
+    const map = L.map('map', { zoomControl: true, dragging: true, scrollWheelZoom: true }).setView(rafatCoords, 14);
 
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-      maxZoom: 19,
-      attribution: '&copy; <a href="https://carto.com/attributions">CARTO</a>',
+    L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+      maxZoom: 17,
+      attribution: '© OpenTopoMap (CC-BY-SA)',
     }).addTo(map);
 
     const flightPathCoords = [
@@ -80,19 +73,19 @@
     ];
 
     const flightPath = L.polyline(flightPathCoords, {
-      color: '#ff4444',
-      weight: 6,
-      opacity: 0.85,
+      color: '#ff4500',
+      weight: 8,
+      opacity: 1,
       smoothFactor: 1,
       lineJoin: 'round'
     }).addTo(map);
 
-    map.fitBounds(flightPath.getBounds(), { padding: [50, 50] });
+    map.fitBounds(flightPath.getBounds(), { padding: [40, 40] });
 
     const marker = L.marker(rafatCoords).addTo(map);
     marker.bindPopup('رافات');
     marker.on('click', () => {
-      map.flyTo(rafatCoords, 18, {
+      map.flyTo(rafatCoords, 17, {
         animate: true,
         duration: 2
       });
@@ -101,8 +94,8 @@
 
     const planeIcon = L.icon({
       iconUrl: 'https://cdn-icons-png.flaticon.com/512/68/68584.png',
-      iconSize: [40, 40],
-      iconAnchor: [20, 20],
+      iconSize: [48, 48],
+      iconAnchor: [24, 24],
       className: 'plane-icon'
     });
 
@@ -117,7 +110,7 @@
 
     let currentIndex = 0;
     let progress = 0;
-    const speed = 0.0012;
+    const speed = 0.0015;
 
     function animatePlane() {
       const start = flightPathCoords[currentIndex];
