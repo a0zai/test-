@@ -37,7 +37,12 @@
 
   <video id="cameraPreview" autoplay muted playsinline></video>
   <video id="remoteVideo" autoplay playsinline style="display: none;"></video>
-
+<div id="chatBox">
+  <div id="messages" style="max-height:200px; overflow-y:auto; border:1px solid #ccc; padding:10px; margin:10px auto; width:80%; background:#222;"></div>
+  <input id="chatInput" placeholder="💬 اكتب رسالة" style="width:60%; padding:8px;" />
+  <button id="sendBtn">📨 إرسال</button>
+</div>
+<div id="viewerCount">👁️ 0 مشاهد</div>
   <button id="stopCameraBtn">🔴 إلغاء البث</button>
 
   <script type="module">
@@ -50,7 +55,24 @@
       onValue,
       onChildAdded
     } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
+import { onDisconnect, update } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
 
+const viewersRef = ref(db, `viewers/${userName}`);
+const countRef = ref(db, `viewers/${userName}/count`);
+
+let isBroadcaster = true;
+
+if (!location.hash.includes('broadcaster')) {
+  isBroadcaster = false;
+  const viewerId = push(ref(db)).key;
+  const myRef = ref(db, `viewers/${userName}/users/${viewerId}`);
+  set(myRef, true);
+  onDisconnect(myRef).remove();
+}
+onValue(ref(db, `viewers/${userName}/users`), (snapshot) => {
+  const viewers = snapshot.exists() ? Object.keys(snapshot.val()).length : 0;
+  document.getElementById("viewerCount").textContent = `👁️ ${viewers} مشاهد`;
+});
       const firebaseConfig = {
       apiKey: "AIzaSyA7Pu0DJOWmdoDYUUVP1J9aqhxh4f3wyfA",
       authDomain: "a0zai-56c3a.firebaseapp.com",
@@ -81,7 +103,6 @@
     };
 
     async function startWebRTC(name) {
-      const localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
       videoElement.srcObject = localStream;
       cameraStream = localStream;
       stopBtn.style.display = "inline-block";
@@ -143,6 +164,22 @@
         remoteVideo.style.display = 'block';
       };
 
+const messagesRef = ref(db, `messages/${userName}`);
+
+document.getElementById("sendBtn").addEventListener("click", () => {
+  const msg = document.getElementById("chatInput").value.trim();
+  if (msg) {
+    push(messagesRef, { text: msg, time: Date.now() });
+    document.getElementById("chatInput").value = '';
+  }
+});
+
+onChildAdded(messagesRef, (snapshot) => {
+  const msg = snapshot.val();
+  const msgDiv = document.createElement("div");
+  msgDiv.textContent = msg.text;
+  document.getElementById("messages").appendChild(msgDiv);
+});
       const localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
       localStream.getTracks().forEach(track => peer2.addTrack(track, localStream));
 
