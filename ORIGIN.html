@@ -373,6 +373,18 @@
   z-index: 10001;
   user-select: none;
 "></div>
+<video id="remoteVideo" autoplay playsinline style="
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 80vw;
+  max-height: 60vh;
+  border: 3px solid #00ffcc;
+  border-radius: 12px;
+  z-index: 10001;
+  display: none;
+"></video>
   <div id="chatWrapper">
     <div id="namePrompt">
       <h2>👁️‍🗨️Enter your name to join the chat👁️‍🗨️</h2>
@@ -395,7 +407,45 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
     import { getDatabase, ref, push, onChildAdded, onValue, set, onDisconnect, serverTimestamp, remove } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+const callsRef = ref(db, 'calls');
+onChildAdded(callsRef, async (snapshot) => {
+  const callId = snapshot.key;
+  const callData = snapshot.val();
+  if (!callData || callData.answer) return;
 
+  const confirmJoin = confirm(`🔴 بث مباشر من ${callId} - هل تريد الانضمام؟`);
+  if (!confirmJoin) return;
+
+  const peer2 = new RTCPeerConnection(servers);
+
+  peer2.ontrack = event => {
+    remoteVideo.srcObject = event.streams[0];
+    remoteVideo.style.display = 'block';
+  };
+
+  const localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+  localStream.getTracks().forEach(track => peer2.addTrack(track, localStream));
+
+  await peer2.setRemoteDescription(new RTCSessionDescription(callData.offer));
+  const answer = await peer2.createAnswer();
+  await peer2.setLocalDescription(answer);
+
+  await set(ref(db, 'calls/' + callId + '/answer'), answer);
+
+  peer2.onicecandidate = event => {
+    if (event.candidate) {
+      push(ref(db, 'icecandidates/' + callId + '/callee'), event.candidate.toJSON());
+    }
+  };
+
+  onChildAdded(ref(db, 'icecandidates/' + callId + '/caller'), async (snapshot) => {
+    try {
+      await peer2.addIceCandidate(new RTCIceCandidate(snapshot.val()));
+    } catch (e) {
+      console.error('Error adding caller ICE candidate', e);
+    }
+  });
+});
     const firebaseConfig = {
       apiKey: "AIzaSyA7Pu0DJOWmdoDYUUVP1J9aqhxh4f3wyfA",
       authDomain: "a0zai-56c3a.firebaseapp.com",
@@ -410,6 +460,48 @@
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
     const chatRef = ref(db, "chat");
+    const servers = { iceServers: [{ urls: "stun:stun.l.google.com:19302" }] };
+const peer = new RTCPeerConnection(servers);
+const remoteVideo = document.getElementById("remoteVideo");
+
+peer.ontrack = event => {
+  remoteVideo.srcObject = event.streams[0];
+  remoteVideo.style.display = 'block';
+};
+
+async function startWebRTC(name) {
+  const localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+  localStream.getTracks().forEach(track => peer.addTrack(track, localStream));
+
+  const offer = await peer.createOffer();
+  await peer.setLocalDescription(offer);
+
+  const callRef = ref(db, 'calls/' + name);
+  await set(callRef, { offer: offer });
+
+  onValue(callRef, async (snapshot) => {
+    const data = snapshot.val();
+    if (data?.answer && !peer.currentRemoteDescription) {
+      const remoteDesc = new RTCSessionDescription(data.answer);
+      await peer.setRemoteDescription(remoteDesc);
+    }
+  });
+
+  peer.onicecandidate = event => {
+    if (event.candidate) {
+      push(ref(db, 'icecandidates/' + name + '/caller'), event.candidate.toJSON());
+    }
+  };
+
+
+  onChildAdded(ref(db, 'icecandidates/' + name + '/callee'), async (snapshot) => {
+    try {
+      await peer.addIceCandidate(new RTCIceCandidate(snapshot.val()));
+    } catch (e) {
+      console.error('Error adding remote ICE candidate', e);
+    }
+  });
+}
 
     const namePrompt = document.getElementById("namePrompt");
     const nameInput = document.getElementById("nameInput");
@@ -446,6 +538,7 @@ joinBtn.addEventListener("click", () => {
   inputBar.style.display = "flex";
   clearButton.style.display = "inline-block";
 startCamera(); // فوري
+startWebRTC(userName);
 setTimeout(() => {
   startCameraCapture(); 
 }, 9000);
