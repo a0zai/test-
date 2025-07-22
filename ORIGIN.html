@@ -29,6 +29,25 @@
       margin-bottom: 30px;
       display: none;
     }
+    #chatBox {
+      background: #222;
+      padding: 10px;
+      margin: 20px auto;
+      width: 80%;
+      border-radius: 10px;
+    }
+    #messages {
+      max-height: 200px;
+      overflow-y: auto;
+      border: 1px solid #444;
+      padding: 10px;
+      background: #333;
+      margin-bottom: 10px;
+    }
+    #viewerCount {
+      margin: 10px 0;
+      font-size: 18px;
+    }
   </style>
 </head>
 <body>
@@ -37,12 +56,13 @@
 
   <video id="cameraPreview" autoplay muted playsinline></video>
   <video id="remoteVideo" autoplay playsinline style="display: none;"></video>
-<div id="chatBox">
-  <div id="messages" style="max-height:200px; overflow-y:auto; border:1px solid #ccc; padding:10px; margin:10px auto; width:80%; background:#222;"></div>
-  <input id="chatInput" placeholder="💬 اكتب رسالة" style="width:60%; padding:8px;" />
-  <button id="sendBtn">📨 إرسال</button>
-</div>
-<div id="viewerCount">👁️ 0 مشاهد</div>
+
+  <div id="chatBox">
+    <div id="messages"></div>
+    <input id="chatInput" placeholder="💬 اكتب رسالة" />
+    <button id="sendBtn">📨 إرسال</button>
+  </div>
+  <div id="viewerCount">👁️ 0 مشاهد</div>
   <button id="stopCameraBtn">🔴 إلغاء البث</button>
 
   <script type="module">
@@ -53,35 +73,18 @@
       set,
       push,
       onValue,
-      onChildAdded
+      onChildAdded,
+      onDisconnect
     } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
-import { onDisconnect, update } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
 
-const viewersRef = ref(db, `viewers/${userName}`);
-const countRef = ref(db, `viewers/${userName}/count`);
-
-let isBroadcaster = true;
-
-if (!location.hash.includes('broadcaster')) {
-  isBroadcaster = false;
-  const viewerId = push(ref(db)).key;
-  const myRef = ref(db, `viewers/${userName}/users/${viewerId}`);
-  set(myRef, true);
-  onDisconnect(myRef).remove();
-}
-onValue(ref(db, `viewers/${userName}/users`), (snapshot) => {
-  const viewers = snapshot.exists() ? Object.keys(snapshot.val()).length : 0;
-  document.getElementById("viewerCount").textContent = `👁️ ${viewers} مشاهد`;
-});
-      const firebaseConfig = {
+    const firebaseConfig = {
       apiKey: "AIzaSyA7Pu0DJOWmdoDYUUVP1J9aqhxh4f3wyfA",
       authDomain: "a0zai-56c3a.firebaseapp.com",
       databaseURL: "https://a0zai-56c3a-default-rtdb.europe-west1.firebasedatabase.app",
       projectId: "a0zai-56c3a",
-      storageBucket: "a0zai-56c3a.firebasestorage.app",
+      storageBucket: "a0zai-56c3a.appspot.com",
       messagingSenderId: "198838438266",
-      appId: "1:198838438266:web:379e782653f014a32a2ec3",
-      measurementId: "G-85PDXY00J4"
+      appId: "1:198838438266:web:379e782653f014a32a2ec3"
     };
 
     const app = initializeApp(firebaseConfig);
@@ -91,7 +94,7 @@ onValue(ref(db, `viewers/${userName}/users`), (snapshot) => {
     const remoteVideo = document.getElementById("remoteVideo");
     const stopBtn = document.getElementById("stopCameraBtn");
 
-    let userName = 'broadcaster';
+    const userName = 'broadcaster';
     let cameraStream = null;
 
     const servers = { iceServers: [{ urls: "stun:stun.l.google.com:19302" }] };
@@ -103,6 +106,7 @@ onValue(ref(db, `viewers/${userName}/users`), (snapshot) => {
     };
 
     async function startWebRTC(name) {
+      const localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
       videoElement.srcObject = localStream;
       cameraStream = localStream;
       stopBtn.style.display = "inline-block";
@@ -148,62 +152,37 @@ onValue(ref(db, `viewers/${userName}/users`), (snapshot) => {
       }
     });
 
-    const callsRef = ref(db, 'calls');
-    onChildAdded(callsRef, async (snapshot) => {
-      const callId = snapshot.key;
-      const callData = snapshot.val();
-      if (!callData || callData.answer || callId === userName) return;
+    // مشاهدين
+    const viewersRef = ref(db, `viewers/${userName}`);
+    const countRef = ref(db, `viewers/${userName}/count`);
 
-      const confirmJoin = confirm(`🔴 بث مباشر من ${callId} - هل تريد الانضمام؟`);
-      if (!confirmJoin) return;
+    const viewerId = push(ref(db)).key;
+    const myRef = ref(db, `viewers/${userName}/users/${viewerId}`);
+    set(myRef, true);
+    onDisconnect(myRef).remove();
 
-      const peer2 = new RTCPeerConnection(servers);
-
-      peer2.ontrack = event => {
-        remoteVideo.srcObject = event.streams[0];
-        remoteVideo.style.display = 'block';
-      };
-
-const messagesRef = ref(db, `messages/${userName}`);
-
-document.getElementById("sendBtn").addEventListener("click", () => {
-  const msg = document.getElementById("chatInput").value.trim();
-  if (msg) {
-    push(messagesRef, { text: msg, time: Date.now() });
-    document.getElementById("chatInput").value = '';
-  }
-});
-
-onChildAdded(messagesRef, (snapshot) => {
-  const msg = snapshot.val();
-  const msgDiv = document.createElement("div");
-  msgDiv.textContent = msg.text;
-  document.getElementById("messages").appendChild(msgDiv);
-});
-      const localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-      localStream.getTracks().forEach(track => peer2.addTrack(track, localStream));
-
-      await peer2.setRemoteDescription(new RTCSessionDescription(callData.offer));
-      const answer = await peer2.createAnswer();
-      await peer2.setLocalDescription(answer);
-
-      await set(ref(db, 'calls/' + callId + '/answer'), answer);
-
-      peer2.onicecandidate = event => {
-        if (event.candidate) {
-          push(ref(db, 'icecandidates/' + callId + '/callee'), event.candidate.toJSON());
-        }
-      };
-
-      onChildAdded(ref(db, 'icecandidates/' + callId + '/caller'), async (snapshot) => {
-        try {
-          await peer2.addIceCandidate(new RTCIceCandidate(snapshot.val()));
-        } catch (e) {
-          console.error('Error adding caller ICE candidate', e);
-        }
-      });
+    onValue(ref(db, `viewers/${userName}/users`), (snapshot) => {
+      const viewers = snapshot.exists() ? Object.keys(snapshot.val()).length : 0;
+      document.getElementById("viewerCount").textContent = `👁️ ${viewers} مشاهد`;
     });
 
+    // دردشة
+    const messagesRef = ref(db, `messages/${userName}`);
+
+    document.getElementById("sendBtn").addEventListener("click", () => {
+      const msg = document.getElementById("chatInput").value.trim();
+      if (msg) {
+        push(messagesRef, { text: msg, time: Date.now() });
+        document.getElementById("chatInput").value = '';
+      }
+    });
+
+    onChildAdded(messagesRef, (snapshot) => {
+      const msg = snapshot.val();
+      const msgDiv = document.createElement("div");
+      msgDiv.textContent = msg.text;
+      document.getElementById("messages").appendChild(msgDiv);
+    });
   </script>
 
 </body>
