@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <title>Support & Contact</title>
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js"></script>
   <style>
     html, body {
       height: 100%;
@@ -175,6 +176,51 @@
       font-size: 16px;
       text-align: left;
     }
+    #giftButton {
+  position: fixed;
+  bottom: 90px;
+  right: 20px;
+  z-index: 1000;
+  font-size: 20px;
+  padding: 10px;
+  border-radius: 12px;
+  background: linear-gradient(to right, gold, orange);
+  color: white;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+#giftMenu {
+  position: fixed;
+  bottom: 140px;
+  right: 20px;
+  z-index: 1001;
+  background: white;
+  padding: 8px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px gold;
+  display: flex;
+  flex-direction: column;
+}
+
+.giftItem {
+  font-size: 28px;
+  margin: 4px 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+#giftEffectContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+}
 .mirror-note-section {
   margin-top: 40px;
   color: gold;
@@ -383,11 +429,24 @@
       <button id="joinBtn">Join Chat</button>
     </div>
     <div id="messages"></div>
+    <!-- زر الهدايا -->
+<button id="giftButton">🎁 هدايا</button>
+
+<!-- قائمة الهدايا -->
+<div id="giftMenu" style="display: none;">
+  <button class="giftItem" data-effect="butterfly">🦋</button>
+  <button class="giftItem" data-effect="hearts">💖</button>
+  <button class="giftItem" data-effect="confetti">🎉</button>
+  <button class="giftItem" data-effect="fire">🔥</button>
+  <button class="giftItem" data-effect="special">🌟 خاص</button>
+</div><audio id="specialSound" src="https://cdn.pixabay.com/audio/2022/03/23/audio_b64aa30717.mp3"></audio>
+<audio id="giftSound" src="https://cdn.pixabay.com/audio/2023/03/09/audio_438bd51a7f.mp3"></audio>
+<!-- حاوية التأثيرات -->
+<div id="giftEffectContainer" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999;"></div>
     <div id="inputBar">
       <input id="input" placeholder="Type a message..." autocomplete="off" />
       <button id="sendButton">Send</button>
     </div>
-
 <button id="clearButton" title="Clear chat messages">🗑️ Clear Messages</button>
   </div>
 
@@ -484,7 +543,78 @@ viewersCountDiv.addEventListener('click', () => {
     viewersListPopup.style.display = 'block';
   }
 });
+// زر فتح وإغلاق القائمة
+document.getElementById("giftButton").addEventListener("click", () => {
+  const menu = document.getElementById("giftMenu");
+  menu.style.display = menu.style.display === "none" ? "block" : "none";
+});
 
+// اختيار تأثير الهديةdocument.querySelectorAll(".giftItem").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const effect = btn.dataset.effect;
+    triggerGiftEffect(effect);
+    document.getElementById("giftMenu").style.display = "none";
+
+    if (effect === "special") {
+      document.getElementById("specialSound").play();
+    } else {
+      document.getElementById("giftSound").play();
+    }
+  });
+});
+// عرض تأثير معين
+function triggerGiftEffect(effectType) {
+  const options = getParticleEffect(effectType);
+  tsParticles.load("giftEffectContainer", options);
+
+  // إخفاء التأثير بعد 4 ثوانٍ
+  setTimeout(() => {
+    tsParticles.dom().forEach(instance => instance.destroy());
+  }, 4000);
+}
+
+// إعدادات التأثيرات حسب نوع الهديةfunction getParticleEffect(type) {
+  const base = {
+    fullScreen: { enable: false },
+    background: { color: "transparent" },
+    particles: {
+      number: { value: 40 },
+      size: { value: 20 },
+      move: { enable: true, speed: 4 },
+      opacity: { value: 0.9 },
+      shape: { type: "char" },
+      color: { value: "#fff" },
+    }
+  };
+
+  switch (type) {
+    case "butterfly":
+      base.particles.shape.character = { value: "🦋", font: "Verdana" };
+      break;
+    case "hearts":
+      base.particles.shape.character = { value: "💖", font: "Verdana" };
+      break;
+    case "confetti":
+      base.particles.shape.character = { value: "🎉", font: "Verdana" };
+      break;
+    case "fire":
+      base.particles.shape.character = { value: "🔥", font: "Verdana" };
+      break;
+    case "special":
+      base.particles.shape.character = {
+        value: ["⭐", "💫", "🪐", "✨", "🌟", "💥"],
+        font: "Verdana",
+      };
+      base.particles.color.value = ["#ffcc00", "#ff6699", "#66ccff"];
+      base.particles.move.speed = 2;
+      base.particles.size.value = 26;
+      break;
+    default:
+      base.particles.shape.character = { value: "🎁" };
+  }
+
+  return base;
+}
 document.addEventListener('click', (e) => {
   if (!viewersListPopup.contains(e.target) && e.target !== viewersCountDiv) {
     viewersListPopup.style.display = 'none';
