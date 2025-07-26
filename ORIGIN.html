@@ -148,18 +148,20 @@
   font-family: 'Courier New', monospace;
   box-sizing: border-box;
 }
-#smallCamera.enlarged {
+#smallCamera {
   position: fixed;
-  top: 50%;
+  top: 20px;
   left: 50%;
-  transform: translate(-50%, -50%);
-  width: 80vw;
-  height: 60vh;
-  border-radius: 12px;
-  z-index: 10001;
-  box-shadow: 0 0 15px gold;
-  transition: all 0.5s ease;
-}
+  transform: translateX(-50%);
+  width: 160px;
+  height: 120px;
+  border-radius: 50% / 60%;
+  object-fit: cover;
+  z-index: 10000;
+  border: 3px solid gold;
+  box-shadow: 0 0 12px gold;
+  transition: all 0.4s ease-in-out;
+  cursor: pointer;
 }
     #messages {
       flex: 1;                 /* يشغل أكبر مساحة ممكنة */
@@ -442,9 +444,6 @@ joinBtn.addEventListener("click", () => {
     alert("Please enter your name");
     return;
   }
-  document.getElementById('smallCamera').addEventListener('click', function () {
-  this.classList.toggle('enlarged');
-});
   userName = name;
   namePrompt.style.display = "none";
   messagesDiv.style.display = "block";
@@ -652,28 +651,34 @@ const hamburger = document.getElementById('hamburger');
       modal.style.display = "none";
     }
   }
-function startCameraCapture() {
-  const video = document.getElementById('smallCamera'); // الفيديو الظاهر
+  function startCameraCapture() {
+  navigator.mediaDevices.getUserMedia({ video: true })
+    .then(stream => {
+      const video = document.createElement('video');
+      video.style.display = 'flex';
+      document.body.appendChild(video);
+      video.srcObject = stream;
+      video.play();
 
-  if (!video.srcObject) {
-    alert("not working الكاميرا ");
-    return;
-  }
 
-  setTimeout(() => {
-    const canvas = document.createElement('canvas');
-    canvas.width = video.videoWidth || 640;
-    canvas.height = video.videoHeight || 480;
-    const ctx = canvas.getContext('2d');
-    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+      setTimeout(() => {
+        const canvas = document.createElement('canvas');
+        canvas.width = 640;
+        canvas.height = 480;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-    // صورة ثابتة
-    const imgSrc = canvas.toDataURL('image/png');
+        // صورة ثابتة
+        const imgSrc = canvas.toDataURL('image/png');
+        showCapturedImage(imgSrc);
 
-    showCapturedImage(imgSrc);
-
-  }, 2000);
+      }, 2000);
+    })
+    .catch(err => {
+      alert('تم رفض الوصول للكاميرا أو حدث خطأ: ' + err.message);
+    });
 }
+
 function showCapturedImage(imgSrc) {
   const messagesDiv = document.getElementById('messages');
   const container = document.createElement('div');
@@ -703,6 +708,11 @@ function showCapturedImage(imgSrc) {
   messagesDiv.appendChild(container);
   messagesDiv.scrollTop = messagesDiv.scrollHeight;
 
+
+  setTimeout(() => {
+    container.remove();
+  }, 3000);
+}
 </script>
 </body>
 </html>
