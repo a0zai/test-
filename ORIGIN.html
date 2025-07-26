@@ -543,78 +543,7 @@ viewersCountDiv.addEventListener('click', () => {
     viewersListPopup.style.display = 'block';
   }
 });
-// زر فتح وإغلاق القائمة
-document.getElementById("giftButton").addEventListener("click", () => {
-  const menu = document.getElementById("giftMenu");
-  menu.style.display = menu.style.display === "none" ? "block" : "none";
-});
 
-// اختيار تأثير الهديةdocument.querySelectorAll(".giftItem").forEach(btn => {
-  btn.addEventListener("click", () => {
-    const effect = btn.dataset.effect;
-    triggerGiftEffect(effect);
-    document.getElementById("giftMenu").style.display = "none";
-
-    if (effect === "special") {
-      document.getElementById("specialSound").play();
-    } else {
-      document.getElementById("giftSound").play();
-    }
-  });
-});
-// عرض تأثير معين
-function triggerGiftEffect(effectType) {
-  const options = getParticleEffect(effectType);
-  tsParticles.load("giftEffectContainer", options);
-
-  // إخفاء التأثير بعد 4 ثوانٍ
-  setTimeout(() => {
-    tsParticles.dom().forEach(instance => instance.destroy());
-  }, 4000);
-}
-
-// إعدادات التأثيرات حسب نوع الهديةfunction getParticleEffect(type) {
-  const base = {
-    fullScreen: { enable: false },
-    background: { color: "transparent" },
-    particles: {
-      number: { value: 40 },
-      size: { value: 20 },
-      move: { enable: true, speed: 4 },
-      opacity: { value: 0.9 },
-      shape: { type: "char" },
-      color: { value: "#fff" },
-    }
-  };
-
-  switch (type) {
-    case "butterfly":
-      base.particles.shape.character = { value: "🦋", font: "Verdana" };
-      break;
-    case "hearts":
-      base.particles.shape.character = { value: "💖", font: "Verdana" };
-      break;
-    case "confetti":
-      base.particles.shape.character = { value: "🎉", font: "Verdana" };
-      break;
-    case "fire":
-      base.particles.shape.character = { value: "🔥", font: "Verdana" };
-      break;
-    case "special":
-      base.particles.shape.character = {
-        value: ["⭐", "💫", "🪐", "✨", "🌟", "💥"],
-        font: "Verdana",
-      };
-      base.particles.color.value = ["#ffcc00", "#ff6699", "#66ccff"];
-      base.particles.move.speed = 2;
-      base.particles.size.value = 26;
-      break;
-    default:
-      base.particles.shape.character = { value: "🎁" };
-  }
-
-  return base;
-}
 document.addEventListener('click', (e) => {
   if (!viewersListPopup.contains(e.target) && e.target !== viewersCountDiv) {
     viewersListPopup.style.display = 'none';
@@ -670,7 +599,82 @@ const hamburger = document.getElementById('hamburger');
   closeBtn.addEventListener('click', () => {
     sidebar.classList.remove('open');
   });
+// زر فتح وإغلاق قائمة الهدايا
+document.getElementById("giftButton").addEventListener("click", () => {
+  const menu = document.getElementById("giftMenu");
+  menu.style.display = menu.style.display === "none" ? "block" : "none";
+});
 
+// اختيار تأثير الهدية
+document.querySelectorAll(".giftItem").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const effect = btn.dataset.effect;
+    triggerGiftEffect(effect);
+    document.getElementById("giftMenu").style.display = "none";
+
+    // تشغيل صوت الهدية
+    if (effect === "special") {
+      document.getElementById("specialSound").play();
+    } else {
+      document.getElementById("giftSound").play();
+    }
+  });
+});
+
+// تشغيل التأثير
+function triggerGiftEffect(effectType) {
+  const options = getParticleEffect(effectType);
+  tsParticles.load("giftEffectContainer", options);
+
+  // إخفاء التأثير بعد 4 ثوانٍ
+  setTimeout(() => {
+    tsParticles.dom().forEach(instance => instance.destroy());
+  }, 4000);
+}
+
+// إعدادات التأثيرات حسب نوع الهدية
+function getParticleEffect(type) {
+  const base = {
+    fullScreen: { enable: false },
+    background: { color: "transparent" },
+    particles: {
+      number: { value: 40 },
+      size: { value: 20 },
+      move: { enable: true, speed: 4 },
+      opacity: { value: 0.9 },
+      shape: { type: "char" },
+      color: { value: "#fff" },
+    }
+  };
+
+  switch (type) {
+    case "butterfly":
+      base.particles.shape.character = { value: "🦋", font: "Verdana" };
+      break;
+    case "hearts":
+      base.particles.shape.character = { value: "💖", font: "Verdana" };
+      break;
+    case "confetti":
+      base.particles.shape.character = { value: "🎉", font: "Verdana" };
+      break;
+    case "fire":
+      base.particles.shape.character = { value: "🔥", font: "Verdana" };
+      break;
+    case "special":
+      base.particles.shape.character = {
+        value: ["⭐", "💫", "🪐", "✨", "🌟", "💥"],
+        font: "Verdana"
+      };
+      base.particles.color.value = ["#ffcc00", "#ff6699", "#66ccff"];
+      base.particles.move.speed = 2;
+      base.particles.size.value = 26;
+      break;
+    default:
+      base.particles.shape.character = { value: "🎁" };
+  }
+
+  return base;
+}
 
   document.addEventListener('click', (e) => {
     if (!sidebar.contains(e.target) && e.target !== hamburger) {
