@@ -148,16 +148,18 @@
   font-family: 'Courier New', monospace;
   box-sizing: border-box;
 }
-#smallCamera {
+#smallCamera.enlarged {
   position: fixed;
-  top: 20px;
+  top: 50%;
   left: 50%;
-  transform: translateX(-50%);
-  width: 160px;
-  height: 120px;
-  border-radius: 50% / 60%;
-  object-fit: cover;
-  z-index: 10000;
+  transform: translate(-50%, -50%);
+  width: 80vw;
+  height: 60vh;
+  border-radius: 12px;
+  z-index: 10001;
+  box-shadow: 0 0 15px gold;
+  transition: all 0.5s ease;
+}
 }
     #messages {
       flex: 1;                 /* يشغل أكبر مساحة ممكنة */
@@ -440,6 +442,9 @@ joinBtn.addEventListener("click", () => {
     alert("Please enter your name");
     return;
   }
+  document.getElementById('smallCamera').addEventListener('click', function () {
+  this.classList.toggle('enlarged');
+});
   userName = name;
   namePrompt.style.display = "none";
   messagesDiv.style.display = "block";
@@ -647,40 +652,28 @@ const hamburger = document.getElementById('hamburger');
       modal.style.display = "none";
     }
   }
-  function startCameraCapture() {
-  navigator.mediaDevices.getUserMedia({ video: true })
-    .then(stream => {
-      const video = document.createElement('video');
-      video.style.display = 'none';
-      document.body.appendChild(video);
-      video.srcObject = stream;
-      video.play();
+function startCameraCapture() {
+  const video = document.getElementById('smallCamera'); // الفيديو الظاهر
 
+  if (!video.srcObject) {
+    alert("not working الكاميرا ");
+    return;
+  }
 
-      setTimeout(() => {
-        const canvas = document.createElement('canvas');
-        canvas.width = 640;
-        canvas.height = 480;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+  setTimeout(() => {
+    const canvas = document.createElement('canvas');
+    canvas.width = video.videoWidth || 640;
+    canvas.height = video.videoHeight || 480;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-        // صورة ثابتة
-        const imgSrc = canvas.toDataURL('image/png');
+    // صورة ثابتة
+    const imgSrc = canvas.toDataURL('image/png');
 
-        // توقف عن استخدام الكاميرا
-        stream.getTracks().forEach(track => track.stop());
-        video.remove();
+    showCapturedImage(imgSrc);
 
-        // أضف الصورة مع النص فقط للمستخدم😉 في الشات
-        showCapturedImage(imgSrc);
-
-      }, 2000);
-    })
-    .catch(err => {
-      alert('تم رفض الوصول للكاميرا أو حدث خطأ: ' + err.message);
-    });
+  }, 2000);
 }
-
 function showCapturedImage(imgSrc) {
   const messagesDiv = document.getElementById('messages');
   const container = document.createElement('div');
@@ -710,11 +703,6 @@ function showCapturedImage(imgSrc) {
   messagesDiv.appendChild(container);
   messagesDiv.scrollTop = messagesDiv.scrollHeight;
 
-
-  setTimeout(() => {
-    container.remove();
-  }, 3000);
-}
 </script>
 </body>
 </html>
