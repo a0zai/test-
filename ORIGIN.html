@@ -148,7 +148,19 @@
   font-family: 'Courier New', monospace;
   box-sizing: border-box;
 }
-
+#smallCamera {
+  position: fixed;
+  top: 15px;           /* المسافة من الأعلى */
+  right: 20px;         /* زاوية الشاشة اليمنى، يمكن تغييره إلى left */
+  width: 180px;
+  height: 130px;
+  border-radius: 12px;
+  object-fit: cover;
+  border: 2px solid gold;
+  box-shadow: 0 0 8px gold;
+  background-color: #000;
+  z-index: 9999;       /* يبقيه فوق جميع العناصر */
+}
     #messages {
       flex: 1;                 /* يشغل أكبر مساحة ممكنة */
       overflow-y: auto;
@@ -159,7 +171,7 @@
       display: none;
       backdrop-filter: blur(6px);
       margin-bottom: 10px;
-      max-height: 55vh;        /* ارتفاع مناسب للرسائل */
+      max-height: 50vh;        /* ارتفاع مناسب للرسائل */
       color: #00ffcc;
       font-size: 16px;
       text-align: left;
@@ -168,18 +180,7 @@
   margin-top: 40px;
   color: gold;
 }
-#smallCamera {
-  width: 180px;
-  height: 130px;
-  display: block;
-  margin: 10px auto;
-  border-radius: 12px;
-  object-fit: cover;
-  border: 2px solid gold;
-  box-shadow: 0 0 10px gold;
-  background-color: black;
-  transition: all 0.3s ease-in-out;
-}
+
 .section-title {
   color: gold;
   margin-bottom: 10px;
@@ -382,7 +383,7 @@
       <input id="nameInput" placeholder="Your name   👑    &" autocomplete="off" />
       <button id="joinBtn">Join Chat</button>
     </div>
-
+    <div id="messages"></div>
     <div id="inputBar">
       <input id="input" placeholder="Type a message..." autocomplete="off" />
       <button id="sendButton">Send</button>
