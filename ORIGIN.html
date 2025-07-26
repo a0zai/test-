@@ -150,16 +150,17 @@
 }
 #smallCamera {
   position: fixed;
-  top: 15px;           /* المسافة من الأعلى */
-  right: 20px;         /* زاوية الشاشة اليمنى، يمكن تغييره إلى left */
-  width: 180px;
-  height: 130px;
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 482px;     /* حجم ثابت */
+  height: 360px;    /* حجم ثابت */
   border-radius: 12px;
   object-fit: cover;
   border: 2px solid gold;
   box-shadow: 0 0 8px gold;
   background-color: #000;
-  z-index: 9999;       /* يبقيه فوق جميع العناصر */
+  z-index: 9999;
 }
     #messages {
       flex: 1;                 /* يشغل أكبر مساحة ممكنة */
