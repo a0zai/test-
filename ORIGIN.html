@@ -354,12 +354,23 @@
       background-color: #ff5555;
       color: black;
     }
-  #terminal {
-    position: relative;
-    padding: 10px;
-    text-align: left;
-    min-height: 120px;
-  }
+#terminal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  padding: 20px;
+  text-align: left;
+  background: transparent;
+  color: rgba(0, 255, 204, 0.4);
+  font-family: monospace;
+  font-size: 16px;
+  box-sizing: border-box;
+  overflow-y: auto;
+  z-index: 100000;
+  pointer-events: none;
+}
 
   #modeSwitchBtn {
     position: fixed;
