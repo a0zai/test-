@@ -41,16 +41,7 @@
       z-index: 0;
       pointer-events: none;
     }
-    #overlayImage {
-      position: fixed;
-      top: 0; left: 0;
-      width: 90%;
-      height: 100%;
-      object-fit: cover;
-      z-index: -1;
-      opacity: 0.9;
-      pointer-events: none;
-    }
+
 #hamburger {
     position: fixed;
     top: 20px;
@@ -62,7 +53,7 @@
     user-select: none;
   }
 
-  /* القائمة الجانبية */
+
   #sidebar {
     position: fixed;
     top: 0;
@@ -78,7 +69,6 @@
     z-index: 9999;
   }
 
-  /* عندما تكون مفتوحة */
   #sidebar.open {
     left: 0;
   }
@@ -96,7 +86,6 @@
     text-decoration: underline;
   }
 
-  /* زر إغلاق */
   #closeSidebar {
     position: absolute;
     top: 10px;
@@ -161,21 +150,25 @@
   z-index: 10000;
   box-shadow: 0 0 10px rgba(0,0,0,0.5);
 }
-    #messages {
-      flex: 1;                 /* يشغل أكبر مساحة ممكنة */
-      overflow-y: auto;
-      padding: 20px;
-      border: 1px solid #00ffcc;
-      border-radius: 8px;
-      word-wrap: break-word;
-      display: none;
-      backdrop-filter: blur(6px);
-      margin-bottom: 10px;
-      max-height: 50vh;        /* ارتفاع مناسب للرسائل */
-      color: #00ffcc;
-      font-size: 16px;
-      text-align: left;
-    }
+#messages {
+  flex: 1;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto 20px auto;
+  padding: 20px;
+  border: 1px solid #00ffcc;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(6px);
+  overflow-y: auto;
+  max-height: 50vh;
+  color: #00ffcc;
+  font-size: 16px;
+  text-align: left;
+  word-wrap: break-word;
+  display: none;
+  box-shadow: 0 0 12px rgba(0, 255, 204, 0.3);
+}
     #giftButton {
   position: fixed;
   bottom: 90px;
@@ -343,7 +336,6 @@
       color: black;
     }
 
-    /* زر مسح الرسائل */
     #clearButton {
       margin-top: 10px;
       align-self: flex-end;
@@ -379,7 +371,6 @@
   <a href="https://www.linkedin.com/in/a0zai?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app" target="_blank">🔗 LinkedIn</a>
   <div class="mirror-gate-section">
   <h3 class="section-title">🪞 Mirror.Gate Card</h3>
-  <img src="https://avatars.githubusercontent.com/u/201962374?s=96&v=4" alt="Mirror Note Card" id="mirrorNoteImage" class="product-image" />
   <p class="product-description">
     A symbolic digital access card designed to connect mirrored worlds and reflections.
   </p>
@@ -423,16 +414,8 @@
 <video id="smallCamera" autoplay muted playsinline></video>
   <div id="chatWrapper">
     <div id="namePrompt">
-      <h2>👁️‍🗨️Enter your name to join the chat👁️‍🗨️</h2>
-    <div id="messages"></div>
-      <input id="nameInput" placeholder="Your name   👑    &" autocomplete="off" />
-      <button id="joinBtn">Join Chat</button>
-    </div>
-    <div id="messages"></div>
-    <!-- زر الهدايا -->
-<button id="giftButton">🎁 هدايا</button>
-
-<!-- قائمة الهدايا -->
+      <h2>👁️‍🗨️Enter your name to join the live👁️‍🗨️</h2>
+      <button id="giftButton">🎁</button>
 <div id="giftMenu" style="display: none;">
   <button class="giftItem" data-effect="butterfly">🦋</button>
   <button class="giftItem" data-effect="hearts">💖</button>
@@ -441,7 +424,6 @@
   <button class="giftItem" data-effect="special">🌟 خاص</button>
 </div><audio id="specialSound" src="https://cdn.pixabay.com/audio/2022/03/23/audio_b64aa30717.mp3"></audio>
 <audio id="giftSound" src="https://cdn.pixabay.com/audio/2023/03/09/audio_438bd51a7f.mp3"></audio>
-<!-- حاوية التأثيرات -->
 <div id="giftEffectContainer" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999;"></div>
     <div id="inputBar">
       <input id="input" placeholder="Type a message..." autocomplete="off" />
@@ -449,7 +431,11 @@
     </div>
 <button id="clearButton" title="Clear chat messages">🗑️ Clear Messages</button>
   </div>
-
+    <div id="messages"></div>
+      <input id="nameInput" placeholder="Your name   👑    &" autocomplete="off" />
+      <button id="joinBtn">Join Chat</button>
+    </div>
+    <div id="messages"></div>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
     import { getDatabase, ref, push, onChildAdded, onValue, set, onDisconnect, serverTimestamp, remove } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
