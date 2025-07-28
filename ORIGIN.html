@@ -354,19 +354,43 @@
       background-color: #ff5555;
       color: black;
     }
-#terminal {
-  position: relative;
-  padding: 10px;
-  color: #00ffcc;
-  font-family: monospace;
-  font-size: 16px;
-  text-align: left;
-}
-@keyframes pulse {
-  0% { transform: scale(3); opacity: 0.1; }
-  50% { transform: scale(3.5); opacity: 0.3; }
-  100% { transform: scale(3); opacity: 0.1; }
-}
+  #terminal {
+    position: relative;
+    padding: 10px;
+    text-align: left;
+    min-height: 120px;
+  }
+
+  .cmd-line {
+    margin-bottom: 6px;
+  }
+
+  @keyframes pulse {
+    0% { transform: scale(3); opacity: 0.1; }
+    50% { transform: scale(3.5); opacity: 0.3; }
+    100% { transform: scale(3); opacity: 0.1; }
+  }
+
+  #modeSwitchBtn {
+    position: fixed;
+    top: 20px;
+    right: 80px;
+    z-index: 1000;
+    padding: 8px 14px;
+    font-size: 15px;
+    background-color: #111;
+    color: #00ffcc;
+    border: 1px solid #555;
+    border-radius: 6px;
+    cursor: pointer;
+    box-shadow: 0 0 8px rgba(0,255,204,0.7);
+    transition: background 0.3s;
+    user-select: none;
+  }
+
+  #modeSwitchBtn:hover {
+    background-color: #004d40;
+  }
 
   </style>
 </head>
@@ -375,6 +399,9 @@
   <div id="particles-js"></div>
 
   <img src="https://avatars.githubusercontent.com/u/201962374?v=4" alt="Overlay Image" id="overlayImage" />
+<button id="modeSwitchBtn">🎨</button>
+
+<div id="terminal" aria-live="polite" aria-atomic="true"></div>
 
   <div id="hamburger">☰</div>
 
@@ -393,15 +420,6 @@
       </p>
       <p class="product-price"><strong>Price: 36 EUR</strong></p>
     </div>
-
-<h3 class="section-title">🎛️ Modes</h3>
-<div id="menu" aria-hidden="true">
-  <button data-mode="1 note">Note 1</button>
-  <button data-mode="2 note">Note 2</button>
-  <button data-mode="3 note">Note 3</button>
-</div>
-    <div id="terminal" aria-live="polite" aria-atomic="true"></div>
-
     <!-- Payment Modal -->
     <div id="paymentModal" class="modal">
       <div class="modal-content">
@@ -473,6 +491,82 @@
     <div id="messages"></div>
   </div>
   <script type="module">
+  const terminal = document.getElementById("terminal");
+  const modeSwitchBtn = document.getElementById("modeSwitchBtn");
+
+  const modes = {
+    "1 note": () => {
+      document.body.style.background = "linear-gradient(to right, #0f2027, #203a43, #2c5364)";
+      const msg = document.createElement("div");
+      msg.className = "cmd-line";
+      msg.textContent = "📝 Note 1 Activated - Calm Cyber Blue";
+      terminal.appendChild(msg);
+      terminal.scrollTop = terminal.scrollHeight;
+      const glow = document.createElement("div");
+      glow.textContent = "🌀";
+      Object.assign(glow.style, {
+        position: "fixed",
+        top: "30%",
+        left: "50%",
+        transform: "translate(-50%, -50%) scale(3)",
+        opacity: "0.1",
+        zIndex: "10",
+        fontSize: "80px",
+        animation: "pulse 2s infinite ease-in-out",
+        pointerEvents: "none"
+      });
+      document.body.appendChild(glow);
+      setTimeout(() => glow.remove(), 3000);
+    },
+    "2 note": () => {
+      document.body.style.background = "radial-gradient(circle, #1b1b1b, #000000, #220044)";
+      terminal.innerHTML += "<div class='cmd-line'>☍ Eye opened. Identity confirmed: AOZ-414-36</div>";
+      terminal.scrollTop = terminal.scrollHeight;
+      const eye = document.createElement("div");
+      eye.textContent = "👁️";
+      Object.assign(eye.style, {
+        position: "fixed",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%) scale(4)",
+        opacity: "0.05",
+        zIndex: "100",
+        pointerEvents: "none",
+        fontSize: "90px"
+      });
+      document.body.appendChild(eye);
+      setTimeout(() => eye.remove(), 4000);
+    },
+    "3 note": () => {
+      document.body.style.background = "linear-gradient(to right, #ff416c, #ff4b2b)";
+      terminal.innerHTML += "<div class='cmd-line'>🔥 Inferno Mode Engaged</div>";
+      terminal.scrollTop = terminal.scrollHeight;
+
+      const fire = document.createElement("div");
+      fire.textContent = "🔥";
+      Object.assign(fire.style, {
+        position: "fixed",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%) scale(3)",
+        opacity: "0.15",
+        fontSize: "100px",
+        zIndex: "200",
+        animation: "pulse 1.5s infinite ease-in-out",
+        pointerEvents: "none"
+      });
+      document.body.appendChild(fire);
+      setTimeout(() => fire.remove(), 3000);
+    }
+  };
+  let currentModeIndex = 1;
+  modeSwitchBtn.addEventListener("click", () => {
+    const key = `${currentModeIndex} note`;
+    modes[key]();
+    currentModeIndex++;
+    if (currentModeIndex > 3) currentModeIndex = 1;
+  });
+
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
     import { getDatabase, ref, push, onChildAdded, onValue, set, onDisconnect, serverTimestamp, remove } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
 
@@ -613,68 +707,6 @@ onChildAdded(chatRef, (snapshot) => {
 const hamburger = document.getElementById('hamburger');
   const sidebar = document.getElementById('sidebar');
   const closeBtn = document.getElementById('closeSidebar');
-const modes = {
-  "1 note": () => {
-    // تغيير الخلفية مع تأثير
-    document.body.style.background = "linear-gradient(to right, #0f2027, #203a43, #2c5364)";
-    const msg = document.createElement("div");
-    msg.className = "cmd-line";
-    msg.textContent = "📝 Note 1 Activated - Calm Cyber Blue";
-    terminal.appendChild(msg);
-
-    // مؤثر عائم
-    const glow = document.createElement("div");
-    glow.textContent = "🌀";
-    Object.assign(glow.style, {
-      position: "fixed",
-      top: "30%",
-      left: "50%",
-      transform: "translate(-50%, -50%) scale(3)",
-      opacity: "0.1",
-      zIndex: "10",
-      fontSize: "80px",
-      animation: "pulse 2s infinite ease-in-out",
-      pointerEvents: "none"
-    });
-    document.body.appendChild(glow);
-    setTimeout(() => glow.remove(), 3000);
-  },
-  "2 note": () => {
-    terminal.innerHTML += "<div class='cmd-line'>☍ Eye opened. Identity confirmed: AOZ-414-36</div>";
-    const eye = document.createElement("div");
-    eye.textContent = "👁️";
-    Object.assign(eye.style, {
-      position: "fixed",
-      top: "50%",
-      left: "50%",
-      transform: "translate(-50%, -50%) scale(4)",
-      opacity: "0.05",
-      zIndex: "100",
-      pointerEvents: "none"
-    });
-    document.body.appendChild(eye);
-    setTimeout(() => eye.remove(), 4000);
-    document.body.style.background = "radial-gradient(circle, #1b1b1b, #000000, #220044)";
-  },
- "3 note": () => {
-    terminal.innerHTML += "<div class='cmd-line'>🔥 Inferno Mode Engaged</div>";
-    document.body.style.background = "linear-gradient(to right, #ff416c, #ff4b2b)";
-    const fire = document.createElement("div");
-    fire.textContent = "🔥";
-    Object.assign(fire.style, {
-      position: "fixed",
-      top: "50%",
-      left: "50%",
-      transform: "translate(-50%, -50%) scale(3)",
-      opacity: "0.15",
-      fontSize: "100px",
-      zIndex: "200",
-      animation: "pulse 1.5s infinite ease-in-out"
-    });
-    document.body.appendChild(fire);
-    setTimeout(() => fire.remove(), 3000);
-  }
-};
 
   hamburger.addEventListener('click', () => {
     sidebar.classList.add('open');
@@ -886,19 +918,6 @@ function getParticleEffect(type) {
       });
   }
 
-  // تفعيل أزرار المودات داخل الهامبرغر
-  const menu = document.getElementById("menu"); // تأكد أن لديك div أو ul بـ id="menu" يحتوي الأزرار
-  if (menu) {
-    menu.querySelectorAll('button').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const mode = btn.getAttribute('data-mode');
-        if (modes[mode]) {
-          modes[mode]();
-        }
-      });
-    });
-  }
-</script>
 </script>
 </body>
 </html>
