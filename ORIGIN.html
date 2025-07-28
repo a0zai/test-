@@ -398,7 +398,42 @@
   <div id="pageOverlay"></div>
   <div id="particles-js"></div>
 <button id="modeSwitchBtn">🦋</button>
-
+<select id="modeSelect" style="display: none; position: fixed; top: 130px; right: 36px; z-index: 1001; background: #111; color: #00ffcc; border: 1px solid #00ffcc; border-radius: 6px; padding: 6px 12px; font-family: monospace; font-size: 16px;">
+  <option disabled selected>🎨🤔</option>
+  <option value="run 1">Run 1</option>
+  <option value="run 2">Run 2</option>
+  <option value="run 3">Run 3</option>
+  <option value="run 4">Run 4</option>
+  <option value="run 5">Run 5</option>
+  <option value="run 6">Run 6</option>
+  <option value="run 7">Run 7</option>
+  <option value="run 8">Run 8</option>
+  <option value="run 9">Run 9</option>
+  <option value="run 10">Run 10</option>
+  <option value="run 11">Run 11</option>
+  <option value="run 12">Run 12</option>
+  <option value="run 13">Run 13</option>
+  <option value="run 14">Run 14</option>
+  <option value="run 15">Run 15</option>
+  <option value="run 16">Run 16</option>
+  <option value="run 17">Run 17</option>
+  <option value="run 18">Run 18</option>
+  <option value="run 19">Run 19</option>
+  <option value="run 20">Run 20</option>
+  <option value="run 21">Run 21</option>
+  <option value="run 22">Run 22</option>
+  <option value="run 23">Run 23</option>
+  <option value="run 24">Run 24</option>
+  <option value="run 25">Run 25</option>
+  <option value="run 26">Run 26</option>
+  <option value="run 27">Run 27</option>
+  <option value="run 28">Run 28</option>
+  <option value="run 29">Run 29</option>
+  <option value="run 30">Run 30</option>
+  <option value="run 31">Run 31</option>
+  <option value="run 32">Run 32</option>
+  <option value="run 33">Run 33</option>
+</select>
 <div id="terminal" aria-live="polite" aria-atomic="true"></div>
 
   <div id="hamburger">☰</div>
@@ -491,7 +526,7 @@
   <script type="module">
   const terminal = document.getElementById("terminal");
   const modeSwitchBtn = document.getElementById("modeSwitchBtn");
-
+const modeSelect = document.getElementById("modeSelect");
   const modes = {
   "run 1": () => {
     document.body.style.background = "linear-gradient(to right, #0f2027, #203a43, #2c5364)";
@@ -742,13 +777,17 @@
     document.body.appendChild(voidDiv);
   }
 };
-  let currentModeIndex = 1;
-  modeSwitchBtn.addEventListener("click", () => {
-  const key = `run ${currentModeIndex}`;
-    modes[key]();
-    currentModeIndex++;
-    if (currentModeIndex > 33) currentModeIndex = 1;
-  });
+modeSwitchBtn.addEventListener("click", () => {
+modeSelect.style.display = modeSelect.style.display === "none" ? "block" : "none";
+});
+
+modeSelect.addEventListener("change", () => {
+  const selectedMode = modeSelect.value;
+  if (modes[selectedMode]) {
+    modes[selectedMode](); // تشغيل المود المختار
+  }
+  modeSelect.style.display = "none"; // إخفاء القائمة بعد الاختيار
+});
 
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
     import { getDatabase, ref, push, onChildAdded, onValue, set, onDisconnect, serverTimestamp, remove } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
