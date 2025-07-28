@@ -34,7 +34,6 @@
       max-width: 700px;
       margin: 40px auto 60px;
       background-color: #ffffffdd;
-      padding: 40px 40
       padding: 40px 40px 30px;
       border-radius: 14px;
       box-shadow: 0 8px 30px rgba(0,0,0,0.1);
@@ -130,8 +129,19 @@
     .result {
       margin-top: 25px;
       font-size: 16px;
-      color: #2ed573;
       font-weight: bold;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .success {
+      color: #2ed573;
+    }
+
+    .error {
+      color: #e84118;
     }
 
     blockquote {
@@ -173,120 +183,123 @@
   </style>
 </head>
 <body>
+
 <div style="text-align: center; margin-top: 20px;">
   <img src="courthouse-logo.png" alt="Logo Rechtbank" style="width: 120px; opacity: 0.85;">
 </div>
-  <div style="margin-top: 30px; display: flex; justify-content: space-between; gap: 15px;">
-    <button type="button" id="backBtn">← Terug naar startpagina</button>
-    <button type="button" id="helpBtn">ℹ️ Meer info</button>
-  </div>
-  <div class="container" role="main">
-    <h1>Welkom bij de Transparante Rechtbank</h1>
 
-    <p>
-      De Transparante Rechtbank is een modern initiatief dat streeft naar eerlijkheid en openheid binnen het rechtssysteem.
-      Hier kunt u kiezen of uw zaak openbaar wordt behandeld via een livestream of besloten blijft.
-    </p>
+<div style="margin-top: 30px; display: flex; justify-content: space-between; gap: 15px;">
+  <button type="button" id="backBtn">← Terug naar startpagina</button>
+  <button type="button" id="helpBtn">ℹ️ Meer info</button>
+</div>
 
-    <h2>Waarom deze keuze?</h2>
-    <p>
-      Transparantie versterkt het vertrouwen in de rechtspraak. Door te kiezen voor een openbare livestream, maakt u het proces inzichtelijk voor iedereen.
-      Indien u liever vertrouwelijkheid behoudt, is er de optie voor een besloten rechtszaak.
-    </p>
+<div class="container" role="main">
+  <h1>Welkom bij de Transparante Rechtbank</h1>
 
-    <blockquote>
-      "Uw keuze vandaag bepaalt uw verhaal van morgen. Transparantie is kracht."
-    </blockquote>
+  <p>
+    De Transparante Rechtbank is een modern initiatief dat streeft naar eerlijkheid en openheid binnen het rechtssysteem.
+    Hier kunt u kiezen of uw zaak openbaar wordt behandeld via een livestream of besloten blijft.
+  </p>
 
-    <h2>Hoe werkt het?</h2>
-    <p>
-      Selecteer hieronder uw voorkeur en bevestig dat u de informatie heeft gelezen.
-      Bij keuze voor openbaar wordt u doorverwezen naar de live streampagina.
-      Bij privé ontvangt u een bevestiging van uw keuze zonder uitzending.
-    </p>
+  <h2>Waarom deze keuze?</h2>
+  <p>
+    Transparantie versterkt het vertrouwen in de rechtspraak. Door te kiezen voor een openbare livestream, maakt u het proces inzichtelijk voor iedereen.
+    Indien u liever vertrouwelijkheid behoudt, is er de optie voor een besloten rechtszaak.
+  </p>
 
-    <form id="trialForm" novalidate>
+  <blockquote>
+    "Uw keuze vandaag bepaalt uw verhaal van morgen. Transparantie is kracht."
+  </blockquote>
+
+  <h2>Hoe werkt het?</h2>
+  <p>
+    Selecteer hieronder uw voorkeur en bevestig dat u de informatie heeft gelezen.
+    Bij keuze voor openbaar wordt u doorverwezen naar de live streampagina.
+    Bij privé ontvangt u een bevestiging van uw keuze zonder uitzending.
+  </p>
+
+  <form id="trialForm" novalidate>
+    <label>
+      <input type="radio" name="trial" value="public" />
+      ✅ Ik stem in met een openbare livestream
+    </label>
+
+    <label>
+      <input type="radio" name="trial" value="private" />
+      ❌ Ik verkies een besloten rechtszaak
+    </label>
+
+    <div class="notice">
+      Deze rechtbank is er niet om u te straffen, maar om gerechtigheid te laten zien.  
+      Uw keuze maakt u niet zwakker — het maakt u transparant.
+    </div>
+
+    <div class="confirm-box">
       <label>
-        <input type="radio" name="trial" value="public" />
-        ✅ Ik stem in met een openbare livestream
+        <input type="checkbox" id="confirm" />
+        Ik bevestig dat ik de bovenstaande tekst heb gelezen en begrepen.
       </label>
+    </div>
 
-      <label>
-        <input type="radio" name="trial" value="private" />
-        ❌ Ik verkies een besloten rechtszaak
-      </label>
+    <button id="submitBtn" disabled>Doorgaan</button>
+    <div id="resultMsg" class="result hidden" aria-live="polite"></div>
+  </form>
+</div>
 
-      <div class="notice">
-        Deze rechtbank is er niet om u te straffen, maar om gerechtigheid te laten zien.  
-        Uw keuze maakt u niet zwakker — het maakt u transparant.
-      </div>
+<script>
+  const checkbox = document.getElementById('confirm');
+  const submitBtn = document.getElementById('submitBtn');
+  const form = document.getElementById('trialForm');
+  const resultMsg = document.getElementById('resultMsg');
+  const backBtn = document.getElementById('backBtn');
+  const helpBtn = document.getElementById('helpBtn');
 
-      <div class="confirm-box">
-        <label>
-          <input type="checkbox" id="confirm" />
-          Ik bevestig dat ik de bovenstaande tekst heb gelezen en begrepen.
-        </label>
-      </div>
+  checkbox.addEventListener('change', () => {
+    submitBtn.disabled = !checkbox.checked;
+    clearMessage();
+  });
 
-      <button id="submitBtn" disabled>Doorgaan</button>
-      <div id="resultMsg" class="result hidden" aria-live="polite"></div>
-    </form>
-  </div>
+  backBtn.addEventListener('click', () => {
+    window.location.href = "index.html";
+  });
 
-  <script>
-    const checkbox = document.getElementById('confirm');
-    const submitBtn = document.getElementById('submitBtn');
-    const form = document.getElementById('trialForm');
-    const resultMsg = document.getElementById('resultMsg');
-    const backBtn = document.getElementById('backBtn');
-    const helpBtn = document.getElementById('helpBtn');
+  helpBtn.addEventListener('click', () => {
+    alert("Kies 'Openbaar' voor een livestream van de rechtszaak, zodat iedereen kan meekijken.\n\nKies 'Besloten' als u vertrouwelijkheid wenst.\n\nBevestig dat u de informatie heeft gelezen om door te gaan.");
+  });
 
-    checkbox.addEventListener('change', () => {
-      submitBtn.disabled = !checkbox.checked;
-      clearMessage();
-    });
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    clearMessage();
 
-    backBtn.addEventListener('click', () => {
-      window.location.href = "index.html"; 
-    });
-
-    helpBtn.addEventListener('click', () => {
-      alert("Kies 'Openbaar' voor een livestream van de rechtszaak, zodat iedereen kan meekijken.\n\nKies 'Besloten' als u vertrouwelijkheid wenst.\n\nBevestig dat u de informatie heeft gelezen om door te gaan.");
-    });
-
-    form.addEventListener('submit', function(e) {
-      e.preventDefault();
-      clearMessage();
-
-      const choice = document.querySelector('input[name="trial"]:checked');
-      if (!choice) {
-        showMessage('Selecteer alstublieft een optie.', 'error');
-        return;
-      }
-
-      if (choice.value === 'public') {
-        submitBtn.disabled = true;
-        submitBtn.textContent = "Bezig...";
-        // Redirect to live stream page
-        setTimeout(() => {
-          window.location.href = "ORIGIN.html";
-        }, 600); // kleine تأخير لتعطي إحساس بالتفاعل
-      } else {
-        showMessage('U hebt gekozen voor een privé zitting zonder uitzending.', 'success');
-      }
-    });
-
-    function showMessage(msg, type) {
-      resultMsg.textContent = msg;
-      resultMsg.classList.remove('hidden', 'error', 'success');
-      resultMsg.classList.add(type);
+    const choice = document.querySelector('input[name="trial"]:checked');
+    if (!choice) {
+      showMessage('Selecteer alstublieft een optie.', 'error');
+      return;
     }
 
-    function clearMessage() {
-      resultMsg.textContent = '';
-      resultMsg.classList.add('hidden');
-      resultMsg.classList.remove('error', 'success');
+    if (choice.value === 'public') {
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Bezig...";
+      setTimeout(() => {
+        window.location.href = "ORIGIN.html"; // صفحة البث المباشر
+      }, 600);
+    } else {
+      showMessage('U hebt gekozen voor een privé zitting zonder uitzending.', 'success');
     }
-  </script>
+  });
+
+  function showMessage(msg, type) {
+    resultMsg.textContent = msg;
+    resultMsg.classList.remove('hidden', 'error', 'success');
+    resultMsg.classList.add(type);
+  }
+
+  function clearMessage() {
+    resultMsg.textContent = '';
+    resultMsg.classList.add('hidden');
+    resultMsg.classList.remove('error', 'success');
+  }
+</script>
+
 </body>
 </html>
