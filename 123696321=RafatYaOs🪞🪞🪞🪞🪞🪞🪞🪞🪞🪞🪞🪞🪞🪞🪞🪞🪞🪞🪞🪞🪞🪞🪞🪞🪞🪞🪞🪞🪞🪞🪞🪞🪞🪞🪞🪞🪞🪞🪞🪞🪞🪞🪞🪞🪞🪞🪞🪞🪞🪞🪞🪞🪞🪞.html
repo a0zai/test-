@@ -1,306 +1,180 @@
 <!DOCTYPE html>
-<html lang="nl" dir="ltr">
+<html lang="nl">
 <head>
   <meta charset="UTF-8">
-  <title>Transparante Rechtbank - Keuzepoort</title>
+  <title>Rechterpaneel - Transparante Rechtbank</title>
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
     body {
       margin: 0;
-      padding: 0 20px 60px;
       font-family: 'Segoe UI', sans-serif;
-      color: #2f3542;
       background: linear-gradient(-45deg, #dcdde1, #f1f2f6, #dfe4ea, #ced6e0);
       background-size: 400% 400%;
       animation: gradientBG 15s ease infinite;
-      height: 99vh;
+      color: #2f3542;
+      padding: 40px 20px;
     }
 
     @keyframes gradientBG {
-      0% {
-        background-position: 0% 50%;
-      }
-      50% {
-        background-position: 100% 50%;
-      }
-      100% {
-        background-position: 0% 50%;
-      }
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
 
-    .container {
-      max-width: 700px;
-      margin: 40px auto 60px;
-      background-color: #ffffffdd;
-      padding: 40px 40px 30px;
-      border-radius: 14px;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.1);
-      transition: all 0.3s ease;
-    }
-
-    .container:hover {
-      transform: scale(1.01);
-    }
-
-    h1, h2 {
-      color: #3742fa;
-      margin-bottom: 20px;
+    .dashboard {
+      max-width: 850px;
+      margin: auto;
+      background-color: #ffffffee;
+      border-radius: 12px;
+      padding: 30px 40px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
     }
 
     h1 {
-      font-size: 28px;
       text-align: center;
+      color: #3742fa;
+      margin-bottom: 30px;
     }
 
-    h2 {
-      font-size: 22px;
-      margin-top: 35px;
+    .case-info {
+      background-color: #f1f2f6;
+      padding: 20px;
+      border-left: 6px solid #3742fa;
+      margin-bottom: 30px;
+      border-radius: 8px;
     }
 
-    p, ul {
-      font-size: 16px;
-      line-height: 1.6;
-      margin-bottom: 20px;
-    }
-
-    ul {
-      margin-left: 20px;
+    .case-info strong {
+      color: #2f3542;
     }
 
     label {
       display: block;
-      font-size: 16px;
-      margin: 10px 0;
-      cursor: pointer;
-      transition: background 0.2s ease;
-      padding: 6px 10px;
-      border-radius: 6px;
+      margin: 15px 0 5px;
+      font-weight: bold;
     }
 
-    label:hover {
-      background-color: #f1f2f6;
-    }
-
-    input[type="radio"], input[type="checkbox"] {
-      margin-right: 8px;
-      transform: scale(1.2);
-    }
-
-    .notice {
-      background-color: #ff4757;
-      color: white;
-      padding: 15px;
+    select, textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
       border-radius: 8px;
-      font-style: italic;
-      font-size: 14px;
-      margin-top: 25px;
+      font-size: 15px;
+      font-family: inherit;
     }
 
-    .confirm-box {
-      margin-top: 25px;
+    textarea {
+      height: 100px;
+      resize: vertical;
     }
 
     button {
       margin-top: 30px;
       padding: 14px 40px;
-      background-color: #3742fa;
+      background-color: #2ed573;
       color: white;
       border: none;
       border-radius: 8px;
       font-size: 16px;
       font-weight: bold;
       cursor: pointer;
-      box-shadow: 0 5px 15px rgba(55,66,250,0.4);
+      box-shadow: 0 5px 15px rgba(46, 213, 115, 0.4);
       transition: background 0.3s ease;
     }
 
     button:hover {
-      background-color: #2f36d1;
+      background-color: #1dd1a1;
     }
 
-    button:disabled {
-      background-color: #a4b0be;
-      cursor: not-allowed;
-      box-shadow: none;
-    }
-
-    .result {
-      margin-top: 25px;
+    .status {
+      margin-top: 20px;
       font-size: 16px;
       font-weight: bold;
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    .success {
-      color: #2ed573;
-    }
-
-    .error {
-      color: #e84118;
-    }
-
-    blockquote {
-      font-style: italic;
-      color: #57606f;
-      border-left: 4px solid #3742fa;
-      padding-left: 15px;
-      margin: 30px 0;
-      background-color: #f7f9fc;
-      border-radius: 6px;
-    }
-
-    #backBtn, #helpBtn {
-      padding: 12px 28px;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-weight: bold;
-      cursor: pointer;
-      font-size: 15px;
-      transition: background 0.3s ease;
-    }
-
-    #backBtn {
-      background-color: #57606f;
-    }
-
-    #backBtn:hover {
-      background-color: #3d454d;
-    }
-
-    #helpBtn {
-      background-color: #ffa502;
-    }
-
-    #helpBtn:hover {
-      background-color: #ffb700;
+      color: #2f3542;
     }
   </style>
 </head>
 <body>
-  <div style="text-align: center; margin-top: 20px;">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Justice_scale.svg/1024px-Justice_scale.svg.png" 
-         alt="Logo Rechtbank" 
-         style="width: 100px; opacity: 0.85;">
+  <div class="dashboard">
+    <h1>Rechterpaneel</h1>
+
+    <div class="case-info">
+      <p><strong>Zaaknummer:</strong> 2025-071</p>
+      <p><strong>Verdachte:</strong> Anonieme Burger</p>
+      <p><strong>Beschrijving:</strong> Verdacht van online intimidatie op social media-platforms.</p>
+    </div>
+
+    <form id="judgeForm">
+      <label for="verdict">Kies een vonnis:</label>
+      <select id="verdict" required>
+        <option value="">-- Selecteer een vonnis --</option>
+        <option value="vrijspraak">Vrijspraak (geen bewijs)</option>
+        <option value="waarschuwing">Officiële waarschuwing</option>
+        <option value="geldboete">Geldboete (€500)</option>
+        <option value="verbod">Tijdelijk platformverbod (30 dagen)</option>
+        <option value="openbaar_veroordeeld">Openbaar veroordeeld met livestream</option>
+      </select>
+
+      <label for="reason">Toelichting / motivatie van het vonnis:</label>
+      <textarea id="reason" placeholder="Geef een korte uitleg waarom dit vonnis werd gekozen..." required></textarea>
+
+      <button type="submit">Verzend vonnis</button>
+
+      <div class="status" id="statusMsg"></div>
+    </form>
   </div>
-<div style="margin-top: 30px; display: flex; justify-content: space-between; gap: 15px;">
-  <button type="button" id="backBtn">← Terug naar startpagina</button>
-  <button type="button" id="helpBtn">ℹ️ Meer info</button>
-</div>
 
-<div class="container" role="main">
-  <h1>Welkom bij de Transparante Rechtbank</h1>
+  <script>
+// اسم المفتاح لحفظ الأحكام
+const storageKey = 'previousVerdicts';
 
-  <p>
-    De Transparante Rechtbank is een modern initiatief dat streeft naar eerlijkheid en openheid binnen het rechtssysteem.
-    Hier kunt u kiezen of uw zaak openbaar wordt behandeld via een livestream of besloten blijft.
-  </p>
+// جلب الأحكام من التخزين المحلي (localStorage)
+let verdicts = JSON.parse(localStorage.getItem(storageKey)) || [
+  { caseNum: "2025-070", verdict: "Geldboete (€300)", reason: "Ongepast gedrag op platform" },
+  { caseNum: "2025-069", verdict: "Vrijspraak", reason: "Onvoldoende bewijs" },
+  { caseNum: "2025-068", verdict: "Tijdelijk platformverbod (15 dagen)", reason: "Herhaalde overtredingen" }
+];
 
-  <h2>Waarom deze keuze?</h2>
-  <p>
-    Transparantie versterkt het vertrouwen in de rechtspraak. Door te kiezen voor een openbare livestream, maakt u het proces inzichtelijk voor iedereen.
-    Indien u liever vertrouwelijkheid behoudt, is er de optie voor een besloten rechtszaak.
-  </p>
-
-  <blockquote>
-    "Uw keuze vandaag bepaalt uw verhaal van morgen. Transparantie is kracht."
-  </blockquote>
-
-  <h2>Hoe werkt het?</h2>
-  <p>
-    Selecteer hieronder uw voorkeur en bevestig dat u de informatie heeft gelezen.
-    Bij keuze voor openbaar wordt u doorverwezen naar de live streampagina.
-    Bij privé ontvangt u een bevestiging van uw keuze zonder uitzending.
-  </p>
-
-  <form id="trialForm" novalidate>
-    <label>
-      <input type="radio" name="trial" value="public" />
-      ✅ Ik stem in met een openbare livestream
-    </label>
-
-    <label>
-      <input type="radio" name="trial" value="private" />
-      ❌ Ik verkies een besloten rechtszaak
-    </label>
-
-    <div class="notice">
-      Deze rechtbank is er niet om u te straffen, maar om gerechtigheid te laten zien.  
-      Uw keuze maakt u niet zwakker — het maakt u transparant.
-    </div>
-
-    <div class="confirm-box">
-      <label>
-        <input type="checkbox" id="confirm" />
-        Ik bevestig dat ik de bovenstaande tekst heb gelezen en begrepen.
-      </label>
-    </div>
-
-    <button id="submitBtn" disabled>Doorgaan</button>
-    <div id="resultMsg" class="result hidden" aria-live="polite"></div>
-  </form>
-</div>
-
-<script>
-  const checkbox = document.getElementById('confirm');
-  const submitBtn = document.getElementById('submitBtn');
-  const form = document.getElementById('trialForm');
-  const resultMsg = document.getElementById('resultMsg');
-  const backBtn = document.getElementById('backBtn');
-  const helpBtn = document.getElementById('helpBtn');
-
-  checkbox.addEventListener('change', () => {
-    submitBtn.disabled = !checkbox.checked;
-    clearMessage();
+function updateVerdictsList() {
+  verdictsList.innerHTML = '';
+  verdicts.forEach(v => {
+    const li = document.createElement('li');
+    li.innerHTML = `<strong>${v.caseNum}:</strong> ${v.verdict} - ${v.reason}`;
+    verdictsList.appendChild(li);
   });
+}
 
-  backBtn.addEventListener('click', () => {
-    window.location.href = "index.html";
-  });
+function saveVerdicts() {
+  localStorage.setItem(storageKey, JSON.stringify(verdicts));
+}
 
-  helpBtn.addEventListener('click', () => {
-    alert("Kies 'Openbaar' voor een livestream van de rechtszaak, zodat iedereen kan meekijken.\n\nKies 'Besloten' als u vertrouwelijkheid wenst.\n\nBevestig dat u de informatie heeft gelezen om door te gaan.");
-  });
+updateVerdictsList();
 
-  form.addEventListener('submit', function(e) {
-    e.preventDefault();
-    clearMessage();
+form.addEventListener('submit', function (e) {
+  e.preventDefault();
 
-    const choice = document.querySelector('input[name="trial"]:checked');
-    if (!choice) {
-      showMessage('Selecteer alstublieft een optie.', 'error');
-      return;
-    }
+  const verdict = document.getElementById('verdict').value;
+  const reason = document.getElementById('reason').value.trim();
 
-    if (choice.value === 'public') {
-      submitBtn.disabled = true;
-      submitBtn.textContent = "Bezig...";
-      setTimeout(() => {
-        window.location.href = "ORIGIN.html"; // صفحة البث المباشر
-      }, 600);
-    } else {
-      showMessage('U hebt gekozen voor een privé zitting zonder uitzending.', 'success');
-    }
-  });
-
-  function showMessage(msg, type) {
-    resultMsg.textContent = msg;
-    resultMsg.classList.remove('hidden', 'error', 'success');
-    resultMsg.classList.add(type);
+  if (!verdict || !reason) {
+    statusMsg.textContent = "❗ Vul alle velden in a.u.b.";
+    statusMsg.style.color = "#e84118";
+    return;
   }
 
-  function clearMessage() {
-    resultMsg.textContent = '';
-    resultMsg.classList.add('hidden');
-    resultMsg.classList.remove('error', 'success');
-  }
-</script>
 
+  let lastCaseNum = verdicts.length > 0 ? verdicts[0].caseNum : "2025-000";
+  let baseYear = lastCaseNum.slice(0, 5);
+  let lastNum = parseInt(lastCaseNum.slice(5));
+  let newCaseNum = baseYear + String(lastNum + 1).padStart(3, '0');
+  verdicts.unshift({ caseNum: newCaseNum, verdict: verdict, reason: reason });
+
+  updateVerdictsList();
+  saveVerdicts();
+  statusMsg.textContent = "✅ Vonnis succesvol verzonden.";
+  statusMsg.style.color = "#2ed573";
+
+  form.reset();
+});
+  </script>
 </body>
 </html>
