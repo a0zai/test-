@@ -161,7 +161,7 @@
   background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(6px);
   overflow-y: auto;
-  max-height: 50vh;
+  max-height: 39vh;
   color: #00ffcc;
   font-size: 16px;
   text-align: left;
@@ -354,88 +354,122 @@
       background-color: #ff5555;
       color: black;
     }
+#terminal {
+    border: 1px solid #00ffcc;
+    border-radius: 10px;
+    padding: 15px;
+    min-height: 200px;
+    max-height: 50vh;
+    overflow-y: auto;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(6px);
+    box-shadow: 0 0 12px rgba(0, 255, 204, 0.3);
+    margin: 20px;
+  }
 
   </style>
 </head>
 <body>
   <div id="pageOverlay"></div>
   <div id="particles-js"></div>
-  <img src="https://avatars.githubusercontent.com/u/201962374?v=4" alt="Overlay Image" id="overlayImage" />
-<div id="hamburger">☰</div>
-<!-- Sidebar menu -->
-<div id="sidebar">
-  <div id="closeSidebar">&times;</div>
-  <h2>👑Contact👑</h2>
-  <a href="mailto:hi@rafat.world" target="_blank">📧 Email</a>
-  <a href="https://wa.me/+31644367518" target="_blank">📱 WhatsApp</a>
-  <a href="https://www.linkedin.com/in/a0zai?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app" target="_blank">🔗 LinkedIn</a>
-  <div class="mirror-gate-section">
-  <h3 class="section-title">🪞 Mirror.Gate Card</h3>
-  <p class="product-description">
-    A symbolic digital access card designed to connect mirrored worlds and reflections.
-  </p>
-  <p class="product-price"><strong>Price: 36 EUR</strong></p>
-</div>
 
-<!-- Payment Modal -->
-<div id="paymentModal" class="modal">
-  <div class="modal-content">
-    <span class="close">&times;</span>
-    <h3>Choose Payment Method</h3>
-    <ul>
-      <li>🪙 <strong>Ethereum Address:</strong> 0x20e83c2198d5c4da3f3e864803664a0d15e346ae</li>
-      <li>🧠 <strong>ENS:</strong> ethereum123696321.eth</li>
-      <li>🏦 <strong>IBAN:</strong> NL82ABNA0144739283</li>
-    </ul>
-    <p style="font-size: 14px; color: #ccc;">
-      After payment, please send proof to <a href="mailto:hi@rafat.world">hi@rafat.world</a> to confirm your order and delivery.
-    </p>
+  <img src="https://avatars.githubusercontent.com/u/201962374?v=4" alt="Overlay Image" id="overlayImage" />
+
+  <div id="hamburger">☰</div>
+
+  <!-- Sidebar menu -->
+  <div id="sidebar">
+    <div id="closeSidebar">&times;</div>
+    <h2>👑Contact👑</h2>
+    <a href="mailto:hi@rafat.world" target="_blank">📧 Email</a>
+    <a href="https://wa.me/+31644367518" target="_blank">📱 WhatsApp</a>
+    <a href="https://www.linkedin.com/in/a0zai?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app" target="_blank">🔗 LinkedIn</a>
+
+    <div class="mirror-gate-section">
+      <h3 class="section-title">🪞 Mirror.Gate Card</h3>
+      <p class="product-description">
+        A symbolic digital access card designed to connect mirrored worlds and reflections.
+      </p>
+      <p class="product-price"><strong>Price: 36 EUR</strong></p>
+    </div>
+
+    <div id="menu" aria-hidden="true">
+      <button data-mode="1 note">Note 1</button>
+      <button data-mode="2 note">Note 2</button>
+    </div>
+
+    <div id="terminal" aria-live="polite" aria-atomic="true"></div>
+
+    <!-- Payment Modal -->
+    <div id="paymentModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h3>Choose Payment Method</h3>
+        <ul>
+          <li>🪙 <strong>Ethereum Address:</strong> 0x20e83c2198d5c4da3f3e864803664a0d15e346ae</li>
+          <li>🧠 <strong>ENS:</strong> ethereum123696321.eth</li>
+          <li>🏦 <strong>IBAN:</strong> NL82ABNA0144739283</li>
+        </ul>
+        <p style="font-size: 14px; color: #ccc;">
+          After payment, please send proof to <a href="mailto:hi@rafat.world">hi@rafat.world</a> to confirm your order and delivery.
+        </p>
+      </div>
+    </div>
   </div>
-</div>
-</div>
+
   <div id="viewersCount">👁️‍🗨️ 0</div>
-<div id="viewersListPopup" style="
-  position: fixed;
-  top: 50px;
-  right: 20px;
-  max-height: 200px;
-  width: 200px;
-  overflow-y: auto;
-  background: rgba(0,0,0,0.8);
-  color: gold;
-  border: 1px solid gold;
-  border-radius: 8px;
-  padding: 10px;
-  font-size: 14px;
-  display: none;
-  z-index: 10001;
-  user-select: none;
-"></div>
-<video id="smallCamera" autoplay muted playsinline></video>
+
+  <div id="viewersListPopup" style="
+    position: fixed;
+    top: 50px;
+    right: 20px;
+    max-height: 200px;
+    width: 200px;
+    overflow-y: auto;
+    background: rgba(0,0,0,0.8);
+    color: gold;
+    border: 1px solid gold;
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 14px;
+    display: none;
+    z-index: 10001;
+    user-select: none;
+  "></div>
+
+  <video id="smallCamera" autoplay muted playsinline></video>
+
   <div id="chatWrapper">
     <div id="namePrompt">
       <h2>👁️‍🗨️Enter your name to join the live👁️‍🗨️</h2>
+
       <button id="giftButton">🎁</button>
-<div id="giftMenu" style="display: none;">
-  <button class="giftItem" data-effect="butterfly">🦋</button>
-  <button class="giftItem" data-effect="hearts">💖</button>
-  <button class="giftItem" data-effect="confetti">🎉</button>
-  <button class="giftItem" data-effect="fire">🔥</button>
-  <button class="giftItem" data-effect="special">🌟 خاص</button>
-</div><audio id="specialSound" src="https://cdn.pixabay.com/audio/2022/03/23/audio_b64aa30717.mp3"></audio>
-<audio id="giftSound" src="https://cdn.pixabay.com/audio/2023/03/09/audio_438bd51a7f.mp3"></audio>
-<div id="giftEffectContainer" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999;"></div>
-    <div id="inputBar">
-      <input id="input" placeholder="Type a message..." autocomplete="off" />
-      <button id="sendButton">Send</button>
+      <div id="giftMenu" style="display: none;">
+        <button class="giftItem" data-effect="butterfly">🦋</button>
+        <button class="giftItem" data-effect="hearts">💖</button>
+        <button class="giftItem" data-effect="confetti">🎉</button>
+        <button class="giftItem" data-effect="fire">🔥</button>
+        <button class="giftItem" data-effect="special">🌟 خاص</button>
+      </div>
+
+      <audio id="specialSound" src="https://cdn.pixabay.com/audio/2022/03/23/audio_b64aa30717.mp3"></audio>
+      <audio id="giftSound" src="https://cdn.pixabay.com/audio/2023/03/09/audio_438bd51a7f.mp3"></audio>
+
+      <div id="giftEffectContainer" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999;"></div>
+
+      <div id="inputBar">
+        <input id="input" placeholder="Type a message..." autocomplete="off" />
+        <button id="sendButton">Send</button>
+      </div>
+
+      <button id="clearButton" title="Clear chat messages">🗑️ Clear Messages</button>
     </div>
-<button id="clearButton" title="Clear chat messages">🗑️ Clear Messages</button>
+
+    <input id="nameInput" placeholder="Your name   👑    &" autocomplete="off" />
+    <button id="joinBtn">Join Chat</button>
+
+    <div id="messages"></div>
   </div>
-    <div id="messages"></div>
-      <input id="nameInput" placeholder="Your name   👑    &" autocomplete="off" />
-      <button id="joinBtn">Join Chat</button>
-    </div>
-    <div id="messages"></div>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
     import { getDatabase, ref, push, onChildAdded, onValue, set, onDisconnect, serverTimestamp, remove } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
@@ -775,6 +809,47 @@ function startCameraCapture() {
       alert('تم رفض الوصول للكاميرا أو حدث خطأ: ' + err.message);
     });
 }
+</script>
+<script>
+  const hamburgerBtn = document.getElementById('hamburgerBtn');
+  const menu = document.getElementById('menu');
+  const terminal = document.getElementById('terminal');
+
+  const modes = {
+    "1 note": () => {
+      const msg = document.createElement("div");
+      msg.className = "cmd-line";
+      msg.textContent = "Nice one";
+      terminal.appendChild(msg);
+      menu.classList.remove('open');
+    },
+    "2 note": () => {
+      terminal.innerHTML += "<div class='cmd-line'>☍ Eye opened. Identity confirmed: AOZ-414-36</div>";
+      const eye = document.createElement("div");
+      eye.textContent = "👁️";
+      Object.assign(eye.style, {
+        position: "fixed",
+        top: "50%",
+        right: "50%",
+        transform: "translate(50%, -50%) scale(4)",
+        opacity: "0.05",
+        zIndex: "100",
+        pointerEvents: "none",
+        userSelect: "none"
+      });
+      document.body.appendChild(eye);
+      setTimeout(() => eye.remove(), 4000);
+      menu.classList.remove('open'); // اغلاق القائمة بعد الاختيار
+    }
+  };
+menu.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const mode = btn.getAttribute('data-mode');
+      if (modes[mode]) {
+        modes[mode]();
+      }
+    });
+  });
 
 </script>
 </body>
