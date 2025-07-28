@@ -639,7 +639,6 @@ const modes = {
     document.body.appendChild(glow);
     setTimeout(() => glow.remove(), 3000);
   },
-
   "2 note": () => {
     terminal.innerHTML += "<div class='cmd-line'>☍ Eye opened. Identity confirmed: AOZ-414-36</div>";
     const eye = document.createElement("div");
@@ -656,7 +655,7 @@ const modes = {
     document.body.appendChild(eye);
     setTimeout(() => eye.remove(), 4000);
     document.body.style.background = "radial-gradient(circle, #1b1b1b, #000000, #220044)";
-  }
+  },
  "3 note": () => {
     terminal.innerHTML += "<div class='cmd-line'>🔥 Inferno Mode Engaged</div>";
     document.body.style.background = "linear-gradient(to right, #ff416c, #ff4b2b)";
@@ -838,51 +837,68 @@ function getParticleEffect(type) {
   </script>
 
   <script>
-    window.addEventListener('load', () => {
-      const overlay = document.getElementById('pageOverlay');
+  window.addEventListener('load', () => {
+    const overlay = document.getElementById('pageOverlay');
+    if (overlay) {
       overlay.classList.add('fade-out');
-    });
-  </script>
-  <script>
+    }
+  });
+
+  // عناصر المودال
   const modal = document.getElementById("paymentModal");
   const img = document.getElementById("mirrorGateImage");
   const span = document.getElementsByClassName("close")[0];
 
-  img.onclick = function() {
-    modal.style.display = "block";
+
+  if (img && modal) {
+    img.onclick = function () {
+      modal.style.display = "block";
+    };
   }
 
-  span.onclick = function() {
-    modal.style.display = "none";
+
+  if (span && modal) {
+    span.onclick = function () {
+      modal.style.display = "none";
+    };
   }
 
-  window.onclick = function(event) {
+  // إغلاق المودال عند الضغط خارج المودال
+  window.onclick = function (event) {
     if (event.target == modal) {
       modal.style.display = "none";
     }
+  };
+
+  // تفعيل الكاميرا
+  function startCameraCapture() {
+    const video = document.getElementById('smallCamera');
+    if (!video) return;
+
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then(stream => {
+        video.srcObject = stream;
+        video.play();
+        video.style.display = 'block';
+      })
+      .catch(err => {
+        alert('تم رفض الوصول للكاميرا أو حدث خطأ: ' + err.message);
+      });
   }
-function startCameraCapture() {
-  const video = document.getElementById('smallCamera');
 
-  navigator.mediaDevices.getUserMedia({ video: true })
-    .then(stream => {
-      video.srcObject = stream;
-      video.play();
-      video.style.display = 'block';    
-    })
-     .catch(err => {
-      alert('تم رفض الوصول للكاميرا أو حدث خطأ: ' + err.message);
+  // تفعيل أزرار المودات داخل الهامبرغر
+  const menu = document.getElementById("menu"); // تأكد أن لديك div أو ul بـ id="menu" يحتوي الأزرار
+  if (menu) {
+    menu.querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const mode = btn.getAttribute('data-mode');
+        if (modes[mode]) {
+          modes[mode]();
+        }
+      });
     });
-}
-menu.querySelectorAll('button').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const mode = btn.getAttribute('data-mode');
-      if (modes[mode]) {
-        modes[mode]();
-      }
-    });
-  });
-
+  }
+</script>
 </script>
 </body>
 </html>
