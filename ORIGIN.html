@@ -355,17 +355,18 @@
       color: black;
     }
 #terminal {
-    border: 1px solid #00ffcc;
-    border-radius: 10px;
-    padding: 15px;
-    min-height: 200px;
-    max-height: 50vh;
-    overflow-y: auto;
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(6px);
-    box-shadow: 0 0 12px rgba(0, 255, 204, 0.3);
-    margin: 20px;
-  }
+  position: relative;
+  padding: 10px;
+  color: #00ffcc;
+  font-family: monospace;
+  font-size: 16px;
+  text-align: left;
+}
+@keyframes pulse {
+  0% { transform: scale(3); opacity: 0.1; }
+  50% { transform: scale(3.5); opacity: 0.3; }
+  100% { transform: scale(3); opacity: 0.1; }
+}
 
   </style>
 </head>
@@ -393,11 +394,12 @@
       <p class="product-price"><strong>Price: 36 EUR</strong></p>
     </div>
 
-    <div id="menu" aria-hidden="true">
-      <button data-mode="1 note">Note 1</button>
-      <button data-mode="2 note">Note 2</button>
-    </div>
-
+<h3 class="section-title">🎛️ Modes</h3>
+<div id="menu" aria-hidden="true">
+  <button data-mode="1 note">Note 1</button>
+  <button data-mode="2 note">Note 2</button>
+  <button data-mode="3 note">Note 3</button>
+</div>
     <div id="terminal" aria-live="polite" aria-atomic="true"></div>
 
     <!-- Payment Modal -->
@@ -611,6 +613,69 @@ onChildAdded(chatRef, (snapshot) => {
 const hamburger = document.getElementById('hamburger');
   const sidebar = document.getElementById('sidebar');
   const closeBtn = document.getElementById('closeSidebar');
+const modes = {
+  "1 note": () => {
+    // تغيير الخلفية مع تأثير
+    document.body.style.background = "linear-gradient(to right, #0f2027, #203a43, #2c5364)";
+    const msg = document.createElement("div");
+    msg.className = "cmd-line";
+    msg.textContent = "📝 Note 1 Activated - Calm Cyber Blue";
+    terminal.appendChild(msg);
+
+    // مؤثر عائم
+    const glow = document.createElement("div");
+    glow.textContent = "🌀";
+    Object.assign(glow.style, {
+      position: "fixed",
+      top: "30%",
+      left: "50%",
+      transform: "translate(-50%, -50%) scale(3)",
+      opacity: "0.1",
+      zIndex: "10",
+      fontSize: "80px",
+      animation: "pulse 2s infinite ease-in-out",
+      pointerEvents: "none"
+    });
+    document.body.appendChild(glow);
+    setTimeout(() => glow.remove(), 3000);
+  },
+
+  "2 note": () => {
+    terminal.innerHTML += "<div class='cmd-line'>☍ Eye opened. Identity confirmed: AOZ-414-36</div>";
+    const eye = document.createElement("div");
+    eye.textContent = "👁️";
+    Object.assign(eye.style, {
+      position: "fixed",
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%) scale(4)",
+      opacity: "0.05",
+      zIndex: "100",
+      pointerEvents: "none"
+    });
+    document.body.appendChild(eye);
+    setTimeout(() => eye.remove(), 4000);
+    document.body.style.background = "radial-gradient(circle, #1b1b1b, #000000, #220044)";
+  }
+ "3 note": () => {
+    terminal.innerHTML += "<div class='cmd-line'>🔥 Inferno Mode Engaged</div>";
+    document.body.style.background = "linear-gradient(to right, #ff416c, #ff4b2b)";
+    const fire = document.createElement("div");
+    fire.textContent = "🔥";
+    Object.assign(fire.style, {
+      position: "fixed",
+      top: "50%",
+      left: "50%",
+      transform: "translate(-50%, -50%) scale(3)",
+      opacity: "0.15",
+      fontSize: "100px",
+      zIndex: "200",
+      animation: "pulse 1.5s infinite ease-in-out"
+    });
+    document.body.appendChild(fire);
+    setTimeout(() => fire.remove(), 3000);
+  }
+};
 
   hamburger.addEventListener('click', () => {
     sidebar.classList.add('open');
@@ -619,7 +684,7 @@ const hamburger = document.getElementById('hamburger');
   closeBtn.addEventListener('click', () => {
     sidebar.classList.remove('open');
   });
-// زر فتح وإغلاق قائمة الهدايا
+
 document.getElementById("giftButton").addEventListener("click", () => {
   const menu = document.getElementById("giftMenu");
   menu.style.display = menu.style.display === "none" ? "block" : "none";
@@ -809,39 +874,6 @@ function startCameraCapture() {
       alert('تم رفض الوصول للكاميرا أو حدث خطأ: ' + err.message);
     });
 }
-</script>
-<script>
-  const hamburgerBtn = document.getElementById('hamburgerBtn');
-  const menu = document.getElementById('menu');
-  const terminal = document.getElementById('terminal');
-
-  const modes = {
-    "1 note": () => {
-      const msg = document.createElement("div");
-      msg.className = "cmd-line";
-      msg.textContent = "Nice one";
-      terminal.appendChild(msg);
-      menu.classList.remove('open');
-    },
-    "2 note": () => {
-      terminal.innerHTML += "<div class='cmd-line'>☍ Eye opened. Identity confirmed: AOZ-414-36</div>";
-      const eye = document.createElement("div");
-      eye.textContent = "👁️";
-      Object.assign(eye.style, {
-        position: "fixed",
-        top: "50%",
-        right: "50%",
-        transform: "translate(50%, -50%) scale(4)",
-        opacity: "0.05",
-        zIndex: "100",
-        pointerEvents: "none",
-        userSelect: "none"
-      });
-      document.body.appendChild(eye);
-      setTimeout(() => eye.remove(), 4000);
-      menu.classList.remove('open'); // اغلاق القائمة بعد الاختيار
-    }
-  };
 menu.querySelectorAll('button').forEach(btn => {
     btn.addEventListener('click', () => {
       const mode = btn.getAttribute('data-mode');
