@@ -143,8 +143,8 @@
   top: 10px;
   left: 50%;
   transform: translateX(-50%);
-  width: 478px;
-  height: 366px;
+  width: 475px;
+  height: 399px;
   border-radius: 10px;
   object-fit: cover;
   z-index: 10000;
@@ -354,7 +354,7 @@
       background-color: #ff5555;
       color: black;
     }
- #terminal {
+#terminal {
   position: fixed;
   top: 0;
   left: 0;
@@ -362,15 +362,14 @@
   height: 100vh;
   padding: 20px;
   box-sizing: border-box;
-  text-align: left;
-  overflow-y: auto;
-  z-index: 1000;
-  background: transparent; /* أو لون خلفية إن أردت */
+  background: transparent; 
   color: #00ffcc;
   font-family: monospace;
   font-size: 16px;
+  text-align: left;
+  overflow-y: auto; 
+  z-index: 1000; 
 }
-
   #modeSwitchBtn {
     position: fixed;
     top: 93px;
@@ -391,18 +390,7 @@
   #modeSwitchBtn:hover {
     background-color: #004d40;
   }
-.fullscreen-effect {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  pointer-events: none; /* حتى لا تمنع التفاعل مع الصفحة */
-  font-size: 100px;
-  animation: pulse 2s infinite ease-in-out;
-  z-index: 999; /* أقل من الزر */
-  opacity: 0.15;
-}
+
   .cmd-line {
     margin-bottom: 6px;
   }
@@ -761,7 +749,7 @@
     voidDiv.style.left = "50%";
     voidDiv.style.transform = "translate(-50%, -50%)";
     document.body.appendChild(voidDiv);
-  },
+  }
 };
   let currentModeIndex = 1;
   modeSwitchBtn.addEventListener("click", () => {
