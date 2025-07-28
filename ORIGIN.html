@@ -354,17 +354,27 @@
       background-color: #ff5555;
       color: black;
     }
-  #terminal {
-    position: relative;
-    padding: 10px;
-    text-align: left;
-    min-height: 120px;
-  }
+ #terminal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
+  text-align: left;
+  overflow-y: auto;
+  z-index: 1000;
+  background: transparent; /* أو لون خلفية إن أردت */
+  color: #00ffcc;
+  font-family: monospace;
+  font-size: 16px;
+}
 
   #modeSwitchBtn {
     position: fixed;
-    top: 63px;
-    right: 75px;
+    top: 93px;
+    right: 36px;
     z-index: 1000;
     padding: 8px 14px;
     font-size: 15px;
@@ -408,7 +418,7 @@
 <body>
   <div id="pageOverlay"></div>
   <div id="particles-js"></div>
-<button id="modeSwitchBtn">🎨</button>
+<button id="modeSwitchBtn">🦋</button>
 
 <div id="terminal" aria-live="polite" aria-atomic="true"></div>
 
@@ -635,16 +645,9 @@
     }
   },
   "run 16": () => {
-    document.body.innerHTML = "";
-    const voidDiv = document.createElement("div");
-    voidDiv.textContent = "⬛";
-    voidDiv.style.fontSize = "100px";
-    voidDiv.style.color = "#222";
-    voidDiv.style.position = "fixed";
-    voidDiv.style.top = "50%";
-    voidDiv.style.left = "50%";
-    voidDiv.style.transform = "translate(-50%, -50%)";
-    document.body.appendChild(voidDiv);
+    terminal.innerHTML += "<div class='cmd-line'>🔚 Recursiepunt 33 bereikt. De structuur begrijpt jou nu.</div>";
+    document.body.style.background = "#000";
+    document.body.style.color = "#39ff14";
   },
   "run 17": () => {
     document.body.style.animation = "shake 0.2s infinite";
@@ -748,9 +751,16 @@
     setTimeout(() => document.body.style.filter = "none", 3000);
   },
   "run 33": () => {
-    terminal.innerHTML += "<div class='cmd-line'>🔚 Recursiepunt 33 bereikt. De structuur begrijpt jou nu.</div>";
-    document.body.style.background = "#000";
-    document.body.style.color = "#39ff14";
+    document.body.innerHTML = "";
+    const voidDiv = document.createElement("div");
+    voidDiv.textContent = "⬛";
+    voidDiv.style.fontSize = "100px";
+    voidDiv.style.color = "#222";
+    voidDiv.style.position = "fixed";
+    voidDiv.style.top = "50%";
+    voidDiv.style.left = "50%";
+    voidDiv.style.transform = "translate(-50%, -50%)";
+    document.body.appendChild(voidDiv);
   },
 };
   let currentModeIndex = 1;
