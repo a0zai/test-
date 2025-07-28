@@ -755,10 +755,10 @@
 };
   let currentModeIndex = 1;
   modeSwitchBtn.addEventListener("click", () => {
-    const key = `${currentModeIndex} note`;
+  const key = `run ${currentModeIndex}`;
     modes[key]();
     currentModeIndex++;
-    if (currentModeIndex > 3) currentModeIndex = 1;
+    if (currentModeIndex > 33) currentModeIndex = 1;
   });
 
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
