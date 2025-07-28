@@ -1,72 +1,94 @@
 <!DOCTYPE html>
 <html lang="nl" dir="ltr">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>Transparante Rechtbank - Keuzepoort</title>
   <style>
     * {
       box-sizing: border-box;
     }
+
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to right, #f1f2f6, #dfe4ea);
-      color: #2f3542;
       margin: 0;
       padding: 0 20px 60px;
+      font-family: 'Segoe UI', sans-serif;
+      color: #2f3542;
+      background: linear-gradient(-45deg, #dcdde1, #f1f2f6, #dfe4ea, #ced6e0);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
     }
+
+    @keyframes gradientBG {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
     .container {
       max-width: 700px;
       margin: 40px auto 60px;
-      background-color: white;
+      background-color: #ffffffdd;
+      padding: 40px 40
       padding: 40px 40px 30px;
       border-radius: 14px;
       box-shadow: 0 8px 30px rgba(0,0,0,0.1);
       transition: all 0.3s ease;
     }
+
     .container:hover {
       transform: scale(1.01);
     }
+
     h1, h2 {
       color: #3742fa;
       margin-bottom: 20px;
     }
+
     h1 {
       font-size: 28px;
       text-align: center;
     }
+
     h2 {
       font-size: 22px;
       margin-top: 35px;
     }
-    p {
+
+    p, ul {
       font-size: 16px;
       line-height: 1.6;
       margin-bottom: 20px;
     }
+
     ul {
       margin-left: 20px;
-      margin-bottom: 25px;
-      font-size: 16px;
     }
+
     label {
       display: block;
-      text-align: left;
       font-size: 16px;
       margin: 10px 0;
       cursor: pointer;
       transition: background 0.2s ease;
       padding: 6px 10px;
       border-radius: 6px;
-      user-select: none;
     }
+
     label:hover {
       background-color: #f1f2f6;
     }
+
     input[type="radio"], input[type="checkbox"] {
       margin-right: 8px;
       transform: scale(1.2);
-      cursor: pointer;
     }
+
     .notice {
       background-color: #ff4757;
       color: white;
@@ -75,11 +97,12 @@
       font-style: italic;
       font-size: 14px;
       margin-top: 25px;
-      user-select: none;
     }
+
     .confirm-box {
       margin-top: 25px;
     }
+
     button {
       margin-top: 30px;
       padding: 14px 40px;
@@ -91,41 +114,26 @@
       font-weight: bold;
       cursor: pointer;
       box-shadow: 0 5px 15px rgba(55,66,250,0.4);
-      transition: background 0.3s ease, box-shadow 0.3s ease;
+      transition: background 0.3s ease;
     }
+
+    button:hover {
+      background-color: #2f36d1;
+    }
+
     button:disabled {
       background-color: #a4b0be;
       cursor: not-allowed;
       box-shadow: none;
     }
-    button:hover:not(:disabled),
-    button:focus:not(:disabled) {
-      background-color: #2f38cc;
-      box-shadow: 0 0 12px #3742fa;
-      outline: none;
-    }
+
     .result {
       margin-top: 25px;
       font-size: 16px;
-      font-weight: bold;
-      user-select: none;
-      transition: opacity 0.3s ease;
-    }
-    .result.success {
       color: #2ed573;
-      opacity: 1;
+      font-weight: bold;
     }
-    .result.error {
-      color: #ff4757;
-      opacity: 1;
-    }
-    .result.hidden {
-      opacity: 0;
-      height: 0;
-      overflow: hidden;
-      margin-top: 0;
-      padding: 0;
-    }
+
     blockquote {
       font-style: italic;
       color: #57606f;
@@ -134,8 +142,8 @@
       margin: 30px 0;
       background-color: #f7f9fc;
       border-radius: 6px;
-      user-select: none;
     }
+
     #backBtn, #helpBtn {
       padding: 12px 28px;
       color: white;
@@ -144,41 +152,34 @@
       font-weight: bold;
       cursor: pointer;
       font-size: 15px;
-      transition: background 0.3s ease, box-shadow 0.3s ease;
-      user-select: none;
+      transition: background 0.3s ease;
     }
+
     #backBtn {
       background-color: #57606f;
-      box-shadow: none;
     }
-    #backBtn:hover, #backBtn:focus {
+
+    #backBtn:hover {
       background-color: #3d454d;
-      box-shadow: 0 0 10px #57606f;
-      outline: none;
     }
+
     #helpBtn {
       background-color: #ffa502;
-      box-shadow: none;
     }
-    #helpBtn:hover, #helpBtn:focus {
+
+    #helpBtn:hover {
       background-color: #ffb700;
-      box-shadow: 0 0 10px #ffa502;
-      outline: none;
-    }
-    .btn-container {
-      margin-top: 30px;
-      display: flex;
-      justify-content: space-between;
-      gap: 15px;
     }
   </style>
 </head>
 <body>
-  <div class="btn-container">
-    <button type="button" id="backBtn" tabindex="0">← Terug naar startpagina</button>
-    <button type="button" id="helpBtn" tabindex="0">ℹ️ Meer info</button>
+<div style="text-align: center; margin-top: 20px;">
+  <img src="courthouse-logo.png" alt="Logo Rechtbank" style="width: 120px; opacity: 0.85;">
+</div>
+  <div style="margin-top: 30px; display: flex; justify-content: space-between; gap: 15px;">
+    <button type="button" id="backBtn">← Terug naar startpagina</button>
+    <button type="button" id="helpBtn">ℹ️ Meer info</button>
   </div>
-
   <div class="container" role="main">
     <h1>Welkom bij de Transparante Rechtbank</h1>
 
