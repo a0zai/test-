@@ -60,6 +60,38 @@ html, body {
   pointer-events: none;
   z-index: 1; 
 }
+.container {
+  display: flex;
+  gap: 10px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 63vw;
+  height: 93vh;
+  pointer-events: none;
+  z-index: 1;
+  justify-content: center;
+  align-items: center;
+  animation: spinGroup 8s linear infinite;
+}
+
+.letter {
+  font-size: 3.6rem;
+  color: 0x8e44ad;
+  display: inline-block;
+  transform-origin: 50% 146%; 
+  animation: spinLetter 4s linear infinite;
+}
+
+@keyframes spinGroup {
+  0% { transform: rotate(0deg); }
+ 100% { transform: rotate(366deg); }
+}
+
+@keyframes spinLetter {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(-365deg); }
+}
   .start-screen {
     position: fixed;
     top: 0;
@@ -78,44 +110,6 @@ html, body {
     box-sizing: border-box;
     text-align: center;
   }
-.container {
-  display: flex;
-  gap: 10px;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 80vw;
-  height: 100vh;
-  pointer-events: none;
-  z-index: 1;
-  justify-content: center;
-  align-items: center;
-  background: transparent;
-  animation: spinGroup 8s linear infinite;
-}
-
-.letter {
-  font-size: 3rem;
-  color: #b300ff;
-  text-shadow:
-    0 0 5px #b300ff,
-    0 0 10px #d580ff,
-    0 0 20px #d580ff,
-    0 0 30px #b300ff;
-  display: inline-block;
-  transform-origin: 50% 150%; 
-  animation: spinLetter 4s linear infinite;
-}
-
-@keyframes spinGroup {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-@keyframes spinLetter {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(-360deg); }
-}
 
   .title {
     font-size: 2rem;
@@ -334,7 +328,7 @@ html, body {
 <!-- Sidebar menu -->
 <div id="sidebar">
   <div id="closeSidebar">&times;</div>
-  <h2>👑Contact👑</h2>
+  <h2>👑👑</h2>
   <a href="hi@rafat.world" target="_blank">📧 Email</a>
  <div id="vanta-bg"></div>
   <div class="container">
@@ -346,11 +340,10 @@ html, body {
 <canvas id="three-sphere"></canvas>
 
  <canvas id="matrix"></canvas>
-<div class="mirror-signature">
 </div>
  <div id="startScreen" class="start-screen">
-   <h1 class="title">A0Z  🔮  HelixAi</h1>
-   <p class="subtitle">Quantum AI Cyber Defense & Blockchain Security</p>
+   <h1 class="title">A  (🔮)  z</h1>
+   <p class="subtitle">(Free>education</p>
    <button id="enterButton" class="enter-btn">🚀 Enter The System</button>
  </div>
  <audio id="bgMusic" src="🌀🎶.mp3.MP4"></audio>
