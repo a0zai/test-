@@ -37,16 +37,19 @@ html, body {
     font-family: "Courier New", Courier, monospace;
     background-color: black;
   }
-  .container {
+.container {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
   gap: 12px;
-  background: black;
-  }
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  background: transparent;
+  animation: spinGroup 6s linear infinite;
+}
 .letter {
-  font-size: 3.5rem;
+  font-size: 5rem;
   color: #b300ff;
   text-shadow:
     0 0 5px #b300ff,
@@ -55,17 +58,17 @@ html, body {
     0 0 30px #b300ff;
   display: inline-block;
   transform-origin: 50% 50%;
-  animation: spin 3s linear infinite;
+  animation: spinLetter 3s linear infinite;
+}
+@keyframes spinGroup {
+  0% { transform: translate(-50%, -50%) rotate(0deg); }
+  100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+@keyframes spinLetter {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(-360deg); }
 }
 
-.letter:nth-child(1) { animation-delay: 0s; }
-.letter:nth-child(2) { animation-delay: 0.4s; }
-.letter:nth-child(3) { animation-delay: 0.8s; }
-
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
 #vanta-bg {
   position: fixed;
   top: 0;
