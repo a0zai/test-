@@ -29,71 +29,53 @@
 }
 </script>
 <style>
-html, body {
-  margin:0;
-    padding:0;
-    overflow:hidden;
-    height:100%;
-    background:#000;
-    color: #00ffcc;
+  html, body {
+    margin: 0; padding: 0; height: 100%;
+    background: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     font-family: "Courier New", Courier, monospace;
   }
-  
-  #threeContainer {
-  position: absolute; 
-  top: 0; 
-  left: 0; 
-  width: 100%; 
-  height: 100%; 
-  z-index: 1;
-  pointer-events: none;
-  color: #b300ff;
-  text-shadow:
-    0 0 5px #b300ff,
-    0 0 10px #d580ff,
-    0 0 20px #d580ff,
-    0 0 30px #b300ff;
-  animation: glowPulse 2.5s ease-in-out infinite;
-}
-
-.main {
-  position: absolute; 
-  top: 0; 
-  left: 0; 
-  width: 63%; 
-  height: 93%;
-  display: flex; 
-  justify-content: center; 
-  align-items: center;
-  color: #b300ff;
-  font-size: 2rem; 
-  opacity: 0; 
-  z-index: 3;
-  background: black;
-  text-shadow:
-    0 0 8px #b300ff,
-    0 0 15px #d580ff,
-    0 0 25px #d580ff,
-    0 0 35px #b300ff;
-  animation: glowPulse 2.5s ease-in-out infinite;
-}
-
-@keyframes glowPulse {
-  0%, 100% {
+  .container {
+    display: flex;
+    gap: 12px;
+  }
+  .letter {
+    font-size: 5rem;
+    color: #b300ff;
     text-shadow:
       0 0 5px #b300ff,
       0 0 10px #d580ff,
       0 0 20px #d580ff,
       0 0 30px #b300ff;
+    display: inline-block;
+    transform-origin: 50% 50%;
+    animation: rotateLetter 3s linear infinite;
   }
-  50% {
-    text-shadow:
-      0 0 10px #d580ff,
-      0 0 20px #b300ff,
-      0 0 30px #d580ff,
-      0 0 40px #b300ff;
+  .letter:nth-child(1) { animation-delay: 0s; }
+  .letter:nth-child(2) { animation-delay: 0.4s; }
+  .letter:nth-child(3) { animation-delay: 0.8s; }
+  
+  @keyframes rotateLetter {
+    0%, 100% {
+      transform: rotate(0deg) translateY(0) rotate(0deg);
+      text-shadow:
+        0 0 5px #b300ff,
+        0 0 10px #d580ff,
+        0 0 20px #d580ff,
+        0 0 30px #b300ff;
+    }
+    50% {
+      transform: rotate(360deg) translateY(-12px) rotate(-360deg);
+      text-shadow:
+        0 0 10px #d580ff,
+        0 0 20px #b300ff,
+        0 0 30px #d580ff,
+        0 0 40px #b300ff;
+    }
   }
-}
+
 #vanta-bg {
   position: fixed;
   top: 0;
@@ -344,14 +326,10 @@ html, body {
 </style>
 </head>
 <body>
-  <div id="threeContainer"></div>
-<div class="main"><p>Main Interface Loaded</p></div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r152/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.152.0/examples/jsm/loaders/FontLoader.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.152.0/examples/jsm/geometries/TextGeometry.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-
+  <div class="container">
+  <span class="letter">A</span>
+  <span class="letter">()</span>
+  <span class="letter">Z</span>
   <div id="aboutButton">🪞About🪞</div>
   <div id="aboutOverlay" style="display: none;">
   <div id="aboutContent"></div>
@@ -377,107 +355,6 @@ html, body {
  <div id="output"></div>
  <div id="countdown"></div>
  <script>
-const container = document.getElementById('threeContainer');
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(70, window.innerWidth/window.innerHeight, 0.1, 1000);
-camera.position.z = 30;
-
-const renderer = new THREE.WebGLRenderer({ antialias:true, alpha:true });
-renderer.setSize(window.innerWidth, window.innerHeight);
-container.appendChild(renderer.domElement);
-
-// Ambient and point light for 3D text glow effect
-const ambientLight = new THREE.AmbientLight(0x00ffff, 0.4);
-scene.add(ambientLight);
-const pointLight = new THREE.PointLight(0x00ffff, 1.2);
-pointLight.position.set(50,50,50);
-scene.add(pointLight);
-
-
-// Load font and create 3D text
-const loader = new THREE.FontLoader();
-let textMesh;
-loader.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', font => {
-  const textGeo = new THREE.TextGeometry('A0Z', {
-    font: font,
-    size: 8,
-    height: 2,
-    curveSegments: 12,
-    bevelEnabled: true,
-    bevelThickness: 0.4,
-    bevelSize: 0.3,
-    bevelOffset: 0,
-    bevelSegments: 5
-  });
-
-  textGeo.center();
-
-  const textMat = new THREE.MeshStandardMaterial({
-    color: 0x00ffff,
-    metalness: 0.9,
-    roughness: 0.2,
-    emissive: 0x00ffff,
-    emissiveIntensity: 0.8
-  });
-
-  textMesh = new THREE.Mesh(textGeo, textMat);
-  scene.add(textMesh);
-
-  // Animate text opacity and scale with GSAP
-  textMesh.material.transparent = true;
-  textMesh.material.opacity = 0;
-  gsap.to(textMesh.material, {opacity:1, duration: 1.8, ease:"power3.out"});
-  gsap.fromTo(textMesh.scale, {x:1.5, y:1.5, z:1.5}, {x:1, y:1, z:1, duration: 2, ease:"power3.out"});
-
-  // Animate letters float with sine wave (simulate floating in VR)
-  animateTextFloat();
-});
-
-// Mouse movement tracking
-let mouseX = 0, mouseY = 0;
-document.addEventListener('mousemove', e => {
-  mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
-  mouseY = -(e.clientY / window.innerHeight - 0.5) * 2;
-});
-document.addEventListener('touchmove', e => {
-  mouseX = (e.touches[0].clientX / window.innerWidth - 0.5) * 2;
-  mouseY = -(e.touches[0].clientY / window.innerHeight - 0.5) * 2;
-});
-
-// Clock for animations
-const clock = new THREE.Clock();
-
-function animate() {
-  requestAnimationFrame(animate);
-
-  const elapsed = clock.getElapsedTime();
-
-  // Rotate and move particles in wave pattern
-  particles.rotation.y = elapsed * 0.04;
-  particles.rotation.x = Math.sin(elapsed * 0.07) * 0.04;
-  particles.position.z = Math.sin(elapsed * 1.5) * 3;
-
-  // Camera smooth follow mouse
-  camera.position.x += (mouseX * 10 - camera.position.x) * 0.05;
-  camera.position.y += (mouseY * 10 - camera.position.y) * 0.05;
-  camera.lookAt(scene.position);
-
-  renderer.render(scene, camera);
-}
-
-function animateTextFloat() {
-  if (!textMesh) return;
-  const elapsed = clock.getElapsedTime();
-
-  // Floating motion
-  textMesh.position.y = Math.sin(elapsed * 2) * 0.8;
-  textMesh.rotation.y = Math.sin(elapsed) * 0.3;
-  textMesh.rotation.x = Math.cos(elapsed * 0.5) * 0.15;
-
-  requestAnimationFrame(animateTextFloat);
-}
-
-animate();
 
  const hamburger = document.getElementById('hamburger');
   const sidebar = document.getElementById('sidebar');
