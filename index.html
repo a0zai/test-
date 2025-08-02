@@ -84,17 +84,18 @@ html, body {
   position: fixed;
   top: 0;
   left: 0;
-  width: 63vw;
-  height: 75vh;
+  width: 80vw;
+  height: 100vh;
   pointer-events: none;
   z-index: 1;
   justify-content: center;
   align-items: center;
+  background: transparent;
   animation: spinGroup 8s linear infinite;
 }
 
 .letter {
-  font-size: 3.6rem;
+  font-size: 3rem;
   color: #b300ff;
   text-shadow:
     0 0 5px #b300ff,
@@ -325,12 +326,6 @@ html, body {
 </style>
 </head>
 <body>
-  <div class="container">
-  <span class="letter">A</span>
-  <span class="letter">(</span>
-  <span class="letter">)</span>
-  <span class="letter">Z</span>
-</div>
   <div id="aboutButton">⚖️</div>
   <div id="aboutOverlay" style="display: none;">
   <div id="aboutContent"></div>
@@ -342,7 +337,14 @@ html, body {
   <h2>👑Contact👑</h2>
   <a href="hi@rafat.world" target="_blank">📧 Email</a>
  <div id="vanta-bg"></div>
+  <div class="container">
+  <span class="letter">A</span>
+  <span class="letter">(</span>
+  <span class="letter">)</span>
+  <span class="letter">Z</span>
+</div>
 <canvas id="three-sphere"></canvas>
+
  <canvas id="matrix"></canvas>
 <div class="mirror-signature">
 </div>
