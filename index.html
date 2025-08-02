@@ -60,38 +60,7 @@ html, body {
   pointer-events: none;
   z-index: 1; 
 }
-.container {
-  display: flex;
-  gap: 10px;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 63vw;
-  height: 93vh;
-  pointer-events: none;
-  z-index: 1;
-  justify-content: center;
-  align-items: center;
-  animation: spinGroup 8s linear infinite;
-}
 
-.letter {
-  font-size: 3.6rem;
-  color: 0x8e44ad;
-  display: inline-block;
-  transform-origin: 50% 146%; 
-  animation: spinLetter 4s linear infinite;
-}
-
-@keyframes spinGroup {
-  0% { transform: rotate(0deg); }
- 100% { transform: rotate(366deg); }
-}
-
-@keyframes spinLetter {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(-365deg); }
-}
   .start-screen {
     position: fixed;
     top: 0;
@@ -328,22 +297,15 @@ html, body {
 <!-- Sidebar menu -->
 <div id="sidebar">
   <div id="closeSidebar">&times;</div>
-  <h2>👑👑</h2>
-  <a href="hi@rafat.world" target="_blank">📧 Email</a>
+  <h2>👑🦋👑</h2>
+  
  <div id="vanta-bg"></div>
-  <div class="container">
-  <span class="letter">A</span>
-  <span class="letter">(</span>
-  <span class="letter">)</span>
-  <span class="letter">Z</span>
-</div>
 <canvas id="three-sphere"></canvas>
-
  <canvas id="matrix"></canvas>
 </div>
  <div id="startScreen" class="start-screen">
    <h1 class="title">A  (🔮)  z</h1>
-   <p class="subtitle">(Free>education</p>
+   <p class="subtitle">(Free❗️education</p>
    <button id="enterButton" class="enter-btn">🚀 Enter The System</button>
  </div>
  <audio id="bgMusic" src="🌀🎶.mp3.MP4"></audio>
