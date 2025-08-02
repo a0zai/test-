@@ -37,37 +37,6 @@ html, body {
     font-family: "Courier New", Courier, monospace;
     background-color: black;
   }
-.container {
-  display: flex;
-  gap: 12px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 10;
-  background: transparent;
-  animation: spinGroup 6s linear infinite;
-}
-.letter {
-  font-size: 5rem;
-  color: #b300ff;
-  text-shadow:
-    0 0 5px #b300ff,
-    0 0 10px #d580ff,
-    0 0 20px #d580ff,
-    0 0 30px #b300ff;
-  display: inline-block;
-  transform-origin: 50% 50%;
-  animation: spinLetter 3s linear infinite;
-}
-@keyframes spinGroup {
-  0% { transform: translate(-50%, -50%) rotate(0deg); }
-  100% { transform: translate(-50%, -50%) rotate(360deg); }
-}
-@keyframes spinLetter {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(-360deg); }
-}
 
 #vanta-bg {
   position: fixed;
@@ -109,6 +78,36 @@ html, body {
     box-sizing: border-box;
     text-align: center;
   }
+.container {
+  display: flex;
+  gap: 12px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  animation: spinGroup 6s linear infinite;
+}
+.letter {
+  font-size: 3.5rem;
+  color: #b300ff;
+  text-shadow:
+    0 0 5px #b300ff,
+    0 0 10px #d580ff,
+    0 0 20px #d580ff,
+    0 0 30px #b300ff;
+  display: inline-block;
+  transform-origin: 50% 50%;
+  animation: spinLetter 3s linear infinite;
+}
+@keyframes spinGroup {
+  0% { transform: translate(-50%, -50%) rotate(0deg); }
+  100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+@keyframes spinLetter {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(-360deg); }
+}
 
   .title {
     font-size: 2rem;
