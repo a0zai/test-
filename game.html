@@ -133,7 +133,7 @@
     from { opacity: 0;}
     to {opacity: 1;}
   }
-
+  /* Shake animation for wrong answers */
   @keyframes shake {
     0% { transform: translateX(0); }
     20% { transform: translateX(-8px); }
@@ -145,7 +145,7 @@
   .shake {
     animation: shake 0.5s;
   }
-
+  /* Progress bar */
   #progress-container {
     margin-top: 20px;
     background: #003f4d;
@@ -160,7 +160,7 @@
     background: #00ffd5;
     transition: width 0.5s ease;
   }
-
+  /* Spinner for loading */
   #spinner {
     border: 4px solid #00c6c0;
     border-top: 4px solid transparent;
@@ -176,7 +176,7 @@
   @keyframes spin {
     to { transform: rotate(360deg);}
   }
-
+  /* Restart button style */
   #restart-btn {
     background: #005050;
     margin-top: 30px;
@@ -231,9 +231,11 @@
   const spinner = document.getElementById('spinner');
   const progressBar = document.getElementById('progress-bar');
 
+  // Sounds
   const soundCorrect = new Audio('https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg');
   const soundIncorrect = new Audio('https://actions.google.com/sounds/v1/cartoon/boing.ogg');
   const soundUnlock = new Audio('https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg');
+
   const puzzles = [
     {
       clue: `🕵️‍♂️ Puzzle 1:
@@ -342,8 +344,10 @@ C) Both A and B
     submitBtn.disabled = true;
     spinner.style.visibility = 'visible';
 
+    // Normalize answer for comparison (case-insensitive)
     const normalizedAnswer = answer.toLowerCase();
 
+    // Check if answer is correct (case insensitive)
     const validAnswers = puzzles[currentPuzzle].answers.map(ans => ans.toLowerCase());
 
     setTimeout(() => {
@@ -384,19 +388,6 @@ C) Both A and B
     }, 1200);
   }
 
-  function endGame() {
-    fadeOutIn(clueBox, () => {
-      clueBox.textContent = '';
-    });
-    animateMessage("🎉 Congratulations, Agent! You've cracked the case.");
-    door.style.display = 'block';
-    door.classList.add('unlocked');
-    soundUnlock.play();
-    inputAnswer.style.display = 'none';
-    submitBtn.style.display = 'none';
-    restartBtn.style.display = 'inline-block';
-  }
-
   function animateMessage(text) {
     fadeOutIn(message, () => {
       message.textContent = text;
@@ -424,6 +415,205 @@ C) Both A and B
     let progressPercent = ((currentPuzzle) / puzzles.length) * 100;
     progressBar.style.width = `${progressPercent}%`;
   }
+
+function startRoomMode() {
+  gameArea.style.display = 'none';
+
+  const roomContainer = document.createElement('div');
+  roomContainer.id = 'room-container';
+  roomContainer.style.position = 'relative';
+  roomContainer.style.width = '900px';
+  roomContainer.style.height = '600px';
+  roomContainer.style.margin = '40px auto';
+  roomContainer.style.background = 'linear-gradient(135deg, #303030, #606060)';
+  roomContainer.style.border = '3px solid #00ffd5';
+  roomContainer.style.borderRadius = '10px';
+  roomContainer.style.overflow = 'hidden';
+  document.getElementById('game-container').appendChild(roomContainer);
+
+  const player = document.createElement('div');
+  player.id = 'player';
+  player.style.width = '50px';
+  player.style.height = '50px';
+  player.style.backgroundColor = '#00ffd5';
+  player.style.position = 'absolute';
+  player.style.left = '60px';
+  player.style.top = '280px';
+  player.style.borderRadius = '10px';
+  player.style.transition = 'left 0.05s, top 0.05s';
+  roomContainer.appendChild(player);
+
+  const obstacles = [];
+
+  function createObstacle(x, y, width, height) {
+    const obs = document.createElement('div');
+    obs.className = 'obstacle';
+    obs.style.position = 'absolute';
+    obs.style.left = x + 'px';
+    obs.style.top = y + 'px';
+    obs.style.width = width + 'px';
+    obs.style.height = height + 'px';
+    obs.style.backgroundColor = '#ff4444';
+    obs.style.borderRadius = '5px';
+    roomContainer.appendChild(obs);
+    obstacles.push(obs);
+  }
+
+  createObstacle(200, 150, 100, 30);
+  createObstacle(400, 300, 50, 100);
+  createObstacle(600, 200, 80, 40);
+
+  const key = document.createElement('div');
+  key.id = 'key';
+  key.style.width = '30px';
+  key.style.height = '30px';
+  key.style.backgroundColor = 'gold';
+  key.style.position = 'absolute';
+  key.style.left = '800px';
+  key.style.top = '100px';
+  key.style.borderRadius = '5px';
+  key.style.boxShadow = '0 0 12px gold';
+  roomContainer.appendChild(key);
+
+  const roomDoor = document.createElement('div');
+  roomDoor.id = 'room-door';
+  roomDoor.style.width = '80px';
+  roomDoor.style.height = '140px';
+  roomDoor.style.backgroundColor = '#004d40';
+  roomDoor.style.position = 'absolute';
+  roomDoor.style.right = '20px';
+  roomDoor.style.bottom = '0';
+  roomDoor.style.borderRadius = '0 0 15px 15px';
+  roomDoor.style.boxShadow = 'inset 0 0 15px #00e5c0';
+  roomContainer.appendChild(roomDoor);
+
+  let hasKey = false;
+  const step = 5;
+  let posX = 60;
+  let posY = 280;
+
+  function checkCollision(el1, el2) {
+    const r1 = el1.getBoundingClientRect();
+    const r2 = el2.getBoundingClientRect();
+    return !(r1.right < r2.left || r1.left > r2.right || r1.bottom < r2.top || r1.top > r2.bottom);
+  }
+
+  function canMove(newX, newY) {
+    const playerRect = {
+      left: newX,
+      top: newY,
+      right: newX + player.clientWidth,
+      bottom: newY + player.clientHeight
+    };
+    const containerRect = roomContainer.getBoundingClientRect();
+
+    for (const obs of obstacles) {
+      const obsRect = obs.getBoundingClientRect();
+      const obsRelRect = {
+        left: obsRect.left - containerRect.left,
+        top: obsRect.top - containerRect.top,
+        right: obsRect.right - containerRect.left,
+        bottom: obsRect.bottom - containerRect.top
+      };
+      if (!(playerRect.right < obsRelRect.left || playerRect.left > obsRelRect.right ||
+          playerRect.bottom < obsRelRect.top || playerRect.top > obsRelRect.bottom)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  function movePlayer(dx, dy) {
+    const newX = Math.min(Math.max(0, posX + dx), roomContainer.clientWidth - player.clientWidth);
+    const newY = Math.min(Math.max(0, posY + dy), roomContainer.clientHeight - player.clientHeight);
+
+    if (canMove(newX, newY)) {
+      posX = newX;
+      posY = newY;
+      player.style.left = posX + 'px';
+      player.style.top = posY + 'px';
+
+      if (!hasKey && checkCollision(player, key)) {
+        hasKey = true;
+        key.style.display = 'none';
+        alert('🔑 You found the key! Go unlock the door!');
+        roomDoor.style.backgroundColor = '#00ffd5';
+        roomDoor.style.boxShadow = '0 0 25px #00ffd5';
+      }
+
+      if (hasKey && checkCollision(player, roomDoor)) {
+        alert('🚪 You opened the door! Mission accomplished!');
+        restartBtn.onclick();
+      }
+    }
+  }
+
+  window.addEventListener('keydown', e => {
+    switch (e.key) {
+      case 'ArrowUp':
+      case 'w':
+      case 'W':
+        movePlayer(0, -step);
+        break;
+      case 'ArrowDown':
+      case 's':
+      case 'S':
+        movePlayer(0, step);
+        break;
+      case 'ArrowLeft':
+      case 'a':
+      case 'A':
+        movePlayer(-step, 0);
+        break;
+      case 'ArrowRight':
+      case 'd':
+      case 'D':
+        movePlayer(step, 0);
+        break;
+    }
+  });
+
+  let timeLeft = 90;
+  const timerDisplay = document.createElement('div');
+  timerDisplay.id = 'timer';
+  timerDisplay.style.position = 'absolute';
+  timerDisplay.style.top = '10px';
+  timerDisplay.style.right = '10px';
+  timerDisplay.style.color = '#00ffd5';
+  timerDisplay.style.fontSize = '24px';
+  timerDisplay.style.fontWeight = '700';
+  timerDisplay.style.textShadow = '0 0 10px #00ffd5';
+  roomContainer.appendChild(timerDisplay);
+
+  function updateTimer() {
+    timerDisplay.textContent = `Time Left: ${timeLeft}s`;
+    if (timeLeft === 0) {
+      alert('⏰ Time’s up! Mission failed!');
+      restartBtn.onclick();
+    }
+    timeLeft--;
+  }
+
+  updateTimer();
+  setInterval(updateTimer, 1000);
+}
+function endGame() {
+  fadeOutIn(clueBox, () => {
+    clueBox.textContent = '';
+  });
+  animateMessage("🎉 Congratulations, Agent! You solved the case.");
+  door.style.display = 'block';
+  door.classList.add('unlocked');
+  soundUnlock.play();
+
+  inputAnswer.style.display = 'none';
+  submitBtn.style.display = 'none';
+  restartBtn.style.display = 'none';
+
+  setTimeout(() => {
+    startRoomMode();
+  }, 2000);
+}
 </script>
 </body>
 </html>
