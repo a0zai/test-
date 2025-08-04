@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Cyberpunk Puzzle Game Enhanced</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap');
+  body, html {
+    margin: 0; padding: 0; overflow: hidden;
+    background: #0f0c29;
+    font-family: 'Orbitron', sans-serif;
+    user-select: none;
+  }
+  #game-container {
+    position: relative;
+    width: 800px;
+    height: 600px;
+    margin: 20px auto;
+    background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80') no-repeat center center / cover;
+    border: 6px solid #00ffe7;
+    border-radius: 20px;
+    box-shadow:
+      0 0 20px #00ffe7,
+      inset 0 0 60px #00ffe7;
+    overflow: hidden;
+  }
+  #player {
+    position: absolute;
+    width: 48px;
+    height: 64px;
+    background-image: url('https://i.imgur.com/JYUB0m3.png');
+    background-repeat: no-repeat;
+    image-rendering: pixelated;
+    filter: drop-shadow(0 0 10px #00fff7);
+    top: 268px;
+    left: 376px;
+    z-index: 10;
+    transition: top 0.1s linear, left 0.1s linear;
+  }
+  #door {
+    position: absolute;
+    width: 80px;
+    height: 120px;
+    background: linear-gradient(45deg, #4400ff, #00ffe7);
+    bottom: 20px;
+    right: 20px;
+    border-radius: 15px;
+    box-shadow:
+      0 0 15px #00ffe7,
+      inset 0 0 35px #00ffe7;
+    cursor: pointer;
+    animation: neonGlow 2s ease-in-out infinite alternate;
+  }
+  #door.opened {
+    background: linear-gradient(45deg, #00ffae, #00ffaa);
+    box-shadow:
+      0 0 40px #00ffaa,
+      inset 0 0 60px #00ffaa;
+    cursor: default;
+    animation: none;
+  }
+  #key {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    background-image: url('https://i.imgur.com/zf6dIJi.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    top: 100px;
+    left: 700px;
+    filter: drop-shadow(0 0 10px #00fff7);
+    cursor: pointer;
+    animation: neonGlow 3s ease-in-out infinite alternate;
+    z-index: 5;
+  }
+  #message {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 22px;
+    font-weight: 700;
+    color: #00fff7;
+    text-shadow:
+      0 0 10px #00fff7,
+      0 0 20px #00fff7,
+      0 0 30px #00fff7;
+  }
+  @keyframes neonGlow {
+    0% {
+      filter: drop-shadow(0 0 5px #00fff7) drop-shadow(0 0 10px #00fff7);
+    }
+    100% {
+      filter: drop-shadow(0 0 20px #00fff7) drop-shadow(0 0 30px #00fff7);
+    }
+  }
+</style>
+</head>
+<body>
+<div id="game-container">
+  <div id="player"></div>
+  <div id="door" title="Door"></div>
+  <div id="key" title="Key"></div>
+  <div id="message">Find the key to open the door!</div>
+</div>
+<script>
+  const player = document.getElementById('player');
+  const door = document.getElementById('door');
+  const key = document.getElementById('key');
+  const message = document.getElementById('message');
+  const container = document.getElementById('game-container');
+  const frameWidth = 48;
+  const frameHeight = 64;
+  let posX = 376;
+  let posY = 268;
+  const speed = 4;
+  let currentDirection = 0;
+  let currentFrame = 0;
+  const frameCount = 3;
+  let animationInterval = null;
+  const keys = { ArrowUp: false, ArrowDown: false, ArrowLeft: false, ArrowRight: false };
+  let hasKey = false;
+
+  function updateFrame() {
+    currentFrame = (currentFrame + 1) % frameCount;
+    updateSprite();
+  }
+  function updateSprite() {
+    const x = currentFrame * frameWidth;
+    const y = currentDirection * frameHeight;
+    player.style.backgroundPosition = `-${x}px -${y}px`;
+  }
+  function startAnimation() {
+    if (!animationInterval) animationInterval = setInterval(updateFrame, 120);
+  }
+  function stopAnimation() {
+    if (animationInterval) {
+      clearInterval(animationInterval);
+      animationInterval = null;
+    }
+    currentFrame = 1;
+    updateSprite();
+  }
+  function movePlayer() {
+    let moved = false;
+    if (keys.ArrowUp) { posY = Math.max(0, posY - speed); currentDirection = 3; moved = true; }
+    if (keys.ArrowDown) { posY = Math.min(container.clientHeight - frameHeight, posY + speed); currentDirection = 0; moved = true; }
+    if (keys.ArrowLeft) { posX = Math.max(0, posX - speed); currentDirection = 1; moved = true; }
+    if (keys.ArrowRight) { posX = Math.min(container.clientWidth - frameWidth, posX + speed); currentDirection = 2; moved = true; }
+    player.style.left = posX + 'px';
+    player.style.top = posY + 'px';
+    if (moved) startAnimation(); else stopAnimation();
+    checkKeyPickup();
+  }
+  function checkKeyPickup() {
+    if (!hasKey) {
+      const dx = posX - key.offsetLeft;
+      const dy = posY - key.offsetTop;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      if (dist < 40) {
+        hasKey = true;
+        key.style.display = 'none';
+        message.textContent = 'You got the key! Go open the door!';
+      }
+    }
+  }
+  door.addEventListener('click', () => {
+    const dx = posX - door.offsetLeft;
+    const dy = posY - door.offsetTop;
+    const dist = Math.sqrt(dx*dx + dy*dy);
+    if (dist < 70) {
+      if (hasKey) {
+        door.classList.add('opened');
+        message.textContent = 'Door opened! You win!';
+        alert('You opened the door! Congratulations!');
+      } else {
+        message.textContent = 'You need the key first!';
+      }
+    } else {
+      message.textContent = 'Move closer to the door to open it.';
+    }
+  });
+  window.addEventListener('keydown', e => { if (e.key in keys) { keys[e.key] = true; e.preventDefault(); } });
+  window.addEventListener('keyup', e => { if (e.key in keys) { keys[e.key] = false; e.preventDefault(); } });
+  function gameLoop() {
+    movePlayer();
+    requestAnimationFrame(gameLoop);
+  }
+  updateSprite();
+  gameLoop();
+</script>
+</body>
+</html>
