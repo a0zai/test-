@@ -1,377 +1,337 @@
 <!DOCTYPE html>
-<html lang="nl" dir="ltr">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Transparante Rechtbank - Keuzepoort</title>
-  <style>
-html {
-  height: 100%;
-  background: radial-gradient(circle at top left, #e0e6ed, #ced6e0, #a4b0be, #747d8c);
-  background-size: 600% 600%;
-  animation: courtroomLight 30s ease-in-out infinite;
-}
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>CVE-2025-30066 - Supply Chain Injection via Structural Obfuscation</title>
+<style>
 
-body {
-  margin: 0;
-  padding: 0 20px 60px;
-  font-family: 'Segoe UI', sans-serif;
-  color: #2f3542;
-  background: transparent;
-}
-
-@keyframes courtroomLight {
-  0% {
-    background-position: 0% 50%;
+  body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow-x: hidden;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: black;
+    color: #c0f5c0;
   }
-  25% {
-    background-position: 50% 50%;
+  canvas#matrix {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
   }
-  50% {
-    background-position: 100% 50%;
+
+  .container {
+    position: relative;
+    max-width: 900px;
+    margin: 60px auto 80px;
+    background: rgba(20, 40, 20, 0.75);
+    border-radius: 15px;
+    padding: 40px 50px;
+    box-shadow:
+      0 0 30px rgba(0, 255, 70, 0.6),
+      inset 0 0 60px rgba(0, 255, 70, 0.3);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(0,255,70,0.3);
+    z-index: 10;
   }
-  75% {
-    background-position: 50% 50%;
+
+  h1, h2, h3 {
+    color: #00ff6a;
+    text-shadow:
+      0 0 6px #00ff6a,
+      0 0 10px #00ff6a,
+      0 0 20px #00ff6a;
+    margin-top: 1em;
+    margin-bottom: 0.3em;
   }
-  100% {
-    background-position: 0% 50%;
+  h1 {
+    border-bottom: 3px solid #00ff6a;
+    padding-bottom: 10px;
   }
-}
-    .container {
-      max-width: 700px;
-      margin: 40px auto 60px;
-      background-color: #ffffffdd;
-      padding: 40px 40px 30px;
-      border-radius: 14px;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.1);
-      transition: all 0.3s ease;
-    }
 
-    .container:hover {
-      transform: scale(1.01);
-    }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+  }
+  th, td {
+    border: 1px solid #00ff6a;
+    padding: 12px 15px;
+    text-align: left;
+    font-size: 16px;
+    color: #b3ffbb;
+  }
+  th {
+    background: rgba(0, 255, 106, 0.2);
+    font-weight: 700;
+  }
 
-    h1, h2 {
-      color: #3742fa;
-      margin-bottom: 20px;
-    }
+  ul, ol {
+    margin-left: 24px;
+    color: #aaffaa;
+  }
 
-    h1 {
-      font-size: 28px;
-      text-align: center;
-    }
+  a {
+    color: #00ff6a;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+  }
+  a:hover {
+    color: #66ff88;
+    text-decoration: underline;
+  }
 
-    h2 {
-      font-size: 22px;
-      margin-top: 35px;
-    }
+  footer {
+    text-align: center;
+    font-size: 14px;
+    color: #55ff77;
+    padding: 15px 0;
+    border-top: 1px solid rgba(0,255,70,0.3);
+    margin-top: 50px;
+  }
 
-    p, ul {
-      font-size: 16px;
-      line-height: 1.6;
-      margin-bottom: 20px;
-    }
+  .btn-container {
+    margin: 30px 0;
+    text-align: center;
+  }
+  button {
+    background: transparent;
+    border: 2px solid #00ff6a;
+    color: #00ff6a;
+    padding: 10px 22px;
+    margin: 0 12px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 25px;
+    cursor: pointer;
+    box-shadow:
+      0 0 8px #00ff6a,
+      0 0 15px #00ff6a;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+  button:hover {
+    background: #00ff6a;
+    color: #002200;
+    box-shadow:
+      0 0 20px #00ff6a,
+      0 0 30px #00ff6a;
+  }
 
-    ul {
-      margin-left: 20px;
-    }
+  .logo {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 3px solid #00ff6a;
+    box-shadow:
+      0 0 12px #00ff6a,
+      0 0 24px #00ff6a,
+      0 0 30px #00ff6a inset;
+    display: block;
+    margin: 0 auto 20px auto;
+    transition: transform 0.3s ease;
+  }
+  .logo:hover {
+    transform: rotate(15deg) scale(1.1);
+    box-shadow:
+      0 0 20px #00ff6a,
+      0 0 40px #00ff6a,
+      0 0 50px #00ff6a inset;
+  }
 
-    label {
-      display: block;
-      font-size: 16px;
-      margin: 10px 0;
-      cursor: pointer;
-      transition: background 0.2s ease;
-      padding: 6px 10px;
-      border-radius: 6px;
-    }
+  section p {
+    margin-bottom: 16px;
+  }
 
-    label:hover {
-      background-color: #f1f2f6;
+  .container {
+    opacity: 0;
+    animation: fadeInUp 1.3s forwards ease-out;
+  }
+  @keyframes fadeInUp {
+    0% {
+      opacity: 0;
+      transform: translateY(30px);
     }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 
-    input[type="radio"], input[type="checkbox"] {
-      margin-right: 8px;
-      transform: scale(1.2);
-    }
-
-    .notice {
-      background-color: #ff4757;
-      color: white;
-      padding: 15px;
-      border-radius: 8px;
-      font-style: italic;
-      font-size: 14px;
-      margin-top: 25px;
-    }
-
-    .confirm-box {
-      margin-top: 25px;
-    }
-
-    button {
-      margin-top: 30px;
-      padding: 14px 40px;
-      background-color: #3742fa;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-      box-shadow: 0 5px 15px rgba(55,66,250,0.4);
-      transition: background 0.3s ease;
-    }
-
-    button:hover {
-      background-color: #2f36d1;
-    }
-
-    button:disabled {
-      background-color: #a4b0be;
-      cursor: not-allowed;
-      box-shadow: none;
-    }
-
-    .result {
-      margin-top: 25px;
-      font-size: 16px;
-      font-weight: bold;
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    .success {
-      color: #2ed573;
-    }
-
-    .error {
-      color: #e84118;
-    }
-
-    blockquote {
-      font-style: italic;
-      color: #57606f;
-      border-left: 4px solid #3742fa;
-      padding-left: 15px;
-      margin: 30px 0;
-      background-color: #f7f9fc;
-      border-radius: 6px;
-    }
-
-    #backBtn, #helpBtn {
-      padding: 12px 28px;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-weight: bold;
-      cursor: pointer;
-      font-size: 15px;
-      transition: background 0.3s ease;
-    }
-
-    #backBtn {
-      background-color: #57606f;
-    }
-
-    #backBtn:hover {
-      background-color: #3d454d;
-    }
-
-    #helpBtn {
-      background-color: #ffa502;
-    }
-
-    #helpBtn:hover {
-      background-color: #ffb700;
-    }
-  </style>
+</style>
 </head>
 <body>
+  <canvas id="matrix"></canvas>
 
-<div style="text-align: center; margin-top: 20px;">
-  <img src="https://avatars.githubusercontent.com/u/201962374?v=4" alt="Logo Rechtbank" style="width: 120px; opacity: 0.85;">
-</div>
+  <div class="container">
+    <img src="https://avatars.githubusercontent.com/u/201962374?v=4&size=64" alt="Author Logo" class="logo" />
 
-<div style="margin-top: 30px; display: flex; justify-content: space-between; gap: 15px;">
-  <button type="button" id="backBtn">← Terug naar startpagina</button>
-  <button type="button" id="helpBtn">ℹ️ Meer info</button>
-</div>
+    <h1>CVE Report</h1>
+    <h2>CVE ID: CVE-2025-30066</h2>
+    <h2>Title: Supply Chain Injection via Structural Obfuscation in Open-Source Repository Structures</h2>
 
-<div class="container" role="main">
-  <h1>Welkom bij de Transparante Rechtbank</h1>
+    <section>
+      <h3>Description</h3>
+      <p>
+        A structural vulnerability exists in the organization of certain open-source repositories,
+        especially those lacking strict code review processes.
+        Attackers can embed malicious logic within seemingly benign files and directories by exploiting implicit trust
+        in repository structure, naming conventions, and file semantics.
+      </p>
+      <p>
+        This technique abuses the repository’s structure and semantics to conceal harmful behavior without exploiting a direct software flaw.
+        Unlike traditional attacks, the payload may activate not only during package installation (e.g., <code>pip install</code>, <code>npm install</code>, <code>docker build</code>) or first import,
+        but also via trigger-based execution — for example, after a user opens a file, clicks a link, or interacts with a component bundled within the repository.
+      </p>
+      <p>
+        The malicious payload is designed to evade static code analysis, heuristic detection, and signature-based scanning
+        by leveraging obfuscation and plausible file naming.
+      </p>
+    </section>
 
-  <p>
-    De Transparante Rechtbank is een modern initiatief dat streeft naar eerlijkheid en openheid binnen het rechtssysteem.
-    Hier kunt u kiezen of uw zaak openbaar wordt behandeld via een livestream of besloten blijft.
-  </p>
+    <section>
+      <h3>Vulnerability Type</h3>
+      <ul>
+        <li>CWE-494: Download of Code Without Integrity Check</li>
+        <li>CWE-506: Embedded Malicious Code</li>
+        <li>CWE-829: Inclusion of Functionality from Untrusted Control Sphere</li>
+      </ul>
+    </section>
 
-  <h2>Waarom deze keuze?</h2>
-  <p>
-    Transparantie versterkt het vertrouwen in de rechtspraak. Door te kiezen voor een openbare livestream, maakt u het proces inzichtelijk voor iedereen.
-    Indien u liever vertrouwelijkheid behoudt, is er de optie voor een besloten rechtszaak.
-  </p>
+    <section>
+      <h3>Attack Vector & Complexity</h3>
+      <table>
+        <tbody>
+          <tr>
+            <th>Metric</th>
+            <th>Detail</th>
+          </tr>
+          <tr>
+            <td>Attack Vector</td>
+            <td>Remote — exploitation occurs when the victim clones, installs, or opens crafted repository/package components.</td>
+          </tr>
+          <tr>
+            <td>Attack Complexity</td>
+            <td>Low — requires only a simple user action (install, open file, or click a link).</td>
+          </tr>
+          <tr>
+            <td>Privileges Required</td>
+            <td>None</td>
+          </tr>
+          <tr>
+            <td>User Interaction</td>
+            <td>Required — victim must perform an action such as install, open, or execute a bundled component.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
 
-  <blockquote>
-    "Uw keuze vandaag bepaalt uw verhaal van morgen. Transparantie is kracht."
-  </blockquote>
+    <section>
+      <h3>Technical Details & Attack Mechanism</h3>
+      <ol>
+        <li>Camouflaged Payloads — malicious code stored in legitimate-looking files (e.g., <code>example.py</code>, <code>helper.js</code>, <code>config_helper.py</code>), often obfuscated (e.g., base64-encoded logic).</li>
+        <li>Misleading Folder Names — innocuous directory names such as <code>utils2/</code>, <code>v3/</code>, <code>drafts/</code> containing executable payloads.</li>
+        <li>Silent Execution via Entry Points — hidden logic inside <code>__init__.py</code>, <code>main.py</code>, or build scripts that auto-execute on install/import.</li>
+        <li>Hidden Hooks in Integration Files — <code>setup.py</code>, <code>Dockerfile</code>, or CI/CD scripts containing hooks to fetch and run remote code.</li>
+        <li>Trigger-Based Execution — payloads activated after a file is opened, a specific UI element is clicked, or a bundled HTML/JS asset is loaded in a local environment.</li>
+        <li>No Obvious Red Flags — code avoids suspicious keywords, uses benign comments, and applies naming schemes consistent with legitimate project files.</li>
+      </ol>
+    </section>
 
-  <h2>Hoe werkt het?</h2>
-  <p>
-    Selecteer hieronder uw voorkeur en bevestig dat u de informatie heeft gelezen.
-    Bij keuze voor openbaar wordt u doorverwezen naar de live streampagina.
-    Bij privé ontvangt u een bevestiging van uw keuze zonder uitzending.
-  </p>
+    <section>
+      <h3>Impact</h3>
+      <ul>
+        <li><strong>Confidentiality:</strong> High — possible exfiltration of environment variables, API keys, credentials, and system metadata.</li>
+        <li><strong>Integrity:</strong> High — unauthorized code injection or modification during build/runtime.</li>
+        <li><strong>Availability:</strong> Medium — potential disruption of service or alteration of application behavior.</li>
+      </ul>
+    </section>
 
-  <form id="trialForm" novalidate>
-    <label>
-      <input type="radio" name="trial" value="public" />
-      ✅ Ik stem in met een openbare livestream
-    </label>
+    <section>
+      <h3>Proof of Concept (PoC)</h3>
+      <p>
+        A demonstration repository is available:
+        <a href="https://github.com/a0zai/A-ZAI-Supply-Chain-Threat-Disclosure" target="_blank" rel="noopener noreferrer">
+          https://github.com/a0zai/A-ZAI-Supply-Chain-Threat-Disclosure
+        </a>
+      </p>
+      <p>
+        This repository contains commits that simulate stealth deployment of a payload hidden in legitimate-looking files and folders.
+        The payload can activate silently during installation/import or upon a specific user-triggered event.
+      </p>
+    </section>
 
-    <label>
-      <input type="radio" name="trial" value="private" />
-      ❌ Ik verkies een besloten rechtszaak
-    </label>
+    <section>
+      <h3>Mitigation Recommendations</h3>
+      <ol>
+        <li>Perform manual review of all files, including helper scripts, drafts, or non-code folders.</li>
+        <li>Disable automatic execution hooks in build/install scripts unless absolutely necessary.</li>
+        <li>Implement strict code signing and integrity verification for dependencies and repository components.</li>
+        <li>Use advanced static and dynamic analysis tools that detect obfuscated or structurally hidden code.</li>
+        <li>Adopt strict repository structure policies and automated scans for suspicious folder/file names.</li>
+        <li>Educate developers and users about risks of trusting repository structure and encourage vigilance on user-triggered events.</li>
+      </ol>
+    </section>
 
-    <div class="notice">
-      Deze rechtbank is er niet om u te straffen, maar om gerechtigheid te laten zien.  
-      Uw keuze maakt u niet zwakker — het maakt u transparant.
-    </div>
+    <section>
+      <h3>References</h3>
+      <ul>
+        <li><a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2025-30066" target="_blank" rel="noopener noreferrer">Official CVE Entry</a></li>
+        <li><a href="https://github.com/a0zai/A-ZAI-Supply-Chain-Threat-Disclosure" target="_blank" rel="noopener noreferrer">PoC Repository</a></li>
+        <li><a href="https://owasp.org/www-project-top-ten/" target="_blank" rel="noopener noreferrer">OWASP Top Ten</a></li>
+        <li><a href="https://cwe.mitre.org/" target="_blank" rel="noopener noreferrer">CWE - Common Weakness Enumeration</a></li>
+      </ul>
+    </section>
 
-    <div class="confirm-box">
-      <label>
-        <input type="checkbox" id="confirm" />
-        Ik bevestig dat ik de bovenstaande tekst heb gelezen en begrepen.
-      </label>
-    </div>
-<h2>Gegevens van de Zaak</h2>
-
-<label for="zaaknummer">Zaaknummer:</label>
-<input type="text" id="zaaknummer" placeholder="Bijv. 2025-072" required>
-
-<label for="verdachte">Verdachte (anoniem):</label>
-<input type="text" id="verdachte" placeholder="Bijv. Gebruiker X" required>
-
-<label for="beschrijving">Korte beschrijving:</label>
-<textarea id="beschrijving" placeholder="Bijv. Beschuldiging van online intimidatie..." required></textarea>
-
-<h2>Vonnis kiezen</h2>
-<label for="verdict">Selecteer een vonnis:</label>
-<select id="verdict" required>
-  <option value="">-- Kies een vonnis --</option>
-  <option value="vrijspraak">Vrijspraak (geen bewijs)</option>
-  <option value="waarschuwing">Waarschuwing</option>
-  <option value="geldboete">Geldboete (€500)</option>
-  <option value="verbod">Platformverbod (30 dagen)</option>
-  <option value="openbaar">Openbare veroordeling met livestream</option>
-  <option value="custom">Anders (zelf invullen)</option>
-</select>
-<textarea id="customVerdict" class="hidden" placeholder="Voer hier een aangepast vonnis in..."></textarea>
-<button type="button" id="genereerVerslagBtn" style="background-color:#ffa502;margin-top:20px;">📄 Genereer verslag</button>
-
-<div id="generatedReport" class="result hidden" style="white-space: pre-wrap; background:#f1f2f6; padding:15px; border-radius:8px; margin-top:20px;"></div>
-    <button id="submitBtn" disabled>Doorgaan</button>
-    <div id="resultMsg" class="result hidden" aria-live="polite"></div>
-  </form>
-</div>
+    <footer>
+      &copy; 2025 Security Research by A0ZAI | CVE-2025-30066
+    </footer>
+  </div>
 
 <script>
-  const checkbox = document.getElementById('confirm');
-  const submitBtn = document.getElementById('submitBtn');
-  const form = document.getElementById('trialForm');
-  const resultMsg = document.getElementById('resultMsg');
-  const backBtn = document.getElementById('backBtn');
-  const helpBtn = document.getElementById('helpBtn');
+  // Matrix rain effect
+  const canvas = document.getElementById('matrix');
+  const ctx = canvas.getContext('2d');
+  let width = canvas.width = window.innerWidth;
+  let height = canvas.height = window.innerHeight;
 
-  checkbox.addEventListener('change', () => {
-    submitBtn.disabled = !checkbox.checked;
-    clearMessage();
-  });
+  const letters = 'アカサタナハマヤラワイキシチニヒミリヰウクスツヌフムユルヲエケセテネヘメレヱオコソトノホモヨロヲ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const fontSize = 16;
+  const columns = Math.floor(width / fontSize);
+  const drops = [];
 
-  backBtn.addEventListener('click', () => {
-    window.location.href = "index.html";
-  });
+  for(let i = 0; i < columns; i++) {
+    drops[i] = Math.random() * height;
+  }
 
-  helpBtn.addEventListener('click', () => {
-    alert("Kies 'Openbaar' voor een livestream van de rechtszaak, zodat iedereen kan meekijken.\n\nKies 'Besloten' als u vertrouwelijkheid wenst.\n\nBevestig dat u de informatie heeft gelezen om door te gaan.");
-  });
+  function draw() {
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+    ctx.fillRect(0, 0, width, height);
 
-  form.addEventListener('submit', function(e) {
-    e.preventDefault();
-    clearMessage();
+    ctx.fillStyle = '#0F0'; 
+    ctx.font = fontSize + 'px monospace';
 
-    const choice = document.querySelector('input[name="trial"]:checked');
-    if (!choice) {
-      showMessage('Selecteer alstublieft een optie.', 'error');
-      return;
+    for(let i = 0; i < drops.length; i++) {
+      const text = letters.charAt(Math.floor(Math.random() * letters.length));
+      ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+      if(drops[i] * fontSize > height && Math.random() > 0.975) {
+        drops[i] = 0;
+      }
+      drops[i]++;
     }
+  }
 
-    if (choice.value === 'public') {
-      submitBtn.disabled = true;
-      submitBtn.textContent = "Bezig...";
-      setTimeout(() => {
-        window.location.href = "ORIGIN.html"; // صفحة البث المباشر
-      }, 600);
-    } else {
-      showMessage('U hebt gekozen voor een privé zitting zonder uitzending.', 'success');
-    }
+  setInterval(draw, 35);
+
+  window.addEventListener('resize', () => {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
   });
-
-  function showMessage(msg, type) {
-    resultMsg.textContent = msg;
-    resultMsg.classList.remove('hidden', 'error', 'success');
-    resultMsg.classList.add(type);
-  }
-
-  function clearMessage() {
-    resultMsg.textContent = '';
-    resultMsg.classList.add('hidden');
-    resultMsg.classList.remove('error', 'success');
-  }
-  const verdictSelect = document.getElementById('verdict');
-const customVerdict = document.getElementById('customVerdict');
-const verslagBtn = document.getElementById('genereerVerslagBtn');
-const reportBox = document.getElementById('generatedReport');
-
-verdictSelect.addEventListener('change', () => {
-  customVerdict.classList.toggle('hidden', verdictSelect.value !== 'custom');
-});
-
-verslagBtn.addEventListener('click', () => {
-  const zaaknummer = document.getElementById('zaaknummer').value.trim();
-  const verdachte = document.getElementById('verdachte').value.trim();
-  const beschrijving = document.getElementById('beschrijving').value.trim();
-  const verdictValue = verdictSelect.value;
-  const customText = customVerdict.value.trim();
-
-  if (!zaaknummer || !verdachte || !beschrijving || !verdictValue || (verdictValue === 'custom' && !customText)) {
-    showMessage('Vul alle velden correct in voordat u een verslag genereert.', 'error');
-    return;
-  }
-
-  const vonnis = verdictValue === 'custom' ? customText : verdictSelect.options[verdictSelect.selectedIndex].text;
-  
-  const verslag = 
-`📄 Verslag gegenereerd
-
-Zaaknummer: ${zaaknummer}
-Verdachte: ${verdachte}
-Beschrijving: ${beschrijving}
-
-Gekozen vonnis:
-${vonnis}
-
-Tijdstip: ${new Date().toLocaleString()}
-`;
-  reportBox.textContent = verslag;
-  reportBox.classList.remove('hidden');
-  reportBox.scrollIntoView({ behavior: "smooth" });
-
-  localStorage.setItem('laatste_verslag', verslag);
-});
 </script>
-
 </body>
 </html>
