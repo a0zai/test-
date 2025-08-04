@@ -184,9 +184,10 @@
 </head>
 <body>
   
-<button class="btn-start-game" onclick="window.location.href='game.html'">
+<button id="start-game-btn" class="btn-start-game">
   Start Game
 </button>
+
   <canvas id="matrix"></canvas>
 
   <div class="container">
@@ -315,7 +316,9 @@
   </div>
 
 <script>
-  // Matrix rain effect
+document.getElementById('start-game-btn').addEventListener('click', function() {
+  window.location.href = 'game.html';
+});
   const canvas = document.getElementById('matrix');
   const ctx = canvas.getContext('2d');
   let width = canvas.width = window.innerWidth;
