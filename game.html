@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Cyber Detective - CVE-2025-30066 Case</title>
+<style>
+  body {
+    margin: 0; padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    color: #f0f0f0;
+    overflow-x: hidden;
+  }
+  #game-container {
+    max-width: 900px;
+    margin: 50px auto;
+    background: #121821cc;
+    border-radius: 14px;
+    padding: 30px 40px;
+    box-shadow: 0 0 25px #0ff;
+    overflow: hidden;
+    position: relative;
+  }
+  h1, h2, h3 {
+    color: #00ffd5;
+    text-shadow: 0 0 8px #00ffd5;
+  }
+  button {
+    background: #00c6c0;
+    border: none;
+    padding: 14px 30px;
+    font-weight: 700;
+    font-size: 17px;
+    color: #003333;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 25px;
+    box-shadow: 0 5px 15px #00ffd5aa;
+    transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+  }
+  button:hover:not(:disabled) {
+    background: #00a2a0;
+    transform: scale(1.05);
+  }
+  button:disabled {
+    background: #005050;
+    color: #003333aa;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+  }
+  #message {
+    margin: 25px 0 10px;
+    font-size: 19px;
+    min-height: 70px;
+    line-height: 1.4;
+    opacity: 0;
+    animation: fadeInUp 1s forwards;
+  }
+  #message.correct {
+    color: #00ff88;
+    text-shadow: 0 0 12px #00ff88;
+  }
+  #message.incorrect {
+    color: #ff4444;
+    text-shadow: 0 0 12px #ff4444;
+  }
+  #input-answer {
+    padding: 14px 18px;
+    font-size: 17px;
+    border-radius: 8px;
+    border: none;
+    width: 65%;
+    max-width: 450px;
+    margin-top: 12px;
+    box-shadow: 0 0 12px #0077b6 inset;
+    transition: box-shadow 0.3s ease;
+  }
+  #input-answer:focus {
+    outline: none;
+    box-shadow: 0 0 20px #00ffd5 inset;
+  }
+  #input-answer:disabled {
+    background: #004d5a;
+    color: #666;
+  }
+  #clue-box {
+    margin: 30px 0;
+    background: #011627;
+    padding: 18px 24px;
+    border-radius: 14px;
+    font-family: 'Courier New', Courier, monospace;
+    white-space: pre-wrap;
+    color: #72e2f8;
+    box-shadow: inset 0 0 18px #0077b6;
+    opacity: 0;
+    animation: fadeIn 1.2s forwards;
+    min-height: 100px;
+  }
+  #door {
+    margin-top: 40px;
+    padding: 18px 26px;
+    background: #004d40;
+    border-radius: 14px;
+    text-align: center;
+    font-size: 22px;
+    color: #a0f7e1;
+    display: none;
+    user-select: none;
+    font-weight: 700;
+    text-shadow: 0 0 12px #00e5c0;
+  }
+  .unlocked {
+    animation: pulse-glow 1.6s infinite alternate;
+    box-shadow: 0 0 25px #00f2aa, 0 0 40px #00f2aaaa;
+  }
+  @keyframes pulse-glow {
+    from { box-shadow: 0 0 25px #00f2aa; }
+    to { box-shadow: 0 0 40px #00f2aaee; }
+  }
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0;}
+    to {opacity: 1;}
+  }
+
+  @keyframes shake {
+    0% { transform: translateX(0); }
+    20% { transform: translateX(-8px); }
+    40% { transform: translateX(8px); }
+    60% { transform: translateX(-6px); }
+    80% { transform: translateX(6px); }
+    100% { transform: translateX(0); }
+  }
+  .shake {
+    animation: shake 0.5s;
+  }
+
+  #progress-container {
+    margin-top: 20px;
+    background: #003f4d;
+    border-radius: 12px;
+    overflow: hidden;
+    height: 20px;
+    box-shadow: inset 0 0 8px #0077b6;
+  }
+  #progress-bar {
+    height: 100%;
+    width: 0%;
+    background: #00ffd5;
+    transition: width 0.5s ease;
+  }
+
+  #spinner {
+    border: 4px solid #00c6c0;
+    border-top: 4px solid transparent;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    animation: spin 1s linear infinite;
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 10px;
+    visibility: hidden;
+  }
+  @keyframes spin {
+    to { transform: rotate(360deg);}
+  }
+
+  #restart-btn {
+    background: #005050;
+    margin-top: 30px;
+    display: none;
+  }
+  #restart-btn:hover {
+    background: #007070;
+    transform: scale(1.05);
+  }
+</style>
+</head>
+<body>
+  <div id="game-container" role="main" aria-label="Cyber Detective Game">
+    <h1>Cyber Detective</h1>
+    <h2>Case: CVE-2025-30066 - Supply Chain Intrusion</h2>
+
+    <div id="story-text">
+      <p>
+        Welcome, Agent. You've been called to investigate a suspicious open-source software repository,
+        rumored to harbor a stealthy supply chain attack. Your mission: solve the puzzles, uncover the attack vector,
+        and secure the system before it’s too late.
+      </p>
+      <p>Are you ready to dive into the depths of code and deception?</p>
+    </div>
+
+    <button id="start-btn" aria-label="Start Investigation">Start Investigation</button>
+
+    <div id="game-area" style="display:none;">
+      <div id="message" aria-live="polite" aria-atomic="true"></div>
+      <input type="text" id="input-answer" placeholder="Type your answer here..." autocomplete="off" aria-label="Answer input" />
+      <button id="submit-btn" aria-label="Submit your answer">Submit
+        <span id="spinner"></span>
+      </button>
+      <div id="progress-container" aria-label="Progress bar">
+        <div id="progress-bar"></div>
+      </div>
+      <div id="clue-box" aria-live="polite" aria-atomic="true"></div>
+      <div id="door" role="alert">🚪 Secret Vault Unlocked! Mission Accomplished!</div>
+      <button id="restart-btn" aria-label="Restart the game">Restart Investigation</button>
+    </div>
+  </div>
+
+<script>
+  const startBtn = document.getElementById('start-btn');
+  const gameArea = document.getElementById('game-area');
+  const message = document.getElementById('message');
+  const inputAnswer = document.getElementById('input-answer');
+  const submitBtn = document.getElementById('submit-btn');
+  const clueBox = document.getElementById('clue-box');
+  const door = document.getElementById('door');
+  const restartBtn = document.getElementById('restart-btn');
+  const spinner = document.getElementById('spinner');
+  const progressBar = document.getElementById('progress-bar');
+
+  const soundCorrect = new Audio('https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg');
+  const soundIncorrect = new Audio('https://actions.google.com/sounds/v1/cartoon/boing.ogg');
+  const soundUnlock = new Audio('https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg');
+  const puzzles = [
+    {
+      clue: `🕵️‍♂️ Puzzle 1:
+Attackers hide malicious code inside files that look legit.
+Which CWE number represents "Download of Code Without Integrity Check"?
+(Type the CWE number, e.g., 494)`,
+      answers: ['494'],
+      reveal: `✔️ CWE-494 - Download of Code Without Integrity Check:
+Attackers exploit the lack of verification, injecting malicious payloads during package download.`,
+      event: `System alert: You discovered the attacker’s first trick: silently slipping code past integrity checks.`
+    },
+    {
+      clue: `🔍 Puzzle 2:
+The malicious code is cleverly embedded inside the repository.
+Which CWE corresponds to "Embedded Malicious Code"?
+Type the CWE number (hint: between 500-600).`,
+      answers: ['506'],
+      reveal: `✔️ CWE-506 - Embedded Malicious Code:
+Malicious logic hidden within benign files to avoid detection.`,
+      event: `Notification: You've identified the core payload hiding within helper scripts.`
+    },
+    {
+      clue: `🧠 Puzzle 3:
+What is the main reason this attack succeeds without exploiting a direct software flaw?
+A) Implicit trust in repo structure
+B) Weak passwords
+C) Missing OS updates
+(Type A, B, or C)`,
+      answers: ['a', 'A'],
+      reveal: `✔️ Correct! The attack exploits implicit trust in the repository’s structure and naming conventions.`,
+      event: `Insight: The chain of trust is broken. Blind trust is your enemy.`
+    },
+    {
+      clue: `🛡️ Puzzle 4:
+Which preventative measure is most effective against such supply chain attacks?
+A) Manual review of all files and folders
+B) Ignoring repos from unknown sources
+C) Both A and B
+(Type A, B, or C)`,
+      answers: ['c', 'C'],
+      reveal: `✔️ Exactly! A combination of vigilance and skepticism is the best defense.`,
+      event: `Status Update: Security protocols updated with thorough manual audits and source verification.`
+    }
+  ];
+
+  let currentPuzzle = 0;
+
+  startBtn.onclick = () => {
+    startBtn.style.display = 'none';
+    gameArea.style.display = 'block';
+    inputAnswer.focus();
+    fadeIn(gameArea);
+    displayPuzzle();
+    updateProgress();
+  };
+
+  restartBtn.onclick = () => {
+    currentPuzzle = 0;
+    door.style.display = 'none';
+    door.classList.remove('unlocked');
+    restartBtn.style.display = 'none';
+    inputAnswer.style.display = 'inline-block';
+    submitBtn.style.display = 'inline-block';
+    inputAnswer.disabled = false;
+    submitBtn.disabled = false;
+    inputAnswer.value = '';
+    message.textContent = '';
+    clueBox.textContent = '';
+    gameArea.style.opacity = 1;
+    displayPuzzle();
+    updateProgress();
+    inputAnswer.focus();
+  };
+
+  function displayPuzzle() {
+    inputAnswer.value = '';
+    fadeOutIn(clueBox, () => {
+      clueBox.textContent = puzzles[currentPuzzle].clue;
+    });
+    fadeOutIn(message, () => {
+      message.textContent = `Puzzle ${currentPuzzle + 1} of ${puzzles.length}`;
+      message.className = '';
+    });
+    inputAnswer.style.borderColor = '#0077b6';
+    inputAnswer.disabled = false;
+    submitBtn.disabled = false;
+    spinner.style.visibility = 'hidden';
+  }
+
+  submitBtn.onclick = () => {
+    let userAnswer = inputAnswer.value.trim();
+    if (!userAnswer) {
+      alert('Please enter an answer!');
+      inputAnswer.focus();
+      return;
+    }
+    checkAnswer(userAnswer);
+  };
+
+  inputAnswer.addEventListener('keypress', e => {
+    if (e.key === 'Enter') submitBtn.click();
+  });
+
+  function checkAnswer(answer) {
+    inputAnswer.disabled = true;
+    submitBtn.disabled = true;
+    spinner.style.visibility = 'visible';
+
+    const normalizedAnswer = answer.toLowerCase();
+
+    const validAnswers = puzzles[currentPuzzle].answers.map(ans => ans.toLowerCase());
+
+    setTimeout(() => {
+      spinner.style.visibility = 'hidden';
+      if (validAnswers.includes(normalizedAnswer)) {
+        message.className = 'correct';
+        soundCorrect.play();
+        animateMessage("✅ Correct! Processing...");
+        fadeOutIn(clueBox, () => {
+          clueBox.textContent = puzzles[currentPuzzle].reveal;
+        });
+        setTimeout(() => {
+          animateMessage(puzzles[currentPuzzle].event);
+          currentPuzzle++;
+          updateProgress();
+          if (currentPuzzle < puzzles.length) {
+            setTimeout(() => {
+              displayPuzzle();
+              inputAnswer.disabled = false;
+              submitBtn.disabled = false;
+              inputAnswer.focus();
+            }, 3500);
+          } else {
+            endGame();
+          }
+        }, 2000);
+      } else {
+        message.className = 'incorrect shake';
+        soundIncorrect.play();
+        animateMessage("❌ Incorrect answer. Try again!");
+        message.addEventListener('animationend', () => {
+          message.classList.remove('shake');
+        }, { once: true });
+        inputAnswer.disabled = false;
+        submitBtn.disabled = false;
+        inputAnswer.focus();
+      }
+    }, 1200);
+  }
+
+  function endGame() {
+    fadeOutIn(clueBox, () => {
+      clueBox.textContent = '';
+    });
+    animateMessage("🎉 Congratulations, Agent! You've cracked the case.");
+    door.style.display = 'block';
+    door.classList.add('unlocked');
+    soundUnlock.play();
+    inputAnswer.style.display = 'none';
+    submitBtn.style.display = 'none';
+    restartBtn.style.display = 'inline-block';
+  }
+
+  function animateMessage(text) {
+    fadeOutIn(message, () => {
+      message.textContent = text;
+    });
+  }
+
+  function fadeOutIn(element, callback) {
+    element.style.transition = 'opacity 0.3s ease';
+    element.style.opacity = 0;
+    setTimeout(() => {
+      if (callback) callback();
+      element.style.opacity = 1;
+    }, 300);
+  }
+
+  function fadeIn(element) {
+    element.style.opacity = 0;
+    element.style.display = 'block';
+    setTimeout(() => {
+      element.style.opacity = 1;
+    }, 10);
+  }
+
+  function updateProgress() {
+    let progressPercent = ((currentPuzzle) / puzzles.length) * 100;
+    progressBar.style.width = `${progressPercent}%`;
+  }
+</script>
+</body>
+</html>
