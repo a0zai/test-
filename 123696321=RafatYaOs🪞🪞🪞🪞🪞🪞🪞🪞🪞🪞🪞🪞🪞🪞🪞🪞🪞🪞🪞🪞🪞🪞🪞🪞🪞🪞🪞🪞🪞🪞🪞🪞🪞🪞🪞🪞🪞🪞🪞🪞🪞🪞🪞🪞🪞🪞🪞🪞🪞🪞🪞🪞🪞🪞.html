@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>CVE-2025-30066 - Supply Chain Injection via Structural Obfuscation</title>
+<script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
+<title>Supply Chain Injection via Structural Obfuscation</title>
 <style>
 
   body, html {
@@ -23,14 +24,6 @@
     height: 100%;
     z-index: 0;
   }
-#particles {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none; 
-  z-index: 5;
   
   .container {
     position: relative;
@@ -163,6 +156,7 @@
     opacity: 1;
     transform: translateY(0);
   }
+  
   .container {
     opacity: 0;
     animation: fadeInUp 1.3s forwards ease-out;
@@ -177,17 +171,24 @@
       transform: translateY(0);
     }
   }
-
+#particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; 
+  z-index: 5;
 </style>
 </head>
 <body>
   
 
   <canvas id="matrix"></canvas>
-<div id="particles"></div>
   <div class="container">
+    
     <img src="https://avatars.githubusercontent.com/u/201962374?v=4&size=64" alt="Author Logo" class="logo" />
-
+<div id="particles"></div>
     <h1>CVE Report</h1>
     <h2>CVE ID: CVE-2025-30066</h2>
     <h2>Title: Supply Chain Injection via Structural Obfuscation in Open-Source Repository Structures</h2>
@@ -360,7 +361,6 @@ document.getElementById('start-game-btn').addEventListener('click', function() {
     height = canvas.height = window.innerHeight;
   });
 </script>
-<script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
 <script>
 tsParticles.load("particles", {
   particles: {
