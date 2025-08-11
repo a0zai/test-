@@ -23,7 +23,15 @@
     height: 100%;
     z-index: 0;
   }
-
+#particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; 
+  z-index: 5;
+  
   .container {
     position: relative;
     max-width: 900px;
@@ -94,24 +102,6 @@
     border-top: 1px solid rgba(0,255,70,0.3);
     margin-top: 50px;
   }
- .btn-start-game {
-    display: inline-block;
-    background-color: #004080;
-    color: white;
-    padding: 12px 25px;
-    font-size: 16px;
-    font-weight: bold;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    text-decoration: none;
-    margin-top: 20px;
-  }
-
-  .btn-start-game:hover {
-    background-color: #0066cc;
-  }
 
   .btn-container {
     margin: 30px 0;
@@ -164,7 +154,15 @@
   section p {
     margin-bottom: 16px;
   }
-
+  #references-list li {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  #references-list li.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
   .container {
     opacity: 0;
     animation: fadeInUp 1.3s forwards ease-out;
@@ -184,12 +182,9 @@
 </head>
 <body>
   
-<button id="start-game-btn" class="btn-start-game">
-  Start Game
-</button>
 
   <canvas id="matrix"></canvas>
-
+<div id="particles"></div>
   <div class="container">
     <img src="https://avatars.githubusercontent.com/u/201962374?v=4&size=64" alt="Author Logo" class="logo" />
 
@@ -216,42 +211,55 @@
       </p>
     </section>
 
-    <section>
-      <h3>Vulnerability Type</h3>
-      <ul>
-        <li>CWE-494: Download of Code Without Integrity Check</li>
-        <li>CWE-506: Embedded Malicious Code</li>
-        <li>CWE-829: Inclusion of Functionality from Untrusted Control Sphere</li>
-      </ul>
-    </section>
-
-    <section>
-      <h3>Attack Vector & Complexity</h3>
-      <table>
-        <tbody>
-          <tr>
-            <th>Metric</th>
-            <th>Detail</th>
-          </tr>
-          <tr>
-            <td>Attack Vector</td>
-            <td>Remote — exploitation occurs when the victim clones, installs, or opens crafted repository/package components.</td>
-          </tr>
-          <tr>
-            <td>Attack Complexity</td>
-            <td>Low — requires only a simple user action (install, open file, or click a link).</td>
-          </tr>
-          <tr>
-            <td>Privileges Required</td>
-            <td>None</td>
-          </tr>
-          <tr>
-            <td>User Interaction</td>
-            <td>Required — victim must perform an action such as install, open, or execute a bundled component.</td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
+<section>
+  <h3>MITRE ATT&CK Mapping & Associated CWEs</h3>
+  <table>
+    <tbody>
+      <tr>
+        <th>Tactic</th>
+        <th>Technique</th>
+        <th>Description</th>
+        <th>Relevant CWE(s)</th>
+      </tr>
+      <tr>
+        <td>Initial Access (TA0001)</td>
+        <td>T1195 – Supply Chain Compromise</td>
+        <td>Exploiting repository structure and trust in project organization to gain initial access.</td>
+        <td>CWE-494: Download of Code Without Integrity Check<br>CWE-829: Inclusion of Functionality from Untrusted Control Sphere</td>
+      </tr>
+      <tr>
+        <td>Initial Access (TA0001)</td>
+        <td>T1195.002 – Compromise Software Supply Chain</td>
+        <td>Injecting malicious code into package dependencies during build or update processes.</td>
+        <td>CWE-506: Embedded Malicious Code<br>CWE-494: Download of Code Without Integrity Check</td>
+      </tr>
+      <tr>
+        <td>Execution (TA0002)</td>
+        <td>T1059.006 – Python Interpreter</td>
+        <td>Executing hidden or obfuscated Python code automatically during installation or runtime.</td>
+        <td>CWE-506: Embedded Malicious Code</td>
+      </tr>
+      <tr>
+        <td>Defense Evasion (TA0005)</td>
+        <td>T1027 – Obfuscated Files or Information</td>
+        <td>Using encoding, compression, or misleading naming to conceal malicious payloads from detection tools.</td>
+        <td>CWE-506: Embedded Malicious Code</td>
+      </tr>
+      <tr>
+        <td>Collection (TA0009)</td>
+        <td>T1056 – Input Capture</td>
+        <td>Gathering sensitive information such as environment variables, credentials, and system metadata.</td>
+        <td>CWE-506: Embedded Malicious Code</td>
+      </tr>
+      <tr>
+        <td>Command and Control (TA0011)</td>
+        <td>T1071 – Application Layer Protocol</td>
+        <td>Sending collected data to remote attacker-controlled servers over legitimate protocols (e.g., HTTPS).</td>
+        <td>CWE-829: Inclusion of Functionality from Untrusted Control Sphere</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
 
     <section>
       <h3>Technical Details & Attack Mechanism</h3>
@@ -300,18 +308,12 @@
       </ol>
     </section>
 
-    <section>
-      <h3>References</h3>
-      <ul>
-        <li><a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2025-30066" target="_blank" rel="noopener noreferrer">Official CVE Entry</a></li>
-        <li><a href="https://github.com/a0zai/A-ZAI-Supply-Chain-Threat-Disclosure" target="_blank" rel="noopener noreferrer">PoC Repository</a></li>
-        <li><a href="https://owasp.org/www-project-top-ten/" target="_blank" rel="noopener noreferrer">OWASP Top Ten</a></li>
-        <li><a href="https://cwe.mitre.org/" target="_blank" rel="noopener noreferrer">CWE - Common Weakness Enumeration</a></li>
-      </ul>
-    </section>
-
+<section>
+  <h3>References</h3>
+  <ul id="references-list"></ul>
+</section>
     <footer>
-      &copy; 2025 Security Research by A0ZAI | CVE-2025-30066
+      &copy; 2025 Security Research by A0ZAI 
     </footer>
   </div>
 
@@ -356,6 +358,50 @@ document.getElementById('start-game-btn').addEventListener('click', function() {
   window.addEventListener('resize', () => {
     width = canvas.width = window.innerWidth;
     height = canvas.height = window.innerHeight;
+  });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
+<script>
+tsParticles.load("particles", {
+  particles: {
+    number: { value: 60 },
+    color: { value: "#ff0000" }, 
+    opacity: { value: 0.3 },
+    size: { value: 2 },
+    move: { enable: true, speed: 1 },
+    links: { enable: false }
+  }
+});
+</script>
+<script>
+  const references = [
+    { text: "Official CVE Entry", url: "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2025-30066" },
+    { text: "PoC Repository", url: "https://github.com/a0zai/A-ZAI-Supply-Chain-Threat-Disclosure" },
+    { text: "OWASP Top Ten", url: "https://owasp.org/www-project-top-ten/" },
+    { text: "CWE - Common Weakness Enumeration", url: "https://cwe.mitre.org/" },
+    { text: "MITRE ATT&CK Framework", url: "https://attack.mitre.org/" },
+    { text: "NVD - National Vulnerability Database", url: "https://nvd.nist.gov/" },
+    { text: "Supply Chain Attack (Wikipedia)", url: "https://en.wikipedia.org/wiki/Supply_chain_attack" },
+    { text: "Software Supply Chain Security (SLSA)", url: "https://slsa.dev/" }
+  ];
+
+  const colors = ["#ff0000", "#0066ff"]; // أحمر وأزرق بالتناوب
+  const refList = document.getElementById("references-list");
+
+  references.forEach((ref, index) => {
+    const li = document.createElement("li");
+    const a = document.createElement("a");
+    a.href = ref.url;
+    a.target = "_blank";
+    a.rel = "noopener noreferrer";
+    a.textContent = ref.text;
+    a.style.color = colors[index % colors.length];
+    li.appendChild(a);
+    refList.appendChild(li);
+
+    setTimeout(() => {
+      li.classList.add("visible");
+    }, index * 200);
   });
 </script>
 </body>
