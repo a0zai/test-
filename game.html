@@ -1,619 +1,269 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Cyber Detective - CVE-2025-30066 Case</title>
+<title>366</title>
+<script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
+
 <style>
-  body {
-    margin: 0; padding: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-    color: #f0f0f0;
-    overflow-x: hidden;
+  :root {
+    --fg: #e6fff0;
+    --accent: #ff2a2a;   /* أحمر للجزيئات والوميض */
+    --muted: #8ef3b0;
+    --glitch1: #00ffd1;
+    --glitch2: #ff3b3b;
   }
-  #game-container {
-    max-width: 900px;
-    margin: 50px auto;
-    background: #121821cc;
-    border-radius: 14px;
-    padding: 30px 40px;
-    box-shadow: 0 0 25px #0ff;
+
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; height: 100%; background: #000; color: var(--fg);
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     overflow: hidden;
-    position: relative;
   }
-  h1, h2, h3 {
-    color: #00ffd5;
-    text-shadow: 0 0 8px #00ffd5;
+
+  /* طبقة الجزيئات */
+  #particles {
+    position: fixed; inset: 0; z-index: 3; pointer-events: none;
   }
-  button {
-    background: #00c6c0;
-    border: none;
-    padding: 14px 30px;
-    font-weight: 700;
-    font-size: 17px;
-    color: #003333;
+
+  /* طبقة الرادار */
+  #radar {
+    position: fixed; top: 2rem; left: 2rem;
+    width: 280px; height: 280px; z-index: 1; opacity: 0.25;
+    filter: drop-shadow(0 0 10px #0f0);
+  }
+
+  /* حاوية المحتوى */
+  .stage {
+    position: relative; z-index: 4; height: 100vh; width: 100vw;
+    display: grid; place-items: center;
+    padding: 2rem;
+  }
+
+  /* النص المركزي */
+  .line {
+    font-weight: 700; text-align: center;
+    letter-spacing: 0.5px; opacity: 0; transform: translateY(8px) scale(0.98);
+    transition: opacity .6s ease, transform .6s ease;
+  }
+  .line.show { opacity: 1; transform: translateY(0) scale(1); }
+
+  .line.l1 { font-size: clamp(22px, 4vw, 40px); color: var(--muted); }
+  .line.l2 { font-size: clamp(22px, 4vw, 40px); color: var(--fg); }
+  .line.l3 { font-size: clamp(16px, 2.6vw, 26px); color: #b6ffca; }
+  .line.l4 { font-size: clamp(18px, 3vw, 30px); color: #d2ffe2; }
+  .line.logo { font-size: clamp(22px, 4.6vw, 44px); color: #fff; }
+
+  /* تأثير glitch للنص */
+  .glitch {
+    position: relative; display: inline-block;
+    text-shadow:
+      0 0 6px rgba(255,255,255,.25),
+      0 0 18px rgba(255,255,255,.15);
+    animation: flicker 2.2s infinite steps(60);
+  }
+  .glitch::before,
+  .glitch::after{
+    content: attr(data-text);
+    position: absolute; inset: 0; clip-path: inset(0 0 0 0);
+    mix-blend-mode: lighten; opacity: .75;
+  }
+  .glitch::before{ color: var(--glitch1); transform: translate(2px,0); animation: glitch1 1.3s infinite; }
+  .glitch::after { color: var(--glitch2); transform: translate(-2px,0); animation: glitch2 1.1s infinite; }
+
+  @keyframes glitch1 {
+    0% { clip-path: inset(0 0 80% 0); }
+    20% { clip-path: inset(10% 0 60% 0); }
+    40% { clip-path: inset(80% 0 0 0); }
+    60% { clip-path: inset(30% 0 40% 0); }
+    80% { clip-path: inset(50% 0 20% 0); }
+    100% { clip-path: inset(0 0 80% 0); }
+  }
+  @keyframes glitch2 {
+    0% { clip-path: inset(80% 0 0 0); }
+    20% { clip-path: inset(60% 0 10% 0); }
+    40% { clip-path: inset(0 0 80% 0); }
+    60% { clip-path: inset(40% 0 30% 0); }
+    80% { clip-path: inset(20% 0 50% 0); }
+    100% { clip-path: inset(80% 0 0 0); }
+  }
+  @keyframes flicker {
+    0%, 100% { opacity: 0.98; }
+    10% { opacity: 0.90; }
+    20% { opacity: 0.99; }
+    30% { opacity: 0.93; }
+    40% { opacity: 1; }
+    50% { opacity: 0.95; }
+    60% { opacity: 1; }
+    70% { opacity: 0.92; }
+    80% { opacity: 1; }
+    90% { opacity: 0.96; }
+  }
+
+  /* بانل الكود */
+  .code {
+    width: min(92vw, 880px);
+    margin-inline: auto;
+    background: rgba(10, 18, 10, 0.6);
+    border: 1px solid rgba(255,255,255,0.08);
     border-radius: 10px;
-    cursor: pointer;
-    margin-top: 25px;
-    box-shadow: 0 5px 15px #00ffd5aa;
-    transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-  }
-  button:hover:not(:disabled) {
-    background: #00a2a0;
-    transform: scale(1.05);
-  }
-  button:disabled {
-    background: #005050;
-    color: #003333aa;
-    cursor: not-allowed;
-    box-shadow: none;
-    transform: none;
-  }
-  #message {
-    margin: 25px 0 10px;
-    font-size: 19px;
-    min-height: 70px;
-    line-height: 1.4;
-    opacity: 0;
-    animation: fadeInUp 1s forwards;
-  }
-  #message.correct {
-    color: #00ff88;
-    text-shadow: 0 0 12px #00ff88;
-  }
-  #message.incorrect {
-    color: #ff4444;
-    text-shadow: 0 0 12px #ff4444;
-  }
-  #input-answer {
     padding: 14px 18px;
-    font-size: 17px;
-    border-radius: 8px;
-    border: none;
-    width: 65%;
-    max-width: 450px;
-    margin-top: 12px;
-    box-shadow: 0 0 12px #0077b6 inset;
-    transition: box-shadow 0.3s ease;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: clamp(12px, 1.9vw, 16px);
+    line-height: 1.55;
+    color: #c4ffd8;
+    box-shadow: 0 0 22px rgba(0,255,120,0.08) inset, 0 0 12px rgba(0,255,120,0.1);
+    opacity: 0; transform: translateY(8px) scale(.98);
+    transition: opacity .6s ease, transform .6s ease;
   }
-  #input-answer:focus {
-    outline: none;
-    box-shadow: 0 0 20px #00ffd5 inset;
+  .code.show { opacity: 1; transform: translateY(0) scale(1); }
+  .hl { color: var(--accent); text-shadow: 0 0 8px rgba(255,42,42,.6); font-weight: 700; }
+
+  /* فلاش ختامي بسيط */
+  .flash {
+    position: fixed; inset: 0; background: #fff; opacity: 0; z-index: 6;
+    pointer-events: none;
   }
-  #input-answer:disabled {
-    background: #004d5a;
-    color: #666;
-  }
-  #clue-box {
-    margin: 30px 0;
-    background: #011627;
-    padding: 18px 24px;
-    border-radius: 14px;
-    font-family: 'Courier New', Courier, monospace;
-    white-space: pre-wrap;
-    color: #72e2f8;
-    box-shadow: inset 0 0 18px #0077b6;
-    opacity: 0;
-    animation: fadeIn 1.2s forwards;
-    min-height: 100px;
-  }
-  #door {
-    margin-top: 40px;
-    padding: 18px 26px;
-    background: #004d40;
-    border-radius: 14px;
-    text-align: center;
-    font-size: 22px;
-    color: #a0f7e1;
-    display: none;
-    user-select: none;
-    font-weight: 700;
-    text-shadow: 0 0 12px #00e5c0;
-  }
-  .unlocked {
-    animation: pulse-glow 1.6s infinite alternate;
-    box-shadow: 0 0 25px #00f2aa, 0 0 40px #00f2aaaa;
-  }
-  @keyframes pulse-glow {
-    from { box-shadow: 0 0 25px #00f2aa; }
-    to { box-shadow: 0 0 40px #00f2aaee; }
-  }
-  @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY(12px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  @keyframes fadeIn {
-    from { opacity: 0;}
-    to {opacity: 1;}
-  }
-  /* Shake animation for wrong answers */
-  @keyframes shake {
-    0% { transform: translateX(0); }
-    20% { transform: translateX(-8px); }
-    40% { transform: translateX(8px); }
-    60% { transform: translateX(-6px); }
-    80% { transform: translateX(6px); }
-    100% { transform: translateX(0); }
-  }
-  .shake {
-    animation: shake 0.5s;
-  }
-  /* Progress bar */
-  #progress-container {
-    margin-top: 20px;
-    background: #003f4d;
-    border-radius: 12px;
-    overflow: hidden;
-    height: 20px;
-    box-shadow: inset 0 0 8px #0077b6;
-  }
-  #progress-bar {
-    height: 100%;
-    width: 0%;
-    background: #00ffd5;
-    transition: width 0.5s ease;
-  }
-  /* Spinner for loading */
-  #spinner {
-    border: 4px solid #00c6c0;
-    border-top: 4px solid transparent;
-    border-radius: 50%;
-    width: 24px;
-    height: 24px;
-    animation: spin 1s linear infinite;
-    display: inline-block;
-    vertical-align: middle;
-    margin-left: 10px;
-    visibility: hidden;
-  }
-  @keyframes spin {
-    to { transform: rotate(360deg);}
-  }
-  /* Restart button style */
-  #restart-btn {
-    background: #005050;
-    margin-top: 30px;
-    display: none;
-  }
-  #restart-btn:hover {
-    background: #007070;
-    transform: scale(1.05);
-  }
+  .flash.show { animation: flash .22s ease-out 1; }
+  @keyframes flash { 0% {opacity: 0} 30% {opacity: .9} 100% {opacity: 0} }
 </style>
 </head>
 <body>
-  <div id="game-container" role="main" aria-label="Cyber Detective Game">
-    <h1>Cyber Detective</h1>
-    <h2>Case: CVE-2025-30066 - Supply Chain Intrusion</h2>
 
-    <div id="story-text">
-      <p>
-        Welcome, Agent. You've been called to investigate a suspicious open-source software repository,
-        rumored to harbor a stealthy supply chain attack. Your mission: solve the puzzles, uncover the attack vector,
-        and secure the system before it’s too late.
-      </p>
-      <p>Are you ready to dive into the depths of code and deception?</p>
-    </div>
+<canvas id="radar" width="280" height="280" aria-hidden="true"></canvas>
+<div id="particles" aria-hidden="true"></div>
 
-    <button id="start-btn" aria-label="Start Investigation">Start Investigation</button>
+<div class="stage" aria-live="polite">
+  <div class="lines">
+    <div id="l1" class="line l1"><span class="glitch" data-text="في عمق المستودعات…">في عمق المستودعات…</span></div>
+    <div id="l2" class="line l2"><span class="glitch" data-text="رقم واحد تكرر.">رقم واحد تكرر.</span></div>
 
-    <div id="game-area" style="display:none;">
-      <div id="message" aria-live="polite" aria-atomic="true"></div>
-      <input type="text" id="input-answer" placeholder="Type your answer here..." autocomplete="off" aria-label="Answer input" />
-      <button id="submit-btn" aria-label="Submit your answer">Submit
-        <span id="spinner"></span>
-      </button>
-      <div id="progress-container" aria-label="Progress bar">
-        <div id="progress-bar"></div>
-      </div>
-      <div id="clue-box" aria-live="polite" aria-atomic="true"></div>
-      <div id="door" role="alert">🚪 Secret Vault Unlocked! Mission Accomplished!</div>
-      <button id="restart-btn" aria-label="Restart the game">Restart Investigation</button>
-    </div>
+    <pre id="code" class="code"><code>
+./repo/
+ ├─ src/
+ │   ├─ core.py
+ │   ├─ utils.py
+ │   └─ index_<span class="hl">30066</span>.py
+ ├─ docs/
+ │   └─ notes_<span class="hl">30066</span>.md
+ ├─ .github/
+ │   └─ workflows/build.yml   # step echo "<span class="hl">30066</span>"
+ └─ setup.py                  # install hook → scans → "<span class="hl">30066</span>"
+    </code></pre>
+
+    <div id="l3" class="line l3"><span class="glitch" data-text="آلاف المشاريع…">آلاف المشاريع…</span></div>
+    <div id="l4" class="line l4"><span class="glitch" data-text="نفس النمط… نفس الخطر.">نفس النمط… نفس الخطر.</span></div>
+
+    <div id="logo" class="line logo"><span class="glitch" data-text="A0ZAI — المعلومة تسبق الحدث.">A0ZAI — المعلومة تسبق الحدث.</span></div>
   </div>
+</div>
+
+<div class="flash" id="flash"></div>
 
 <script>
-  const startBtn = document.getElementById('start-btn');
-  const gameArea = document.getElementById('game-area');
-  const message = document.getElementById('message');
-  const inputAnswer = document.getElementById('input-answer');
-  const submitBtn = document.getElementById('submit-btn');
-  const clueBox = document.getElementById('clue-box');
-  const door = document.getElementById('door');
-  const restartBtn = document.getElementById('restart-btn');
-  const spinner = document.getElementById('spinner');
-  const progressBar = document.getElementById('progress-bar');
 
-  // Sounds
-  const soundCorrect = new Audio('https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg');
-  const soundIncorrect = new Audio('https://actions.google.com/sounds/v1/cartoon/boing.ogg');
-  const soundUnlock = new Audio('https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg');
+const l1 = document.getElementById('l1');
+const l2 = document.getElementById('l2');
+const code = document.getElementById('code');
+const l3 = document.getElementById('l3');
+const l4 = document.getElementById('l4');
+const logo = document.getElementById('logo');
+const flash = document.getElementById('flash');
 
-  const puzzles = [
-    {
-      clue: `🕵️‍♂️ Puzzle 1:
-Attackers hide malicious code inside files that look legit.
-Which CWE number represents "Download of Code Without Integrity Check"?
-(Type the CWE number, e.g., 494)`,
-      answers: ['494'],
-      reveal: `✔️ CWE-494 - Download of Code Without Integrity Check:
-Attackers exploit the lack of verification, injecting malicious payloads during package download.`,
-      event: `System alert: You discovered the attacker’s first trick: silently slipping code past integrity checks.`
-    },
-    {
-      clue: `🔍 Puzzle 2:
-The malicious code is cleverly embedded inside the repository.
-Which CWE corresponds to "Embedded Malicious Code"?
-Type the CWE number (hint: between 500-600).`,
-      answers: ['506'],
-      reveal: `✔️ CWE-506 - Embedded Malicious Code:
-Malicious logic hidden within benign files to avoid detection.`,
-      event: `Notification: You've identified the core payload hiding within helper scripts.`
-    },
-    {
-      clue: `🧠 Puzzle 3:
-What is the main reason this attack succeeds without exploiting a direct software flaw?
-A) Implicit trust in repo structure
-B) Weak passwords
-C) Missing OS updates
-(Type A, B, or C)`,
-      answers: ['a', 'A'],
-      reveal: `✔️ Correct! The attack exploits implicit trust in the repository’s structure and naming conventions.`,
-      event: `Insight: The chain of trust is broken. Blind trust is your enemy.`
-    },
-    {
-      clue: `🛡️ Puzzle 4:
-Which preventative measure is most effective against such supply chain attacks?
-A) Manual review of all files and folders
-B) Ignoring repos from unknown sources
-C) Both A and B
-(Type A, B, or C)`,
-      answers: ['c', 'C'],
-      reveal: `✔️ Exactly! A combination of vigilance and skepticism is the best defense.`,
-      event: `Status Update: Security protocols updated with thorough manual audits and source verification.`
-    }
-  ];
+function sequence(){
+  // reset (لو حاب تعيد التشغيل نقدر نستدعي sequence من جديد)
+  [l1,l2,code,l3,l4,logo].forEach(el => el.classList.remove('show'));
+  flash.classList.remove('show');
 
-  let currentPuzzle = 0;
+  s(()=> l1.classList.add('show'), 50);           // 0.00s
+  s(()=> l2.classList.add('show'), 2000);         // 2.00s
+  s(()=> code.classList.add('show'), 4000);       // 4.00s
+  s(()=> l3.classList.add('show'), 7000);         // 7.00s
+  s(()=> l4.classList.add('show'), 7400);         // 7.40s
+  s(()=> flash.classList.add('show'), 9000);      // 9.00s
+  s(()=> logo.classList.add('show'), 9200);       // 9.20s
 
-  startBtn.onclick = () => {
-    startBtn.style.display = 'none';
-    gameArea.style.display = 'block';
-    inputAnswer.focus();
-    fadeIn(gameArea);
-    displayPuzzle();
-    updateProgress();
-  };
-
-  restartBtn.onclick = () => {
-    currentPuzzle = 0;
-    door.style.display = 'none';
-    door.classList.remove('unlocked');
-    restartBtn.style.display = 'none';
-    inputAnswer.style.display = 'inline-block';
-    submitBtn.style.display = 'inline-block';
-    inputAnswer.disabled = false;
-    submitBtn.disabled = false;
-    inputAnswer.value = '';
-    message.textContent = '';
-    clueBox.textContent = '';
-    gameArea.style.opacity = 1;
-    displayPuzzle();
-    updateProgress();
-    inputAnswer.focus();
-  };
-
-  function displayPuzzle() {
-    inputAnswer.value = '';
-    fadeOutIn(clueBox, () => {
-      clueBox.textContent = puzzles[currentPuzzle].clue;
-    });
-    fadeOutIn(message, () => {
-      message.textContent = `Puzzle ${currentPuzzle + 1} of ${puzzles.length}`;
-      message.className = '';
-    });
-    inputAnswer.style.borderColor = '#0077b6';
-    inputAnswer.disabled = false;
-    submitBtn.disabled = false;
-    spinner.style.visibility = 'hidden';
-  }
-
-  submitBtn.onclick = () => {
-    let userAnswer = inputAnswer.value.trim();
-    if (!userAnswer) {
-      alert('Please enter an answer!');
-      inputAnswer.focus();
-      return;
-    }
-    checkAnswer(userAnswer);
-  };
-
-  inputAnswer.addEventListener('keypress', e => {
-    if (e.key === 'Enter') submitBtn.click();
-  });
-
-  function checkAnswer(answer) {
-    inputAnswer.disabled = true;
-    submitBtn.disabled = true;
-    spinner.style.visibility = 'visible';
-
-    // Normalize answer for comparison (case-insensitive)
-    const normalizedAnswer = answer.toLowerCase();
-
-    // Check if answer is correct (case insensitive)
-    const validAnswers = puzzles[currentPuzzle].answers.map(ans => ans.toLowerCase());
-
-    setTimeout(() => {
-      spinner.style.visibility = 'hidden';
-      if (validAnswers.includes(normalizedAnswer)) {
-        message.className = 'correct';
-        soundCorrect.play();
-        animateMessage("✅ Correct! Processing...");
-        fadeOutIn(clueBox, () => {
-          clueBox.textContent = puzzles[currentPuzzle].reveal;
-        });
-        setTimeout(() => {
-          animateMessage(puzzles[currentPuzzle].event);
-          currentPuzzle++;
-          updateProgress();
-          if (currentPuzzle < puzzles.length) {
-            setTimeout(() => {
-              displayPuzzle();
-              inputAnswer.disabled = false;
-              submitBtn.disabled = false;
-              inputAnswer.focus();
-            }, 3500);
-          } else {
-            endGame();
-          }
-        }, 2000);
-      } else {
-        message.className = 'incorrect shake';
-        soundIncorrect.play();
-        animateMessage("❌ Incorrect answer. Try again!");
-        message.addEventListener('animationend', () => {
-          message.classList.remove('shake');
-        }, { once: true });
-        inputAnswer.disabled = false;
-        submitBtn.disabled = false;
-        inputAnswer.focus();
-      }
-    }, 1200);
-  }
-
-  function animateMessage(text) {
-    fadeOutIn(message, () => {
-      message.textContent = text;
-    });
-  }
-
-  function fadeOutIn(element, callback) {
-    element.style.transition = 'opacity 0.3s ease';
-    element.style.opacity = 0;
-    setTimeout(() => {
-      if (callback) callback();
-      element.style.opacity = 1;
-    }, 300);
-  }
-
-  function fadeIn(element) {
-    element.style.opacity = 0;
-    element.style.display = 'block';
-    setTimeout(() => {
-      element.style.opacity = 1;
-    }, 10);
-  }
-
-  function updateProgress() {
-    let progressPercent = ((currentPuzzle) / puzzles.length) * 100;
-    progressBar.style.width = `${progressPercent}%`;
-  }
-
-function startRoomMode() {
-  gameArea.style.display = 'none';
-
-  const roomContainer = document.createElement('div');
-  roomContainer.id = 'room-container';
-  roomContainer.style.position = 'relative';
-  roomContainer.style.width = '900px';
-  roomContainer.style.height = '600px';
-  roomContainer.style.margin = '40px auto';
-  roomContainer.style.background = 'linear-gradient(135deg, #303030, #606060)';
-  roomContainer.style.border = '3px solid #00ffd5';
-  roomContainer.style.borderRadius = '10px';
-  roomContainer.style.overflow = 'hidden';
-  document.getElementById('game-container').appendChild(roomContainer);
-
-  const player = document.createElement('div');
-  player.id = 'player';
-  player.style.width = '50px';
-  player.style.height = '50px';
-  player.style.backgroundColor = '#00ffd5';
-  player.style.position = 'absolute';
-  player.style.left = '60px';
-  player.style.top = '280px';
-  player.style.borderRadius = '10px';
-  player.style.transition = 'left 0.05s, top 0.05s';
-  roomContainer.appendChild(player);
-
-  const obstacles = [];
-
-  function createObstacle(x, y, width, height) {
-    const obs = document.createElement('div');
-    obs.className = 'obstacle';
-    obs.style.position = 'absolute';
-    obs.style.left = x + 'px';
-    obs.style.top = y + 'px';
-    obs.style.width = width + 'px';
-    obs.style.height = height + 'px';
-    obs.style.backgroundColor = '#ff4444';
-    obs.style.borderRadius = '5px';
-    roomContainer.appendChild(obs);
-    obstacles.push(obs);
-  }
-
-  createObstacle(200, 150, 100, 30);
-  createObstacle(400, 300, 50, 100);
-  createObstacle(600, 200, 80, 40);
-
-  const key = document.createElement('div');
-  key.id = 'key';
-  key.style.width = '30px';
-  key.style.height = '30px';
-  key.style.backgroundColor = 'gold';
-  key.style.position = 'absolute';
-  key.style.left = '800px';
-  key.style.top = '100px';
-  key.style.borderRadius = '5px';
-  key.style.boxShadow = '0 0 12px gold';
-  roomContainer.appendChild(key);
-
-  const roomDoor = document.createElement('div');
-  roomDoor.id = 'room-door';
-  roomDoor.style.width = '80px';
-  roomDoor.style.height = '140px';
-  roomDoor.style.backgroundColor = '#004d40';
-  roomDoor.style.position = 'absolute';
-  roomDoor.style.right = '20px';
-  roomDoor.style.bottom = '0';
-  roomDoor.style.borderRadius = '0 0 15px 15px';
-  roomDoor.style.boxShadow = 'inset 0 0 15px #00e5c0';
-  roomContainer.appendChild(roomDoor);
-
-  let hasKey = false;
-  const step = 5;
-  let posX = 60;
-  let posY = 280;
-
-  function checkCollision(el1, el2) {
-    const r1 = el1.getBoundingClientRect();
-    const r2 = el2.getBoundingClientRect();
-    return !(r1.right < r2.left || r1.left > r2.right || r1.bottom < r2.top || r1.top > r2.bottom);
-  }
-
-  function canMove(newX, newY) {
-    const playerRect = {
-      left: newX,
-      top: newY,
-      right: newX + player.clientWidth,
-      bottom: newY + player.clientHeight
-    };
-    const containerRect = roomContainer.getBoundingClientRect();
-
-    for (const obs of obstacles) {
-      const obsRect = obs.getBoundingClientRect();
-      const obsRelRect = {
-        left: obsRect.left - containerRect.left,
-        top: obsRect.top - containerRect.top,
-        right: obsRect.right - containerRect.left,
-        bottom: obsRect.bottom - containerRect.top
-      };
-      if (!(playerRect.right < obsRelRect.left || playerRect.left > obsRelRect.right ||
-          playerRect.bottom < obsRelRect.top || playerRect.top > obsRelRect.bottom)) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  function movePlayer(dx, dy) {
-    const newX = Math.min(Math.max(0, posX + dx), roomContainer.clientWidth - player.clientWidth);
-    const newY = Math.min(Math.max(0, posY + dy), roomContainer.clientHeight - player.clientHeight);
-
-    if (canMove(newX, newY)) {
-      posX = newX;
-      posY = newY;
-      player.style.left = posX + 'px';
-      player.style.top = posY + 'px';
-
-      if (!hasKey && checkCollision(player, key)) {
-        hasKey = true;
-        key.style.display = 'none';
-        alert('🔑 You found the key! Go unlock the door!');
-        roomDoor.style.backgroundColor = '#00ffd5';
-        roomDoor.style.boxShadow = '0 0 25px #00ffd5';
-      }
-
-      if (hasKey && checkCollision(player, roomDoor)) {
-        alert('🚪 You opened the door! Mission accomplished!');
-        restartBtn.onclick();
-      }
-    }
-  }
-
-  window.addEventListener('keydown', e => {
-    switch (e.key) {
-      case 'ArrowUp':
-      case 'w':
-      case 'W':
-        movePlayer(0, -step);
-        break;
-      case 'ArrowDown':
-      case 's':
-      case 'S':
-        movePlayer(0, step);
-        break;
-      case 'ArrowLeft':
-      case 'a':
-      case 'A':
-        movePlayer(-step, 0);
-        break;
-      case 'ArrowRight':
-      case 'd':
-      case 'D':
-        movePlayer(step, 0);
-        break;
-    }
-  });
-
-  let timeLeft = 90;
-  const timerDisplay = document.createElement('div');
-  timerDisplay.id = 'timer';
-  timerDisplay.style.position = 'absolute';
-  timerDisplay.style.top = '10px';
-  timerDisplay.style.right = '10px';
-  timerDisplay.style.color = '#00ffd5';
-  timerDisplay.style.fontSize = '24px';
-  timerDisplay.style.fontWeight = '700';
-  timerDisplay.style.textShadow = '0 0 10px #00ffd5';
-  roomContainer.appendChild(timerDisplay);
-
-  function updateTimer() {
-    timerDisplay.textContent = `Time Left: ${timeLeft}s`;
-    if (timeLeft === 0) {
-      alert('⏰ Time’s up! Mission failed!');
-      restartBtn.onclick();
-    }
-    timeLeft--;
-  }
-
-  updateTimer();
-  setInterval(updateTimer, 1000);
+  // (اختياري) إعادة التشغيل بعد 18 ثانية
+  // s(()=> sequence(), 18000);
 }
-function endGame() {
-  fadeOutIn(clueBox, () => {
-    clueBox.textContent = '';
-  });
-  animateMessage("🎉 Congratulations, Agent! You solved the case.");
-  door.style.display = 'block';
-  door.classList.add('unlocked');
-  soundUnlock.play();
+sequence();
 
-  inputAnswer.style.display = 'none';
-  submitBtn.style.display = 'none';
-  restartBtn.style.display = 'none';
+/* ===== 2) الرادار البسيط ===== */
+(function radar(){
+  const cvs = document.getElementById('radar');
+  const ctx = cvs.getContext('2d');
+  const W = cvs.width, H = cvs.height;
+  const cx = W/2, cy = H/2, r = Math.min(cx, cy) - 8;
+  let angle = 0;
 
-  setTimeout(() => {
-    startRoomMode();
-  }, 2000);
-}
+  function drawGrid(){
+    ctx.clearRect(0,0,W,H);
+    ctx.save();
+    ctx.translate(cx,cy);
+
+    // دوائر
+    ctx.strokeStyle = 'rgba(0,255,100,0.35)';
+    ctx.lineWidth = 1;
+    for(let i=1;i<=4;i++){
+      ctx.beginPath();
+      ctx.arc(0,0,(r/4)*i,0,Math.PI*2);
+      ctx.stroke();
+    }
+    // محاور
+    ctx.beginPath(); ctx.moveTo(-r,0); ctx.lineTo(r,0); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0,-r); ctx.lineTo(0,r); ctx.stroke();
+
+    ctx.restore();
+  }
+
+  function sweep(){
+    drawGrid();
+    ctx.save();
+    ctx.translate(cx,cy);
+
+    // مخروط المسح
+    const grd = ctx.createRadialGradient(0,0,0, 0,0,r);
+    grd.addColorStop(0, 'rgba(0,255,120,0.15)');
+    grd.addColorStop(1, 'rgba(0,255,120,0.0)');
+    ctx.fillStyle = grd;
+
+    ctx.beginPath();
+    const width = Math.PI/16; // عرض الشعاع
+    ctx.moveTo(0,0);
+    ctx.arc(0,0,r, angle - width, angle + width, false);
+    ctx.closePath();
+    ctx.fill();
+
+    // خط الشعاع
+    ctx.strokeStyle = 'rgba(0,255,160,0.55)';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(0,0);
+    ctx.lineTo(r * Math.cos(angle), r * Math.sin(angle));
+    ctx.stroke();
+
+    ctx.restore();
+    angle += 0.035; // سرعة الدوران
+    requestAnimationFrame(sweep);
+  }
+  sweep();
+})();
+
+
+tsParticles.load("particles", {
+  particles: {
+    number: { value: 80, density: { enable: true, area: 800 } },
+    color: { value: "#ff0000" },
+    shape: { type: "circle" },
+    opacity: { value: 0.35, random: false },
+    size: { value: 1.8, random: { enable: true, minimumValue: 0.6 } },
+    links: { enable: false },
+    move: { enable: true, speed: 0.6, direction: "none", random: true, outModes: "out" }
+  },
+  detectRetina: true,
+  background: { color: "transparent" }
+});
 </script>
 </body>
 </html>
