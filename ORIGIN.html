@@ -35,7 +35,6 @@
         const material = new THREE.MeshStandardMaterial({ color: 0x00ffff, metalness: 0.8, roughness: 0.2 });
         const torusKnot = new THREE.Mesh(geometry, material);
         scene.add(torusKnot);
-
         // إضافة إضاءة
         const light = new THREE.PointLight(0xffffff, 2, 100);
         light.position.set(10, 10, 10);
