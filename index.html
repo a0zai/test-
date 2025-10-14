@@ -12,7 +12,6 @@
       margin: 0;
       padding: 0;
       height: 100%;
-      background: #000;
       font-family: 'Courier New', monospace;
       color: #00ffcc;
       overflow: auto;
@@ -20,6 +19,14 @@
   flex-direction: column;
     }
     
+  #particles-js {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+    }
 
  
     #rafat-title {
@@ -82,6 +89,8 @@ body {
  </head>
 
 <body>
+
+  <div id="particles-js"></div>
 
   <div id="rafat-title">▓</div>
  
