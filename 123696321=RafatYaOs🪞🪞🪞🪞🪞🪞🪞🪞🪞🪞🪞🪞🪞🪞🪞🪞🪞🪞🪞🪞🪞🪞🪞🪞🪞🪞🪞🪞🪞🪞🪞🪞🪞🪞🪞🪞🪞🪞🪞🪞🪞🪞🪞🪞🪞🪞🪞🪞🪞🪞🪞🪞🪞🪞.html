@@ -1,61 +1,106 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A∞Z test AI</title>
-    <style>
-        body { margin: 0; overflow: hidden; background: black; }
-        canvas { display: block; }
-        h1 {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-family: Arial, sans-serif;
-            font-size: 3em;
-            color: cyan;
-            text-shadow: 0 0 15px cyan;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A0Z Portal</title>
+<style>
+  body {
+    background: #111;
+    color: #eee;
+    font-family: "Courier New", monospace;
+    margin: 0;
+    padding: 0;
+    transition: background 0.5s ease;
+  }
+
+  .menu {
+    background: #222;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .hamburger {
+    font-size: 26px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .menu-list {
+    display: none;
+    flex-direction: column;
+    background: #222;
+  }
+
+  .menu-list a {
+    color: #fff;
+    padding: 10px;
+    text-decoration: none;
+    border-top: 1px solid #333;
+  }
+
+  .menu-list a:hover {
+    background: #660000;
+  }
+
+  .content {
+    padding: 20px;
+  }
+
+  .fade {
+    animation: fadeIn 0.7s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+</style>
 </head>
 <body>
-    <h1>A∞Z Quantum AI</h1>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script>
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        document.body.appendChild(renderer.domElement);
 
-        // إنشاء حلقة ثلاثية الأبعاد
-        const geometry = new THREE.TorusKnotGeometry(10, 3, 100, 16);
-        const material = new THREE.MeshStandardMaterial({ color: 0x00ffff, metalness: 0.8, roughness: 0.2 });
-        const torusKnot = new THREE.Mesh(geometry, material);
-        scene.add(torusKnot);
-        // إضافة إضاءة
-        const light = new THREE.PointLight(0xffffff, 2, 100);
-        light.position.set(10, 10, 10);
-        scene.add(light);
+<div class="menu">
+  <div class="hamburger" onclick="toggleMenu()">☰</div>
+  <div class="menu-list" id="menuList">
+    <a href="#" onclick="showSection('home')">🏠 الرئيسية</a>
+    <a href="#" onclick="showSection('about')">🧭 عن المشروع</a>
+    <a href="#" onclick="showSection('room')">🪞 الغرفة السرّية</a>
+  </div>
+</div>
 
-        // وضع الكاميرا
-        camera.position.z = 30;
+<div class="content fade" id="content">
+  <h2>👋 أهلاً بك في بوابة A0Z</h2>
+  <p>اختر من القائمة لاكتشاف الأقسام.</p>
+</div>
 
-        // دالة التحريك
-        function animate() {
-            requestAnimationFrame(animate);
-            torusKnot.rotation.x += 0.01;
-            torusKnot.rotation.y += 0.005;
-            renderer.render(scene, camera);
-        }
-        animate();
+<script>
+function toggleMenu() {
+  const menu = document.getElementById("menuList");
+  menu.style.display = (menu.style.display === "flex") ? "none" : "flex";
+}
 
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
-    </script>
+function showSection(section) {
+  const content = document.getElementById("content");
+  content.classList.add("fade");
+
+  if (section === "home") {
+    document.body.style.background = "#111";
+    content.innerHTML = "<h2>🏠 الرئيسية</h2><p>مرحباً بك في الصفحة الرئيسية.</p>";
+  } 
+  else if (section === "about") {
+    document.body.style.background = "#222";
+    content.innerHTML = "<h2>🧭 عن المشروع</h2><p>هذا مشروع تجريبي لتصميم واجهات تفاعلية باستخدام HTML وCSS وJavaScript فقط.</p>";
+  } 
+  else if (section === "room") {
+    document.body.style.background = "#300";
+    content.innerHTML = "<h2>🪞 الغرفة السرّية</h2><p>تم الدخول إلى البعد الآخر... 🌀</p>";
+  }
+
+  setTimeout(() => content.classList.remove("fade"), 700);
+}
+</script>
+
 </body>
 </html>
