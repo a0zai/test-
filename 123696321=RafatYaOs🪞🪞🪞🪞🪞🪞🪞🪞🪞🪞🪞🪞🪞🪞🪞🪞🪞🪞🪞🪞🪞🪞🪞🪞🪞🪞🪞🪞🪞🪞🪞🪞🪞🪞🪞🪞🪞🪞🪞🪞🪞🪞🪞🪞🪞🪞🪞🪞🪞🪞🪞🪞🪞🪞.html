@@ -42,8 +42,6 @@ async function send() {
   userDiv.textContent = msg;
   messagesEl.appendChild(userDiv);
   messagesEl.scrollTop = messagesEl.scrollHeight;
-
-  // عرض رسالة مؤقتة للرد
   const botDiv = document.createElement("div");
   botDiv.className = "message bot";
   botDiv.textContent = "Thinking... ⏳";
