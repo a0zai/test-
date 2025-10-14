@@ -2781,12 +2781,6 @@ function showLine() {
 showLine();
 </script>
 <script>
-function toggleMenu() {
-  const menu = document.getElementById("menuList");
-  menu.style.display = (menu.style.display === "flex") ? "none" : "flex";
-}
-</script>
-<script>
 particlesJS("particles-js", {
   "particles": {
     "number": {
@@ -2816,27 +2810,11 @@ particlesJS("particles-js", {
  }
 });
 </script>
-<script src="YA.RAFAT.SELFLEARN.js"></script>
-<script src="commandActions.js"></script>
-  <script>
-    const freq = 123.696321;
-  const synth = new Tone.Synth({
-    oscillator: { type: "sine" },
-    envelope: { attack: 2, decay: 1, sustain: 0.5, release: 3 }
-  }).toDestination();
-
-  const notes = [freq, freq / 2, freq * 2];
-  let i = 0;
-
-  document.getElementById("startAudio").addEventListener("click", async () => {
-    await Tone.start();
-    Tone.Transport.scheduleRepeat(time => {
-      synth.triggerAttackRelease(notes[i % notes.length], "4n", time);
-      i++;
-    }, "2n");
-    Tone.Transport.start();
-  });
-
-  </script>
+<script>
+function toggleMenu() {
+  const menu = document.getElementById("menuList");
+  menu.style.display = (menu.style.display === "flex") ? "none" : "flex";
+}
+</script>
 </body>
 </html>
