@@ -2,7 +2,7 @@
     <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>▓</title>
+  <title>👑</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.46/Tone.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
@@ -19,7 +19,45 @@
         display: flex;
   flex-direction: column;
     }
-    
+    /
+  .menu {
+    background: #222;
+    padding: 10px;
+    display: flex;
+    justify-content: flex-start; /* الهامبرغر يسار */
+    align-items: center;
+    position: relative;
+  }
+
+  /* زر الهامبرغر */
+  .hamburger {
+    font-size: 26px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  /* القائمة المنسدلة */
+  .menu-list {
+    display: none;
+    flex-direction: column;
+    background: #222;
+    position: absolute;
+    top: 50px;
+    left: 0;
+    width: 200px;
+    border: 1px solid #333;
+  }
+
+  .menu-list a {
+    color: #fff;
+    padding: 10px;
+    text-decoration: none;
+    border-top: 1px solid #333;
+  }
+
+  .menu-list a:hover {
+    background: #660000;
+    }
   #particles-js {
   position: fixed;
   top: 0;
@@ -92,8 +130,16 @@ body {
 <body>
 
   <div id="particles-js"></div>
+<div class="menu">
+  <div class="hamburger" onclick="toggleMenu()">☰</div>
+  <div class="menu-list" id="menuList">
+    <a href="1.html">🏠</a>
+    <a href="2.html">🧭</a>
+    <a href="3.html"></a>
+  </div>
+</div>
 
-  <div id="rafat-title">▓</div>
+  <div id="rafat-title">👑</div>
  
   <div id="terminal"></div>
 
@@ -2734,6 +2780,12 @@ function showLine() {
 }
 
 showLine();
+</script>
+<script>
+function toggleMenu() {
+  const menu = document.getElementById("menuList");
+  menu.style.display = (menu.style.display === "flex") ? "none" : "flex";
+}
 </script>
 <script>
 particlesJS("particles-js", {
