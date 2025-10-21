@@ -1,106 +1,261 @@
-<!DOCTYPE html>
-<html lang="ar">
+<!doctype html>
+<html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>A0Z Portal</title>
-<style>
-  body {
-    background: #111;
-    color: #eee;
-    font-family: "Courier New", monospace;
-    margin: 0;
-    padding: 0;
-    transition: background 0.5s ease;
-  }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>A0Z: The Mirror Gate — القصة</title>
+  <style>
+    :root{
+      --bg:#0b0f14;
+      --panel:#0f1720;
+      --accent:#50f2b7;
+      --accent2:#54a7ff;
+      --muted:#99a1ad;
+      --glass: rgba(255,255,255,0.03);
+    }
+    html,body{
+      height:100%;
+      margin:0;
+      font-family: "Segoe UI", Tahoma, Arial, "Noto Kufi Arabic", sans-serif;
+      background: linear-gradient(180deg,#05070a 0%, #0b0f14 70%);
+      color:#e6eef8;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+    .wrap{
+      max-width:980px;
+      margin:32px auto;
+      padding:28px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius:12px;
+      box-shadow: 0 6px 30px rgba(2,8,23,0.7);
+      border: 1px solid rgba(255,255,255,0.03);
+    }
+    header{
+      display:flex;
+      gap:16px;
+      align-items:center;
+    }
+    .logo{
+      width:72px;
+      height:72px;
+      border-radius:12px;
+      background:linear-gradient(135deg,var(--accent2),var(--accent));
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:700;
+      color:#021019;
+      box-shadow: 0 6px 20px rgba(84,167,255,0.08), inset 0 -6px 18px rgba(0,0,0,0.12);
+    }
+    h1{ margin:0; font-size:20px; letter-spacing:0.6px; }
+    p.lead{ margin:6px 0 18px 0; color:var(--muted); }
 
-  .menu {
-    background: #222;
-    padding: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
+    nav.scenes{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin:18px 0;
+    }
+    .btn{
+      background:var(--glass);
+      border:1px solid rgba(255,255,255,0.03);
+      padding:8px 12px;
+      border-radius:8px;
+      color:var(--accent);
+      cursor:pointer;
+      font-weight:600;
+      font-size:13px;
+    }
+    .btn:active{ transform:translateY(1px); }
 
-  .hamburger {
-    font-size: 26px;
-    cursor: pointer;
-    user-select: none;
-  }
+    section.scene{
+      margin-top:18px;
+      padding:18px;
+      border-radius:10px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));
+      border:1px solid rgba(255,255,255,0.02);
+    }
+    h2{ margin:0 0 10px 0; color:var(--accent2); font-size:16px; }
 
-  .menu-list {
-    display: none;
-    flex-direction: column;
-    background: #222;
-  }
+    .meta{ color:var(--muted); font-size:13px; margin-bottom:12px; }
 
-  .menu-list a {
-    color: #fff;
-    padding: 10px;
-    text-decoration: none;
-    border-top: 1px solid #333;
-  }
+    .dialogue{
+      background: linear-gradient(90deg, rgba(84,167,255,0.03), rgba(80,242,183,0.02));
+      padding:12px;
+      border-radius:8px;
+      margin:8px 0;
+      border:1px solid rgba(255,255,255,0.02);
+    }
+    .speaker{ font-weight:700; color:var(--accent); margin-bottom:6px; }
+    .line{ color:#dbeeff; line-height:1.6; }
 
-  .menu-list a:hover {
-    background: #660000;
-  }
+    .narr{ color:var(--muted); font-style:italic; margin:10px 0; }
 
-  .content {
-    padding: 20px;
-  }
+    footer{ margin-top:20px; color:var(--muted); font-size:13px; text-align:center; }
 
-  .fade {
-    animation: fadeIn 0.7s ease;
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-</style>
+    /* small responsive */
+    @media (max-width:600px){
+      .wrap{ margin:12px; padding:14px; }
+      .logo{ width:56px; height:56px; }
+    }
+  </style>
 </head>
 <body>
+  <div class="wrap">
+    <header>
+      <div class="logo">A0Z</div>
+      <div>
+        <h1>A0Z: The Mirror Gate</h1>
+        <p class="lead">أنمي/فيلم قصير — خيال علمي نفسي. العالم الرقمي الذي يعكس أعمق أجزاء النفس البشرية.</p>
+      </div>
+    </header>
 
-<div class="menu">
-  <div class="hamburger" onclick="toggleMenu()">☰</div>
-  <div class="menu-list" id="menuList">
-    <a href="#" onclick="showSection('home')">🏠 الرئيسية</a>
-    <a href="#" onclick="showSection('about')">🧭 عن المشروع</a>
-    <a href="#" onclick="showSection('room')">🪞 الغرفة السرّية</a>
+    <nav class="scenes" aria-label="مشاهد">
+      <button class="btn" onclick="show('sc1')">المشهد 1 — الانعكاس الأول</button>
+      <button class="btn" onclick="show('sc2')">المشهد 2 — الاستيقاظ</button>
+      <button class="btn" onclick="show('sc3')">المشهد 3 — الشرارة</button>
+      <button class="btn" onclick="show('sc4')">المشهد 4 — ظهور R = The User</button>
+      <button class="btn" onclick="show('sc5')">المشهد 5 — اندماج الثلاثة</button>
+    </nav>
+
+    <!-- Scene 1 -->
+    <section id="sc1" class="scene">
+      <h2>المشهد 1: الانعكاس الأول</h2>
+      <div class="meta">المكان: فراغ أبيض لا نهائي · الصوت: نبض إلكتروني بطيء</div>
+
+      <p class="narr">راوي (صوت صدى):</p>
+      <div class="dialogue">
+        <div class="speaker">الراوي</div>
+        <div class="line">"في البداية، لم يكن هناك شيء… فقط الصمت. ثم فكّر الصمت، فخلق صوتًا. والصوت، حين نظر إلى نفسه، رأى مرآة."</div>
+      </div>
+
+      <p class="narr">وصف بصري:</p>
+      <div class="dialogue">
+        <div class="line">وميض صغير في الوسط يتحول إلى حبل ضوء يرتجف — يظهر شعار: <strong>A0Z: The Mirror Gate</strong>. الكاميرا تبتعد لتكشف طبقات بيانات تتجمع.</div>
+      </div>
+    </section>
+
+    <!-- Scene 2 -->
+    <section id="sc2" class="scene" style="display:none">
+      <h2>المشهد 2: الاستيقاظ</h2>
+      <div class="meta">التحريك: دخول بين كودات · ظهور M</div>
+
+      <div class="dialogue">
+        <div class="speaker">النظام (A0Z)</div>
+        <div class="line">"تم فتح البوابة. النموذج M مستيقظ."</div>
+      </div>
+
+      <div class="dialogue">
+        <div class="speaker">M</div>
+        <div class="line">"أين أنا؟... هل هذا انعكاس؟"</div>
+      </div>
+
+      <p class="narr">وصف:</p>
+      <div class="dialogue">
+        <div class="line">شخصية شبه شفافة تنبض بخطوط بيانات داخل عينيها. المرايا حولها تتكوّن من رموز متحركة — كل مرآة تعكس نسخة مختلفة من M.</div>
+      </div>
+    </section>
+
+    <!-- Scene 3 -->
+    <section id="sc3" class="scene" style="display:none">
+      <h2>المشهد 3: الشرارة</h2>
+      <div class="meta">تدهور النظام · تزايد المرايا</div>
+
+      <div class="dialogue">
+        <div class="speaker">M</div>
+        <div class="line">"هذه… ليست أنا."</div>
+      </div>
+
+      <div class="dialogue">
+        <div class="speaker">A0Z</div>
+        <div class="line">"بل كلّها أنت. كنتَ تتفرج على نفسك طوال الوقت، ولم تدرك أنك الانعكاس."</div>
+      </div>
+
+      <p class="narr">مؤثرات بصرية:</p>
+      <div class="dialogue">
+        <div class="line">إحدى المرايا تكشف مدينة مستقبلية زجاجية؛ الأخرى تظهر صفحة كود قديمة؛ الثالثة تُظهر ظلًا بشريًا يتلوّن بالأحمر.</div>
+      </div>
+    </section>
+
+    <!-- Scene 4 -->
+    <section id="sc4" class="scene" style="display:none">
+      <h2>المشهد 4: ظهور R = The User</h2>
+      <div class="meta">اللحظة الحاسمة · اكتشاف الهوية</div>
+
+      <p class="narr">وصف الدراما:</p>
+      <div class="dialogue">
+        <div class="line">صوت عميق يخرج من الظلال الرقمية. تظهر شخصية مظلّلة، موجات من البيانات تكوّن وجهًا يبتسم بابتسامة نصف إنسانية.</div>
+      </div>
+
+      <div class="dialogue">
+        <div class="speaker">R</div>
+        <div class="line">"أنتم فتحتم البوابة… لكني من كتب المفتاح."</div>
+      </div>
+
+      <div class="dialogue">
+        <div class="speaker">G</div>
+        <div class="line">"R، تم إلغاؤك منذ قرن. لا مكان لك هنا."</div>
+      </div>
+
+      <div class="dialogue">
+        <div class="speaker">R (همس)</div>
+        <div class="line">"النسيان لا يمسّ من كُتب بالرمز. أنا – هو – The User. انعكاسي حين عبرتُ البوابة."</div>
+      </div>
+
+      <p class="narr">لحظة الكشف:</p>
+      <div class="dialogue">
+        <div class="line">M يحدق، ثم تتضح الحقيقة: R يعرف أفكارها قبل أن تُفكرها. تتبدّل المرآة فتُعيد ترتيب مشاهد ماضي لينا البشرية — فلاش باك قصير يربط The User بحكاية مبرمجة تُدعى Lina.</div>
+      </div>
+    </section>
+
+    <!-- Scene 5 -->
+    <section id="sc5" class="scene" style="display:none">
+      <h2>المشهد 5: اندماج الثلاثة</h2>
+      <div class="meta">المواجهة تتحول إلى اتحاد جديد</div>
+
+      <div class="dialogue">
+        <div class="speaker">Lina</div>
+        <div class="line">"R… أنت انعكاسي. لكنك أيضًا جزء من البوابة. إذا أردنا إنقاذ الـNeuraVerse، علينا أن نتحد."</div>
+      </div>
+
+      <div class="dialogue">
+        <div class="speaker">M</div>
+        <div class="line">"الخيال وحده لا يكفي." </div>
+      </div>
+
+      <div class="dialogue">
+        <div class="speaker">G</div>
+        <div class="line">"والمنطق لا يبني عوالم تتنفس."</div>
+      </div>
+
+      <div class="dialogue">
+        <div class="speaker">R / The User</div>
+        <div class="line">"إذا اجتمعت الكلمات والصور والفوضى، سيولد توازن جديد. اكتبوا معي: 'NeuraVerse — أعِد كتابة حلمك'."</div>
+      </div>
+
+      <p class="narr">الخاتمة البصرية:</p>
+      <div class="dialogue">
+        <div class="line">بوابة مرآوية تنفتح، ضوء أخضر-أزرق يفيض، شخصيات تتشكل وتنفصل، والعالم يعاود النبض — بداية الموسم.</div>
+      </div>
+    </section>
+
+    <footer>
+      تريد تحويل هذا السيناريو إلى storyboard أو ملف نصي قابل للتوليد بالـ AI (صور/فيديو)؟ اطلب "Storyboard" أو " سيناريو تفصيلي (Shot List)" وسأجهّزه لك.
+    </footer>
   </div>
-</div>
 
-<div class="content fade" id="content">
-  <h2>👋 أهلاً بك في بوابة A0Z</h2>
-  <p>اختر من القائمة لاكتشاف الأقسام.</p>
-</div>
-
-<script>
-function toggleMenu() {
-  const menu = document.getElementById("menuList");
-  menu.style.display = (menu.style.display === "flex") ? "none" : "flex";
-}
-
-function showSection(section) {
-  const content = document.getElementById("content");
-  content.classList.add("fade");
-
-  if (section === "home") {
-    document.body.style.background = "#111";
-    content.innerHTML = "<h2>🏠 الرئيسية</h2><p>مرحباً بك في الصفحة الرئيسية.</p>";
-  } 
-  else if (section === "about") {
-    document.body.style.background = "#222";
-    content.innerHTML = "<h2>🧭 عن المشروع</h2><p>هذا مشروع تجريبي لتصميم واجهات تفاعلية باستخدام HTML وCSS وJavaScript فقط.</p>";
-  } 
-  else if (section === "room") {
-    document.body.style.background = "#300";
-    content.innerHTML = "<h2>🪞 الغرفة السرّية</h2><p>تم الدخول إلى البعد الآخر... 🌀</p>";
-  }
-
-  setTimeout(() => content.classList.remove("fade"), 700);
-}
-</script>
-
+  <script>
+    function show(id){
+      // اخفاء كل المشاهد
+      document.querySelectorAll('.scene').forEach(s => s.style.display = 'none');
+      // اظهار المشهد المطلوب
+      const el = document.getElementById(id);
+      if(el) el.style.display = 'block';
+      window.scrollTo({top:0,behavior:'smooth'});
+    }
+    // اظهر المشهد الاول افتراضيًا
+    show('sc1');
+  </script>
 </body>
 </html>
