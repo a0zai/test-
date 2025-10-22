@@ -2,23 +2,24 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>MP test</title>
+<title> test2</title>
 <style>
 body {
   margin:0;
   padding:0;
   font-family: monospace;
   overflow:hidden;
-  background:black;
-  transition: transform 0.2s ease;
+  transition: transform 0.3s ease;
 }
 #bg {
-  position:fixed;
-  top:0; left:0;
-  width:100%; height:100%;
+  position: fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
   z-index:-1;
   background:black;
-  transition: background 0.5s ease;
+  transition: background 0.3s ease;
 }
 #terminal {
   width:800px;
@@ -32,31 +33,37 @@ body {
   position: relative;
   z-index:1;
 }
-.char, .scene-img, .anime-icon {
-  position:relative;
+.char {
   display:inline-block;
   opacity:0;
-  transition: all 0.2s linear;
+  position:relative;
+  transition: all 0.3s ease;
 }
-.scene-img, .anime-icon { width:80px; margin-top:5px; border:2px solid lime; }
+.scene-img, .anime-icon {
+  width:80px;
+  border:2px solid lime;
+  margin-top:5px;
+  display:none;
+  position:relative;
+}
 </style>
 </head>
 <body>
 
 <div id="bg"></div>
 <div id="terminal"></div>
-
-<audio id="sound1" src="https://www.soundjay.com/button/sounds/button-16.mp3"></audio>
-<audio id="sound2" src="https://www.soundjay.com/button/sounds/button-09.mp3"></audio>
-<audio id="music" src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3" autoplay loop></audio>
+<audio id="effectSound1" src="https://www.soundjay.com/button/sounds/button-16.mp3"></audio>
+<audio id="effectSound2" src="https://www.soundjay.com/button/sounds/button-09.mp3"></audio>
+<audio id="effectMusic" src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3" autoplay></audio>
 
 <script>
-const terminal = document.getElementById("terminal");
-const bg = document.getElementById("bg");
-const sound1 = document.getElementById("sound1");
-const sound2 = document.getElementById("sound2");
+const terminal=document.getElementById("terminal");
+const bg=document.getElementById("bg");
+const sound1=document.getElementById("effectSound1");
+const sound2=document.getElementById("effectSound2");
+const music=document.getElementById("effectMusic");
 
-const scenes = [
+const scenes=[
   {text:"💀 The portal opens...\n", bg:"linear-gradient(135deg,#000000,#111111)", icon:"https://via.placeholder.com/80x80?text=💀"},
   {text:"⚡ FH world forms...\n", bg:"linear-gradient(135deg,#220022,#440044)", icon:"https://via.placeholder.com/80x80?text=⚡"},
   {text:"🔥 Philosophy + Code + Chaos...\n", bg:"linear-gradient(135deg,#330000,#660000)", img:"https://via.placeholder.com/300x150?text=Scene+Anime", icon:"https://via.placeholder.com/80x80?text=🔥"},
@@ -64,22 +71,25 @@ const scenes = [
   {text:"⚡ Anime film begins now!\n", bg:"linear-gradient(135deg,#440044,#770077)"}
 ];
 
-let sceneIndex=0, charIndex=0;
+let sceneIndex=0;
+let charIndex=0;
 
-function randomColor(){const colors=["lime","cyan","yellow","magenta","red","orange"]; return colors[Math.floor(Math.random()*colors.length)];}
+function randomColor(){const colors=["lime","cyan","yellow","magenta","red","orange"];return colors[Math.floor(Math.random()*colors.length)];}
 
-// cinematic-chaos motion for elements
-function mpMotion(el){
+// chaotic motion with amplitude for hollywood style
+function hollywoodMotion(span, delay){
   let angle=Math.random()*10;
-  setInterval(()=>{
-    angle+=0.25+Math.random()*0.2;
-    const radius=Math.random()*10+2;
-    const x=Math.cos(angle)*radius+Math.random()*2-1;
-    const y=Math.sin(angle)*radius+Math.random()*2-1;
-    el.style.left=`${x}px`;
-    el.style.top=`${y}px`;
-    el.style.transform=`rotate(${Math.sin(angle*3)*25}deg) scale(${0.7+Math.abs(Math.sin(angle))*0.6})`;
+  const radius=Math.random()*8+3;
+  const interval=setInterval(()=>{
+    angle+=0.3+Math.random()*0.2;
+    const x=Math.cos(angle+delay)*radius + Math.random()*2-1;
+    const y=Math.sin(angle+delay)*radius + Math.random()*2-1;
+    span.style.left=`${x}px`;
+    span.style.top=`${y}px`;
+    // dynamic rotation & scale
+    span.style.transform=`rotate(${Math.sin(angle*3)*20}deg) scale(${0.8+Math.abs(Math.sin(angle))*0.4})`;
   },30);
+  return interval;
 }
 
 function typeScene(){
@@ -92,20 +102,22 @@ function typeScene(){
       span.textContent=scene.text[charIndex];
       span.className='char';
       span.style.color=randomColor();
+      span.style.opacity=0;
       terminal.appendChild(span);
 
-      mpMotion(span);
+      hollywoodMotion(span,charIndex);
 
       setTimeout(()=>{
         span.style.opacity=1;
-        terminal.scrollTop = terminal.scrollHeight;
+        terminal.scrollTop=terminal.scrollHeight;
         if(Math.random()<0.3) sound1.play();
         if(Math.random()<0.2) sound2.play();
-        bg.style.background=`linear-gradient(135deg, rgba(${Math.floor(Math.random()*100)},0,${Math.floor(Math.random()*100)},0.7), ${scene.bg})`;
+        // background flash
+        bg.style.background=`linear-gradient(135deg, rgba(${Math.floor(Math.random()*50)},0,${Math.floor(Math.random()*50)},0.7), ${scene.bg})`;
       },20);
 
       charIndex++;
-      setTimeout(typeScene,40);
+      setTimeout(typeScene,50);
     } else {
       charIndex=0;
 
@@ -115,7 +127,8 @@ function typeScene(){
         img.className="scene-img";
         terminal.appendChild(img);
         img.style.display="block";
-        mpMotion(img);
+        terminal.scrollTop=terminal.scrollHeight;
+        setInterval(()=>{img.style.transform=`translate(${Math.random()*6-3}px,${Math.random()*6-3}px) rotate(${Math.random()*15-7}deg)`},200);
       }
 
       if(scene.icon){
@@ -124,21 +137,23 @@ function typeScene(){
         icon.className="anime-icon";
         terminal.appendChild(icon);
         icon.style.display="block";
-        mpMotion(icon);
+        setInterval(()=>{
+          icon.style.transform=`translate(${Math.random()*10-5}px,${Math.random()*10-5}px) rotate(${Math.random()*30-15}deg) scale(${0.8+Math.random()*0.4})`;
+        },300);
       }
 
-      // camera continuous chaos
-      setInterval(()=>{
-        document.body.style.transform=`translate(${Math.random()*12-6}px, ${Math.random()*12-6}px) scale(${1+Math.random()*0.06})`;
-      },100);
+      // camera shake + zoom
+      document.body.style.transform=`translate(${Math.random()*10-5}px, ${Math.random()*10-5}px) scale(${1+Math.random()*0.05})`;
+      setTimeout(()=>document.body.style.transform=`translate(0,0) scale(1)`,300);
 
       sceneIndex++;
-      setTimeout(typeScene,500);
+      setTimeout(typeScene,700);
     }
   }
 }
 
 typeScene();
 </script>
+
 </body>
 </html>
