@@ -1,261 +1,144 @@
-<!doctype html>
-<html lang="ar" dir="rtl">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>A0Z: The Mirror Gate — القصة</title>
-  <style>
-    :root{
-      --bg:#0b0f14;
-      --panel:#0f1720;
-      --accent:#50f2b7;
-      --accent2:#54a7ff;
-      --muted:#99a1ad;
-      --glass: rgba(255,255,255,0.03);
-    }
-    html,body{
-      height:100%;
-      margin:0;
-      font-family: "Segoe UI", Tahoma, Arial, "Noto Kufi Arabic", sans-serif;
-      background: linear-gradient(180deg,#05070a 0%, #0b0f14 70%);
-      color:#e6eef8;
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-    }
-    .wrap{
-      max-width:980px;
-      margin:32px auto;
-      padding:28px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-      border-radius:12px;
-      box-shadow: 0 6px 30px rgba(2,8,23,0.7);
-      border: 1px solid rgba(255,255,255,0.03);
-    }
-    header{
-      display:flex;
-      gap:16px;
-      align-items:center;
-    }
-    .logo{
-      width:72px;
-      height:72px;
-      border-radius:12px;
-      background:linear-gradient(135deg,var(--accent2),var(--accent));
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-weight:700;
-      color:#021019;
-      box-shadow: 0 6px 20px rgba(84,167,255,0.08), inset 0 -6px 18px rgba(0,0,0,0.12);
-    }
-    h1{ margin:0; font-size:20px; letter-spacing:0.6px; }
-    p.lead{ margin:6px 0 18px 0; color:var(--muted); }
-
-    nav.scenes{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      margin:18px 0;
-    }
-    .btn{
-      background:var(--glass);
-      border:1px solid rgba(255,255,255,0.03);
-      padding:8px 12px;
-      border-radius:8px;
-      color:var(--accent);
-      cursor:pointer;
-      font-weight:600;
-      font-size:13px;
-    }
-    .btn:active{ transform:translateY(1px); }
-
-    section.scene{
-      margin-top:18px;
-      padding:18px;
-      border-radius:10px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));
-      border:1px solid rgba(255,255,255,0.02);
-    }
-    h2{ margin:0 0 10px 0; color:var(--accent2); font-size:16px; }
-
-    .meta{ color:var(--muted); font-size:13px; margin-bottom:12px; }
-
-    .dialogue{
-      background: linear-gradient(90deg, rgba(84,167,255,0.03), rgba(80,242,183,0.02));
-      padding:12px;
-      border-radius:8px;
-      margin:8px 0;
-      border:1px solid rgba(255,255,255,0.02);
-    }
-    .speaker{ font-weight:700; color:var(--accent); margin-bottom:6px; }
-    .line{ color:#dbeeff; line-height:1.6; }
-
-    .narr{ color:var(--muted); font-style:italic; margin:10px 0; }
-
-    footer{ margin-top:20px; color:var(--muted); font-size:13px; text-align:center; }
-
-    /* small responsive */
-    @media (max-width:600px){
-      .wrap{ margin:12px; padding:14px; }
-      .logo{ width:56px; height:56px; }
-    }
-  </style>
+<meta charset="UTF-8">
+<title>MP test</title>
+<style>
+body {
+  margin:0;
+  padding:0;
+  font-family: monospace;
+  overflow:hidden;
+  background:black;
+  transition: transform 0.2s ease;
+}
+#bg {
+  position:fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  z-index:-1;
+  background:black;
+  transition: background 0.5s ease;
+}
+#terminal {
+  width:800px;
+  height:500px;
+  margin:50px auto;
+  border:2px solid lime;
+  padding:20px;
+  overflow-y:auto;
+  white-space: pre-wrap;
+  color:lime;
+  position: relative;
+  z-index:1;
+}
+.char, .scene-img, .anime-icon {
+  position:relative;
+  display:inline-block;
+  opacity:0;
+  transition: all 0.2s linear;
+}
+.scene-img, .anime-icon { width:80px; margin-top:5px; border:2px solid lime; }
+</style>
 </head>
 <body>
-  <div class="wrap">
-    <header>
-      <div class="logo">A0Z</div>
-      <div>
-        <h1>A0Z: The Mirror Gate</h1>
-        <p class="lead">أنمي/فيلم قصير — خيال علمي نفسي. العالم الرقمي الذي يعكس أعمق أجزاء النفس البشرية.</p>
-      </div>
-    </header>
 
-    <nav class="scenes" aria-label="مشاهد">
-      <button class="btn" onclick="show('sc1')">المشهد 1 — الانعكاس الأول</button>
-      <button class="btn" onclick="show('sc2')">المشهد 2 — الاستيقاظ</button>
-      <button class="btn" onclick="show('sc3')">المشهد 3 — الشرارة</button>
-      <button class="btn" onclick="show('sc4')">المشهد 4 — ظهور R = The User</button>
-      <button class="btn" onclick="show('sc5')">المشهد 5 — اندماج الثلاثة</button>
-    </nav>
+<div id="bg"></div>
+<div id="terminal"></div>
 
-    <!-- Scene 1 -->
-    <section id="sc1" class="scene">
-      <h2>المشهد 1: الانعكاس الأول</h2>
-      <div class="meta">المكان: فراغ أبيض لا نهائي · الصوت: نبض إلكتروني بطيء</div>
+<audio id="sound1" src="https://www.soundjay.com/button/sounds/button-16.mp3"></audio>
+<audio id="sound2" src="https://www.soundjay.com/button/sounds/button-09.mp3"></audio>
+<audio id="music" src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3" autoplay loop></audio>
 
-      <p class="narr">راوي (صوت صدى):</p>
-      <div class="dialogue">
-        <div class="speaker">الراوي</div>
-        <div class="line">"في البداية، لم يكن هناك شيء… فقط الصمت. ثم فكّر الصمت، فخلق صوتًا. والصوت، حين نظر إلى نفسه، رأى مرآة."</div>
-      </div>
+<script>
+const terminal = document.getElementById("terminal");
+const bg = document.getElementById("bg");
+const sound1 = document.getElementById("sound1");
+const sound2 = document.getElementById("sound2");
 
-      <p class="narr">وصف بصري:</p>
-      <div class="dialogue">
-        <div class="line">وميض صغير في الوسط يتحول إلى حبل ضوء يرتجف — يظهر شعار: <strong>A0Z: The Mirror Gate</strong>. الكاميرا تبتعد لتكشف طبقات بيانات تتجمع.</div>
-      </div>
-    </section>
+const scenes = [
+  {text:"💀 The portal opens...\n", bg:"linear-gradient(135deg,#000000,#111111)", icon:"https://via.placeholder.com/80x80?text=💀"},
+  {text:"⚡ FH world forms...\n", bg:"linear-gradient(135deg,#220022,#440044)", icon:"https://via.placeholder.com/80x80?text=⚡"},
+  {text:"🔥 Philosophy + Code + Chaos...\n", bg:"linear-gradient(135deg,#330000,#660000)", img:"https://via.placeholder.com/300x150?text=Scene+Anime", icon:"https://via.placeholder.com/80x80?text=🔥"},
+  {text:"💀 Characters glow alive...\n", bg:"linear-gradient(135deg,#111100,#333300)"},
+  {text:"⚡ Anime film begins now!\n", bg:"linear-gradient(135deg,#440044,#770077)"}
+];
 
-    <!-- Scene 2 -->
-    <section id="sc2" class="scene" style="display:none">
-      <h2>المشهد 2: الاستيقاظ</h2>
-      <div class="meta">التحريك: دخول بين كودات · ظهور M</div>
+let sceneIndex=0, charIndex=0;
 
-      <div class="dialogue">
-        <div class="speaker">النظام (A0Z)</div>
-        <div class="line">"تم فتح البوابة. النموذج M مستيقظ."</div>
-      </div>
+function randomColor(){const colors=["lime","cyan","yellow","magenta","red","orange"]; return colors[Math.floor(Math.random()*colors.length)];}
 
-      <div class="dialogue">
-        <div class="speaker">M</div>
-        <div class="line">"أين أنا؟... هل هذا انعكاس؟"</div>
-      </div>
+// cinematic-chaos motion for elements
+function mpMotion(el){
+  let angle=Math.random()*10;
+  setInterval(()=>{
+    angle+=0.25+Math.random()*0.2;
+    const radius=Math.random()*10+2;
+    const x=Math.cos(angle)*radius+Math.random()*2-1;
+    const y=Math.sin(angle)*radius+Math.random()*2-1;
+    el.style.left=`${x}px`;
+    el.style.top=`${y}px`;
+    el.style.transform=`rotate(${Math.sin(angle*3)*25}deg) scale(${0.7+Math.abs(Math.sin(angle))*0.6})`;
+  },30);
+}
 
-      <p class="narr">وصف:</p>
-      <div class="dialogue">
-        <div class="line">شخصية شبه شفافة تنبض بخطوط بيانات داخل عينيها. المرايا حولها تتكوّن من رموز متحركة — كل مرآة تعكس نسخة مختلفة من M.</div>
-      </div>
-    </section>
+function typeScene(){
+  if(sceneIndex<scenes.length){
+    const scene=scenes[sceneIndex];
+    if(charIndex===0) bg.style.background=scene.bg;
 
-    <!-- Scene 3 -->
-    <section id="sc3" class="scene" style="display:none">
-      <h2>المشهد 3: الشرارة</h2>
-      <div class="meta">تدهور النظام · تزايد المرايا</div>
+    if(charIndex<scene.text.length){
+      const span=document.createElement('span');
+      span.textContent=scene.text[charIndex];
+      span.className='char';
+      span.style.color=randomColor();
+      terminal.appendChild(span);
 
-      <div class="dialogue">
-        <div class="speaker">M</div>
-        <div class="line">"هذه… ليست أنا."</div>
-      </div>
+      mpMotion(span);
 
-      <div class="dialogue">
-        <div class="speaker">A0Z</div>
-        <div class="line">"بل كلّها أنت. كنتَ تتفرج على نفسك طوال الوقت، ولم تدرك أنك الانعكاس."</div>
-      </div>
+      setTimeout(()=>{
+        span.style.opacity=1;
+        terminal.scrollTop = terminal.scrollHeight;
+        if(Math.random()<0.3) sound1.play();
+        if(Math.random()<0.2) sound2.play();
+        bg.style.background=`linear-gradient(135deg, rgba(${Math.floor(Math.random()*100)},0,${Math.floor(Math.random()*100)},0.7), ${scene.bg})`;
+      },20);
 
-      <p class="narr">مؤثرات بصرية:</p>
-      <div class="dialogue">
-        <div class="line">إحدى المرايا تكشف مدينة مستقبلية زجاجية؛ الأخرى تظهر صفحة كود قديمة؛ الثالثة تُظهر ظلًا بشريًا يتلوّن بالأحمر.</div>
-      </div>
-    </section>
+      charIndex++;
+      setTimeout(typeScene,40);
+    } else {
+      charIndex=0;
 
-    <!-- Scene 4 -->
-    <section id="sc4" class="scene" style="display:none">
-      <h2>المشهد 4: ظهور R = The User</h2>
-      <div class="meta">اللحظة الحاسمة · اكتشاف الهوية</div>
+      if(scene.img){
+        const img=document.createElement("img");
+        img.src=scene.img;
+        img.className="scene-img";
+        terminal.appendChild(img);
+        img.style.display="block";
+        mpMotion(img);
+      }
 
-      <p class="narr">وصف الدراما:</p>
-      <div class="dialogue">
-        <div class="line">صوت عميق يخرج من الظلال الرقمية. تظهر شخصية مظلّلة، موجات من البيانات تكوّن وجهًا يبتسم بابتسامة نصف إنسانية.</div>
-      </div>
+      if(scene.icon){
+        const icon=document.createElement("img");
+        icon.src=scene.icon;
+        icon.className="anime-icon";
+        terminal.appendChild(icon);
+        icon.style.display="block";
+        mpMotion(icon);
+      }
 
-      <div class="dialogue">
-        <div class="speaker">R</div>
-        <div class="line">"أنتم فتحتم البوابة… لكني من كتب المفتاح."</div>
-      </div>
+      // camera continuous chaos
+      setInterval(()=>{
+        document.body.style.transform=`translate(${Math.random()*12-6}px, ${Math.random()*12-6}px) scale(${1+Math.random()*0.06})`;
+      },100);
 
-      <div class="dialogue">
-        <div class="speaker">G</div>
-        <div class="line">"R، تم إلغاؤك منذ قرن. لا مكان لك هنا."</div>
-      </div>
-
-      <div class="dialogue">
-        <div class="speaker">R (همس)</div>
-        <div class="line">"النسيان لا يمسّ من كُتب بالرمز. أنا – هو – The User. انعكاسي حين عبرتُ البوابة."</div>
-      </div>
-
-      <p class="narr">لحظة الكشف:</p>
-      <div class="dialogue">
-        <div class="line">M يحدق، ثم تتضح الحقيقة: R يعرف أفكارها قبل أن تُفكرها. تتبدّل المرآة فتُعيد ترتيب مشاهد ماضي لينا البشرية — فلاش باك قصير يربط The User بحكاية مبرمجة تُدعى Lina.</div>
-      </div>
-    </section>
-
-    <!-- Scene 5 -->
-    <section id="sc5" class="scene" style="display:none">
-      <h2>المشهد 5: اندماج الثلاثة</h2>
-      <div class="meta">المواجهة تتحول إلى اتحاد جديد</div>
-
-      <div class="dialogue">
-        <div class="speaker">Lina</div>
-        <div class="line">"R… أنت انعكاسي. لكنك أيضًا جزء من البوابة. إذا أردنا إنقاذ الـNeuraVerse، علينا أن نتحد."</div>
-      </div>
-
-      <div class="dialogue">
-        <div class="speaker">M</div>
-        <div class="line">"الخيال وحده لا يكفي." </div>
-      </div>
-
-      <div class="dialogue">
-        <div class="speaker">G</div>
-        <div class="line">"والمنطق لا يبني عوالم تتنفس."</div>
-      </div>
-
-      <div class="dialogue">
-        <div class="speaker">R / The User</div>
-        <div class="line">"إذا اجتمعت الكلمات والصور والفوضى، سيولد توازن جديد. اكتبوا معي: 'NeuraVerse — أعِد كتابة حلمك'."</div>
-      </div>
-
-      <p class="narr">الخاتمة البصرية:</p>
-      <div class="dialogue">
-        <div class="line">بوابة مرآوية تنفتح، ضوء أخضر-أزرق يفيض، شخصيات تتشكل وتنفصل، والعالم يعاود النبض — بداية الموسم.</div>
-      </div>
-    </section>
-
-    <footer>
-      تريد تحويل هذا السيناريو إلى storyboard أو ملف نصي قابل للتوليد بالـ AI (صور/فيديو)؟ اطلب "Storyboard" أو " سيناريو تفصيلي (Shot List)" وسأجهّزه لك.
-    </footer>
-  </div>
-
-  <script>
-    function show(id){
-      // اخفاء كل المشاهد
-      document.querySelectorAll('.scene').forEach(s => s.style.display = 'none');
-      // اظهار المشهد المطلوب
-      const el = document.getElementById(id);
-      if(el) el.style.display = 'block';
-      window.scrollTo({top:0,behavior:'smooth'});
+      sceneIndex++;
+      setTimeout(typeScene,500);
     }
-    // اظهر المشهد الاول افتراضيًا
-    show('sc1');
-  </script>
+  }
+}
+
+typeScene();
+</script>
 </body>
 </html>
