@@ -126,41 +126,15 @@ body {
     });
   const terminal = document.getElementById("terminal");
   const input = document.getElementById("commandInput");
+const videoMap = {
+  "fire": "IMG_1478.mov"
+};
 const imageMap = {
-  "2": "IMG_9055.jpeg"
+  "2": ""
 };
 
 const baseLines = [
-  
-  "  \      .  ",
-  "  \    .   .  ",
-  "  \.           .  ",
-  "\.      2      .  ",
-  " \ .           .  ",
-  "  \  .   3   .  ",
-  "    \  .   .  ",
-  "     \   .  ",
-  "|.       | ",
-  "  /      .  ",
-  "   /   .   .  ",
-  "   / .   6   .  ",
-  "  /.           .  ",
-  "/.      9      .  ",
-  "/  .           .  ",
-  "/    .   6   .  ",
-  "/      .   .  ",
-  "/       .  ",
-  "|.        |",
-  " •       .  ",
-  " •     .   .  ",
-  " • .           .  ",
-  "•.      2      .  ",
-  " • .           .  ",
-  "  •  .   1   .  ",
-  "   •  .   .  ",
-  " •      .  ",
-  "Response: Live signal online.",
-  "Awaiting world🕳️..."
+  "fire"
 ];
 const commandActions = {
   "wake up": () => {
@@ -2708,6 +2682,7 @@ input.addEventListener("keydown", function(event) {
     input.value = "";
   }
 });
+
 let i = 0;
 function showLine() {
   if (i < baseLines.length) {
@@ -2718,21 +2693,21 @@ function showLine() {
     const words = line.split(/\s+/); // تقسيم السطر إلى كلمات
 
     words.forEach(word => {
-      if (imageMap[word]) { // إذا توجد صورة للكلمة
-        const img = document.createElement("img");
-        img.src = imageMap[word];
-        img.alt = word;
+      if (videoMap[word]) {
+        const video = document.createElement("video");
+        video.src = videoMap[word];
+        video.style.height = "200px";  // يمكنك تعديل الحجم
+        video.style.width = "200px";
+        video.style.marginRight = "10px";
 
-        // حجم أكبر للصورة
-        img.style.height = "239px";
-        img.style.width = "239px";
-        img.style.marginRight = "5px"; // مسافة بين الصور
+        video.autoplay = true;
+        video.loop = true;
+        video.muted = true;
+        video.playsInline = true;
 
-        div.appendChild(img);
-      } else {
-
-        div.appendChild(document.createTextNode(word + " "));
+        div.appendChild(video);
       }
+
     });
 
     terminal.appendChild(div);
