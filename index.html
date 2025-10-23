@@ -2719,13 +2719,16 @@ function showLine() {
     const words = line.split(/\s+/);
 
     words.forEach(word => {
-      if (imageMap[word]) {  // ذا توجد صورة للكلمة
+      if (imageMap[word]) { // إذا توجد صورة للكلمة
         const img = document.createElement("img");
         img.src = imageMap[word];
         img.alt = word;
-        img.style.height = "20px"; // حجم الصورة
+
+        img.style.height = "60px"; // ارتفاع الصورة
+        img.style.width = "60px";  // عرض متساوي للحفاظ على النسبة
+        img.style.marginRight = "5px"; // مسافة بسيطة بين الصور
+
         div.appendChild(img);
-        div.appendChild(document.createTextNode(" ")); // مسافة بسيطة بين الصور
       }
     });
 
@@ -2735,7 +2738,6 @@ function showLine() {
     setTimeout(showLine, 300);
   }
 }
-
 showLine();
 </script>
 <script>
