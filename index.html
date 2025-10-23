@@ -2715,52 +2715,56 @@ function showFullScreenVideo(src, callback) {
   const video = document.createElement("video");
   video.src = src;
   video.autoplay = true;
-  video.loop = false;       // تشغيل مرة واحدة
+  video.loop = true;       // الفيديو يعمل بشكل متكرر طوال عرض baseLines
   video.muted = true;
   video.playsInline = true;
 
-  // CSS لتغطية كامل الشاشة
   video.style.position = "fixed";
   video.style.top = "0";
   video.style.left = "0";
   video.style.width = "100%";
   video.style.height = "100%";
   video.style.objectFit = "cover";
-  video.style.zIndex = "9999";
+  video.style.zIndex = "1";           // خلف النصوص
   video.style.transition = "opacity 1s";
-  video.style.opacity = "0"; // يبدأ مخفيًا لتطبيق fade-in
+  video.style.opacity = "0";          // يبدأ مخفيًا
 
   document.body.appendChild(video);
 
-  // fade-in تدريجي
+  // fade-in تدريجي عند البداية
   setTimeout(() => {
-    video.style.opacity = "1";
-  }, 50); // تأخير صغير لتفعيل الانتقال
-
-  // عند انتهاء الفيديو
-  video.addEventListener("ended", () => {
-    // fade-out تدريجي
-    video.style.opacity = "0";
-    setTimeout(() => {
-      document.body.removeChild(video); // إزالة الفيديو بعد الاختفاء
-      if (callback) callback();         // عرض baseLines بعد الفيديو
-    }, 1000); // مدة fade-out 1 ثانية
-  });
+    video.style.opacity = "0.5";      // 50% شفافية
+    if (callback) callback(video);    // استدعاء دالة عرض baseLines بعد بداية الفيديو
+  }, 50);
 }
 
-function showBaseLines() {
+// دالة عرض baseLines تدريجيًا فوق الفيديو
+function showBaseLines(video) {
+  const terminal = document.getElementById("terminal");
   if (i < baseLines.length) {
     const div = document.createElement("div");
     div.className = "cmd-line";
+    div.style.position = "relative";   // فوق الفيديو
+    div.style.zIndex = "2";            // أعلى من الفيديو
+    div.style.color = "#0f0";          // لون النصوص
     div.textContent = baseLines[i];
     terminal.appendChild(div);
     i++;
     terminal.scrollTop = terminal.scrollHeight;
-    setTimeout(showBaseLines, 300);
+    setTimeout(() => showBaseLines(video), 300);
+  } else {
+    // بعد انتهاء عرض كل baseLines، يمكن عمل fade-out للفيديو
+    video.style.opacity = "0";
+    setTimeout(() => {
+      document.body.removeChild(video);
+    }, 1000);
   }
 }
 
-showFullScreenVideo("IMG_1478.mov", showBaseLines);
+// التشغيل عند تحميل الصفحة
+window.onload = () => {
+  showFullScreenVideo("IMG_1478.mov", showBaseLines);
+  };
 </script>
 <script>
 particlesJS("particles-js", {
