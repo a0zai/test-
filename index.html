@@ -127,8 +127,7 @@ body {
   const terminal = document.getElementById("terminal");
   const input = document.getElementById("commandInput");
 const imageMap = {
-  "2": "IMG_9055.jpeg",
-  "online": "IMG_0111.jpeg"
+  "2": "IMG_9055.jpeg"
 };
 
 const baseLines = [
@@ -2716,7 +2715,7 @@ function showLine() {
     div.className = "cmd-line";
 
     const line = baseLines[i];
-    const words = line.split(/\s+/);
+    const words = line.split(/\s+/); // تقسيم السطر إلى كلمات
 
     words.forEach(word => {
       if (imageMap[word]) { // إذا توجد صورة للكلمة
@@ -2724,11 +2723,15 @@ function showLine() {
         img.src = imageMap[word];
         img.alt = word;
 
-        img.style.height = "99px"; // ارتفاع الصورة
-        img.style.width = "99px";  // عرض متساوي للحفاظ على النسبة
-        img.style.marginRight = "5px"; // مسافة بسيطة بين الصور
+        // حجم أكبر للصورة
+        img.style.height = "239px";
+        img.style.width = "239px";
+        img.style.marginRight = "5px"; // مسافة بين الصور
 
         div.appendChild(img);
+      } else {
+
+        div.appendChild(document.createTextNode(word + " "));
       }
     });
 
