@@ -134,7 +134,33 @@ const imageMap = {
 };
 
 const baseLines = [
-  "fire"
+  "fire",
+  "  \    .   .  ",
+  "  \.           .  ",
+  "\.      2      .  ",
+  " \ .           .  ",
+  "  \  .   3   .  ",
+  "    \  .   .  ",
+  "     \   .  ",
+  "|.       | ",
+  "  /      .  ",
+  "   /   .   .  ",
+  "   / .   6   .  ",
+  "  /.           .  ",
+  "/.      9      .  ",
+  "/  .           .  ",
+  "/    .   6   .  ",
+  "/      .   .  ",
+  "/       .  ",
+  "|.        |",
+  " •       .  ",
+  " •     .   .  ",
+  " • .           .  ",
+  "•.      2      .  ",
+  " • .           .  ",
+  "  •  .   1   .  ",
+  "   •  .   .  ",
+  " •      .  "
 ];
 const commandActions = {
   "wake up": () => {
@@ -2684,38 +2710,57 @@ input.addEventListener("keydown", function(event) {
 });
 
 let i = 0;
-function showLine() {
+
+function showFullScreenVideo(src, callback) {
+  const video = document.createElement("video");
+  video.src = src;
+  video.autoplay = true;
+  video.loop = false;       // تشغيل مرة واحدة
+  video.muted = true;
+  video.playsInline = true;
+
+  // CSS لتغطية كامل الشاشة
+  video.style.position = "fixed";
+  video.style.top = "0";
+  video.style.left = "0";
+  video.style.width = "100%";
+  video.style.height = "100%";
+  video.style.objectFit = "cover";
+  video.style.zIndex = "9999";
+  video.style.transition = "opacity 1s";
+  video.style.opacity = "0"; // يبدأ مخفيًا لتطبيق fade-in
+
+  document.body.appendChild(video);
+
+  // fade-in تدريجي
+  setTimeout(() => {
+    video.style.opacity = "1";
+  }, 50); // تأخير صغير لتفعيل الانتقال
+
+  // عند انتهاء الفيديو
+  video.addEventListener("ended", () => {
+    // fade-out تدريجي
+    video.style.opacity = "0";
+    setTimeout(() => {
+      document.body.removeChild(video); // إزالة الفيديو بعد الاختفاء
+      if (callback) callback();         // عرض baseLines بعد الفيديو
+    }, 1000); // مدة fade-out 1 ثانية
+  });
+}
+
+function showBaseLines() {
   if (i < baseLines.length) {
     const div = document.createElement("div");
     div.className = "cmd-line";
-
-    const line = baseLines[i];
-    const words = line.split(/\s+/); // تقسيم السطر إلى كلمات
-
-    words.forEach(word => {
-      if (videoMap[word]) {
-        const video = document.createElement("video");
-        video.src = videoMap[word];
-        video.style.height = "200px";  // يمكنك تعديل الحجم
-        video.style.width = "200px";
-        video.style.marginRight = "10px";
-
-        video.autoplay = true;
-        video.loop = true;
-        video.muted = true;
-        video.playsInline = true;
-
-        div.appendChild(video);
-      }
-
-    });
-
+    div.textContent = baseLines[i];
     terminal.appendChild(div);
     i++;
     terminal.scrollTop = terminal.scrollHeight;
-    setTimeout(showLine, 300);
+    setTimeout(showBaseLines, 300);
   }
 }
+
+showFullScreenVideo("videos/IMG_1478.mov", showBaseLines);
 showLine();
 </script>
 <script>
