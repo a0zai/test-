@@ -2709,7 +2709,6 @@ input.addEventListener("keydown", function(event) {
     input.value = "";
   }
 });
-
 let i = 0;
 function showLine() {
   if (i < baseLines.length) {
@@ -2717,18 +2716,16 @@ function showLine() {
     div.className = "cmd-line";
 
     const line = baseLines[i];
-    const words = line.split(/\s+/); // تقسيم السطر إلى كلمات
+    const words = line.split(/\s+/);
 
     words.forEach(word => {
-      if (imageMap[word]) {
+      if (imageMap[word]) {  // ذا توجد صورة للكلمة
         const img = document.createElement("img");
         img.src = imageMap[word];
         img.alt = word;
         img.style.height = "20px"; // حجم الصورة
         div.appendChild(img);
-        div.appendChild(document.createTextNode(" "));
-      } else {
-        div.appendChild(document.createTextNode(word + " "));
+        div.appendChild(document.createTextNode(" ")); // مسافة بسيطة بين الصور
       }
     });
 
