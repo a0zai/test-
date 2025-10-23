@@ -126,6 +126,10 @@ body {
     });
   const terminal = document.getElementById("terminal");
   const input = document.getElementById("commandInput");
+const imageMap = {
+  "2": "IMG_9055.jpeg",
+  "online": "IMG_0111.jpeg"
+};
 
 const baseLines = [
   
@@ -2711,7 +2715,23 @@ function showLine() {
   if (i < baseLines.length) {
     const div = document.createElement("div");
     div.className = "cmd-line";
-    div.textContent = baseLines[i];
+
+    const line = baseLines[i];
+    const words = line.split(/\s+/); // تقسيم السطر إلى كلمات
+
+    words.forEach(word => {
+      if (imageMap[word]) {
+        const img = document.createElement("img");
+        img.src = imageMap[word];
+        img.alt = word;
+        img.style.height = "20px"; // حجم الصورة
+        div.appendChild(img);
+        div.appendChild(document.createTextNode(" "));
+      } else {
+        div.appendChild(document.createTextNode(word + " "));
+      }
+    });
+
     terminal.appendChild(div);
     i++;
     terminal.scrollTop = terminal.scrollHeight;
