@@ -2692,6 +2692,14 @@ function typeReply(text, element) {
 input.addEventListener("keydown", function(event) {
   if (event.key === "Enter") {
     const cmd = input.value.trim();
+    const lowerCmd = cmd.toLowerCase();
+
+    // عرض الفيديو إذا الأمر موجود
+    if (videoMap[lowerCmd]) {
+      showFullScreenVideo(videoMap[lowerCmd]);
+    }
+
+    // عرض الأمر في التيرمينال
     const userCmd = document.createElement("div");
     userCmd.className = "cmd-line cmd-user";
     userCmd.textContent = "> " + cmd;
@@ -2702,9 +2710,13 @@ input.addEventListener("keydown", function(event) {
     terminal.appendChild(userCmd);
     terminal.appendChild(botReply);
 
+    // تنفيذ interpretInput أو أي معالجة أخرى
     const result = interpretInput(cmd);
     typeReply(result, botReply);
+
+    // مسح الـ input بعد التنفيذ
     input.value = "";
+    terminal.scrollTop = terminal.scrollHeight;
   }
 });
 
@@ -2752,23 +2764,9 @@ function showBaseLines() {
   }
 }
 
-// معالجة أوامر الفيديو فقط
-input.addEventListener("keydown", function(event) {
-  if (event.key === "Enter") {
-    const cmd = input.value.trim().toLowerCase();
-
-    if (videoMap[cmd]) {
-      showFullScreenVideo(videoMap[cmd]);
-    }
-
-    input.value = "";
-  }
-});
-
 window.onload = () => {
   showBaseLines();
 };
-
 </script>
 <script>
 particlesJS("particles-js", {
