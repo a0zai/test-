@@ -10,6 +10,7 @@
       margin: 0;
       padding: 0;
       height: 100%;
+      background-color: black
       font-family: 'Courier New', monospace;
       color: #00ffcc;
       overflow: auto;
@@ -2673,23 +2674,26 @@ if (commandActions[lowerInput]) {
 
   return result.join(" | ");
 }
+
+let i = 0;
+
+// دالة الكتابة التدريجية في التيرمنال
 function typeReply(text, element) {
-  let i = 0;
+  let idx = 0;
   element.textContent = "";
   function typeChar() {
-    if (i < text.length) {
-      element.textContent += text.charAt(i);
-      i++;
+    if (idx < text.length) {
+      element.textContent += text.charAt(idx);
+      idx++;
       terminal.scrollTop = terminal.scrollHeight; 
-    setTimeout(typeChar, 20);
+      setTimeout(typeChar, 20);
     }
   }
   typeChar();
 }
 
-let i = 0;
-
-function showFullScreenVideo(src, callback) {
+// عرض الفيديو بكامل الشاشة بدون التأثير على النصوص
+function showFullScreenVideo(src) {
   const video = document.createElement("video");
   video.src = src;
   video.autoplay = true;
@@ -2697,43 +2701,37 @@ function showFullScreenVideo(src, callback) {
   video.muted = true;
   video.playsInline = true;
 
-  // CSS لتغطية كامل الشاشة وشفافية جزئية
   video.style.position = "fixed";
   video.style.top = "0";
   video.style.left = "0";
   video.style.width = "100%";
   video.style.height = "100%";
   video.style.objectFit = "cover";
-  video.style.zIndex = "1";          // خلف النصوص
+  video.style.zIndex = "1";       // خلف النصوص
+  video.style.opacity = "0";
   video.style.transition = "opacity 1s";
-  video.style.opacity = "0";         // يبدأ مخفيًا
 
   document.body.appendChild(video);
 
-  // fade-in تدريجي مع الشفافية الجزئية
-  setTimeout(() => { 
-    video.style.opacity = "0.5";     // 50% شفافية
-  }, 50);
+  // fade-in جزئي
+  setTimeout(() => { video.style.opacity = "0.5"; }, 50);
 
+  // fade-out عند انتهاء الفيديو
   video.addEventListener("ended", () => {
-    // fade-out تدريجي
     video.style.opacity = "0";
-    setTimeout(() => {
-      document.body.removeChild(video);
-      if (callback) callback();       // عرض baseLines بعد الفيديو
-    }, 1000);
+    setTimeout(() => document.body.removeChild(video), 1000);
   });
 }
 
-// دالة عرض baseLines فوق الفيديو
+// عرض baseLines تدريجيًا فوق الفيديو
 function showBaseLines() {
   const terminal = document.getElementById("terminal");
   if (i < baseLines.length) {
     const div = document.createElement("div");
     div.className = "cmd-line";
-    div.style.position = "relative";   // فوق الفيديو
-    div.style.zIndex = "2";            // أعلى من الفيديو
-    div.style.color = "#0f0";          // لون النص
+    div.style.position = "relative";  // فوق الفيديو
+    div.style.zIndex = "2";           // أعلى من الفيديو
+    div.style.color = "#0f0";         // لون النص
     div.textContent = baseLines[i];
     terminal.appendChild(div);
     i++;
@@ -2742,9 +2740,39 @@ function showBaseLines() {
   }
 }
 
-// الاستخدام
+// الاستماع لأوامر التيرمنال
+input.addEventListener("keydown", function(event) {
+  if (event.key === "Enter") {
+    const cmd = input.value.trim();
+    const lowerCmd = cmd.toLowerCase();
+
+    // عرض الفيديو إذا كان الأمر موجود
+    if (videoMap[lowerCmd]) {
+      showFullScreenVideo(videoMap[lowerCmd]);
+    }
+
+    const userCmd = document.createElement("div");
+    userCmd.className = "cmd-line cmd-user";
+    userCmd.textContent = "> " + cmd;
+
+    const botReply = document.createElement("div");
+    botReply.className = "cmd-line";
+
+    terminal.appendChild(userCmd);
+    terminal.appendChild(botReply);
+
+    const result = interpretInput(cmd);
+    typeReply(result, botReply);
+
+    input.value = "";
+    terminal.scrollTop = terminal.scrollHeight;
+  }
+});
+
+// عند تحميل الصفحة
 window.onload = () => {
-  showFullScreenVideo("copy_AB4B27C5-578B-4DE7-82C4-73FFA10B97C5.mov", showBaseLines);
+  showFullScreenVideo("copy_AB4B27C5-578B-4DE7-82C4-73FFA10B97C5.mov");
+  showBaseLines();  // يبدأ عرض baseLines مباشرة
 };
 </script>
 <script>
