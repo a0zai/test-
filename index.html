@@ -127,7 +127,7 @@ body {
   const terminal = document.getElementById("terminal");
   const input = document.getElementById("commandInput");
 const videoMap = {
-  "fire": "IMG_1478.mov"
+  "video 1": "IMG_1478.mov"
 };
 const imageMap = {
   "2": ""
@@ -2709,13 +2709,11 @@ input.addEventListener("keydown", function(event) {
   }
 });
 
-let i = 0;
-
-function showFullScreenVideo(src, callback) {
+function showFullScreenVideo(src) {
   const video = document.createElement("video");
   video.src = src;
   video.autoplay = true;
-  video.loop = true;       // الفيديو يعمل بشكل متكرر طوال عرض baseLines
+  video.loop = false;
   video.muted = true;
   video.playsInline = true;
 
@@ -2725,46 +2723,52 @@ function showFullScreenVideo(src, callback) {
   video.style.width = "100%";
   video.style.height = "100%";
   video.style.objectFit = "cover";
-  video.style.zIndex = "1";           // خلف النصوص
-  video.style.transition = "opacity 1s";
-  video.style.opacity = "0";          // يبدأ مخفيًا
+  video.style.zIndex = "9999";
+  video.style.transition = "opacity 0.5s";
+  video.style.opacity = "0";
 
   document.body.appendChild(video);
 
-  // fade-in تدريجي عند البداية
-  setTimeout(() => {
-    video.style.opacity = "0.5";      // 50% شفافية
-    if (callback) callback(video);    // استدعاء دالة عرض baseLines بعد بداية الفيديو
-  }, 50);
-}
+  setTimeout(() => { video.style.opacity = "1"; }, 50);
 
-// دالة عرض baseLines تدريجيًا فوق الفيديو
-function showBaseLines(video) {
-  const terminal = document.getElementById("terminal");
-  if (i < baseLines.length) {
-    const div = document.createElement("div");
-    div.className = "cmd-line";
-    div.style.position = "relative";   // فوق الفيديو
-    div.style.zIndex = "2";            // أعلى من الفيديو
-    div.style.color = "#0f0";          // لون النصوص
-    div.textContent = baseLines[i];
-    terminal.appendChild(div);
-    i++;
-    terminal.scrollTop = terminal.scrollHeight;
-    setTimeout(() => showBaseLines(video), 300);
-  } else {
-    // بعد انتهاء عرض كل baseLines، يمكن عمل fade-out للفيديو
+  video.addEventListener("ended", () => {
     video.style.opacity = "0";
-    setTimeout(() => {
-      document.body.removeChild(video);
-    }, 1000);
-  }
+    setTimeout(() => document.body.removeChild(video), 500);
+  });
 }
 
-// التشغيل عند تحميل الصفحة
-window.onload = () => {
-  showFullScreenVideo("IMG_1478.mov", showBaseLines);
-  };
+// دالة تفسير الأوامر
+function interpretInput(cmdText) {
+  const cmd = cmdText.trim().toLowerCase();
+
+  if (videoMap[cmd]) {
+    showFullScreenVideo(videoMap[cmd]);
+    return `🎬 Playing ${cmd}`;
+  }
+
+  return "Command not recognized: " + cmdText;
+}
+
+// حدث الضغط على Enter
+input.addEventListener("keydown", function(event) {
+  if (event.key === "Enter") {
+    const cmdText = input.value;
+    const userDiv = document.createElement("div");
+    userDiv.className = "cmd-line";
+    userDiv.textContent = "> " + cmdText;
+    terminal.appendChild(userDiv);
+
+    const botDiv = document.createElement("div");
+    botDiv.className = "cmd-line";
+    terminal.appendChild(botDiv);
+
+    botDiv.textContent = interpretInput(cmdText);
+
+    input.value = "";
+    terminal.scrollTop = terminal.scrollHeight;
+  }
+});
+
 </script>
 <script>
 particlesJS("particles-js", {
