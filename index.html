@@ -126,9 +126,6 @@ body {
     });
   const terminal = document.getElementById("terminal");
   const input = document.getElementById("commandInput");
-const videoMap = {
-  "video 1": "IMG_1478.mov"
-};
 const imageMap = {
   "2": ""
 };
@@ -2547,7 +2544,9 @@ const emojiResponseMap = {
     "11": "S", "12": "T", "13": "U", "14": "V", "15": "W", "16": "X",
     "17": "Y", "18": "Z", "63": "_0"
   };
-
+const videoMap = {
+  "video 1": "IMG_1478.mov"
+};
   const symbolicMemory = JSON.parse(localStorage.getItem("symbolicMemory") || "{}");
 
 // ربط أوامر جديدة (تعليم ديناميكي)
@@ -2729,45 +2728,46 @@ function showFullScreenVideo(src) {
 
   document.body.appendChild(video);
 
-  setTimeout(() => { video.style.opacity = "1"; }, 50);
+  // fade-in
+  setTimeout(() => { video.style.opacity = "0.5"; }, 50);
 
+  // fade-out عند انتهاء الفيديو
   video.addEventListener("ended", () => {
     video.style.opacity = "0";
     setTimeout(() => document.body.removeChild(video), 500);
   });
 }
 
-// دالة تفسير الأوامر
-function interpretInput(cmdText) {
-  const cmd = cmdText.trim().toLowerCase();
-
-  if (videoMap[cmd]) {
-    showFullScreenVideo(videoMap[cmd]);
-    return `🎬 Playing ${cmd}`;
+// عرض baseLines تدريجيًا
+let i = 0;
+function showBaseLines() {
+  if (i < baseLines.length) {
+    const div = document.createElement("div");
+    div.className = "cmd-line";
+    div.textContent = baseLines[i];
+    terminal.appendChild(div);
+    i++;
+    terminal.scrollTop = terminal.scrollHeight;
+    setTimeout(showBaseLines, 300);
   }
-
-  return "Command not recognized: " + cmdText;
 }
 
-// حدث الضغط على Enter
+// معالجة أوامر الفيديو فقط
 input.addEventListener("keydown", function(event) {
   if (event.key === "Enter") {
-    const cmdText = input.value;
-    const userDiv = document.createElement("div");
-    userDiv.className = "cmd-line";
-    userDiv.textContent = "> " + cmdText;
-    terminal.appendChild(userDiv);
+    const cmd = input.value.trim().toLowerCase();
 
-    const botDiv = document.createElement("div");
-    botDiv.className = "cmd-line";
-    terminal.appendChild(botDiv);
-
-    botDiv.textContent = interpretInput(cmdText);
+    if (videoMap[cmd]) {
+      showFullScreenVideo(videoMap[cmd]);
+    }
 
     input.value = "";
-    terminal.scrollTop = terminal.scrollHeight;
   }
 });
+
+window.onload = () => {
+  showBaseLines();
+};
 
 </script>
 <script>
