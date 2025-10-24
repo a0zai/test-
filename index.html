@@ -18,18 +18,21 @@
         display: flex;
   flex-direction: column;
     }
-    
+  #title {
+  text-align: center;
+  color: #00ff00; /* لون النيون الأساسي */
+  font-size: 48px;
+  font-weight: bold;
+  margin-top: 20px;
+  font-family: 'Courier New', monospace;
 
-  .menu-list a {
-    color: #fff;
-    padding: 10px;
-    text-decoration: none;
-    border-top: 1px solid #333;
-  }
-
-  .menu-list a:hover {
-    background: #660000;
-    }
+  text-shadow:
+    0 0 5px #00ff00,
+    0 0 10px #00ff00,
+    0 0 20px #00ff00,
+    0 0 40px #00ff00,
+    0 0 80px #00ff00;
+}
   #particles-js {
   position: fixed;
   top: 0;
@@ -38,20 +41,6 @@
   height: 100%;
   z-index: 0;
     }
-
- 
-    #rafat-title {
-      position: relative;
-      width: 100%;
-      height: 150px;
-      font-size: 60px;
-      line-height: 150px;
-      text-align: center;
-      z-index: 2;
-      color: #00ffcc;
-      text-shadow: 0 0 20px #00ffcc;
-    }
-
  
     #terminal {
       flex: 1;
@@ -2568,6 +2557,9 @@ const emojiResponseMap = {
     "11": "S", "12": "T", "13": "U", "14": "V", "15": "W", "16": "X",
     "17": "Y", "18": "Z", "63": "_0"
   };
+const videoMap = {
+  "video 1": "copy_AB4B27C5-578B-4DE7-82C4-73FFA10B97C5.mov"
+};
 
   const symbolicMemory = JSON.parse(localStorage.getItem("symbolicMemory") || "{}");
 
@@ -2697,23 +2689,82 @@ if (commandActions[lowerInput]) {
 
   return result.join(" | ");
 }
+let i = 0;
+
+// دالة الكتابة التدريجية في التيرمنال
 function typeReply(text, element) {
-  let i = 0;
+  let idx = 0;
   element.textContent = "";
   function typeChar() {
-    if (i < text.length) {
-      element.textContent += text.charAt(i);
-      i++;
+    if (idx < text.length) {
+      element.textContent += text.charAt(idx);
+      idx++;
       terminal.scrollTop = terminal.scrollHeight; 
-    setTimeout(typeChar, 20);
+      setTimeout(typeChar, 20);
     }
   }
   typeChar();
 }
 
+// عرض الفيديو بكامل الشاشة بدون التأثير على النصوص
+function showFullScreenVideo(src) {
+  const video = document.createElement("video");
+  video.src = src;
+  video.autoplay = true;
+  video.loop = false;
+  video.muted = true;
+  video.playsInline = true;
+
+  video.style.position = "fixed";
+  video.style.top = "0";
+  video.style.left = "0";
+  video.style.width = "100%";
+  video.style.height = "100%";
+  video.style.objectFit = "cover";
+  video.style.zIndex = "1";       // خلف النصوص
+  video.style.opacity = "0";
+  video.style.transition = "opacity 1s";
+
+  document.body.appendChild(video);
+
+  // fade-in جزئي
+  setTimeout(() => { video.style.opacity = "0.5"; }, 50);
+
+  // fade-out عند انتهاء الفيديو
+  video.addEventListener("ended", () => {
+    video.style.opacity = "0";
+    setTimeout(() => document.body.removeChild(video), 1000);
+  });
+}
+
+// عرض baseLines تدريجيًا فوق الفيديو
+function showBaseLines() {
+  const terminal = document.getElementById("terminal");
+  if (i < baseLines.length) {
+    const div = document.createElement("div");
+    div.className = "cmd-line";
+    div.style.position = "relative";  // فوق الفيديو
+    div.style.zIndex = "2";           // أعلى من الفيديو
+    div.style.color = "#00ffcc";         // لون النص
+    div.textContent = baseLines[i];
+    terminal.appendChild(div);
+    i++;
+    terminal.scrollTop = terminal.scrollHeight;
+    setTimeout(showBaseLines, 300);
+  }
+}
+
+// الاستماع لأوامر التيرمنال
 input.addEventListener("keydown", function(event) {
   if (event.key === "Enter") {
     const cmd = input.value.trim();
+    const lowerCmd = cmd.toLowerCase();
+
+    // عرض الفيديو إذا كان الأمر موجود
+    if (videoMap[lowerCmd]) {
+      showFullScreenVideo(videoMap[lowerCmd]);
+    }
+
     const userCmd = document.createElement("div");
     userCmd.className = "cmd-line cmd-user";
     userCmd.textContent = "> " + cmd;
@@ -2726,24 +2777,17 @@ input.addEventListener("keydown", function(event) {
 
     const result = interpretInput(cmd);
     typeReply(result, botReply);
+
     input.value = "";
+    terminal.scrollTop = terminal.scrollHeight;
   }
 });
 
-let i = 0;
-function showLine() {
-  if (i < baseLines.length) {
-    const div = document.createElement("div");
-    div.className = "cmd-line";
-    div.textContent = baseLines[i];
-    terminal.appendChild(div);
-    i++;
-    terminal.scrollTop = terminal.scrollHeight;
-    setTimeout(showLine, 300);
-  }
-}
-
-showLine();
+// عند تحميل الصفحة
+window.onload = () => {
+  showFullScreenVideo("copy_AB4B27C5-578B-4DE7-82C4-73FFA10B97C5.mov");
+  showBaseLines();  // يبدأ عرض baseLines مباشرة
+};
 </script>
 <script>
 particlesJS("particles-js", {
