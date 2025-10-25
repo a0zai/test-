@@ -140,47 +140,35 @@ body {
 
 const baseLines = [
   
-  "        *        ",
-  "       ***       ",
-  "      *****      ",
-  "     *******     ",
-  "    *********    ",
-  "   ***********   ",
-  "  *************  ",
-  "   ***********   ",
-  "    *********    ",
-  "     *******     ",
-  "      *****      ",
-  "       ***       ",
-  "        *        ",
-  "                 ",
-  "  *           *  ",
-  "   *         *   ",
-  "    *       *    ",
-  "     *     *     ",
-  "      *   *      ",
-  "       * *       ",
-  "        *        ",
-  "                 ",
-  "      *   *      ",
-  "     *     *     ",
-  "    *       *    ",
-  "   *         *   ",
-  "  *           *  ",
-  "                 ",
-  "        *        ",
-  "       ***       ",
-  "      *****      ",
-  "     *******     ",
-  "    *********    ",
-  "   ***********   ",
-  "  *************  ",
-  "   ***********   ",
-  "    *********    ",
-  "     *******     ",
-  "      *****      ",
-  "       ***       ",
-  "        *        ",
+  "  \      .  ",
+  "  \    .   .  ",
+  "  \  .   1   .  ",
+  "  \.           .  ",
+  "\.      2      .  ",
+  " \ .           .  ",
+  "  \  .   3   .  ",
+  "    \  .   .  ",
+  "     \   .  ",
+  "|.       | ",
+  "  /      .  ",
+  "   /   .   .  ",
+  "   / .   6   .  ",
+  "  /.           .  ",
+  "/.      9      .  ",
+  "/  .           .  ",
+  "/    .   6   .  ",
+  "/      .   .  ",
+  "/       .  ",
+  "|.        |",
+  " •       .  ",
+  " •     .   .  ",
+  " •  .   3   .  ",
+  " • .           .  ",
+  "•.      2      .  ",
+  " • .           .  ",
+  "  •  .   1   .  ",
+  "   •  .   .  ",
+  " •      .  ",
   "Response: Live signal online.",
   "Awaiting world🚀..."
 ];
@@ -2702,6 +2690,8 @@ if (commandActions[lowerInput]) {
   return result.join(" | ");
 }
 let i = 0;
+
+// دالة الكتابة التدريجية في التيرمنال
 function typeReply(text, element) {
   let idx = 0;
   element.textContent = "";
@@ -2716,7 +2706,8 @@ function typeReply(text, element) {
   typeChar();
 }
 
-// عرض الفيديو بكامل الشاشة بدون التأثير على النصوصfunction showFullScreenVideo(src) {function showFullScreenVideo(src) {
+// عرض الفيديو بكامل الشاشة بدون التأثير على النصوص
+function showFullScreenVideo(src) {
   const video = document.createElement("video");
   video.src = src;
   video.autoplay = true;
@@ -2731,11 +2722,13 @@ function typeReply(text, element) {
   video.style.height = "100%";
   video.style.objectFit = "cover";
   video.style.zIndex = "1";       // خلف النصوص
-  video.style.opacity = "0.3";
+  video.style.opacity = "0";
   video.style.transition = "opacity 1s";
 
   document.body.appendChild(video);
-setTimeout(() => { video.style.opacity = "0.5"; }, 50);
+
+  // fade-in جزئي
+  setTimeout(() => { video.style.opacity = "0.5"; }, 50);
 
   // fade-out عند انتهاء الفيديو
   video.addEventListener("ended", () => {
