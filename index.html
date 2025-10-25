@@ -2722,17 +2722,14 @@ function showFullScreenVideo(src) {
   video.style.height = "100%";
   video.style.objectFit = "cover";
   video.style.zIndex = "1";       // خلف النصوص
-  video.style.opacity = "0";
+  video.style.opacity = "0.3";
   video.style.transition = "opacity 1s";
 
   document.body.appendChild(video);
 
-  // fade-in جزئي
-  setTimeout(() => { video.style.opacity = "0.5"; }, 50);
-
   // fade-out عند انتهاء الفيديو
   video.addEventListener("ended", () => {
-    video.style.opacity = "0";
+    video.style.opacity = "0.3";
     setTimeout(() => document.body.removeChild(video), 1000);
   });
 }
