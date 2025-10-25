@@ -2718,8 +2718,7 @@ function typeReply(text, element) {
   typeChar();
 }
 
-// عرض الفيديو بكامل الشاشة بدون التأثير على النصوص
-function showFullScreenVideo(src) {
+// عرض الفيديو بكامل الشاشة بدون التأثير على النصوصfunction showFullScreenVideo(src) {
   const video = document.createElement("video");
   video.src = src;
   video.autoplay = true;
@@ -2735,15 +2734,25 @@ function showFullScreenVideo(src) {
   video.style.objectFit = "cover";
   video.style.zIndex = "1";       // خلف النصوص
   video.style.opacity = "0.3";
-  video.style.transition = "opacity 1s";
+  video.style.transition = "opacity 2s"; // مدة التلاشي آخر ثانيتين
 
   document.body.appendChild(video);
-setTimeout(() => { video.style.opacity = "0.5"; }, 50);
+  setTimeout(() => { video.style.opacity = "0.5"; }, 50);
 
-  // fade-out عند انتهاء الفيديو
+  // fade-out تدريجي قبل ثانيتين من النهاية
+  video.addEventListener("loadedmetadata", () => {
+    const fadeDuration = 2; // ثانيتين
+    const fadeStart = video.duration - fadeDuration;
+    if (fadeStart > 0) {
+      setTimeout(() => {
+        video.style.opacity = "0";
+      }, fadeStart * 1000);
+    }
+  });
+
+  // إزالة الفيديو بعد النهاية
   video.addEventListener("ended", () => {
-    video.style.opacity = "0.3";
-    setTimeout(() => document.body.removeChild(video), 1000);
+    document.body.removeChild(video);
   });
 }
 
