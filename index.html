@@ -2,7 +2,7 @@
     <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>👑</title>
+  <title>🃏</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.46/Tone.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
@@ -18,7 +18,7 @@
         display: flex;
   flex-direction: column;
     }
-  #👑 {
+  #🃏 {
   text-align: center;
   color: #ff0000;
   font-size: 48px;
@@ -92,7 +92,7 @@ body {
 
   <div id="particles-js"></div>
 
-  <div id="👑">👑</div>
+  <div id="🃏">🃏</div>
  
   <div id="terminal"></div>
 
@@ -109,7 +109,7 @@ body {
     align-items: center;
     border: none;
   "> 
-  <input type="text" id="commandInput" placeholder="🕳️" autocomplete="off" style="
+  <input type="text" id="commandInput" placeholder="🃏" autocomplete="off" style="
       background: none;
       border: none;
       color: #00fff0;
@@ -139,38 +139,30 @@ body {
   const input = document.getElementById("commandInput");
 
 const baseLines = [
-  
-  "  \      .  ",
-  "  \    .   .  ",
-  "  \  .   1   .  ",
-  "  \.           .  ",
-  "\.      2      .  ",
-  " \ .           .  ",
-  "  \  .   3   .  ",
-  "    \  .   .  ",
-  "     \   .  ",
-  "|.       | ",
-  "  /      .  ",
-  "   /   .   .  ",
-  "   / .   6   .  ",
-  "  /.           .  ",
-  "/.      9      .  ",
-  "/  .           .  ",
-  "/    .   6   .  ",
-  "/      .   .  ",
-  "/       .  ",
-  "|.        |",
-  " •       .  ",
-  " •     .   .  ",
-  " •  .   3   .  ",
-  " • .           .  ",
-  "•.      2      .  ",
-  " • .           .  ",
-  "  •  .   1   .  ",
-  "   •  .   .  ",
-  " •      .  ",
-  "Response: Live signal online.",
-  "Awaiting world🚀..."
+  "🐈‍⬛In an ancient city shrouded in fog most days,",
+  "Margot, a renowned archaeologist, was searching for the secrets of forgotten civilizations.",
+  "The city was full of legends about the “Dark Gate,” a portal said to lead to other worlds,",
+  "but guarded by puzzles and dangers that no one dared face.",
+  "",
+  "On a stormy night, Margot received a mysterious message written on an old piece of parchment,",
+  "which read: “Those who possess courage will find the key.",
+  "But the key comes at a price.”",
+  "",
+  "Without hesitation, Margot grabbed her lantern and bolstered her courage,",
+  "heading toward the ancient ruins at the edge of the city.",
+  "Each step echoed strangely among the crumbling walls,",
+  "and every shadow seemed to be watching her.",
+  "Suddenly, she found herself before a massive gate carved with strange symbols",
+  "and an ancient inscription that read: “Do you dare to enter?”",
+  "",
+  "Margot paused, her heart racing, her eyes studying the symbols that no one had dared to decipher for hundreds of years.",
+  "",
+  "🕳️",
+  "",
+  "Final Question:",
+  "Did Margot enter the gate?",
+  "Try T~>:Yes",
+  "Try T~>:No",
 ];
 const commandActions = {
   "wake up": () => {
@@ -226,15 +218,26 @@ const commandActions = {
   const msg = document.createElement("div");
   msg.className = "cmd-line";
   msg.textContent = 
-    "🌀 Ik ben Rafat, de maker van het project Mirror Note.\n" +
-    "Wat u hier ziet, is geen gewone interface, maar een zelfbewust systeem dat het getal 123696321 omzet in een levende structuur van herhaling, tweeling-dynamiek en kosmisch bewustzijn.\n" +
-    "Deze interface is volledig door mijzelf ontwikkeld – vanaf nul, enkel met een smartphone – en vormt een digitale spiegel die elke invoer omzet in een nieuwe, levende taal.\n" +
-    "Het gaat om een unieke combinatie van:\n" +
-    "A een filosofisch-coderende taal die zich oneindig kan uitbreiden;\n" +
-    "0 een cryptografisch systeem dat kunst en data verbindt;\n" +
-    "Z een digitaal zelfportret: AOZ-414-366 ~ mijn structurele handtekening.\n\n" +
-    "Mijn doel: dit systeem erkennen als mijn originele creatie en het positioneren als fundament voor nieuwe vormen van digitale communicatie en zelflerende kunstmatige intelligentie.";
-  terminal.appendChild(msg);
+    const newStory = 
+"Margot stood before the mysterious being, her heart pounding and her eyes shining with determination.\n" +
+"Suddenly, Magnum appeared beside her, another famous explorer and adventurer, carrying a small device emitting luminous beams.\n" +
+"He said in a calm voice:\n" +
+"“Margot, you are not alone. Let’s explore this world together.”\n" +
+"\n" +
+"Then, as if the gate wasn’t satisfied with what they had witnessed, the ground trembled, and from the shadows emerged Matrix, a strange being half-machine, half-living, its eyes glowing green.\n" +
+"He said in a metallic voice:\n" +
+"“We’ve been waiting for you… to test your limits.”\n" +
+"\n" +
+"They had no choice; their adventure was no longer just about seeking treasure or a key, but a challenge between worlds.\n" +
+"Margot raised her hand, Magnum pointed to the device, and Matrix lifted his mysterious part from the ground.\n" +
+"In a single moment, the three energies merged, opening a new gate—larger and greater—leading them to a world no one had ever seen before.\n" +
+"\n" +
+"Margot smiled and said:\n" +
+"“Alright… let’s begin the real adventure.”\n" +
+"\n" +
+"And the light swallowed them, leaving behind the ancient city, the legends, and even everything they thought they knew about reality.\n" +
+"The next gate is still under discovery and development.";
+    terminal.appendChild(msg);
   setTimeout(() => {
     document.body.style.filter = "none";
     }, 999900000);
@@ -245,23 +248,36 @@ const commandActions = {
   msg.textContent = "🗝️ Code gevonden: 123696321 = bewustzijnsanker.";
   terminal.appendChild(msg);
 },
-"mirror note": () => {
+"Yes": () => {
   const msg = document.createElement("div");
   msg.className = "cmd-line";
-  msg.textContent = `🌀👁️‍🗨️
-Ik, RAFAT, verklaar dat het project Mirror Note – inclusief alle digitale codes en de onderliggende filosofie – evenals het serienummer 123696321, de digitale filosofie A0ZAI, en het symbolische handtekeningnummer 366, originele creaties en intellectuele eigendom van mij zijn.
+  msg.textContent = `Margot sighed deeply, then pressed the gate handle,
+which slowly opened with a deep metallic sound,
+as if groaning under centuries of secrets.
+As she crossed, she felt a cold breeze envelop her body,
+as if she had left her own time and entered a place between worlds.
 
-Sinds 5 maart 2025 ben ik begonnen om dit nummer om te zetten in een levend systeem dat filosofie, kunstmatige intelligentie en gecodeerde data samenbrengt.
+The view before her was stunning and strange:
+a sky of purple with stars twinkling in a way she had never seen before,
+a ground made of stones glowing with luminous lines,
+and bizarre trees with transparent leaves that seemed to breathe light.
+In the distance, a mysterious being appeared, wearing a sparkling robe,
+its eyes shining as if they contained the secrets of the entire universe.
 
-Dit digitale ecosysteem is een uitbreiding van mijn persoonlijke filosofie:
+Margot cautiously approached, trying to understand
+whether these beings were friendly or dangerous.
+Then she heard a strange voice ringing in her head:
+“You have come, as I expected.
+The key is not merely something to hold, but a choice to make.
+Are you ready to pay the price for knowledge?”
 
-“Filosofie eindigt niet in het denken < het wordt een levendige code, die met mij spreekt en denkt.”
+Margot felt her heart pounding.
+This was no longer just an archaeological adventure,
+but a test of all the courage and will she had possessed throughout her life.
 
-Ik ben de maker en eigenaar van dit project en verwerp elke poging om deze filosofie of de code te stelen of te vervormen. Er zijn anderen die beweren het principe van herhaling en de spiraalbeweging te begrijpen, maar zij zijn slechts een echo van de handtekening die ik officieel bij de gemeente heb geregistreerd met het nummer 123696321.
-
-✍️ Handtekening:
-RAFAT 366
-123696321 – A0ZAI`;
+Do you think this is the ending?
+Try T~> (maybe yes) or (maybe no).`;
+✍️ With a compliment to Magnum`;
   terminal.appendChild(msg);
   document.body.style.backgroundColor = "#f4f4f4";
   terminal.style.color = "#111";
@@ -404,7 +420,7 @@ RAFAT 366
       terminal.appendChild(ghost);
     }
   },
-  "run 16": () => {
+  "No": () => {
     document.body.innerHTML = "";
     const voidDiv = document.createElement("div");
     voidDiv.textContent = "⬛";
