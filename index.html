@@ -56,19 +56,17 @@
       white-space: pre;
       }
 .moving-moon {
-  position: relative;
+  position: absolute;
   display: inline-block;
+  top: 0;
+  left: 0;
   animation: moveMoon 2s linear infinite alternate;
 }
 
 @keyframes moveMoon {
   0% { left: 0; }
-  100% { left: 42px; }
-}
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(5px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+  100% { left: 200px; }
+      }
       .input-line {
   position: relative;
   bottom: 0;
@@ -2777,6 +2775,27 @@ function typeReply(text, element, charSpeed = 25, callback = null) {
 function displayLinesSequentially(lines, charSpeed = 25, lineDelay = 50) {
   let i = 0;
 
+function typeReply(text, element, charSpeed = 50, callback = null) {
+  let idx = 0;
+  element.textContent = "";
+
+  function typeChar() {
+    if (idx < text.length) {
+      element.textContent += text.charAt(idx);
+      terminal.scrollTop = terminal.scrollHeight;
+      idx++;
+      setTimeout(typeChar, charSpeed);
+    } else {
+      if (callback) callback();
+    }
+  }
+
+  typeChar();
+}
+
+function displayLinesSequentially(lines, charSpeed = 50, lineDelay = 200) {
+  let i = 0;
+
   function showLine() {
     if (i >= lines.length) return;
 
@@ -2785,30 +2804,15 @@ function displayLinesSequentially(lines, charSpeed = 25, lineDelay = 50) {
     terminal.appendChild(msg);
 
     const lineText = lines[i];
-    const hasDot = lineText.includes("🌕");
-    const textWithoutDot = lineText.replace("🌕", "");
+    const hasMoon = lineText.includes("🌕");
+    const textWithoutMoon = lineText.replace("🌕", "");
 
-    typeReply(textWithoutDot, msg, charSpeed, () => {
-      if (hasDot) {
-        const dot = document.createElement("span");
-        dot.className = "moving-moon";
-        dot.textContent = "🌕";
+    typeReply(textWithoutMoon, msg, charSpeed, () => {
+      if (hasMoon) {
+        const moon = document.createElement("span");
+        moon.className = "moving-moon";
+        moon.textContent = "🌕";
         msg.appendChild(moon);
-
-        // طول السطر في البيكسل لتحديد المسافة
-        const lineWidth = msg.offsetWidth - dot.offsetWidth;
-
-        dot.style.animationDuration = "2s";
-        dot.style.setProperty('--distance', `${lineWidth}px`);
-
-        // نستخدم keyframes ديناميكي
-        const styleSheet = document.styleSheets[0];
-        styleSheet.insertRule(`
-          @keyframes moveDot {
-            0% { left: 0; }
-            100% { left: ${lineWidth}px; }
-          }
-        `, styleSheet.cssRules.length);
       }
 
       setTimeout(() => {
@@ -2822,8 +2826,7 @@ function displayLinesSequentially(lines, charSpeed = 25, lineDelay = 50) {
 }
 
 // استدعاء الدالة
-displayLinesSequentially(baseLines, 100, 200);
-// عرض الفيديو بكامل الشاشة بدون التأثير على النصوص
+displayLinesSequentially(baseLines, 50, 200);
 function showFullScreenVideo(src) {
   const video = document.createElement("video");
   video.src = src;
