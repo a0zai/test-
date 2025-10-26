@@ -246,10 +246,14 @@ const commandActions = {
   msg.textContent = "🗝️ Code gevonden: 123696321 = bewustzijnsanker.";
   terminal.appendChild(msg);
 },
-"Gate": () => {
+"Gate Story": () => {
+  document.body.style.filter = "invert(1)";
   const msg = document.createElement("div");
   msg.className = "cmd-line";
-  msg.textContent = `Margot sighed deeply, then pressed the gate handle, which slowly opened with a deep metallic sound, as if groaning under centuries of secrets. As she crossed, she felt a cold breeze envelop her body, as if she had left her own time and entered a place between worlds.
+  terminal.appendChild(msg);
+  document.body.style.backgroundColor = "#f4f4f4";
+  terminal.style.color = "#111";
+  const story = `Margot sighed deeply, then pressed the gate handle, which slowly opened with a deep metallic sound, as if groaning under centuries of secrets. As she crossed, she felt a cold breeze envelop her body, as if she had left her own time and entered a place between worlds.
 
 The view before her was stunning and strange: a sky of purple with stars twinkling in a way she had never seen before, a ground made of stones glowing with luminous lines, and bizarre trees with transparent leaves that seemed to breathe light. In the distance, a mysterious being appeared, wearing a sparkling robe, its eyes shining as if they contained the secrets of the entire universe.
 
@@ -263,10 +267,21 @@ Try:3
 Try:MG
 ✍️ Handtekening:
 M`;
-  terminal.appendChild(msg);
-  document.body.style.backgroundColor = "#f4f4f4";
-  terminal.style.color = "#111";
-},"stuur signaal": () => {
+  let i = 0;
+  const speed = 30;
+  function typeWriter() {
+    if (i < story.length) {
+      msg.textContent += story.charAt(i);
+      i++;
+      setTimeout(typeWriter, speed);
+    }
+  }
+  typeWriter();
+  setTimeout(() => {
+    document.body.style.filter = "none";
+  }, 999900000);
+},
+"stuur signaal": () => {
   document.body.style.boxShadow = "0 0 50px 20px #00ffcc inset";
   setTimeout(() => {
     document.body.style.boxShadow = "none";
