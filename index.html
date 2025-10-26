@@ -253,6 +253,33 @@ Try ~>:MG
     document.body.style.boxShadow = "none";
   }, 3000);
 },
+"about": () => {
+  const msg = document.createElement("div");
+  msg.className = "cmd-line";
+  msg.innerHTML = `
+  <span style="color:#00ff66;">🧩 ABOUT A0ZAI</span><br><br>
+
+  Behind the code, there’s no myth — just a person who thinks, questions, and builds.<br><br>
+
+  A0ZAI is a digital craftsman — working between art and logic,<br>
+  shaping experiences that speak more than they show.<br><br>
+
+  ☕ Sometimes designing.  
+  ⚙️ Sometimes developing.  
+  📡 Always observing how people and machines interact.<br><br>
+
+  Every project is a small experiment — in emotion, perception, and connection.<br>
+  Not everything here is meant to be “understood.” Some of it is meant to be felt.<br><br>
+
+  “Reality begins where the code ends.”<br><br>
+
+  <span style="color:#ff0033;">Type 'projects'</span> to explore the work.<br>
+  <span style="color:#999;">Type 'contact'</span> to open a signal.  
+  `;
+  terminal.appendChild(msg);
+  document.body.style.background = "#000000";
+  document.body.style.color = "#00ff66";
+},
 "rafat info": () => {
   const msg = document.createElement("div");
   msg.className = "cmd-line";
