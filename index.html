@@ -2798,7 +2798,7 @@ function displayLinesSequentially(lines, charSpeed = 25, lineDelay = 50) {
 }
 
 // استدعاء الدالة
-displayLinesSequentially(baseLines, 25, 50);
+displayLinesSequentially(baseLines, 100, 200);
 
 // عرض الفيديو بكامل الشاشة بدون التأثير على النصوص
 function showFullScreenVideo(src) {
@@ -2829,23 +2829,6 @@ function showFullScreenVideo(src) {
     video.style.opacity = "0";
     setTimeout(() => document.body.removeChild(video), 1000);
   });
-}
-
-// عرض baseLines تدريجيًا فوق الفيديو
-function showBaseLines() {
-  const terminal = document.getElementById("terminal");
-  if (i < baseLines.length) {
-    const div = document.createElement("div");
-    div.className = "cmd-line";
-    div.style.position = "relative";  // فوق الفيديو
-    div.style.zIndex = "2";           // أعلى من الفيديو
-    div.style.color = "#008833";         // لون النص
-    div.textContent = baseLines[i];
-    terminal.appendChild(div);
-    i++;
-    terminal.scrollTop = terminal.scrollHeight;
-    setTimeout(showBaseLines, 999);
-  }
 }
 
 // الاستماع لأوامر التيرمنال
