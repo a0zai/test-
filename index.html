@@ -218,25 +218,22 @@ const commandActions = {
   const msg = document.createElement("div");
   msg.className = "cmd-line";
   msg.textContent = 
-    "Margot stood before the mysterious being, her heart pounding and her eyes shining with determination.\n" +
-    "Suddenly, Magnum appeared beside her, another famous explorer and adventurer, carrying a small device emitting luminous beams.\n" +
-    "He said in a calm voice:\n" +
-    "\"Margot, you are not alone. Let’s explore this world together.\"\n" +
-    "\n" +
-    "Then, as if the gate wasn’t satisfied with what they had witnessed, the ground trembled, and from the shadows emerged Matrix, a strange being half-machine, half-living, its eyes glowing green.\n" +
-    "He said in a metallic voice:\n" +
-    "\"We’ve been waiting for you… to test your limits.\"\n" +
-    "\n" +
-    "They had no choice; their adventure was no longer just about seeking treasure or a key, but a challenge between worlds.\n" +
-    "Margot raised her hand, Magnum pointed to the device, and Matrix lifted his mysterious part from the ground.\n" +
-    "In a single moment, the three energies merged, opening a new gate—larger and greater—leading them to a world no one had ever seen before.\n" +
-    "\n" +
-    "Margot smiled and said:\n" +
-    "\"Alright… let’s begin the real adventure.\"\n" +
-    "\n" +
-    "And the light swallowed them, leaving behind the ancient city, the legends, and even everything they thought they knew about reality.\n" +
-    "The next gate is still under discovery and development.\n";
-  setTimeout(() => {
+  "Margot stood before the mysterious being, her heart pounding and her eyes shining with determination.\n" +
+  "Suddenly, Magnum appeared beside her, another famous explorer and adventurer, carrying a small device emitting luminous beams.\n" +
+  "He said in a calm voice:\n" +
+  "Margot, you are not alone. Let’s explore this world together.\n" +
+  "Then, as if the gate wasn’t satisfied with what they had witnessed, the ground trembled, and from the shadows emerged Matrix, a strange being half-machine, half-living, its eyes glowing green.\n" +
+  "He said in a metallic voice:\n" +
+  "We’ve been waiting for you… to test your limits.\n" +
+  "They had no choice; their adventure was no longer just about seeking treasure or a key, but a challenge between worlds.\n" +
+  "Margot raised her hand, Magnum pointed to the device, and Matrix lifted his mysterious part from the ground.\n" +
+  "In a single moment, the three energies merged, opening a new gate—larger and greater—leading them to a world no one had ever seen before.\n" +
+  "Margot smiled and said:\n" +
+  "Alright… let’s begin the real adventure.\n" +
+  "And the light swallowed them, leaving behind the ancient city, the legends, and even everything they thought they knew about reality.\n" +
+  "The next gate is still under discovery and development.\n";
+terminal.appendChild(msg);
+setTimeout(() => {
     document.body.style.filter = "none";
     }, 999900000);
 },
@@ -246,14 +243,11 @@ const commandActions = {
   msg.textContent = "🗝️ Code gevonden: 123696321 = bewustzijnsanker.";
   terminal.appendChild(msg);
 },
-"Gate Story": () => {
-  document.body.style.filter = "invert(1)";
+
+"Gate": () => {
   const msg = document.createElement("div");
   msg.className = "cmd-line";
-  terminal.appendChild(msg);
-  document.body.style.backgroundColor = "#f4f4f4";
-  terminal.style.color = "#111";
-  const story = `Margot sighed deeply, then pressed the gate handle, which slowly opened with a deep metallic sound, as if groaning under centuries of secrets. As she crossed, she felt a cold breeze envelop her body, as if she had left her own time and entered a place between worlds.
+  msg.textContent = `Margot sighed deeply, then pressed the gate handle, which slowly opened with a deep metallic sound, as if groaning under centuries of secrets. As she crossed, she felt a cold breeze envelop her body, as if she had left her own time and entered a place between worlds.
 
 The view before her was stunning and strange: a sky of purple with stars twinkling in a way she had never seen before, a ground made of stones glowing with luminous lines, and bizarre trees with transparent leaves that seemed to breathe light. In the distance, a mysterious being appeared, wearing a sparkling robe, its eyes shining as if they contained the secrets of the entire universe.
 
@@ -267,19 +261,9 @@ Try:3
 Try:MG
 ✍️ Handtekening:
 M`;
-  let i = 0;
-  const speed = 30;
-  function typeWriter() {
-    if (i < story.length) {
-      msg.textContent += story.charAt(i);
-      i++;
-      setTimeout(typeWriter, speed);
-    }
-  }
-  typeWriter();
-  setTimeout(() => {
-    document.body.style.filter = "none";
-  }, 999900000);
+  terminal.appendChild(msg);
+  document.body.style.backgroundColor = "#f4f4f4";
+  terminal.style.color = "#111";
 },
 "stuur signaal": () => {
   document.body.style.boxShadow = "0 0 50px 20px #00ffcc inset";
