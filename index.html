@@ -50,23 +50,21 @@
   z-index: 2;
 }
 
-    .cmd-line {
+.cmd-line {
       margin: 10px 0;
       animation: fadeIn 0.3s ease-in-out;
       white-space: pre;
       }
-.moving-moon {
+.moving-dot {
   position: absolute;
-  display: inline-block;
   top: 0;
   left: 0;
-  animation: moveMoon 2s linear infinite alternate;
+  animation: moveDot linear infinite alternate;
 }
-
-@keyframes moveMoon {
-  0% { left: 0; }
-  100% { left: 200px; }
-      }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
       .input-line {
   position: relative;
   bottom: 0;
@@ -77,7 +75,6 @@
   padding: 10px 20px;
 
 }
-
     
     .cmd-user {
   color: #ff0044;
