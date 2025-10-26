@@ -55,11 +55,15 @@
       animation: fadeIn 0.3s ease-in-out;
       white-space: pre;
       }
-.moving-dot {
-  position: absolute;
-  top: 0;
-  left: 0;
-  animation: moveDot linear infinite alternate;
+.moving-moon {
+  position: relative;
+  display: inline-block;
+  animation: moveMoon 3s linear infinite alternate;
+}
+
+@keyframes moveMoon {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(20px); } 
 }
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(5px); }
