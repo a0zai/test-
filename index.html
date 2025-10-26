@@ -213,27 +213,27 @@ const commandActions = {
     document.body.style.display = "none";
     setTimeout(() => { document.body.style.display = "block"; }, 2000);
   },
-"MG": () => {
+  "MG": () => {
   document.body.style.filter = "invert(1)";
   const msg = document.createElement("div");
   msg.className = "cmd-line";
   msg.textContent = 
-  "Margot stood before the mysterious being, her heart pounding and her eyes shining with determination.\n" +
-  "Suddenly, Magnum appeared beside her, another famous explorer and adventurer, carrying a small device emitting luminous beams.\n" +
-  "He said in a calm voice:\n" +
-  "Margot, you are not alone. Let’s explore this world together.\n" +
-  "Then, as if the gate wasn’t satisfied with what they had witnessed, the ground trembled, and from the shadows emerged Matrix, a strange being half-machine, half-living, its eyes glowing green.\n" +
-  "He said in a metallic voice:\n" +
-  "We’ve been waiting for you… to test your limits.\n" +
-  "They had no choice; their adventure was no longer just about seeking treasure or a key, but a challenge between worlds.\n" +
-  "Margot raised her hand, Magnum pointed to the device, and Matrix lifted his mysterious part from the ground.\n" +
-  "In a single moment, the three energies merged, opening a new gate—larger and greater—leading them to a world no one had ever seen before.\n" +
-  "Margot smiled and said:\n" +
-  "Alright… let’s begin the real adventure.\n" +
-  "And the light swallowed them, leaving behind the ancient city, the legends, and even everything they thought they knew about reality.\n" +
-  "The next gate is still under discovery and development.\n";
-terminal.appendChild(msg);
-setTimeout(() => {
+    "Margot stood before the mysterious being, her heart pounding and her eyes shining with determination.\n" +
+    "Suddenly, Magnum appeared beside her, another famous explorer and adventurer, carrying a small device emitting luminous beams.\n" +
+    "He said in a calm voice.\n" +
+    "Margot, you are not alone. Let’s explore this world together:\n" +
+    "Then, as if the gate wasn’t satisfied with what they had witnessed, the ground trembled, and from the shadows emerged Matrix, a strange being half-machine, half-living, its eyes glowing green;\n" +
+    "He said in a metallic voice:;\n" +
+    "We’ve been waiting for you… to test your limits.\n\n" +
+    "They had no choice; their adventure was no longer just about seeking treasure or a key, but a challenge between worlds.\n" +
+    "Margot raised her hand, Magnum pointed to the device, and Matrix lifted his mysterious part from the ground.\n" +
+    "In a single moment, the three energies merged, opening a new gate—larger and greater—leading them to a world no one had ever seen before.\n" +
+    "Margot smiled and said:\n" +
+    "Alright… let’s begin the real adventure.\"\n" +
+    "And the light swallowed them, leaving behind the ancient city, the legends, and even everything they thought they knew about reality.\n" +
+    "The next gate is still under discovery and development.\n";
+  terminal.appendChild(msg);
+  setTimeout(() => {
     document.body.style.filter = "none";
     }, 999900000);
 },
@@ -244,7 +244,7 @@ setTimeout(() => {
   terminal.appendChild(msg);
 },
 
-"Gate": () => {
+"mirror note": () => {
   const msg = document.createElement("div");
   msg.className = "cmd-line";
   msg.textContent = `Margot sighed deeply, then pressed the gate handle, which slowly opened with a deep metallic sound, as if groaning under centuries of secrets. As she crossed, she felt a cold breeze envelop her body, as if she had left her own time and entered a place between worlds.
