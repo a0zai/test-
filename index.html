@@ -439,13 +439,22 @@ Try ~>:MG
       terminal.innerHTML += "<div class='cmd-line'>🛑 Je hebt gezien wat je niet mocht zien.</div>";
     }, 3000);
   },
-  "contact": () => {
-    const reveal = document.createElement("div");
-    reveal.className = "cmd-line";
-    reveal.textContent = "📡Stuur Signaal : https://www.linkedin.com/in/a0zai?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app.";
-    terminal.appendChild(reveal);
-    document.body.style.background = "#1a0000";
-  },
+"contact": () => {
+  const reveal = document.createElement("div");
+  reveal.className = "cmd-line";
+
+  reveal.innerHTML = `
+    📡✉️ Stuur Signaal : 
+    <a href="https://www.linkedin.com/in/a0zai?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app" 
+       target="_blank" 
+       style="color:#ff0044; text-decoration:none;">
+      LinkedIn ↗
+    </a>
+  `;
+
+  terminal.appendChild(reveal);
+  document.body.style.background = "#1a0000";
+},
   "run 19": () => {
     const trap = document.createElement("div");
     trap.className = "cmd-line";
