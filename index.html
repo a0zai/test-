@@ -154,11 +154,11 @@ const baseLines = [
   " \\ .           .  ",
   "  \\  .   3   .  ",
   "    \\  .   .  ",
-  "-----████████░░░░🔴",
+  "-----████████░░░░🌕",
   "Type 'about'    → to know more",
   "Type 'projects' → to see my work",
   "Type 'contact'  → to reach me",
-  "██████████🟢",
+  "██████████🔵",
   "  /      .  ",
   "😈🔥",
   " •      .  ",
@@ -2781,14 +2781,14 @@ function displayLinesSequentially(lines, charSpeed = 25, lineDelay = 50) {
     terminal.appendChild(msg);
 
     const lineText = lines[i];
-    const hasDot = lineText.includes("🔴");
-    const textWithoutDot = lineText.replace("🔴", "");
+    const hasDot = lineText.includes("🌕");
+    const textWithoutDot = lineText.replace("🌕", "");
 
     typeReply(textWithoutDot, msg, charSpeed, () => {
       if (hasDot) {
         const dot = document.createElement("span");
         dot.className = "moving-dot";
-        dot.textContent = "🔴";
+        dot.textContent = "🌕";
         msg.appendChild(dot);
 
         // طول السطر في البيكسل لتحديد المسافة
@@ -2818,7 +2818,7 @@ function displayLinesSequentially(lines, charSpeed = 25, lineDelay = 50) {
 }
 
 // استدعاء الدالة
-displayLinesSequentially(baseLines, 100l, 200);
+displayLinesSequentially(baseLines, 100, 200);
 // عرض الفيديو بكامل الشاشة بدون التأثير على النصوص
 function showFullScreenVideo(src) {
   const video = document.createElement("video");
