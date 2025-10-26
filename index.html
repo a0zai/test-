@@ -139,6 +139,35 @@ body {
   const input = document.getElementById("commandInput");
 
 const baseLines = [
+  "  \      .  ",
+  "  \    .   .  ",
+  "  \  .   1   .  ",
+  "  \.           .  ",
+  "\.      2      .  ",
+  " \ .           .  ",
+  "  \  .   3   .  ",
+  "    \  .   .  ",
+  "     \   .  ",
+  "|.       | ",
+  "  /      .  ",
+  "   /   .   .  ",
+  "   / .   6   .  ",
+  "  /.           .  ",
+  "/.      9      .  ",
+  "/  .           .  ",
+  "/    .   6   .  ",
+  "/      .   .  ",
+  "/       .  ",
+  "|.        |",
+  " •       .  ",
+  " •     .   .  ",
+  " •  .   3   .  ",
+  " • .           .  ",
+  "•.      2      .  ",
+  " • .           .  ",
+  "  •  .   1   .  ",
+  "   •  .   .  ",
+  " •      .  ",
   "🐈‍⬛In an ancient city shrouded in fog most days,",
   "Margot, a renowned archaeologist, was searching for the secrets of forgotten civilizations.",
   "The city was full of legends about the “Dark Gate,” a portal said to lead to other worlds,",
@@ -231,7 +260,7 @@ const commandActions = {
     "Margot smiled and said:\n" +
     "Alright… let’s begin the real adventure.\n" +
     "And the light swallowed them, leaving behind the ancient city, the legends, and even everything they thought they knew about reality.\n" +
-    "The next gate is still under discovery and development.\n";
+    "The next gate is still under discovery and development(👁️‍🗨️).\n";
   terminal.appendChild(msg);
   setTimeout(() => {
     document.body.style.filter = "none";
@@ -257,7 +286,7 @@ Margot cautiously approached, trying to understand whether these beings were fri
 Margot felt her heart pounding. This was no longer just an archaeological adventure, but a test of all the courage and will she had possessed throughout her life.
 
 Do you think this is the ending?
-Try:3
+Try:dose
 Try:MG
 ✍️ Handtekening:
 ()`;
@@ -300,7 +329,7 @@ Try:MG
     document.body.appendChild(eye);
     setTimeout(() => eye.remove(), 4000);
   },
-  "run 3": () => {
+  "dose": () => {
     terminal.innerHTML += "<div class='cmd-line'>∴ Codebase aligned to 3/6/9...</div>";
     document.body.style.boxShadow = "inset 0 0 80px #00ffcc";
     document.body.style.transition = "box-shadow 1.5s";
