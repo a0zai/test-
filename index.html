@@ -140,15 +140,15 @@ body {
 
 const baseLines = [
   "Welcome to A0ZAI Terminal 💀",
-  "  \      .  ",
-  "  \    .   .  ",
-  "  \  .   1   .  ",
-  "  \.           .  ",
-  "\.      2      .  ",
-  " \ .           .  ",
-  "  \  .   3   .  ",
-  "    \  .   .  ",
-  "     \   .  ",
+  "  \\      .  ",
+  "  \\    .   .  ",
+  "  \\  .   1   .  ",
+  "  \\.           .  ",
+  "\\.      2      .  ",
+  " \\ .           .  ",
+  "  \\  .   3   .  ",
+  "    \\  .   .  ",
+  "     \\   .  ",
   "|.       | ",
   "----------------------------",
   "Type 'about'    → to know more",
@@ -164,7 +164,7 @@ const baseLines = [
   " • .           .  ",
   "  •  .   1   .  ",
   "   •  .   .  ",
-  😈🔥
+  "😈🔥",
   " •      .  ",
 ];
 const commandActions = {
@@ -2755,20 +2755,49 @@ if (commandActions[lowerInput]) {
 }
 let i = 0;
 
-// دالة الكتابة التدريجية في التيرمنال
-function typeReply(text, element) {
+// دالة الكتابة التدريجية في التيرمنالfunction typeReply(text, element, charSpeed = 25, callback = null) {
   let idx = 0;
   element.textContent = "";
+  
   function typeChar() {
     if (idx < text.length) {
       element.textContent += text.charAt(idx);
+      terminal.scrollTop = terminal.scrollHeight; // تمرير تلقائي للـ terminal
       idx++;
-      terminal.scrollTop = terminal.scrollHeight; 
-      setTimeout(typeChar, 20);
+      setTimeout(typeChar, charSpeed);
+    } else {
+      if (callback) callback(); // استدعاء التالي بعد انتهاء السطر
     }
   }
+  
   typeChar();
 }
+
+// عرض جميع الأسطر واحدًا تلو الآخر
+function displayLinesSequentially(lines, charSpeed = 25, lineDelay = 50) {
+  let i = 0;
+
+  function showLine() {
+    if (i >= lines.length) return;
+
+    const msg = document.createElement("div");
+    msg.className = "cmd-line";
+    terminal.appendChild(msg);
+
+    typeReply(lines[i], msg, charSpeed, () => {
+      // بعد الانتهاء من السطر الحالي ننتظر قليلاً قبل السطر التالي
+      setTimeout(() => {
+        i++;
+        showLine();
+      }, lineDelay);
+    });
+  }
+
+  showLine();
+}
+
+// استدعاء الدالة
+displayLinesSequentially(baseLines, 25, 50);
 
 // عرض الفيديو بكامل الشاشة بدون التأثير على النصوص
 function showFullScreenVideo(src) {
