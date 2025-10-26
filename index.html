@@ -58,12 +58,12 @@
 .moving-moon {
   position: relative;
   display: inline-block;
-  animation: moveMoon 3s linear infinite alternate;
+  animation: moveMoon 2s linear infinite alternate;
 }
 
 @keyframes moveMoon {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(20px); } 
+  0% { left: 0; }
+  100% { left: 42px; }
 }
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(5px); }
@@ -2791,9 +2791,9 @@ function displayLinesSequentially(lines, charSpeed = 25, lineDelay = 50) {
     typeReply(textWithoutDot, msg, charSpeed, () => {
       if (hasDot) {
         const dot = document.createElement("span");
-        dot.className = "moving-dot";
+        dot.className = "moving-moon";
         dot.textContent = "🌕";
-        msg.appendChild(dot);
+        msg.appendChild(moon);
 
         // طول السطر في البيكسل لتحديد المسافة
         const lineWidth = msg.offsetWidth - dot.offsetWidth;
