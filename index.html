@@ -224,12 +224,12 @@ const commandActions = {
     "Margot, you are not alone. Let’s explore this world together:\n" +
     "Then, as if the gate wasn’t satisfied with what they had witnessed, the ground trembled, and from the shadows emerged Matrix, a strange being half-machine, half-living, its eyes glowing green;\n" +
     "He said in a metallic voice:;\n" +
-    "We’ve been waiting for you… to test your limits.\n\n" +
+    "We’ve been waiting for you… to test your limits.\n" +
     "They had no choice; their adventure was no longer just about seeking treasure or a key, but a challenge between worlds.\n" +
     "Margot raised her hand, Magnum pointed to the device, and Matrix lifted his mysterious part from the ground.\n" +
     "In a single moment, the three energies merged, opening a new gate—larger and greater—leading them to a world no one had ever seen before.\n" +
     "Margot smiled and said:\n" +
-    "Alright… let’s begin the real adventure.\"\n" +
+    "Alright… let’s begin the real adventure.\n" +
     "And the light swallowed them, leaving behind the ancient city, the legends, and even everything they thought they knew about reality.\n" +
     "The next gate is still under discovery and development.\n";
   terminal.appendChild(msg);
@@ -244,7 +244,7 @@ const commandActions = {
   terminal.appendChild(msg);
 },
 
-"mirror note": () => {
+"Gate": () => {
   const msg = document.createElement("div");
   msg.className = "cmd-line";
   msg.textContent = `Margot sighed deeply, then pressed the gate handle, which slowly opened with a deep metallic sound, as if groaning under centuries of secrets. As she crossed, she felt a cold breeze envelop her body, as if she had left her own time and entered a place between worlds.
@@ -257,10 +257,12 @@ Margot cautiously approached, trying to understand whether these beings were fri
 Margot felt her heart pounding. This was no longer just an archaeological adventure, but a test of all the courage and will she had possessed throughout her life.
 
 Do you think this is the ending?
+
+
 Try:3
 Try:MG
 ✍️ Handtekening:
-M`;
+()`;
   terminal.appendChild(msg);
   document.body.style.backgroundColor = "#f4f4f4";
   terminal.style.color = "#111";
