@@ -161,8 +161,8 @@ const baseLines = [
   "",
   "Final Question:",
   "Did Margot enter the gate?",
-  "Try T~>:Yes",
-  "Try T~>:No",
+  "Try T~>:Gate",
+  "Try T~>:No gate",
 ];
 const commandActions = {
   "wake up": () => {
@@ -213,7 +213,7 @@ const commandActions = {
     document.body.style.display = "none";
     setTimeout(() => { document.body.style.display = "block"; }, 2000);
   },
-"?": () => {
+"Mgate": () => {
   document.body.style.filter = "invert(1)";
   const msg = document.createElement("div");
   msg.className = "cmd-line";
@@ -249,7 +249,7 @@ const commandActions = {
   msg.textContent = "🗝️ Code gevonden: 123696321 = bewustzijnsanker.";
   terminal.appendChild(msg);
 },
-"Yes": () => {
+"Gate": () => {
   const msg = document.createElement("div");
   msg.className = "cmd-line";
 msg.textContent = `Margot sighed deeply, then pressed the gate handle,
@@ -277,7 +277,7 @@ This was no longer just an archaeological adventure,
 but a test of all the courage and will she had possessed throughout her life.
 
 Do you think this is the ending?
-Try T~> (maybe yes) or (maybe no).
+Try T~> (No gate) or (Mgate).
 
 ✍️ With a compliment to Magnum`; 
   terminal.appendChild(msg);
@@ -422,7 +422,7 @@ Try T~> (maybe yes) or (maybe no).
       terminal.appendChild(ghost);
     }
   },
-  "No": () => {
+  "No gate": () => {
     document.body.innerHTML = "";
     const voidDiv = document.createElement("div");
     voidDiv.textContent = "⬛";
@@ -2768,7 +2768,7 @@ function showBaseLines() {
     terminal.appendChild(div);
     i++;
     terminal.scrollTop = terminal.scrollHeight;
-    setTimeout(showBaseLines, 300);
+    setTimeout(showBaseLines, 900);
   }
 }
 
