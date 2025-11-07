@@ -389,9 +389,13 @@ const emojiResponseMap = {
     "17": "Y", "18": "Z", "63": "_0"
   };
 
+const videoMap = {
+  "video 1": "copy_AB4B27C5-578B-4DE7-82C4-73FFA10B97C5.mov"
+};
+
   const symbolicMemory = JSON.parse(localStorage.getItem("symbolicMemory") || "{}");
 
-
+// ربط أوامر جديدة (تعليم ديناميكي)
 function handleLearningCommand(input) {
   if (input.startsWith("learn ")) {
     const parts = input.split(" ");
@@ -405,7 +409,7 @@ function handleLearningCommand(input) {
   return false;
 }
 
-
+// ربط رمز بمفهوم (تعليم رمزي)
 function handleTeachSymbol(input) {
   if (input.startsWith("teach ")) {
     const [_, symbol, __, ...concept] = input.split(" ");
@@ -419,7 +423,7 @@ function handleTeachSymbol(input) {
   return false;
 }
 
-
+// استدعاء كل ما تعلّمه النظام
 function handleRecallCommand(input) {
   if (input === "recall") {
     terminal.innerHTML += "<div class='cmd-line'>🧠 Geleerde elementen:</div>";
@@ -431,7 +435,7 @@ function handleRecallCommand(input) {
   return false;
 }
 
-
+// إعادة تعيين الذاكرة
 function handleResetMind(input) {
   if (input === "reset mind") {
     localStorage.removeItem("symbolicMemory");
@@ -458,7 +462,7 @@ function handleIntent(input) {
   return false;
 }
 
-
+// إدماج كل الأوامر الرمزية التعليمية داخل نقطة واحدة
 function symbolicSelfLearn(input) {
   const lower = input.trim().toLowerCase();
   return (
@@ -519,24 +523,26 @@ if (commandActions[lowerInput]) {
 }
 let i = 0;
 
+// دالة الكتابة التدريجية في التيرمنال
 function typeReply(text, element, charSpeed = 25, callback = null) {
   let idx = 0;
   element.textContent = "";
-
+  
   function typeChar() {
     if (idx < text.length) {
       element.textContent += text.charAt(idx);
-      terminal.scrollTop = terminal.scrollHeight;
+      terminal.scrollTop = terminal.scrollHeight; // تمرير تلقائي للـ terminal
       idx++;
       setTimeout(typeChar, charSpeed);
     } else {
-      if (callback) callback();
+      if (callback) callback(); // استدعاء التالي بعد انتهاء السطر
     }
   }
-
+  
   typeChar();
 }
 
+// عرض جميع الأسطر واحدًا تلو الآخر
 function displayLinesSequentially(lines, charSpeed = 25, lineDelay = 50) {
   let i = 0;
 
@@ -547,33 +553,8 @@ function displayLinesSequentially(lines, charSpeed = 25, lineDelay = 50) {
     msg.className = "cmd-line";
     terminal.appendChild(msg);
 
-    const lineText = lines[i];
-    const hasDot = lineText.includes("🌕");
-    const textWithoutDot = lineText.replace("🌕", "");
-
-    typeReply(textWithoutDot, msg, charSpeed, () => {
-      if (hasDot) {
-        const dot = document.createElement("span");
-        dot.className = "moving-dot";
-        dot.textContent = "🌕";
-        msg.appendChild(dot);
-
-
-        const lineWidth = msg.offsetWidth - dot.offsetWidth;
-
-        dot.style.animationDuration = "2s";
-        dot.style.setProperty('--distance', `${lineWidth}px`);
-
-
-        const styleSheet = document.styleSheets[0];
-        styleSheet.insertRule(`
-          @keyframes moveDot {
-            0% { left: 0; }
-            100% { left: ${lineWidth}px; }
-          }
-        `, styleSheet.cssRules.length);
-      }
-
+    typeReply(lines[i], msg, charSpeed, () => {
+      // بعد الانتهاء من السطر الحالي ننتظر قليلاً قبل السطر التالي
       setTimeout(() => {
         i++;
         showLine();
@@ -584,16 +565,50 @@ function displayLinesSequentially(lines, charSpeed = 25, lineDelay = 50) {
   showLine();
 }
 
-
+// استدعاء الدالة
 displayLinesSequentially(baseLines, 100, 200);
 
+// عرض الفيديو بكامل الشاشة بدون التأثير على النصوص
+function showFullScreenVideo(src) {
+  const video = document.createElement("video");
+  video.src = src;
+  video.autoplay = true;
+  video.loop = false;
+  video.muted = true;
+  video.playsInline = true;
 
+  video.style.position = "fixed";
+  video.style.top = "0";
+  video.style.left = "0";
+  video.style.width = "100%";
+  video.style.height = "100%";
+  video.style.objectFit = "cover";
+  video.style.zIndex = "1";       // خلف النصوص
+  video.style.opacity = "0";
+  video.style.transition = "opacity 1s";
 
+  document.body.appendChild(video);
+
+  // fade-in جزئي
+  setTimeout(() => { video.style.opacity = "0.5"; }, 50);
+
+  // fade-out عند انتهاء الفيديو
+  video.addEventListener("ended", () => {
+    video.style.opacity = "0";
+    setTimeout(() => document.body.removeChild(video), 1000);
+  });
+}
+
+// الاستماع لأوامر التيرمنال
 input.addEventListener("keydown", function(event) {
   if (event.key === "Enter") {
     const cmd = input.value.trim();
     const lowerCmd = cmd.toLowerCase();
 
+    // عرض الفيديو إذا كان الأمر موجود
+    if (videoMap[lowerCmd]) {
+      showFullScreenVideo(videoMap[lowerCmd]);
+    }
 
     const userCmd = document.createElement("div");
     userCmd.className = "cmd-line cmd-user";
@@ -612,6 +627,12 @@ input.addEventListener("keydown", function(event) {
     terminal.scrollTop = terminal.scrollHeight;
   }
 });
+
+// عند تحميل الصفحة
+window.onload = () => {
+  showFullScreenVideo("copy_AB4B27C5-578B-4DE7-82C4-73FFA10B97C5.mov");
+  showBaseLines();  // يبدأ عرض baseLines مباشرة
+};
 
 </script>
 <script>
