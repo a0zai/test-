@@ -13,7 +13,7 @@
       height: 100%;
       font-family: 'Courier New', monospace;
       background: #000000;
-      color: #FFD700
+      color: #39FF14
 ;
       overflow: auto;
         display: flex;
@@ -648,12 +648,12 @@ particlesJS("particles-js", {
       "value": 2
     },
     "color": {
-      "value": "#B8860B
+      "value": "#8A2BE2
 "
     },
     "line_linked": {
       "enable": true,
-      "color": "#B8860B
+      "color": "#8A2BE2
 "
     },
     "move": {
@@ -696,6 +696,32 @@ function animate() {
     requestAnimationFrame(animate);
     torusKnot.rotation.x += 0.01;
     torusKnot.rotation.y += 0.005;
+    renderer.render(scene, camera);
+}
+animate();
+</script>
+<script>
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({ alpha: true });
+renderer.setSize(300, 300);
+renderer.domElement.style.position = "fixed";
+renderer.domElement.style.bottom = "10px";
+renderer.domElement.style.right = "10px";
+renderer.domElement.style.zIndex = "1000";
+document.body.appendChild(renderer.domElement);
+
+const geometry = new THREE.SphereGeometry(1, 32, 32);
+const material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
+const sphere = new THREE.Mesh(geometry, material);
+scene.add(sphere);
+
+camera.position.z = 5;
+
+function animate() {
+    requestAnimationFrame(animate);
+    sphere.rotation.x += 0.01;
+    sphere.rotation.y += 0.01;
     renderer.render(scene, camera);
 }
 animate();
