@@ -13,8 +13,7 @@
       height: 100%;
       font-family: 'Courier New', monospace;
       background: #000000;
-      color: #39FF14
-;
+      color: #39FF14;
       overflow: auto;
         display: flex;
   flex-direction: column;
@@ -702,30 +701,30 @@ particlesJS("particles-js", {
 </script>
 <script>
 (function() {
-  const scene2 = new THREE.Scene();
-  const camera2 = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
-  const renderer2 = new THREE.WebGLRenderer({ alpha: true });
-  renderer2.setSize(300, 300);
-  renderer2.domElement.style.position = "fixed";
-  renderer2.domElement.style.bottom = "10px";
-  renderer2.domElement.style.right = "10px";
-  renderer2.domElement.style.zIndex = "1000";
-  document.body.appendChild(renderer2.domElement);
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
+  const renderer = new THREE.WebGLRenderer({ alpha: true });
+  renderer.setSize(300, 300);
+  renderer.domElement.style.position = "fixed";
+  renderer.domElement.style.bottom = "10px";
+  renderer.domElement.style.right = "10px";
+  renderer.domElement.style.zIndex = "1000";
+  document.body.appendChild(renderer.domElement);
 
-  const geometry2 = new THREE.SphereGeometry(1, 32, 32);
-  const material2 = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
-  const sphere2 = new THREE.Mesh(geometry2, material2);
-  scene2.add(sphere2);
+  const geometry = new THREE.SphereGeometry(1, 32, 32);
+  const material = new THREE.MeshBasicMaterial({ color: 0xFF0000, wireframe: true });
+  const sphere = new THREE.Mesh(geometry, material);
+  scene.add(sphere);
 
-  camera2.position.z = 5;
+  camera.position.z = 5;
 
-  function animate2() {
-      requestAnimationFrame(animate2);
-      sphere2.rotation.x += 0.01;
-      sphere2.rotation.y += 0.01;
-      renderer2.render(scene2, camera2);
+  function animate() {
+    requestAnimationFrame(animate);
+    sphere.rotation.x += 0.01;
+    sphere.rotation.y += 0.01;
+    renderer.render(scene, camera);
   }
-  animate2();
+  animate();
 })();
 </script>
 </body>
