@@ -647,11 +647,11 @@ particlesJS("particles-js", {
       "value": 2
     },
     "color": {
-      "value": "#8A2BE2
+      "value": "#8A2BE2"
     },
     "line_linked": {
       "enable": true,
-      "color": "#8A2BE2
+      "color": "#8A2BE2"
     },
     "move": {
       "speed": 0.6
@@ -697,34 +697,6 @@ particlesJS("particles-js", {
       renderer1.render(scene1, camera1);
   }
   animate1();
-})();
-</script>
-<script>
-(function() {
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
-  const renderer = new THREE.WebGLRenderer({ alpha: true });
-  renderer.setSize(300, 300);
-  renderer.domElement.style.position = "fixed";
-  renderer.domElement.style.bottom = "10px";
-  renderer.domElement.style.right = "10px";
-  renderer.domElement.style.zIndex = "1000";
-  document.body.appendChild(renderer.domElement);
-
-  const geometry = new THREE.SphereGeometry(1, 32, 32);
-  const material = new THREE.MeshBasicMaterial({ color: 0xFF0000, wireframe: true });
-  const sphere = new THREE.Mesh(geometry, material);
-  scene.add(sphere);
-
-  camera.position.z = 5;
-
-  function animate() {
-    requestAnimationFrame(animate);
-    sphere.rotation.x += 0.01;
-    sphere.rotation.y += 0.01;
-    renderer.render(scene, camera);
-  }
-  animate();
 })();
 </script>
 </body>
