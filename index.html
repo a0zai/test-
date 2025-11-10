@@ -5,7 +5,6 @@
   <title>🃏</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.46/Tone.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <style>
     html, body {
       margin: 0;
@@ -666,38 +665,6 @@ particlesJS("particles-js", {
     }
  }
 });
-</script>
-<script>
-(function() {
-  const scene1 = new THREE.Scene();
-  const camera1 = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
-  const renderer1 = new THREE.WebGLRenderer({ alpha: true });
-  renderer1.setSize(300, 300);
-  renderer1.domElement.style.position = "fixed";
-  renderer1.domElement.style.bottom = "10px";
-  renderer1.domElement.style.left = "10px";
-  renderer1.domElement.style.zIndex = "1000";
-  document.body.appendChild(renderer1.domElement);
-
-  const geometry1 = new THREE.TorusKnotGeometry(10, 3, 100, 16);
-  const material1 = new THREE.MeshStandardMaterial({ color: 0x00ffff, metalness: 0.8, roughness: 0.2 });
-  const torusKnot1 = new THREE.Mesh(geometry1, material1);
-  scene1.add(torusKnot1);
-
-  const light1 = new THREE.PointLight(0xffffff, 2, 100);
-  light1.position.set(10, 10, 10);
-  scene1.add(light1);
-
-  camera1.position.z = 30;
-
-  function animate1() {
-      requestAnimationFrame(animate1);
-      torusKnot1.rotation.x += 0.01;
-      torusKnot1.rotation.y += 0.005;
-      renderer1.render(scene1, camera1);
-  }
-  animate1();
-})();
 </script>
 </body>
 </html>
