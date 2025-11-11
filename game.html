@@ -3,137 +3,105 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Header Example</title>
+<title>Example</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r150/three.min.js"></script>
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    font-family: Arial, sans-serif;
-    background-color: white;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-
+  * { margin:0; padding:0; box-sizing:border-box; font-family: Arial, sans-serif;}
+  body { background:white; min-height:100vh; display:flex; flex-direction:column; justify-content:space-between;}
+  
   header {
-    width: 100%;
-    background-color: #ffffff;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    border-bottom: 1px solid #ccc;
+    width:100%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:10px 20px;
     position: relative;
+    background:white;
+    border-bottom:1px solid #ccc;
   }
-
-  /* Brand */
-  .brand {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    color: red;
-    font-weight: bold;
-    font-size: 20px;
-  }
-
-  .brand span {
-    font-size: 18px;
-    color: #ffffff; /* أبيض تحت كلمة A0Z حسب طلبك */
-  }
+  
+  .brand { font-size:1.5em; font-weight:bold; color:red; }
 
   /* Search */
   .search-container {
-    display: flex;
-    align-items: center;
-    margin-top: 5px;
+    display:flex;
+    align-items:center;
+    gap:5px;
+    font-size:1em;
+    color:red;
+    max-height:0;
+    overflow:hidden;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+    opacity:0;
   }
-
+  .search-container.show {
+    max-height:50px;
+    opacity:1;
+  }
   .search-container input {
-    padding: 5px 10px;
-    border: 1px solid #ccc;
-    border-radius: 20px;
-    outline: none;
-    width: 150px;
-    margin-left: 5px;
-  }
-
-  .search-icon {
-    font-size: 18px;
-    color: red;
+    padding:5px 8px;
+    border:1px solid #ccc;
+    border-radius:4px;
+    outline:none;
+    width:150px;
   }
 
   /* Hamburger */
   .hamburger {
-    cursor: pointer;
-    width: 30px;
-    height: 3px;
-    background-color: #333;
-    position: relative;
-    transition: 0.3s;
+    cursor:pointer;
+    width:30px;
+    height:3px;
+    background-color:red;
+    position:relative;
+    transition:0.3s;
   }
-
   .hamburger::before,
   .hamburger::after {
-    content: '';
-    position: absolute;
-    width: 30px;
-    height: 3px;
-    background-color: #333;
-    transition: 0.3s;
+    content:'';
+    position:absolute;
+    width:30px;
+    height:3px;
+    background-color:red;
+    transition:0.3s;
   }
+  .hamburger::before { top:-10px; }
+  .hamburger::after { top:10px; }
 
-  .hamburger::before { top: -10px; }
-  .hamburger::after { top: 10px; }
-
-  /* Menu */
   nav {
-    position: absolute;
-    top: 50px;
-    right: 20px;
-    background-color: #f0f0f0;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    display: none;
-    flex-direction: column;
-    min-width: 150px;
-    box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+    position:absolute;
+    top:50px;
+    right:20px;
+    background:#f0f0f0;
+    border-radius:8px;
+    display:none;
+    flex-direction:column;
+    min-width:150px;
   }
+  nav a { padding:10px 15px; text-decoration:none; color:#333; }
+  nav a:hover { background:#ddd; }
+  nav.active { display:flex; }
 
-  nav a {
-    padding: 10px 15px;
-    text-decoration: none;
-    color: #333;
-    transition: 0.2s;
-  }
+  main { flex:1; display:flex; justify-content:center; align-items:center; }
 
-  nav a:hover { background-color: #ddd; }
-
-  nav.active { display: flex; }
-
+  /* Footer */
   footer {
-    width: 100%;
-    padding: 80px 20px;
-    background-color: #800080;
-    color: #ffffff;
-    text-align: center;
+    position:relative;
+    background:#6a0dad;
+    color:#fff;
+    text-align:center;
+    padding:80px 20px;
+    overflow:hidden;
   }
+  #threeContainer { position:absolute; bottom:10px; right:10px; width:200px; height:200px; }
 </style>
 </head>
 <body>
 
 <header>
-  <div class="left-header">
-    <div class="brand">
-      A0Z
-      <span>Brand</span>
-    </div>
-    <div class="search-container">
-      <span class="search-icon">🔍</span>
-      <input type="text" placeholder="على ماذا تبحث بالظبط؟">
-    </div>
+  <div class="search-container" id="searchContainer">
+    🔍 <input type="text" placeholder="على ماذا تبحث بالظبط؟">
   </div>
-
+  <div class="brand">A0Z</div>
   <div class="hamburger" id="hamburger"></div>
   <nav id="menu">
     <a href="#">Home</a>
@@ -142,27 +110,59 @@
   </nav>
 </header>
 
-<main style="flex: 1; display: flex; justify-content: center; align-items: center;">
+<main>
   <h1>Welkom op de website!</h1>
 </main>
 
-<footer id="footer">&copy; 2025 A0ZAI Example Footer</footer>
+<footer id="footer">
+  &copy; 2025 A0ZAI Example
+  <div id="threeContainer"></div>
+</footer>
 
 <script>
   const hamburger = document.getElementById('hamburger');
   const menu = document.getElementById('menu');
-  const footer = document.getElementById('footer');
+  const searchContainer = document.getElementById('searchContainer');
 
   hamburger.addEventListener('click', () => {
     menu.classList.toggle('active');
-    if(menu.classList.contains('active')) {
-      footer.style.backgroundColor = '#ffffff';
-      footer.style.color = '#000000';
-    } else {
-      footer.style.backgroundColor = '#800080';
-      footer.style.color = '#ffffff';
-    }
+    searchContainer.classList.toggle('show');
   });
+
+  // Three.js TorusKnot inside footer
+  (function() {
+    const container = document.getElementById('threeContainer');
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, container.clientWidth/container.clientHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ alpha:true, antialias:true });
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    container.appendChild(renderer.domElement);
+
+    const geometry = new THREE.TorusKnotGeometry(10, 3, 100, 16);
+    const material = new THREE.MeshStandardMaterial({ color:0x00ffff, metalness:0.8, roughness:0.2 });
+    const torusKnot = new THREE.Mesh(geometry, material);
+    scene.add(torusKnot);
+
+    const light = new THREE.PointLight(0xffffff, 2, 100);
+    light.position.set(10,10,10);
+    scene.add(light);
+
+    camera.position.z = 30;
+
+    function animate() {
+      requestAnimationFrame(animate);
+      torusKnot.rotation.x += 0.01;
+      torusKnot.rotation.y += 0.005;
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    window.addEventListener('resize', () => {
+      camera.aspect = container.clientWidth / container.clientHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(container.clientWidth, container.clientHeight);
+    });
+  })();
 </script>
 
 </body>
