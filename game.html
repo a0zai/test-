@@ -14,7 +14,7 @@ html, body {
       height: 100%;
       font-family: 'Courier New', monospace;
       background: #ffffff;
-      overflow: auto;
+      overflow: hidden;
         display: flex;
   flex-direction: column;
     }
@@ -51,15 +51,15 @@ html, body {
   nav a:hover { background-color: #ddd; }
   nav.active { display: flex; }
   main { flex: 1; display: flex; justify-content: center; align-items: center; }
-  footer {
-    width: 100%;
-    padding: 80px 20px;
-    background-color: #800080;
-    color: #ffffff;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-  }
+footer {
+  width: 100%;
+  padding: 80px 20px;
+  background-color: rgba(128, 0, 128, 0.5); /* بنفسجي شفاف */
+  color: #ffffff;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
   #threeContainer {
     position: absolute;
     bottom: 10px;
@@ -70,9 +70,8 @@ html, body {
 </style>
 </head>
 <body>
-
-<header>
   <div id="particles-js"></div>
+<header>
   <div class="left-header">
     <div class="brand">
       A0Z
