@@ -7,7 +7,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
   body {
     font-family: Arial, sans-serif;
     background-color: white;
@@ -16,7 +15,6 @@
     flex-direction: column;
     justify-content: space-between;
   }
-
   header {
     width: 100%;
     background-color: #ffffff;
@@ -27,97 +25,35 @@
     border-bottom: 1px solid #ccc;
     position: relative;
   }
-
-  /* Brand */
-  .brand {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    color: red;
-    font-weight: bold;
-    font-size: 20px;
-  }
-
-  .brand span {
-    font-size: 18px;
-    color: #ffffff; 
-  }
-
-  /* Search */
-  .search-container {
-    display: flex;
-    align-items: center;
-    margin-top: 5px;
-  }
-
-  .search-container input {
-    padding: 5px 10px;
-    border: 1px solid #ccc;
-    border-radius: 20px;
-    outline: none;
-    width: 150px;
-    margin-left: 5px;
-  }
-
-  .search-icon {
-    font-size: 18px;
-    color: red;
-  }
-
-  /* Hamburger */
-  .hamburger {
-    cursor: pointer;
-    width: 30px;
-    height: 3px;
-    background-color: #333;
-    position: relative;
-    transition: 0.3s;
-  }
-
-  .hamburger::before,
-  .hamburger::after {
-    content: '';
-    position: absolute;
-    width: 30px;
-    height: 3px;
-    background-color: #333;
-    transition: 0.3s;
-  }
-
+  .brand { display: flex; flex-direction: column; align-items: flex-start; color: red; font-weight: bold; font-size: 20px; }
+  .brand span { font-size: 18px; color: #ffffff; }
+  .search-container { display: flex; align-items: center; margin-top: 5px; }
+  .search-container input { padding: 5px 10px; border: 1px solid #ccc; border-radius: 20px; outline: none; width: 150px; margin-left: 5px; }
+  .search-icon { font-size: 18px; color: red; }
+  .hamburger { cursor: pointer; width: 30px; height: 3px; background-color: #333; position: relative; transition: 0.3s; }
+  .hamburger::before, .hamburger::after { content: ''; position: absolute; width: 30px; height: 3px; background-color: #333; transition: 0.3s; }
   .hamburger::before { top: -10px; }
   .hamburger::after { top: 10px; }
-
-  /* Menu */
-  nav {
-    position: absolute;
-    top: 50px;
-    right: 20px;
-    background-color: #f0f0f0;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    display: none;
-    flex-direction: column;
-    min-width: 150px;
-    box-shadow: 0 5px 10px rgba(0,0,0,0.1);
-  }
-
-  nav a {
-    padding: 10px 15px;
-    text-decoration: none;
-    color: #333;
-    transition: 0.2s;
-  }
-
+  nav { position: absolute; top: 50px; right: 20px; background-color: #f0f0f0; border: 1px solid #ccc; border-radius: 8px; display: none; flex-direction: column; min-width: 150px; box-shadow: 0 5px 10px rgba(0,0,0,0.1); }
+  nav a { padding: 10px 15px; text-decoration: none; color: #333; transition: 0.2s; }
   nav a:hover { background-color: #ddd; }
-
   nav.active { display: flex; }
-
+  main { flex: 1; display: flex; justify-content: center; align-items: center; }
   footer {
     width: 100%;
     padding: 80px 20px;
     background-color: #800080;
     color: #ffffff;
     text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  #threeContainer {
+    position: absolute;
+    bottom: 10px;
+    right: 10px; /* يمكن تغييره إلى left:10px حسب الرغبة */
+    width: 100px;
+    height: 100px;
   }
 </style>
 </head>
@@ -134,7 +70,6 @@
       <input type="text" placeholder="على ماذا تبحث بالظبط؟">
     </div>
   </div>
-
   <div class="hamburger" id="hamburger"></div>
   <nav id="menu">
     <a href="#">Home</a>
@@ -147,7 +82,10 @@
   <h1>Welkom op de website!</h1>
 </main>
 
-<footer id="footer">&copy; 2025 A0ZAI Example Footer</footer>
+<footer id="footer">
+  &copy; 2025 A0ZAI Example Footer
+  <div id="threeContainer"></div>
+</footer>
 
 <script>
   const hamburger = document.getElementById('hamburger');
@@ -165,37 +103,42 @@
     }
   });
 </script>
+
 <script>
 (function() {
-  const scene1 = new THREE.Scene();
-  const camera1 = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
-  const renderer1 = new THREE.WebGLRenderer({ alpha: true });
-  renderer1.setSize(300, 300);
-  renderer1.domElement.style.position = "fixed";
-  renderer1.domElement.style.bottom = "10px";
-  renderer1.domElement.style.left = "10px";
-  renderer1.domElement.style.zIndex = "1000";
-  document.body.appendChild(renderer1.domElement);
+  const container = document.getElementById('threeContainer');
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(75, container.clientWidth/container.clientHeight, 0.1, 1000);
+  const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+  renderer.setSize(container.clientWidth, container.clientHeight);
+  container.appendChild(renderer.domElement);
 
-  const geometry1 = new THREE.TorusKnotGeometry(10, 3, 100, 16);
-  const material1 = new THREE.MeshStandardMaterial({ color: 0x00ffff, metalness: 0.8, roughness: 0.2 });
-  const torusKnot1 = new THREE.Mesh(geometry1, material1);
-  scene1.add(torusKnot1);
+  const geometry = new THREE.TorusKnotGeometry(5, 1.5, 100, 16); // حجم أصغر
+  const material = new THREE.MeshStandardMaterial({ color: 0x00ffff, metalness: 0.8, roughness: 0.2 });
+  const torusKnot = new THREE.Mesh(geometry, material);
+  scene.add(torusKnot);
 
-  const light1 = new THREE.PointLight(0xffffff, 2, 100);
-  light1.position.set(10, 10, 10);
-  scene1.add(light1);
+  const light = new THREE.PointLight(0xffffff, 2, 100);
+  light.position.set(10,10,10);
+  scene.add(light);
 
-  camera1.position.z = 30;
+  camera.position.z = 9; 
 
-  function animate1() {
-      requestAnimationFrame(animate1);
-      torusKnot1.rotation.x += 0.01;
-      torusKnot1.rotation.y += 0.005;
-      renderer1.render(scene1, camera1);
+  function animate() {
+    requestAnimationFrame(animate);
+    torusKnot.rotation.x += 0.01;
+    torusKnot.rotation.y += 0.005;
+    renderer.render(scene, camera);
   }
-  animate1();
+  animate();
+
+  window.addEventListener('resize', () => {
+    camera.aspect = container.clientWidth / container.clientHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(container.clientWidth, container.clientHeight);
+  });
 })();
 </script>
+
 </body>
 </html>
