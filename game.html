@@ -134,13 +134,13 @@ footer {
   <div id="particles-js"></div>
 <header>
   <div class="left-header">
+    </div>
     <div class="search-container">
       <span class="search-icon">🔍</span>
       <input type="text" placeholder="Under construction😈">
     </div>
   </div>
-   <div class="hamburger" id="hamburger"></div>
-</header>
+  <div class="hamburger" id="hamburger"></div>
 <main style="flex: 1; display: flex; justify-content: center; align-items: center; flex-direction: column; color: white; text-align: center;">
 
   <!-- Home Section -->
@@ -160,7 +160,7 @@ footer {
   <!-- Over Ons Section -->
   <section id="over-ons" style="margin-top: 50px;">
     <h2>About Us</h2>
-    <p>In ontwikkeling en constructie🔄🛠️!</p>
+    <p>Under development🔄🛠️!</p>
   </section>
 
 </main>
@@ -171,6 +171,7 @@ footer {
   <a href="#contact">Contact</a>
   <a href="#over-ons">Over Ons</a>
 </nav>
+
 
 <footer id="footer">
   &copy; A0ZAI Example
@@ -192,16 +193,6 @@ footer {
       footer.style.color = '#ffffff';
     }
   });
-  const navLinks = menu.querySelectorAll('a');
-  navLinks.forEach(link => {
-    link.addEventListener('click', (e) => {
-      e.preventDefault();
-      const targetId = link.getAttribute('href').substring(1);
-      const targetSection = document.getElementById(targetId);
-      targetSection.scrollIntoView({ behavior: 'smooth' });
-      menu.classList.remove('active'); 
-  });
-
 </script>
 
 <script>
