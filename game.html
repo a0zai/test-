@@ -437,23 +437,6 @@ const baseLines = [
 
 
 const commandActions = {
-  "why?": () => {
-    const overlay = createFullScreenOverlay();
-    overlay.style.background = "rgba(0,0,0,0.8)"; // خلفية شبه شفافة
-    overlay.style.transition = "background 1s";   // تأثير الانتقال على الخلفية فقط
-
-    const msg = document.createElement("div");
-    msg.className = "cmd-line";
-    msg.textContent = `Margot sighed deeply, then pressed the gate handle, which slowly opened with a deep metallic sound, as if groaning under centuries of secrets. As she crossed, she felt a cold breeze envelop her body, as if she had left her own time and entered a place between worlds.
-
-🎃 you are here😈!:
-(🗝️Try 63output)`;
-    terminal.appendChild(msg);
-
-    document.body.style.backgroundColor = "#f4f4f4";
-    terminal.style.color = "#111";
-  },
-
   "dose": () => {
     const overlay = createFullScreenOverlay();
     overlay.style.background = "rgba(0,0,0,0.9)";
@@ -491,9 +474,26 @@ const commandActions = {
     terminal.style.color = "#00ffff";
   },
 
+  "why?": () => {
+    const overlay = createFullScreenOverlay();
+    overlay.style.background = "rgba(0,0,0,0.8)";
+    overlay.style.transition = "background 1s";
+
+    const msg = document.createElement("div");
+    msg.className = "cmd-line";
+    msg.textContent = `Margot sighed deeply, then pressed the gate handle, which slowly opened with a deep metallic sound, as if groaning under centuries of secrets. As she crossed, she felt a cold breeze envelop her body, as if she had left her own time and entered a place between worlds.
+
+🎃 you are here😈!:
+(🗝️Try 63output)`;
+    terminal.appendChild(msg);
+
+    document.body.style.backgroundColor = "#f4f4f4";
+    terminal.style.color = "#111";
+  },
+
   "how?": () => {
     const overlay = createFullScreenOverlay();
-    overlay.style.background = "rgba(0,0,0,0.9)";
+    overlay.style.background = "rgba(0,0,0,0.8)";
     overlay.style.transition = "background 1s";
 
     const msg = document.createElement("div");
@@ -529,6 +529,7 @@ Try <code>~>:why?</code> or <code>~>:no way</code>.
     terminal.style.color = "#ff0033";
   },
 };
+
  const questionResponses = {
       "why am i here?": [
     "Answer 1: To explore meaning.",
