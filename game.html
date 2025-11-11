@@ -402,6 +402,22 @@ const geometry = new THREE.TorusKnotGeometry(5, 1.2, 150, 20);
 })();
   const terminal = document.getElementById("terminal");
   const input = document.getElementById("commandInput");
+function createFullScreenOverlay() {
+  let overlay = document.getElementById("fullscreenOverlay");
+  if (!overlay) {
+    overlay = document.createElement("div");
+    overlay.id = "fullscreenOverlay";
+    overlay.style.position = "fixed";
+    overlay.style.top = "0";
+    overlay.style.left = "0";
+    overlay.style.width = "100%";
+    overlay.style.height = "100%";
+    overlay.style.zIndex = "9999";
+    overlay.style.pointerEvents = "none";
+    document.body.appendChild(overlay);
+  }
+  return overlay;
+}
 
 const baseLines = [
   "Welcome to A0ZAI",
