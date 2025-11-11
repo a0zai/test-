@@ -38,8 +38,10 @@ header {
 }
 .logo-container {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 10px;
+  width: 100%;
+  padding: 0 20px;
 }
 
 .mode-toggle {
@@ -190,13 +192,11 @@ footer {
   </div>
   <div class="mode-toggle" id="modeToggle">🌓</div>
 </div>
-
   <div class="header-bottom">
     <div class="search-container">
       <span class="search-icon">🔍</span>
       <input type="text" placeholder="not now😈!">
     </div>
-
     <div class="hamburger" id="hamburger"></div>
     <nav id="menu">
       <a href="#home">Home</a>
@@ -267,6 +267,7 @@ hamburger.addEventListener('click', () => {
     footer.style.backgroundColor = 'rgba(128, 0, 128, 0.5)';  // بنفسجي شفاف قبل النقر
     footer.style.color = '#ffffff';
   }
+  footer.scrollIntoView({ behavior: 'smooth' });
 });
 
 navLinks.forEach(link => {
