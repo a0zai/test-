@@ -27,45 +27,6 @@ html, body {
   z-index: 0;
 }
 
-#terminalContainer {
-  height: 200px;
-  background: #111;
-  color: #0f0;
-  font-family: monospace;
-  padding: 15px;
-  border-radius: 10px;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-}
-
-#terminal {
-  flex: 1;
-  overflow-y: auto;
-  padding-bottom: 50px;
-}
-
-.cmd-line {
-  margin: 10px 0;
-  animation: fadeIn 0.3s ease-in-out;
-  white-space: pre;
-}
-
-.input-line {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  padding: 10px;
-}
-
-.cmd-user {
-  color: #ff0044;
-  font-weight: bold;
-}
 header {
   width: 100%;
   display: flex;
@@ -182,7 +143,46 @@ main {
   z-index: 1;
 }
 
-/* الفوتر */
+#terminalContainer {
+  height: 200px;
+  background: #111;
+  color: #0f0;
+  font-family: monospace;
+  padding: 15px;
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+#terminal {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 20px;
+}
+
+.cmd-line {
+  margin: 10px 0;
+  animation: fadeIn 0.3s ease-in-out;
+  white-space: pre;
+}
+
+.input-line {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+}
+
+.cmd-user {
+  color: #ff0044;
+  font-weight: bold;
+}
 footer {
   width: 100%;
   padding: 80px 20px;
