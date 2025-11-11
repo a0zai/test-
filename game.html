@@ -3,23 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Example</title>
+<title>A0Z Example</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.46/Tone.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
 <style>
 html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      font-family: 'Courier New', monospace;
-      background: #000000;
-      overflow: hidden;
-      scroll-behavior: smooth;
-        display: flex;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: 'Courier New', monospace;
+  background: #000000;
+  display: flex;
   flex-direction: column;
-    }
-    
+}
+
+/* خلفية الجزيئات */
 #particles-js {
   position: fixed;
   top: 0;
@@ -27,17 +27,29 @@ html, body {
   width: 100%;
   height: 100%;
   z-index: 0;
-    }
-  header {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    border-bottom: 1px solid #ccc;
-    position: relative;
-  }
+}
 
+/* الهيدر */
+header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  border-bottom: 1px solid #ccc;
+  position: relative;
+  z-index: 2;
+}
+
+/* اسم الموقع */
+.logo {
+  font-size: 20px;
+  font-weight: bold;
+  color: red;
+  letter-spacing: 2px;
+}
+
+/* مربع البحث */
 .search-container { 
   display: flex; 
   align-items: center; 
@@ -49,7 +61,7 @@ html, body {
   border: 1px solid #ccc; 
   border-radius: 20px; 
   outline: none; 
-  width: 100px; 
+  width: 120px; 
   margin-left: 5px; 
 }
 
@@ -58,6 +70,7 @@ html, body {
   color: red; 
 }
 
+/* زر القائمة */
 .hamburger {
   cursor: pointer;
   width: 30px;
@@ -67,6 +80,7 @@ html, body {
   top: 20px;
   left: 3px;
   transition: 0.3s;
+  z-index: 3;
 }
 
 .hamburger::before, 
@@ -82,6 +96,7 @@ html, body {
 .hamburger::before { top: -10px; }
 .hamburger::after { top: 10px; }
 
+/* القائمة المنسدلة */
 nav { 
   position: absolute; 
   top: 50px; 
@@ -103,43 +118,52 @@ nav a {
 }
 
 nav a:hover { background-color: #ddd; }
-
 nav.active { display: flex; }
 
+/* المحتوى الرئيسي */
 main { 
   flex: 1; 
-  display: flex; 
-  justify-content: center; 
-  align-items: center; 
+  overflow-y: auto;
+  color: white;
+  text-align: center;
+  padding: 20px;
+  z-index: 1;
 }
+
+/* الفوتر */
 footer {
   width: 100%;
   padding: 80px 20px;
-  background-color: rgba(128, 0, 128, 0.5); /* بنفسجي شفاف */
+  background-color: rgba(128, 0, 128, 0.5);
   color: #ffffff;
   text-align: center;
   position: relative;
   overflow: hidden;
 }
-  #threeContainer {
-    position: absolute;
-    bottom: 10px;
-    right: 10px; 
-    width: 100px;
-    height: 100px;
-    transform: translateX(-10px);
-  }
+
+#threeContainer {
+  position: absolute;
+  bottom: 10px;
+  right: 10px; 
+  width: 100px;
+  height: 100px;
+  transform: translateX(-10px);
+}
 </style>
 </head>
 <body>
   <div id="particles-js"></div>
 
 <header>
+  <div class="logo">A0ZAI</div>
+
   <div class="search-container">
     <span class="search-icon">🔍</span>
-    <input type="text" placeholder="Under construction😈">
+    <input type="text" placeholder="Intended construction😈">
   </div>
+
   <div class="hamburger" id="hamburger"></div>
+
   <nav id="menu">
     <a href="#home">Home</a>
     <a href="#contact">Contact</a>
@@ -148,34 +172,39 @@ footer {
 </header>
 
 <main>
-  <section id="home">
+
+  <!-- Home Section -->
+  <section id="home" style="min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;">
     <h2>Welcome to A0ZAI</h2>
     <p>Discover amazing content and projects here!</p>
-    <img src="IMG_9055.jpeg" alt="Main Image" style="max-width: 500px; width: 80%; border-radius: 10px; margin-top: 10px;">
+    <img src="IMG_9055.jpeg" alt="Main Image" style="max-width: 400px; width: 80%; border-radius: 10px; margin-top: 20px;">
   </section>
 
-  <section id="contact">
+  <!-- Contact Section -->
+  <section id="contact" style="min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;">
     <h2>Contact Me</h2>
     <p>Connect on LinkedIn:</p>
-    <a href="https://www.linkedin.com/in/a0zai" target="_blank" style="color: red; text-decoration: underline;">Visit my LinkedIn</a>
+    <a href="https://www.linkedin.com/in/a0zai" target="_blank" style="color: red; text-decoration: underline;">LinkedIn Profile</a>
   </section>
 
-  <section id="over-ons">
+  <!-- Over Ons Section -->
+  <section id="over-ons" style="min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;">
     <h2>About Us</h2>
-    <p>In development and under construction 🔄🛠️</p>
+    <p>In development and under construction 🔧🚀</p>
   </section>
+
 </main>
 
 <footer id="footer">
-  &copy; 2025 A0ZAI Example
+  &copy; A0ZAI Example
   <div id="threeContainer"></div>
 </footer>
 
-<!-- Hamburger Script -->
 <script>
 const hamburger = document.getElementById('hamburger');
 const menu = document.getElementById('menu');
 const footer = document.getElementById('footer');
+const navLinks = menu.querySelectorAll('a');
 
 hamburger.addEventListener('click', () => {
   menu.classList.toggle('active');
@@ -186,18 +215,19 @@ hamburger.addEventListener('click', () => {
     footer.style.backgroundColor = 'rgba(128, 0, 128, 0.5)';
     footer.style.color = '#ffffff';
   }
-  });
 });
 
-const navLinks = menu.querySelectorAll('a');
 navLinks.forEach(link => {
   link.addEventListener('click', (e) => {
     e.preventDefault();
     const targetId = link.getAttribute('href').substring(1);
     const targetSection = document.getElementById(targetId);
-    targetSection.scrollIntoView({ behavior: 'smooth' });
+    if (targetSection) {
+      targetSection.scrollIntoView({ behavior: 'smooth' });
+    }
     menu.classList.remove('active');
   });
+});
 </script>
 
 <script>
@@ -235,34 +265,19 @@ navLinks.forEach(link => {
   });
 })();
 </script>
+
 <script>
 particlesJS("particles-js", {
   "particles": {
-    "number": {
-      "value": 80
-    },
-    "size": {
-      "value": 2
-    },
-    "color": {
-      "value": "#8A2BE2"
-    },
-    "line_linked": {
-      "enable": true,
-      "color": "#8A2BE2"
-    },
-    "move": {
-      "speed": 0.6
-    }
+    "number": { "value": 80 },
+    "size": { "value": 2 },
+    "color": { "value": "#8A2BE2" },
+    "line_linked": { "enable": true, "color": "#8A2BE2" },
+    "move": { "speed": 0.6 }
   },
   "interactivity": {
-    "events": {
-      "onhover": {
-        "enable": true,
-        "mode": "repulse"
-      }
-    }
- }
+    "events": { "onhover": { "enable": true, "mode": "repulse" } }
+  }
 });
 </script>
 </body>
