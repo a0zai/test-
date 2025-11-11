@@ -294,7 +294,7 @@ body {
     left: 50%;
     transform: translateX(-50%);
     width: 100px;
-    height: 50px;
+    height: 120px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -307,7 +307,7 @@ body {
       outline: none;
       font-size: 16px;
       text-align: center;
-      width: 33%;
+      width: 50%;
     ">
   </div>
   </section>
@@ -423,6 +423,9 @@ const baseLines = [
 ];
 const commandActions = {
 "why?": () => {
+  const overlay = createFullScreenOverlay();
+  overlay.style.background = "rgba(0,0,0,0.8)";
+  overlay.style.transition = "all 1s";
   const msg = document.createElement("div");
   msg.className = "cmd-line";
   msg.textContent = `Margot sighed deeply, then pressed the gate handle, which slowly opened with a deep metallic sound, as if groaning under centuries of secrets. As she crossed, she felt a cold breeze envelop her body, as if she had left her own time and entered a place between worlds.
@@ -435,12 +438,18 @@ const commandActions = {
 },
 
   "dose": () => {
+    const overlay = createFullScreenOverlay();
+    overlay.style.background = "rgba(0,0,0,0.9)";
+    overlay.style.transition = "all 1s";
     terminal.innerHTML += "<div class='cmd-line'>∴ 🧪.</div>";
     document.body.style.boxShadow = "inset 0 0 80px #00ffcc";
     document.body.style.transition = "box-shadow 1.5s";
   },
   
 "no way": () => {
+    const overlay = createFullScreenOverlay();
+    overlay.style.background = "rgba(0,0,0,0.9)";
+    overlay.style.transition = "all 1s";
     document.body.innerHTML = "";
     const voidDiv = document.createElement("div");
     voidDiv.textContent = "⬛";
@@ -453,11 +462,17 @@ const commandActions = {
     document.body.appendChild(voidDiv);
   },
   "47-": () => {
+  const overlay = createFullScreenOverlay();
+  overlay.style.background = "rgba(0,0,0,0.9)";
+  overlay.style.transition = "all 1s";  
   terminal.innerHTML += "<div class='cmd-line'>🧿: 47</div>";
   document.body.style.background = "#111111";
   document.body.style.boxShadow = "0 0 50px #00ffff";
 },
   "how?": () => {
+  const overlay = createFullScreenOverlay();
+  overlay.style.background = "rgba(0,0,0,0.9)";
+  overlay.style.transition = "all 1s";
   const msg = document.createElement("div");
   msg.className = "cmd-line";
 
