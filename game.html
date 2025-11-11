@@ -435,11 +435,12 @@ const baseLines = [
   " •      .  ",
 ];
 
+
 const commandActions = {
   "why?": () => {
     const overlay = createFullScreenOverlay();
-    overlay.style.background = "rgba(0,0,0,0.8)"; // لون overlay دائم وواضح
-    overlay.style.transition = "all 1s";
+    overlay.style.background = "rgba(0,0,0,0.8)"; // خلفية شبه شفافة
+    overlay.style.transition = "background 1s";   // تأثير الانتقال على الخلفية فقط
 
     const msg = document.createElement("div");
     msg.className = "cmd-line";
@@ -456,23 +457,23 @@ const commandActions = {
   "dose": () => {
     const overlay = createFullScreenOverlay();
     overlay.style.background = "rgba(0,0,0,0.9)";
-    overlay.style.transition = "all 1s";
+    overlay.style.transition = "background 1s";
 
     terminal.innerHTML += "<div class='cmd-line'>∴ 🧪.</div>";
-    document.body.style.boxShadow = "inset 0 0 80px #00ffcc";
-    document.body.style.transition = "box-shadow 1.5s";
+    document.body.style.backgroundColor = "#000000";
+    terminal.style.color = "#00ffcc";
   },
 
   "no way": () => {
     const overlay = createFullScreenOverlay();
     overlay.style.background = "rgba(0,0,0,0.9)";
-    overlay.style.transition = "all 1s";
+    overlay.style.transition = "background 1s";
 
     document.body.innerHTML = "";
     const voidDiv = document.createElement("div");
     voidDiv.textContent = "⬛";
     voidDiv.style.fontSize = "100px";
-    voidDiv.style.color = "#222";
+    voidDiv.style.color = "#fff";
     voidDiv.style.position = "fixed";
     voidDiv.style.top = "50%";
     voidDiv.style.left = "50%";
@@ -483,17 +484,17 @@ const commandActions = {
   "47-": () => {
     const overlay = createFullScreenOverlay();
     overlay.style.background = "rgba(0,0,0,0.9)";
-    overlay.style.transition = "all 1s";
+    overlay.style.transition = "background 1s";
 
     terminal.innerHTML += "<div class='cmd-line'>🧿: 47</div>";
     document.body.style.background = "#111111";
-    document.body.style.boxShadow = "0 0 50px #00ffff";
+    terminal.style.color = "#00ffff";
   },
 
   "how?": () => {
     const overlay = createFullScreenOverlay();
     overlay.style.background = "rgba(0,0,0,0.9)";
-    overlay.style.transition = "all 1s";
+    overlay.style.transition = "background 1s";
 
     const msg = document.createElement("div");
     msg.className = "cmd-line";
