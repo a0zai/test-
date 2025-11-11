@@ -417,13 +417,13 @@ const baseLines = [
 
 
 const commandActions = {
-  "why?": () => {
+  "how??": () => {
   const msg = document.createElement("div");
   msg.className = "cmd-line";
   msg.textContent = `Margot sighed deeply, then pressed the gate handle, which slowly opened with a deep metallic sound, as if groaning under centuries of secrets. As she crossed, she felt a cold breeze envelop her body, as if she had left her own time and entered a place between worlds.
 
 🎃 you are here😈!:
-(🗝️Try 63output)`;
+🗝️Try: (why?)`;
   terminal.appendChild(msg);
   document.body.style.backgroundColor = "#f4f4f4";
   terminal.style.color = "#00ff00";
@@ -447,45 +447,12 @@ const commandActions = {
     voidDiv.style.transform = "translate(-50%, -50%)";
     document.body.appendChild(voidDiv);
   },
-  "47-": () => {
-  terminal.innerHTML += "<div class='cmd-line'>🧿: 47</div>";
+  "why?": () => {
+  terminal.innerHTML += "<div class='cmd-line'>🧿Try~>(dose):why?</div>";
   document.body.style.background = "#111111";
   document.body.style.boxShadow = "0 0 50px #00ffff";
 },
-  "how?": () => {
-  const msg = document.createElement("div");
-  msg.className = "cmd-line";
-
-  msg.innerHTML = `
-    🐈‍⬛ In an ancient city shrouded in fog most days,<br>
-    Margot, a renowned archaeologist, was searching for the secrets of forgotten civilizations.<br>
-    The city was full of legends about the “Dark Gate,” a portal said to lead to other worlds,<br>
-    but guarded by puzzles and dangers that no one dared face.<br><br>
-
-    On a stormy night, Margot received a mysterious message written on an old piece of parchment,<br>
-    which read: “Those who possess courage will find the key.<br>
-    But the key comes at a price.”<br><br>
-
-    Without hesitation, Margot grabbed her lantern and bolstered her courage,<br>
-    heading toward the ancient ruins at the edge of the city.<br>
-    Each step echoed strangely among the crumbling walls,<br>
-    and every shadow seemed to be watching her.<br><br>
-
-    Suddenly, she found herself before a massive gate carved with strange symbols,<br>
-    and an ancient inscription that read: “Do you dare to enter?”<br><br>
-
-    Margot paused, her heart racing, her eyes studying the symbols that no one had dared to decipher for hundreds of years.<br><br>
-
-    🕳️<br><br>
-    <b>Final Question:</b><br>
-    Did Margot enter the gate?<br>
-    Try <code>~>:why?</code> or <code>~>:no way</code>.
-  `;
-
-  terminal.appendChild(msg);
-  document.body.style.color = "#ff0033";
-},
-};
+  };
  const questionResponses = {
       "why am i here?": [
     "Answer 1: To explore meaning.",
