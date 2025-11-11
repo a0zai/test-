@@ -476,8 +476,9 @@ const commandActions = {
 
   "why?": () => {
     const overlay = createFullScreenOverlay();
-    overlay.style.background = "rgba(0,0,0,0.8)";
-    overlay.style.transition = "background 1s";
+    overlay.style.background = "#000000"; // overlay ثابت وواضح
+    overlay.style.pointerEvents = "none"; // لا يمنع التفاعل
+    overlay.style.transition = "none";    // بدون أي انتقال
 
     const msg = document.createElement("div");
     msg.className = "cmd-line";
@@ -493,8 +494,9 @@ const commandActions = {
 
   "how?": () => {
     const overlay = createFullScreenOverlay();
-    overlay.style.background = "rgba(0,0,0,0.8)";
-    overlay.style.transition = "background 1s";
+    overlay.style.background = "#000000"; // overlay ثابت وواضح
+    overlay.style.pointerEvents = "none";
+    overlay.style.transition = "none";
 
     const msg = document.createElement("div");
     msg.className = "cmd-line";
@@ -529,7 +531,6 @@ Try <code>~>:why?</code> or <code>~>:no way</code>.
     terminal.style.color = "#ff0033";
   },
 };
-
  const questionResponses = {
       "why am i here?": [
     "Answer 1: To explore meaning.",
