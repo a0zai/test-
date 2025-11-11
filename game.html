@@ -12,11 +12,9 @@
 html, body {
   margin: 0;
   padding: 0;
-  height: 100%;
   font-family: 'Courier New', monospace;
   background: #000000;
-  display: flex;
-  flex-direction: column;
+  color: white;
 }
 
 /* خلفية الجزيئات */
@@ -46,7 +44,7 @@ header {
   font-weight: bold;
   color: red;
   letter-spacing: 2px;
-  margin-bottom: 10px; /* مسافة بين اللوغو والعناصر تحت */
+  margin-bottom: 10px;
 }
 
 /* الصف السفلي للهيدر */
@@ -102,6 +100,7 @@ header {
 
 .hamburger::before { top: -10px; }
 .hamburger::after { top: 10px; }
+
 /* القائمة المنسدلة */
 nav { 
   position: absolute; 
@@ -128,10 +127,6 @@ nav.active { display: flex; }
 
 /* المحتوى الرئيسي */
 main { 
-  flex: 1; 
-  overflow-y: auto;
-  color: white;
-  text-align: center;
   padding: 20px;
   z-index: 1;
 }
@@ -140,19 +135,19 @@ main {
 footer {
   width: 100%;
   padding: 80px 20px;
-  background-color: rgba(128, 0, 128, 0.5);
+  background-color: rgba(128, 0, 128, 0.5); /* بنفسجي شفاف قبل الضغط */
   color: #ffffff;
-  text-align: center;
+  text-align: left;
   position: relative;
   overflow: hidden;
 }
+
 .footer-links {
-  position: absolute;
-  bottom: 10px;
-  left: 20px;
   display: flex;
   flex-direction: column;
   gap: 5px;
+  color: #1E90FF;
+  text-align: left;
 }
 
 .footer-links a {
@@ -165,18 +160,19 @@ footer {
 .footer-links a:hover {
   color: #00BFFF;
 }
+
 #threeContainer {
   position: absolute;
   bottom: 10px;
   right: 10px; 
   width: 100px;
   height: 100px;
-  transform: translateX(-10px);
 }
 </style>
 </head>
 <body>
-  <div id="particles-js"></div>
+<div id="particles-js"></div>
+
 <header>
   <div class="logo">A0ZAI</div>
 
@@ -200,7 +196,7 @@ footer {
   <!-- Home Section -->
   <section id="home" style="min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;">
     <h2>Welcome to A0ZAI</h2>
-    <p>Discover amazing content and projects here!</p>
+    <p>Future experimental example!🔥</p>
     <img src="IMG_9055.jpeg" alt="Main Image" style="max-width: 400px; width: 80%; border-radius: 10px; margin-top: 20px;">
   </section>
 
@@ -221,7 +217,7 @@ footer {
 
 <footer id="footer">
   &copy; A0ZAI Example
-  
+
   <div class="footer-links">
     <a href="#home">Home</a>
     <a href="#contact">Contact</a>
@@ -240,12 +236,12 @@ const navLinks = menu.querySelectorAll('a');
 hamburger.addEventListener('click', () => {
   menu.classList.toggle('active');
   if(menu.classList.contains('active')) {
-  footer.style.backgroundColor = '#ffffff';  // أبيض عند فتح القائمة
-  footer.style.color = '#000000';
-} else {
-  footer.style.backgroundColor = 'rgba(128, 0, 128, 0.5)';  // بنفسجي شفاف قبل النقر
-  footer.style.color = '#ffffff';
-}
+    footer.style.backgroundColor = '#ffffff';  // أبيض عند فتح القائمة
+    footer.style.color = '#000000';
+  } else {
+    footer.style.backgroundColor = 'rgba(128, 0, 128, 0.5)';  // بنفسجي شفاف قبل النقر
+    footer.style.color = '#ffffff';
+  }
 });
 
 navLinks.forEach(link => {
