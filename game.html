@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hamburger Menu Example</title>
+  <title>Example</title>
   <style>
-    /* Reset */
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
@@ -17,7 +16,6 @@
       justify-content: space-between;
     }
 
-    /* Header */
     header {
       width: 100%;
       padding: 10px 20px;
@@ -29,7 +27,6 @@
       border-bottom: 1px solid #ccc;
     }
 
-    /* Hamburger */
     .hamburger {
       cursor: pointer;
       width: 30px;
@@ -49,15 +46,9 @@
       transition: 0.3s;
     }
 
-    .hamburger::before {
-      top: -10px;
-    }
+    .hamburger::before { top: -10px; }
+    .hamburger::after { top: 10px; }
 
-    .hamburger::after {
-      top: 10px;
-    }
-
-    /* Menu */
     nav {
       position: absolute;
       top: 50px;
@@ -78,23 +69,18 @@
       transition: 0.2s;
     }
 
-    nav a:hover {
-      background-color: #ddd;
-    }
+    nav a:hover { background-color: #ddd; }
 
-    /* Footer */
     footer {
       width: 100%;
-      padding: 20px;
-      background-color: #333; /* لون مختلف */
-      color: #fff;
+      padding: 80px 20px;
+      background-color: #800080;
+      color: #800080;
       text-align: center;
+      transition: background-color 0.3s, color 0.3s;
     }
 
-    /* Show menu */
-    nav.active {
-      display: flex;
-    }
+    nav.active { display: flex; }
   </style>
 </head>
 <body>
@@ -123,11 +109,12 @@
 
     hamburger.addEventListener('click', () => {
       menu.classList.toggle('active');
-      // ربط لون الفوتر مع فتح القائمة
       if(menu.classList.contains('active')) {
-        footer.style.backgroundColor = '#008833'; // لون عند فتح القائمة
+        footer.style.backgroundColor = '#ffffff';
+        footer.style.color = '#ffffff';
       } else {
-        footer.style.backgroundColor = '#333'; // اللون الافتراضي
+        footer.style.backgroundColor = '#800080';
+        footer.style.color = '#800080';
       }
     });
   </script>
