@@ -7,6 +7,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.46/Tone.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.164.0/build/three.min.js"></script>
 
 <style>
 html, body {
@@ -327,6 +328,36 @@ body {
   <div id="threeContainer"></div>
 </footer>
 <script>
+import * as THREE from 'three';
+
+const container = document.getElementById('sphereContainer');
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(
+  75,
+  container.clientWidth / container.clientHeight,
+  0.1,
+  1000
+);
+
+const renderer = new THREE.WebGLRenderer({ alpha: true }); // خلفية شفافة
+renderer.setSize(container.clientWidth, container.clientHeight);
+container.appendChild(renderer.domElement);
+
+const geometry = new THREE.SphereGeometry(1, 32, 32);
+const material = new THREE.MeshBasicMaterial({ color: 0x9b00ff, wireframe: true });
+const sphere = new THREE.Mesh(geometry, material);
+scene.add(sphere);
+
+camera.position.z = 3;
+
+function animate() {
+  requestAnimationFrame(animate);
+  sphere.rotation.x += 0.01;
+  sphere.rotation.y += 0.01;
+  renderer.render(scene, camera);
+}
+animate();
 const hamburger = document.getElementById('hamburger');
 const menu = document.getElementById('menu');
 const footer = document.getElementById('footer');
@@ -368,36 +399,6 @@ navLinks.forEach(link => {
 </script>
 
 <script>
-import * as THREE from 'three';
-
-const container = document.getElementById('sphereContainer');
-
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(
-  75,
-  container.clientWidth / container.clientHeight,
-  0.1,
-  1000
-);
-
-const renderer = new THREE.WebGLRenderer({ alpha: true }); // خلفية شفافة
-renderer.setSize(container.clientWidth, container.clientHeight);
-container.appendChild(renderer.domElement);
-
-const geometry = new THREE.SphereGeometry(1, 32, 32);
-const material = new THREE.MeshBasicMaterial({ color: 0x9b00ff, wireframe: true });
-const sphere = new THREE.Mesh(geometry, material);
-scene.add(sphere);
-
-camera.position.z = 3;
-
-function animate() {
-  requestAnimationFrame(animate);
-  sphere.rotation.x += 0.01;
-  sphere.rotation.y += 0.01;
-  renderer.render(scene, camera);
-}
-animate();
 (function() {
   const container = document.getElementById('threeContainer');
   const scene = new THREE.Scene();
