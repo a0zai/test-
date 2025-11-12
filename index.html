@@ -337,6 +337,121 @@ body {
 
   <div id="threeContainer"></div>
 </footer>
+<div id="particleOverlay"></div>
+<script>
+const overlay = document.getElementById('particleOverlay');
+overlay.style.position = 'fixed';
+overlay.style.top = 0;
+overlay.style.left = 0;
+overlay.style.width = '100%';
+overlay.style.height = '100%';
+overlay.style.pointerEvents = 'none';
+overlay.style.zIndex = '9999';
+
+const canvas = document.createElement('canvas');
+overlay.appendChild(canvas);
+const ctx = canvas.getContext('2d');
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let x = 50;
+let y = canvas.height - 150;
+let step = 0;
+
+const particleCount = 100;
+const particles = [];
+for(let i=0;i<particleCount;i++){
+  particles.push({
+    x: Math.random()*canvas.width,
+    y: Math.random()*canvas.height,
+    radius: Math.random()*2+1,
+    speedX: (Math.random()-0.5)*0.5,
+    speedY: (Math.random()-0.5)*0.5
+  });
+}
+
+function drawParticles() {
+  ctx.fillStyle = 'rgba(155,0,255,0.6)';
+  particles.forEach(p => {
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.radius,0,Math.PI*2);
+    ctx.fill();
+    p.x += p.speedX;
+    p.y += p.speedY;
+    if(p.x<0) p.x=canvas.width;
+    if(p.x>canvas.width) p.x=0;
+    if(p.y<0) p.y=canvas.height;
+    if(p.y>canvas.height) p.y=0;
+  });
+}
+
+function drawCharacter(x, y, step) {
+  ctx.save();
+  ctx.translate(x, y);
+
+  ctx.strokeStyle = '#333';
+  ctx.lineWidth = 6;
+  ctx.beginPath();
+  ctx.moveTo(-10, 0);
+  ctx.lineTo(-10 + Math.sin(step)*15, 50);
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.moveTo(10, 0);
+  ctx.lineTo(10 + Math.sin(step + Math.PI)*15, 50);
+  ctx.stroke();
+
+  ctx.fillStyle = '#0077cc';
+  ctx.fillRect(-12, -50, 24, 50);
+
+  ctx.strokeStyle = '#333';
+  ctx.lineWidth = 5;
+  ctx.beginPath();
+  ctx.moveTo(-12, -45);
+  ctx.lineTo(-25 + Math.sin(step + Math.PI)*10, -20);
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.moveTo(12, -45);
+  ctx.lineTo(25 + Math.sin(step)*10, -20);
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.arc(0, -70, 15, 0, Math.PI * 2);
+  ctx.fillStyle = '#ffcc99';
+  ctx.fill();
+  ctx.strokeStyle = '#333';
+  ctx.stroke();
+
+  ctx.fillStyle = '#000';
+  ctx.beginPath();
+  ctx.arc(-5, -72, 2, 0, Math.PI*2);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.arc(5, -72, 2, 0, Math.PI*2);
+  ctx.fill();
+
+  ctx.restore();
+}
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  drawParticles();
+  drawCharacter(x, y, step);
+  x += 2;
+  step += 0.2;
+  if (x > canvas.width + 30) x = -30;
+  requestAnimationFrame(animate);
+}
+
+animate();
+
+window.addEventListener('resize', () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  y = canvas.height - 150;
+});
 </script>
 <script>
 const hamburger = document.getElementById('hamburger');
