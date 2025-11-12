@@ -239,11 +239,9 @@ body {
 
 <header>
 <div class="logo-container">
-  <div class="logo">
-    A<span class="highlight">0</span>Z
-  </div>
-  <div id="sphereContainer" style="width:120px; height:120px;"></div>
-  <div class="mode-toggle" id="modeToggle">🌓</div>
+<span style="color: red;">(</span>
+<span style="color: blue;">)</span>
+  <div class="mode-toggle" id="modeToggle">☂️</div>
 </div>
   <div class="header-bottom">
     <div class="search-container">
@@ -325,29 +323,6 @@ body {
 
   <div id="threeContainer"></div>
 </footer>
-<script>
-const container = document.getElementById('sphereContainer');
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
-
-const renderer = new THREE.WebGLRenderer({ alpha: true });
-renderer.setSize(container.clientWidth, container.clientHeight);
-container.appendChild(renderer.domElement);
-
-const geometry = new THREE.SphereGeometry(1, 32, 32);
-const material = new THREE.MeshBasicMaterial({ color: 0x0077ff, wireframe: true });
-const sphere = new THREE.Mesh(geometry, material);
-scene.add(sphere);
-
-camera.position.z = 3;
-
-function animate() {
-    requestAnimationFrame(animate);
-    sphere.rotation.x += 0.01;
-    sphere.rotation.y += 0.01;
-    renderer.render(scene, camera);
-}
-animate();
 </script>
 createSphere('threeContainerHeader', 0x9b00ff); // بنفسجي
 </script>
