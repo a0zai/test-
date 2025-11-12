@@ -76,10 +76,23 @@ header {
   width: 120px;
 }
 
-.small-icon {
-  width: 63px;
-  height: 63px;
+.icon-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  left: 20px; 
+  width: 80px;
+  height: 80px;
 }
+
+.small-icon {
+  width: 93px;
+  height: 93px;
+  border-radius: 50%; 
+  z-index: 1;
+}
+
 /* زر القائمة */
 .hamburger {
   cursor: pointer;
@@ -242,6 +255,7 @@ body {
 <div class="header-bottom">
   <div class="left-controls">
     <div class="mode-toggle" id="modeToggle">☂️</div>
+    <div class="icon-wrapper">
     <img src="IMG_0111.jpeg" alt="icon" class="small-icon">
     <div class="hamburger" id="hamburger"></div>
   </div>
