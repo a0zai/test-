@@ -242,7 +242,7 @@ body {
   <div class="logo">
     A<span class="highlight">0</span>Z
   </div>
-  <div id="sphereContainer" style="width:120px; height:120px;"></div>
+<div id="threeContainerHeader" style="width:120px;height:120px;"></div>
   <div class="mode-toggle" id="modeToggle">🌓</div>
 </div>
   <div class="header-bottom">
@@ -325,35 +325,35 @@ body {
 
   <div id="threeContainer"></div>
 </footer>
-<script>
-const container = document.getElementById('sphereContainer');
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.164.0/build/three.module.js';
 
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(
-  75,
-  container.clientWidth / container.clientHeight,
-  0.1,
-  1000
-);
+function createSphere(containerId, color) {
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
+  const renderer = new THREE.WebGLRenderer({ alpha: true });
 
-const renderer = new THREE.WebGLRenderer({ alpha: true });
-renderer.setSize(container.clientWidth, container.clientHeight);
-container.appendChild(renderer.domElement);
+  const container = document.getElementById(containerId);
+  renderer.setSize(container.clientWidth, container.clientHeight);
+  container.appendChild(renderer.domElement);
 
-const geometry = new THREE.SphereGeometry(1, 32, 32);
-const material = new THREE.MeshBasicMaterial({ color: 0x9b00ff, wireframe: true });
-const sphere = new THREE.Mesh(geometry, material);
-scene.add(sphere);
+  const geometry = new THREE.SphereGeometry(1, 32, 32);
+  const material = new THREE.MeshBasicMaterial({ color: color, wireframe: true });
+  const sphere = new THREE.Mesh(geometry, material);
+  scene.add(sphere);
 
-camera.position.z = 3;
+  camera.position.z = 3;
 
-function animate() {
-  requestAnimationFrame(animate);
-  sphere.rotation.x += 0.01;
-  sphere.rotation.y += 0.01;
-  renderer.render(scene, camera);
+  function animate() {
+    requestAnimationFrame(animate);
+    sphere.rotation.x += 0.01;
+    sphere.rotation.y += 0.01;
+    renderer.render(scene, camera);
+  }
+  animate();
 }
-animate();
+
+createSphere('threeContainerHeader', 0x9b00ff); // بنفسجي
 </script>
 <script>
 const hamburger = document.getElementById('hamburger');
