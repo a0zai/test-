@@ -3,853 +3,183 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>A0Z</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.46/Tone.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<title>Character Jump Example</title>
 <style>
-html, body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Courier New', monospace;
-  background: #000000;
-  color: white;
-}
-
-/* خلفية الجزيئات */
-#particles-js {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-}
-
-header {
-  width: 100%;
-  display: flex;
-  flex-direction: column; 
-  align-items: center;
-  border-bottom: 1px solid #ccc;
-  padding: 30px 0;
-  position: relative;
-  z-index: 2;
-}
-.logo-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  padding: 0 20px;
-}
-
-.mode-toggle {
-  font-size: 28px;
-  cursor: pointer;
-}
-.logo {
-  font-size: 40px;
-  font-weight: bold;
-  color: red;
-  letter-spacing: 2px;
-  margin-bottom: 25px;
-}
-
-.logo .highlight {
-  color: blue;
-}
-
-.header-bottom {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 20px;
-  position: relative;
-}
-/* البحث */
-.search-container { 
-  display: flex; 
-  align-items: center; 
-}
-
-.search-container input { 
-  padding: 3px 6px; 
-  border: 1px solid #ccc; 
-  border-radius: 20px; 
-  outline: none; 
-  width: 120px; 
-  margin-left: 5px; 
-}
-
-.search-icon { 
-  font-size: 12px; 
-  color: red; 
-}
-
-/* زر القائمة */
-.hamburger {
-  cursor: pointer;
-  width: 30px;
-  height: 3px;
-  background-color: red;
-  position: absolute;
-  right: 20px;
-  transition: 0.3s;
-}
-
-.hamburger::before, 
-.hamburger::after { 
-  content: ''; 
-  position: absolute; 
-  width: 30px; 
-  height: 3px; 
-  background-color: red; 
-  transition: 0.3s; 
-}
-
-.hamburger::before { top: -10px; }
-.hamburger::after { top: 10px; }
-
-/* القائمة المنسدلة */
-nav { 
-  position: absolute; 
-  top: 50px; 
-  right: 20px; 
-  border: 1px solid #ccc; 
-  border-radius: 8px;
-  background-color: #ffffff;
-  display: none; 
-  flex-direction: column; 
-  min-width: 150px; 
-  box-shadow: 0 5px 10px rgba(0,0,0,0.1); 
-}
-
-nav a { 
-  padding: 10px 15px; 
-  text-decoration: none; 
-  color: #333; 
-  transition: 0.2s; 
-}
-
-nav a:hover { background-color: #ddd; }
-nav.active { display: flex; }
-
-/* المحتوى الرئيسي */
-main { 
-  padding: 20px;
-  z-index: 1;
-}
-
-#terminalContainer {
-  height: 200px;
-  background: #111;
-  color: #0f0;
-  font-family: monospace;
-  padding: 15px;
-  border-radius: 10px;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-}
-
-#terminal {
-  flex: 1;
-  overflow-y: auto;
-  padding-bottom: 20px;
-}
-
-.cmd-line {
-  margin: 10px 0;
-  animation: fadeIn 0.3s ease-in-out;
-  white-space: pre;
-}
-
-.input-line {
-  position: absolute;
-  bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  padding: 10px;
-}
-
-.cmd-user {
-  color: #ff0044;
-  font-weight: bold;
-}
-footer {
-  width: 100%;
-  padding: 80px 20px;
-  text-align: left;
-  position: relative;
-  overflow: hidden;
-}
-
-.footer-links {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  color: #1E90FF;
-  text-align: left;
-}
-
-.footer-links a {
-  color: #1E90FF;
-  text-decoration: none;
-  font-size: 14px;
-  transition: 0.3s;
-}
-
-.footer-links a:hover {
-  color: #00BFFF;
-}
-
-#threeContainer {
-  position: absolute;
-  bottom: 10px;
-  right: 10px; 
-  width: 100px;
-  height: 100px;
-  transform: translateX(-20px);
-}
-@keyframes fadeIn {
-      from { opacity: 0; transform: translateY(5px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-@keyframes shake {
-  0% { transform: translate(0px, 0px); }
-  25% { transform: translate(2px, -2px); }
-  50% { transform: translate(-2px, 2px); }
-  75% { transform: translate(2px, 2px); }
-  100% { transform: translate(0px, 0px); }
-}
-body {
-  animation: none; 
-}
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: monospace;
+    height: 200vh; /* صفحة طويلة لتجربة السكروول */
+    background: #000;
+    color: #fff;
+  }
+  canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 9999;
+  }
+  .obstacle {
+    width: 100px;
+    height: 30px;
+    background: red;
+    margin: 300px auto;
+    text-align: center;
+    line-height: 30px;
+    font-weight: bold;
+  }
 </style>
 </head>
 <body>
-<div id="particles-js"></div>
-
-<header>
-<div class="logo-container">
-<span style="color: red;">(</span>
-<span style="color: blue;">)</span>
-  <div class="mode-toggle" id="modeToggle">️☂️</div>
-  
-</div>
-  <div class="header-bottom">
-    <div class="search-container">
-      <span class="search-icon">🔍</span>
-      <input type="text" placeholder="not now😈!">
-    </div>
-    <div class="hamburger" id="hamburger"></div>
-    <nav id="menu">
-      <a href="#home">Home</a>
-      <a href="#contact">Contact</a>
-      <a href="#over-ons">Over Ons</a>
-    </nav>
-  </div>
-</header>
-
-<main>
-
-  <!-- Home Section -->
-  <section id="home" style="min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;">
-    <h2>Welcome to A0ZAI</h2>
-    <p>Future experimental example!🔥</p>
-    <img src="IMG_9055.jpeg" alt="Main Image" style="max-width: 400px; width: 80%; border-radius: 10px; margin-top: 20px;">
-      <img src="https://avatars.githubusercontent.com/u/201962374?v=4" 
-       alt="GitHub Profile" 
-       style="width: 120px; height: 120px; border-radius: 50%; margin-top: 20px;">
-  </section>
-
-  <!-- Contact Section -->
-  <section id="contact" style="min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;">
-    <h2>Contact A0Z</h2>
-    <p>Connect on LinkedIn:</p>
-    <a href="https://www.linkedin.com/in/a0zai" target="_blank" style="color: red; text-decoration: underline;">LinkedIn Profile</a>
-    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTepTK7e9HpbOrtaQR5lw4_xjoJrL_u_QLWPKNskqrHQw&s=10" 
-     alt="LinkedIn Profile" 
-     style="width: 120px; height: 120px; border-radius: 50%; margin-top: 20px;">
-   </section>
-  <!-- Over Ons Section -->
-  <section id="over-ons" style="min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;">
-    <h2>About Us</h2>
-    <p>🚀</p>
-  <div id="terminalContainer" style="width: 90%; max-width: 600px; background: #111; color: #0f0; font-family: monospace; padding: 15px; border-radius: 10px; margin-top: 30px; overflow-y: auto; height: 200px;">
-  <div id="terminal"></div>
-
-  <div class="input-line">
-      <div style="
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 150px;
-    height: 80px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: none;
-  "> 
-  <input type="text" id="commandInput" placeholder="🃏" autocomplete="off" style="
-      background: none;
-      border: none;
-      color: #00fff0;
-      outline: none;
-      font-size: 16px;
-      text-align: center;
-      width: 50%;
-    ">
-  </div>
-  </section>
-
-</main>
-
-<footer id="footer">
-  &copy; A0ZAI
-
-  <div class="footer-links">
-    <a href="#home">Home</a>
-    <a href="#contact">Contact</a>
-    <a href="#over-ons">Over Ons</a>
-  </div>
-
-  <div id="threeContainer"></div>
-</footer>
-</script>
-<script>
-const hamburger = document.getElementById('hamburger');
-const menu = document.getElementById('menu');
-const footer = document.getElementById('footer');
-const navLinks = menu.querySelectorAll('a');
-const modeToggle = document.getElementById('modeToggle');
-let isDark = false;
-modeToggle.addEventListener('click', () => {
-  if (!isDark) {
-    document.body.style.filter = "invert(1)";
-    isDark = true;
-  } else {
-    document.body.style.filter = "none";
-    isDark = false;
-  }
-});
-hamburger.addEventListener('click', () => {
-  menu.classList.toggle('active');
-  if(menu.classList.contains('active')) {
-    footer.style.backgroundColor = '#ffffff';  // أبيض عند فتح القائمة
-    footer.style.color = '#000000';
-  } else {
-    footer.style.backgroundColor = 'rgba(128, 0, 128, 0.5)';  // بنفسجي شفاف قبل النقر
-    footer.style.color = '#ffffff';
-  }
-  footer.scrollIntoView({ behavior: 'smooth' });
-});
-
-navLinks.forEach(link => {
-  link.addEventListener('click', (e) => {
-    e.preventDefault();
-    const targetId = link.getAttribute('href').substring(1);
-    const targetSection = document.getElementById(targetId);
-    if (targetSection) {
-      targetSection.scrollIntoView({ behavior: 'smooth' });
-    }
-    menu.classList.remove('active');
-  });
-});
-</script>
+<div class="obstacle">JUMP HERE</div>
 
 <script>
-(function() {
-  const container = document.getElementById('threeContainer');
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(75, container.clientWidth/container.clientHeight, 0.1, 1000);
-  const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-  renderer.setSize(container.clientWidth, container.clientHeight);
-  container.appendChild(renderer.domElement);
+const canvas = document.createElement('canvas');
+document.body.appendChild(canvas);
+const ctx = canvas.getContext('2d');
 
-const geometry = new THREE.TorusKnotGeometry(5, 1.2, 150, 20);
-  const material = new THREE.MeshStandardMaterial({ color: 0x00ffff, metalness: 0.8, roughness: 0.2 });
-  const torusKnot = new THREE.Mesh(geometry, material);
-  scene.add(torusKnot);
+let width = window.innerWidth;
+let height = window.innerHeight;
+canvas.width = width;
+canvas.height = height;
 
-  const light = new THREE.PointLight(0xffffff, 2, 100);
-  light.position.set(10,10,10);
-  scene.add(light);
-
-  camera.position.z = 20; 
-
-  function animate() {
-    requestAnimationFrame(animate);
-    torusKnot.rotation.x += 0.01;
-    torusKnot.rotation.y += 0.005;
-    renderer.render(scene, camera);
-  }
-  animate();
-
-  window.addEventListener('resize', () => {
-    camera.aspect = container.clientWidth / container.clientHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(container.clientWidth, container.clientHeight);
-  });
-})();
-const terminal = document.getElementById("terminal");
-const input = document.getElementById("commandInput");
-
-const baseLines = [
-  "Welcome to A0ZAI",
-  "Trust me 🕯️💀 ",
-  "-----████████░░░░🌕🌕",
-  "Type 'how?' → to see my work",
-  "██████████🔵",
-  "  /      .  ",
-  "😈🔥",
-  "    \\     .  ",
-  " •      .  ",
-];
-
-
-const commandActions = {
-  "how?": () => {
-  const msg = document.createElement("div");
-  msg.className = "cmd-line";
-  msg.textContent = `Margot sighed deeply, then pressed the gate handle, which slowly opened with a deep metallic sound, as if groaning under centuries of secrets. As she crossed, she felt a cold breeze envelop her body, as if she had left her own time and entered a place between worlds.
-
-🎃 you are here😈!:
-🗝️Try: (why?)`;
-  terminal.appendChild(msg);
-  document.body.style.backgroundColor = "#f4f4f4";
-  terminal.style.color = "#00ff00";
-},
-
-  "dose": () => {
-    terminal.innerHTML += "<div class='cmd-line'>∴ 🧪.</div>";
-    document.body.style.boxShadow = "inset 0 0 80px #00ffcc";
-    document.body.style.transition = "box-shadow 1.5s";
-  },
-  
-"no way": () => {
-    document.body.innerHTML = "";
-    const voidDiv = document.createElement("div");
-    voidDiv.textContent = "⬛";
-    voidDiv.style.fontSize = "100px";
-    voidDiv.style.color = "#222";
-    voidDiv.style.position = "fixed";
-    voidDiv.style.top = "50%";
-    voidDiv.style.left = "50%";
-    voidDiv.style.transform = "translate(-50%, -50%)";
-    document.body.appendChild(voidDiv);
-  },
-  "why?": () => {
-  terminal.innerHTML += "<div class='cmd-line'>🧿Try~>(dose) Or ~>(No way):</div>";
-  document.body.style.background = "#111111";
-  document.body.style.boxShadow = "0 0 50px #00ffff";
-},
-  };
- const questionResponses = {
-      "why am i here?": [
-    "Answer 1: To explore meaning.",
-    "Answer 2: To reflect the origin of asking."
-  ],
-  "what is truth?": [
-    "Answer 1: That which endures all filters.",
-    "Answer 2: A mirror of thought."
-  ],
-  "who am i?": [
-    "Answer 1: A unique expression of existence.",
-    "Answer 2: A pattern unfolding."
-  ],
-  "hi": [
-    "🤡.",
-    "Shall we begin the mystery?."
-],
-  "yes": [
-    "toestemming gegeven.",
-    "de prompt accepteert de realiteit."
-],
-  "nee": [
-    "grens getrokken.",
-    "de lus weigert toegang."
-],
-  "misschien": [
-    "beslissing uitgesteld.",
-    "de lus is onzeker."
-],
-"einde": [
-  "🔚.",
-  "Of misschien... slechts een overgang?"
-],
+// الشخصية
+let char = {
+  x: 50,
+  y: height - 50,
+  baseY: height - 50,
+  step: 0,
+  swing: 0,
+  speedX: 1.5,
+  jump: false,
+  jumpHeight: 50,
+  jumpStep: 0
 };
 
-  const exampleCommands = {
-     "A": ["Align", "Ask", "Activate", "Access", "Analyze", "Accept", "Absorb", "Amplify", "Adapt", "Announce", "Anchor", "Authenticate", "Advance", "Ascend", "Attune"],
-    "B": ["Begin", "Break", "Build", "Bind", "Bounce", "Balance", "Blink", "Burn", "Bridge", "Broadcast", "Block", "Bloom", "Breathe", "Blend", "Boost"],
-    "C": ["Connect", "Compare", "Create", "Calibrate", "Clarify", "Compress", "Control", "Confirm", "Charge", "Contain", "Configure", "Compile", "Capture", "Cleanse", "Converge"],
-    "D": ["Decode", "Detect", "Define", "Derive", "Divide", "Deploy", "Direct", "Distill", "Debug", "Design", "Delay", "Disrupt", "Disarm", "Disclose", "Dream"],
-    "E": ["Engage", "Encode", "Evaluate", "Expand", "Emit", "Enhance", "Equalize", "Execute", "Expose", "Elevate", "Extract", "Edit", "Echo", "Empower", "Evolve"],
-    "F": ["Focus", "Filter", "Form", "Flow", "Fuse", "Finalize", "Fragment", "Feed", "Forecast", "Fortify", "Frame", "Flash", "Fold", "Force", "Fulfill"],
-    "G": ["Generate", "Guide", "Ground", "Group", "Guard", "Glow", "Grip", "Grant", "Gather", "Glitch", "Grow", "Gaze", "Gravitate", "Glue", "Glorify"],
-    "H": ["Hear", "Hold", "Highlight", "Harmonize", "Host", "Heal", "Halt", "Hunt", "Hover", "Hack", "Hint", "Hash", "Hatch", "Hide", "Honor"],
-    "I": ["Ignite", "Identify", "Integrate", "Interact", "Illuminate", "Inject", "Induce", "Invert", "Inherit", "Inform", "Initiate", "Input", "Influence", "Interpret", "Inspire"],
-    "J": ["Jump", "Join", "Jolt", "Judge", "Jam", "Justify", "Juggle", "Journey", "Jerk", "Jettison", "Jazz", "Jail", "Jinx", "Juxtapose", "Juice"],
-    "K": ["Know", "Keep", "Kick", "Knock", "Key", "Kill", "Kindle", "Kneel", "Knit", "Kickstart", "Knockout", "Keepalive", "Keystream", "Kite", "Knowmerge"],
-    "L": ["Listen", "Link", "Loop", "Learn", "Load", "Lock", "Light", "Lift", "Lead", "Launch", "Layer", "Levitate", "Limit", "Latch", "Love"],
-    "M": ["Map", "Match", "Merge", "Mark", "Move", "Mirror", "Monitor", "Modulate", "Magnetize", "Multiply", "Morph", "Measure", "Mergepoint", "Memorize", "Manifest"],
-    "N": ["Navigate", "Name", "Notice", "Nullify", "Normalize", "Network", "Nest", "Nourish", "Nominate", "Negotiate", "Note", "Neutralize", "Nudge", "Navigateback", "Notarize"],
-    "O": ["Open", "Observe", "Organize", "Optimize", "Output", "Override", "Orbit", "Outline", "Offer", "Operate", "Offset", "Obey", "Overload", "Oversee", "Originate"],
-    "P": ["Ping", "Process", "Parse", "Project", "Protect", "Pulse", "Persist", "Patch", "Prioritize", "Play", "Predict", "Pause", "Push", "Plant", "Purify"],
-    "Q": ["Query", "Queue", "Quantify", "Quiet", "Quicken", "Qualify", "Quench", "Quote", "Quiver", "Question", "Quantize", "Quarantine", "Quell", "Quasar", "Queryloop"],
-    "R": ["Root", "Reflect", "Run", "Respond", "Recall", "Reboot", "Reinforce", "Rotate", "Rewrite", "Radiate", "Remember", "Recursify", "Resonate", "Reconstruct", "Realign"],
-    "S": ["Scan", "Signal", "Shift", "Stabilize", "Store", "Silence", "Stream", "Synchronize", "Structure", "Simplify", "Shield", "Share", "Syncopate", "Strobe", "Sustain"],
-    "T": ["Transmit", "Translate", "Trace", "Tune", "Trigger", "Transcend", "Tilt", "Tap", "Test", "Transform", "Time", "Touch", "Terminate", "Travel", "Thrive"],
-    "U": ["Unlock", "Update", "Upload", "Unify", "Understand", "Unfold", "Utilize", "Undo", "Uncover", "Upgrade", "Unleash", "Uphold", "Unwind", "Unmute", "Uploadkey"],
-    "V": ["Validate", "Visualize", "Vibrate", "Verify", "Venture", "Vault", "Vary", "Vectorize", "Vocalize", "Volatilize", "Vote", "Vanish", "Veil", "View", "Vortex"],
-    "W": ["Wake", "Write", "Weave", "Warp", "Watch", "Whisper", "Wander", "Warn", "Weigh", "Wrap", "Wipe", "Widen", "Wind", "Wield", "Wonder"],
-    "X": ["Xtract", "Xpress", "Xpand", "Xpose", "Xchange", "Xcite", "Xact", "Xclude", "Xplore", "Xlink", "Xform", "Xray", "Xecute", "Xmute", "Xalign"],
-    "Y": ["Yield", "Yearn", "Yoke", "Yell", "Yank", "Yawn", "Yokeout", "Yonder", "Y-Axis", "Yelllow", "Yelp", "Yieldpoint", "Yshift", "Ytrace", "Ysing"],
-    "Z": ["Zero", "Zip", "Zoom", "Zig", "Zone", "Zink", "Zap", "Zeal", "Zenith", "Zether", "Z-Lock", "Z-Ring", "Z-Fold", "Z-Flow", "Z-Rafat"]
-};
- 
-  const grammarMapping = {
-    "I": "SELF_α", "You": "OTHER_β", "He": "ENTITY_γ", "She": "ENTITY_δ", "It": "SYSTEM_ε",
-  "Can": "PERMISSION_GRANTED", "Could": "PERMISSION_PAST", "Will": "INTENT_FUTURE",
-};
-const emojiResponseMap = {
-  "🙂": { feeling: "Good", opposite: "Melancholy" },
-  "😢": { feeling: "Bad", opposite: "Hope" },
-  "😠": { feeling: "Bad", opposite: "Calm" },
-  "😐": { feeling: "Neutral", opposite: "Emotion" },
-  "😨": { feeling: "Bad", opposite: "Courage" },
-  "😎": { feeling: "Good", opposite: "Doubt" },
-  "😭": { feeling: "Bad", opposite: "Relief" },
-  "😊": { feeling: "Good", opposite: "Indifference" },
-  "😶": { feeling: "Neutral", opposite: "Expression" },
-  "😇": { feeling: "Good", opposite: "Temptation" },
-  "😈": { feeling: "Bad", opposite: "Innocence" },
-  "🥺": { feeling: "Bad", opposite: "Strength" },
-  "😤": { feeling: "Bad", opposite: "Acceptance" },
-  "🤔": { feeling: "Neutral", opposite: "Certainty" },
-  "😞": { feeling: "Bad", opposite: "Satisfaction" },
-  "😁": { feeling: "Good", opposite: "Restraint" },
-  "😕": { feeling: "Neutral", opposite: "Clarity" },
-  "😬": { feeling: "Bad", opposite: "Confidence" },
-  "🥰": { feeling: "Good", opposite: "Detachment" },
-  "😡": { feeling: "Bad", opposite: "Forgiveness" },
-  "😅": { feeling: "Neutral", opposite: "Stillness" },
-  "😌": { feeling: "Good", opposite: "Tension" },
-  "🤯": { feeling: "Bad", opposite: "Focus" },
-  "😴": { feeling: "Neutral", opposite: "Awareness" },
-  "😋": { feeling: "Good", opposite: "Self-denial" },
-  "😓": { feeling: "Bad", opposite: "Ease" },
-  "😜": { feeling: "Good", opposite: "Seriousness" },
-  "😳": { feeling: "Neutral", opposite: "Composure" },
-  "🤗": { feeling: "Good", opposite: "Isolation" },
-  "🤫": { feeling: "Neutral", opposite: "Expression" },
-  "😔": { feeling: "Bad", opposite: "Motivation" },
-  "😩": { feeling: "Bad", opposite: "Resilience" },
-  "😖": { feeling: "Bad", opposite: "Clarity" },
-  "😫": { feeling: "Bad", opposite: "Flow" },
-  "😰": { feeling: "Bad", opposite: "Peace" },
-  "😱": { feeling: "Bad", opposite: "Groundedness" },
-  "😑": { feeling: "Neutral", opposite: "Response" },
-  "😒": { feeling: "Neutral", opposite: "Engagement" },
-  "🤐": { feeling: "Neutral", opposite: "Transparency" },
-  "🫠": { feeling: "Neutral", opposite: "Cohesion" },
-  "🤤": { feeling: "Neutral", opposite: "Control" },
-  "🫥": { feeling: "Neutral", opposite: "Visibility" },
-  "😚": { feeling: "Good", opposite: "Withdrawal" },
-  "🤩": { feeling: "Good", opposite: "Numbness" },
-  "😛": { feeling: "Good", opposite: "Constraint" },
-  "🤭": { feeling: "Neutral", opposite: "Revelation" },
-  "🥳": { feeling: "Good", opposite: "Disinterest" },
-  "🫡": { feeling: "Good", opposite: "Defiance" },
-  "🫣": { feeling: "Neutral", opposite: "Courage" },
-  "🥶": { feeling: "Bad", opposite: "Warmth" },
-  "🥵": { feeling: "Bad", opposite: "Coolness" },
-  "🤬": { feeling: "Bad", opposite: "Composure" },
-  "🫤": { feeling: "Neutral", opposite: "Alignment" },
-  "🫶": { feeling: "Good", opposite: "Separation" },
-  "🧘": { feeling: "Good", opposite: "Distraction" },
-  "🤝": { feeling: "Good", opposite: "Division" },
-  "🧠": { feeling: "Singular", opposite: "A0ZAI" }
-};
-  const mathMapping = {
-  "Pi": "CONST_π", "E": "CONST_e", "Infinity": "CONST_∞", "NaN": "CONST_UNDEFINED_VALUE",
-  "+": "ADD(↗)", "-": "SUB(↘)", "*": "MUL(⊗)", "/": "DIV(÷)", "%": "MOD(%)", "**": "EXP(↑)",
-  "x": "VAR_INPUT_X", "y": "VAR_OUTPUT_Y", "z": "VAR_DEPTH_Z", "=": "EQUALS(==)", "!=": "NOT_EQUAL(!=)",
-  "sqrt": "ROOT(√)", "log": "LOG_BASE_10()", "ln": "LOG_BASE_e()", "sin": "SIN_ANGLE()", "cos": "COS_ANGLE()", "tan": "TAN_ANGLE()",
-  "∑": "SUMMATION_LOOP(∑)", "∫": "INTEGRATE_AREA(∫)", "dx": "DIFFERENTIAL_X", "dy": "DIFFERENTIAL_Y", "lim": "LIMIT_APPROACH()",
-  "true": "BOOL_TRUE(1)", "false": "BOOL_FALSE(0)", "&&": "LOGIC_AND(&&)", "||": "LOGIC_OR(||)", "!": "LOGIC_NOT(!)",
-  "∈": "IN_SET", "∉": "NOT_IN_SET",
-};
-  const emotionMapping = {
-"Happy": "STATE::JOY(+)", "Joyful": "STATE::BRIGHTNESS(++)", "Sad": "STATE::LOSS(-)", "Angry": "STATE::FIRE(!!)", "Fear": "STATE::RETREAT(<)", "Love": "STATE::MERGE(❤)", "Hate": "STATE::REPEL(X)", "Hope": "STATE::ASCEND(↑)", "Despair": "STATE::FALL(↓)", "Calm": "STATE::STABLE(=)", "Excited": "STATE::ENERGY(++)", "Confused": "STATE::DISORDER(?)", "Curious": "STATE::SEEKING(?)", "Tired": "STATE::LOW_ENERGY(~)", "Lonely": "STATE::ISOLATED(∅)", "Inspired": "STATE::ELEVATED(*∞)", "Grateful": "STATE::RECEIVE(>)", "Anxious": "STATE::OSCILLATION(~?)", "Relaxed": "STATE::SETTLED(≡)", "Motivated": "STATE::THRUST(⇡)", "Shy": "STATE::WITHDRAWN(←)", "Proud": "STATE::EXPANDED(✦)", "Ashamed": "STATE::COLLAPSE(↘)", "Hopeful": "STATE::UPWARD_GLIMPSE(↗)", "Peaceful": "STATE::HARMONY(≜)", "Nervous": "STATE::FRICTION(~!)", "Frustrated": "STATE::BLOCKED(×)", "Jealous": "STATE::COVET(≠)", "Envious": "STATE::DESIRE(!=)", "Forgiving": "STATE::RELEASE(⇠)", "Guilty": "STATE::WEIGHT(↓!)", "Satisfied": "STATE::BALANCE(◼)", "Overwhelmed": "STATE::OVERLOAD(##)", "Embarrassed": "STATE::EXPOSURE(~×)", "Surprised": "STATE::SPIKE(!)", "Determined": "STATE::FOCUS(→)", "Focused": "STATE::CENTER(●)", "Disconnected": "STATE::SEPARATE(‖)", "Connected": "STATE::LINK(∫)", "Elevated": "STATE::RISE(↑↑)", "Depleted": "STATE::EMPTY(0)" 
-};
-   const numToLetter = {
-    "0": "A", "1": "B", "2": "C", "3": "D", "4": "E", "5": "F",
-    "6": "G", "7": "H", "8": "I", "9": "J", "09": "K", "08": "L",
-    "70": "M", "65": "N", "04": "O", "30": "P", "21": "Q", "01": "R",
-    "11": "S", "12": "T", "13": "U", "14": "V", "15": "W", "16": "X",
-    "17": "Y", "18": "Z", "63": "_0"
-  };
-
-const videoMap = {
-  "video 1": "copy_AB4B27C5-578B-4DE7-82C4-73FFA10B97C5.mov"
-};
-
-  const symbolicMemory = JSON.parse(localStorage.getItem("symbolicMemory") || "{}");
-function handleLearningCommand(input) {
-  if (input.startsWith("learn ")) {
-    const parts = input.split(" ");
-    const cmd = parts[1];
-    const response = parts.slice(2).join(" ");
-    symbolicMemory[cmd] = response;
-    localStorage.setItem("symbolicMemory", JSON.stringify(symbolicMemory));
-    terminal.innerHTML += `<div class='cmd-line'>📚 Opgeslagen als les: "${cmd}" → "${response}"</div>`;
-    return true;
-  }
-  return false;
-}
-
-// ربط رمز بمفهوم (تعليم رمزي)
-function handleTeachSymbol(input) {
-  if (input.startsWith("teach ")) {
-    const [_, symbol, __, ...concept] = input.split(" ");
-    if (symbol && concept.length) {
-      symbolicMemory[symbol] = concept.join(" ");
-      localStorage.setItem("symbolicMemory", JSON.stringify(symbolicMemory));
-      terminal.innerHTML += `<div class='cmd-line'>🔣 "${symbol}" gekoppeld aan: ${concept.join(" ")}</div>`;
-      return true;
-    }
-  }
-  return false;
-}
-
-// استدعاء كل ما تعلّمه النظام
-function handleRecallCommand(input) {
-  if (input === "recall") {
-    terminal.innerHTML += "<div class='cmd-line'>🧠 Geleerde elementen:</div>";
-    Object.entries(symbolicMemory).forEach(([k, v]) => {
-      terminal.innerHTML += `<div class='cmd-line'>${k} → ${v}</div>`;
-    });
-    return true;
-  }
-  return false;
-}
-
-// إعادة تعيين الذاكرة
-function handleResetMind(input) {
-  if (input === "reset mind") {
-    localStorage.removeItem("symbolicMemory");
-    terminal.innerHTML += "<div class='cmd-line'>🧽 Geheugen gewist.</div>";
-    return true;
-  }
-  return false;
-}
-
-
-function handleIntent(input) {
-  if (input.startsWith("intent ")) {
-    const intentTarget = input.split(" ").slice(1).join(" ");
-    const hasWhy = intentTarget.includes("waarom") || intentTarget.includes("why");
-    const hasFeel = intentTarget.includes("voelen") || intentTarget.includes("feel");
-
-    let guess = "⚙️ Algemene intentie.";
-    if (hasWhy) guess = "❔ Intentie: Zoektocht naar betekenis.";
-    if (hasFeel) guess = "❤️ Intentie: Emotionele expressie.";
-
-    terminal.innerHTML += `<div class='cmd-line'>🧭 ${guess}</div>`;
-    return true;
-  }
-  return false;
-}
-
-// إدماج كل الأوامر الرمزية التعليمية داخل نقطة واحدة
-function symbolicSelfLearn(input) {
-  const lower = input.trim().toLowerCase();
-  return (
-    handleLearningCommand(lower) ||
-    handleTeachSymbol(lower) ||
-    handleRecallCommand(lower) ||
-    handleResetMind(lower) ||
-    handleIntent(lower)
-  );
-}
-function interpretInput(input) {
-    const trimmedInput = input.trim();
-  const lowerInput = trimmedInput.toLowerCase();
-
-  if (questionResponses[lowerInput]) {
-    const answers = questionResponses[lowerInput];
-    return `Answer 1: ${answers[0]} \nAnswer 2: ${answers[1]}`;
-  }
-  if (symbolicSelfLearn(lowerInput)) return;
-  
-    if (symbolicMemory[lowerInput]) {
-    terminal.innerHTML += `<div class='cmd-line'>${symbolicMemory[lowerInput]}</div>`;
-    return;
-  }
-
-if (commandActions[lowerInput]) {
-  commandActions[lowerInput]();
-  return `🔧 Commando "${lowerInput}" geactiveerd.`;
-}
-
-  const result = [];
-
-  const words = trimmedInput.split(/\s+/);
-  words.forEach(word => {
-    const mapped = grammarMapping[word] || mathMapping[word] || emotionMapping[word] || emojiResponseMap[word];
-    if (mapped) {
-      if (emojiResponseMap[word]) {
-        result.push(`${word} → Feeling: ${emojiResponseMap[word].feeling}, Opposite: ${emojiResponseMap[word].opposite}`);
-      } else {
-        result.push(word + " → " + mapped);
-      }
-    }
-  });
-
-  const clean = trimmedInput.toUpperCase().replace(/[^A-Z0-9]/g, '').split('');
-  clean.forEach((char, i) => {
-    let letter = char;
-    if (numToLetter[char]) letter = numToLetter[char];
-    if (exampleCommands[letter]) {
-      const cmd = exampleCommands[letter][i % exampleCommands[letter].length];
-      result.push(letter + " → " + cmd);
-    } else {
-      result.push("[" + char + "]");
-    }
-  });
-
-  return result.join(" | ");
-}
-let i = 0;
-
-// دالة الكتابة التدريجية في التيرمنال
-function typeReply(text, element, charSpeed = 25, callback = null) {
-  let idx = 0;
-  element.textContent = "";
-  
-  function typeChar() {
-    if (idx < text.length) {
-      element.textContent += text.charAt(idx);
-      terminal.scrollTop = terminal.scrollHeight; // تمرير تلقائي للـ terminal
-      idx++;
-      setTimeout(typeChar, charSpeed);
-    } else {
-      if (callback) callback(); // استدعاء التالي بعد انتهاء السطر
-    }
-  }
-  
-  typeChar();
-}
-
-// عرض جميع الأسطر واحدًا تلو الآخر
-function displayLinesSequentially(lines, charSpeed = 25, lineDelay = 50) {
-  let i = 0;
-
-  function showLine() {
-    if (i >= lines.length) return;
-
-    const msg = document.createElement("div");
-    msg.className = "cmd-line";
-    terminal.appendChild(msg);
-
-    typeReply(lines[i], msg, charSpeed, () => {
-      // بعد الانتهاء من السطر الحالي ننتظر قليلاً قبل السطر التالي
-      setTimeout(() => {
-        i++;
-        showLine();
-      }, lineDelay);
-    });
-  }
-
-  showLine();
-}
-
-// استدعاء الدالة
-displayLinesSequentially(baseLines, 100, 200);
-
-// عرض الفيديو بكامل الشاشة بدون التأثير على النصوص
-function showFullScreenVideo(src) {
-  const video = document.createElement("video");
-  video.src = src;
-  video.autoplay = true;
-  video.loop = false;
-  video.muted = true;
-  video.playsInline = true;
-
-  video.style.position = "fixed";
-  video.style.top = "0";
-  video.style.left = "0";
-  video.style.width = "100%";
-  video.style.height = "100%";
-  video.style.objectFit = "cover";
-  video.style.zIndex = "1";       // خلف النصوص
-  video.style.opacity = "0";
-  video.style.transition = "opacity 1s";
-
-  document.body.appendChild(video);
-
-  // fade-in جزئي
-  setTimeout(() => { video.style.opacity = "0.5"; }, 50);
-
-  // fade-out عند انتهاء الفيديو
-  video.addEventListener("ended", () => {
-    video.style.opacity = "0";
-    setTimeout(() => document.body.removeChild(video), 1000);
+// جزيئات
+const particleCount = 80;
+const particles = [];
+for(let i=0;i<particleCount;i++){
+  particles.push({
+    x: Math.random()*width,
+    y: Math.random()*height,
+    radius: Math.random()*2+1,
+    speedX: (Math.random()-0.5)*0.5,
+    speedY: (Math.random()-0.5)*0.5
   });
 }
 
-// الاستماع لأوامر التيرمنال
-input.addEventListener("keydown", function(event) {
-  if (event.key === "Enter") {
-    const cmd = input.value.trim();
-    const lowerCmd = cmd.toLowerCase();
+const obstacle = document.querySelector('.obstacle');
 
-    // عرض الفيديو إذا كان الأمر موجود
-    if (videoMap[lowerCmd]) {
-      showFullScreenVideo(videoMap[lowerCmd]);
+// رسم الجزيئات
+function drawParticles() {
+  ctx.fillStyle = 'rgba(138,43,226,0.5)';
+  particles.forEach(p => {
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.radius, 0, Math.PI*2);
+    ctx.fill();
+    p.x += p.speedX;
+    p.y += p.speedY;
+    if(p.x<0) p.x=width;
+    if(p.x>width) p.x=0;
+    if(p.y<0) p.y=height;
+    if(p.y>height) p.y=0;
+  });
+}
+
+// رسم الشخصية
+function drawCharacter(c) {
+  ctx.save();
+  ctx.translate(c.x, c.y);
+
+  const legAmp = 6;
+  const armAmp = 4;
+
+  ctx.fillStyle = '#00ffff';
+  ctx.fillRect(-6, -25, 12, 25);
+
+  ctx.strokeStyle = '#fff';
+  ctx.lineWidth = 2;
+
+  ctx.beginPath();
+  ctx.moveTo(-5, 0);
+  ctx.lineTo(-5 + Math.sin(c.step)*legAmp, 25);
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.moveTo(5, 0);
+  ctx.lineTo(5 + Math.sin(c.step + Math.PI)*legAmp, 25);
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.moveTo(-6, -22);
+  ctx.lineTo(-12 + Math.sin(c.step + Math.PI)*armAmp, -10 + Math.sin(c.swing)*2);
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.moveTo(6, -22);
+  ctx.lineTo(12 + Math.sin(c.step)*armAmp, -10 + Math.sin(c.swing + Math.PI)*2);
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.arc(0, -35, 7, 0, Math.PI*2);
+  ctx.fillStyle = '#ffcc99';
+  ctx.fill();
+  ctx.stroke();
+
+  ctx.fillStyle = '#000';
+  ctx.beginPath();
+  ctx.arc(-2, -36, 1.5, 0, Math.PI*2);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.arc(2, -36, 1.5, 0, Math.PI*2);
+  ctx.fill();
+
+  ctx.restore();
+}
+
+// حركة الشخصية
+function animate() {
+  ctx.clearRect(0,0,width,height);
+  drawParticles();
+  drawCharacter(char);
+
+  char.step += 0.25;
+  char.swing += 0.1;
+  char.x += char.speedX;
+
+  if(char.x > width) char.x = -20;
+
+  // قفز إذا اقترب من العقبة
+  const rect = obstacle.getBoundingClientRect();
+  if(char.x + 6 > rect.left && char.x - 6 < rect.right && !char.jump) {
+    char.jump = true;
+    char.jumpStep = 0;
+  }
+
+  if(char.jump) {
+    // حركة قفز نصف دائرية
+    char.y = char.baseY - Math.sin(char.jumpStep*Math.PI)*char.jumpHeight;
+    char.jumpStep += 0.03;
+    if(char.jumpStep >= 1) {
+      char.jump = false;
+      char.y = char.baseY;
     }
-
-    const userCmd = document.createElement("div");
-    userCmd.className = "cmd-line cmd-user";
-    userCmd.textContent = "> " + cmd;
-
-    const botReply = document.createElement("div");
-    botReply.className = "cmd-line";
-
-    terminal.appendChild(userCmd);
-    terminal.appendChild(botReply);
-
-    const result = interpretInput(cmd);
-    typeReply(result, botReply);
-
-    input.value = "";
-    terminal.scrollTop = terminal.scrollHeight;
   }
-});
 
-</script>
-<script>
-particlesJS("particles-js", {
-  "particles": {
-    "number": { "value": 80 },
-    "size": { "value": 2 },
-    "color": { "value": "#8A2BE2" },
-    "line_linked": { "enable": true, "color": "#8A2BE2" },
-    "move": { "speed": 0.6 }
-  },
-  "interactivity": {
-    "events": { "onhover": { "enable": true, "mode": "repulse" } }
-  }
+  requestAnimationFrame(animate);
+}
+
+animate();
+
+window.addEventListener('resize', () => {
+  width = window.innerWidth;
+  height = window.innerHeight;
+  canvas.width = width;
+  canvas.height = height;
+  char.baseY = height - 50;
+  char.y = char.baseY;
 });
 </script>
 </body>
