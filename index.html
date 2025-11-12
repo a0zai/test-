@@ -337,6 +337,8 @@ body {
 
   <div id="threeContainer"></div>
 </footer>
+
+
 <div id="particleOverlay"></div>
 <script>
 const overlay = document.getElementById('particleOverlay');
@@ -355,11 +357,12 @@ const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-let x = 50;
-let y = canvas.height - 150;
+let x = canvas.width/2;
+let y = 50;
 let step = 0;
+let speed = 1.2;
 
-const particleCount = 100;
+const particleCount = 80;
 const particles = [];
 for(let i=0;i<particleCount;i++){
   particles.push({
@@ -372,7 +375,7 @@ for(let i=0;i<particleCount;i++){
 }
 
 function drawParticles() {
-  ctx.fillStyle = 'rgba(155,0,255,0.6)';
+  ctx.fillStyle = 'rgba(155,0,255,0.5)';
   particles.forEach(p => {
     ctx.beginPath();
     ctx.arc(p.x,p.y,p.radius,0,Math.PI*2);
@@ -390,46 +393,52 @@ function drawCharacter(x, y, step) {
   ctx.save();
   ctx.translate(x, y);
 
-  ctx.strokeStyle = '#333';
-  ctx.lineWidth = 6;
-  ctx.beginPath();
-  ctx.moveTo(-10, 0);
-  ctx.lineTo(-10 + Math.sin(step)*15, 50);
-  ctx.stroke();
-
-  ctx.beginPath();
-  ctx.moveTo(10, 0);
-  ctx.lineTo(10 + Math.sin(step + Math.PI)*15, 50);
-  ctx.stroke();
+  const legAmplitude = 6;
+  const armAmplitude = 4;
 
   ctx.fillStyle = '#0077cc';
-  ctx.fillRect(-12, -50, 24, 50);
+  ctx.fillRect(-6, -25, 12, 25);
 
   ctx.strokeStyle = '#333';
-  ctx.lineWidth = 5;
+  ctx.lineWidth = 2;
+
+  // الأرجل
   ctx.beginPath();
-  ctx.moveTo(-12, -45);
-  ctx.lineTo(-25 + Math.sin(step + Math.PI)*10, -20);
+  ctx.moveTo(-5, 0);
+  ctx.lineTo(-5 + Math.sin(step)*legAmplitude, 25);
   ctx.stroke();
 
   ctx.beginPath();
-  ctx.moveTo(12, -45);
-  ctx.lineTo(25 + Math.sin(step)*10, -20);
+  ctx.moveTo(5, 0);
+  ctx.lineTo(5 + Math.sin(step + Math.PI)*legAmplitude, 25);
+  ctx.stroke();
+
+  // الأذرع
+  ctx.beginPath();
+  ctx.moveTo(-6, -22);
+  ctx.lineTo(-12 + Math.sin(step + Math.PI)*armAmplitude, -10);
   ctx.stroke();
 
   ctx.beginPath();
-  ctx.arc(0, -70, 15, 0, Math.PI * 2);
+  ctx.moveTo(6, -22);
+  ctx.lineTo(12 + Math.sin(step)*armAmplitude, -10);
+  ctx.stroke();
+
+  // الرأس
+  ctx.beginPath();
+  ctx.arc(0, -35, 7, 0, Math.PI * 2);
   ctx.fillStyle = '#ffcc99';
   ctx.fill();
   ctx.strokeStyle = '#333';
   ctx.stroke();
 
+  // العيون
   ctx.fillStyle = '#000';
   ctx.beginPath();
-  ctx.arc(-5, -72, 2, 0, Math.PI*2);
+  ctx.arc(-2, -36, 1.5, 0, Math.PI*2);
   ctx.fill();
   ctx.beginPath();
-  ctx.arc(5, -72, 2, 0, Math.PI*2);
+  ctx.arc(2, -36, 1.5, 0, Math.PI*2);
   ctx.fill();
 
   ctx.restore();
@@ -439,9 +448,12 @@ function animate() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawParticles();
   drawCharacter(x, y, step);
-  x += 2;
-  step += 0.2;
-  if (x > canvas.width + 30) x = -30;
+
+  y += speed;
+
+  if(y > canvas.height-40) y = 50;
+
+  step += 0.25;
   requestAnimationFrame(animate);
 }
 
@@ -450,7 +462,6 @@ animate();
 window.addEventListener('resize', () => {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
-  y = canvas.height - 150;
 });
 </script>
 <script>
