@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="ar">
+<html lang="en">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>A0ZAI — Terminal (Prototype)</title>
+<title>A0ZAI-mp</title>
 <style>
   :root{
     --bg:#050607;
@@ -46,7 +46,7 @@
   <header>
     <div class="logo"><h1>A0Z</h1></div>
     <div>
-      <div class="title">A0ZAI — Terminal Prototype</div>
+      <div class="title">A0ZAI-mp</div>
       <div class="subtitle">Self-Referential Symbolic System — v0.1 (interactive)</div>
     </div>
   </header>
@@ -57,7 +57,7 @@
 
       <div style="display:flex;gap:10px">
         <div style="flex:1" class="input">
-          <input id="cmdInput" type="text" placeholder="أدخل أمر — مثال: help أو explain RAFAT" autocomplete="off" />
+          <input id="cmdInput" type="text" placeholder="Try  : help, explain RAFAT" autocomplete="off" />
           <button id="sendBtn">Run</button>
         </div>
         <button id="resetBtn" title="Reset terminal">Reset</button>
@@ -77,18 +77,18 @@
         <div><strong>Quick anchors</strong></div>
         <div class="log">• RAFAT → ASCII sum = <strong>366</strong></div>
         <div class="log">• Signature: <strong>A0Z-414-366</strong></div>
-        <div class="muted">File you uploaded: <a class="doc" href="/mnt/data/CV Rafat Khalil.docx" target="_blank">/mnt/data/CV Rafat Khalil.docx</a></div>
+        <div class="muted">File you uploaded: <a class="doc" href="index.html">index.html</a></div>
       </div>
 
       <div class="card">
-        <div><strong>Help</strong></div>
-        <div class="muted">Try:</div>
-        <div class="muted">• <code>help</code> — أمر المساعدة</div>
-        <div class="muted">• <code>system.info</code> — حالة النظام</div>
-        <div class="muted">• <code>explain RAFAT</code> — فك التوقيع</div>
-        <div class="muted">• <code>oath-mode --activate</code> — فعال/تعطيل مود العهد</div>
-        <div class="muted">• <code>anchor.activate 366</code> — ينشّط الختم</div>
-      </div>
+  <div><strong>Help</strong></div>
+  <div class="muted">Try:</div>
+  <div class="muted">• <code>help</code> — Show available commands</div>
+  <div class="muted">• <code>system.info</code> — Show system status</div>
+  <div class="muted">• <code>explain RAFAT</code> — Explain the signature</div>
+  <div class="muted">• <code>oath-mode --activate</code> — Activate/deactivate oath mode</div>
+  <div class="muted">• <code>anchor.activate 366</code> — Activate the anchor</div>
+</div>
     </aside>
   </main>
 
