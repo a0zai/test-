@@ -25,88 +25,117 @@ html, body {
   height: 100%;
   z-index: 0;
 }
-header{display:flex;align-items:center;gap:12px}
-  .logo{width:64px;height:64px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:linear-gradient(90deg,#002b20,#004d2f);box-shadow:0 8px 30px rgba(0,0,0,0.6)}
-  .logo h1{margin:0;font-size:20px;color:var(--accent)}
-  .title{font-size:20px}
-  .subtitle{color:var(--muted);font-size:13px}
-  main{display:flex;gap:18px;flex:1;min-height:0}
-  .left{flex:1;display:flex;flex-direction:column;gap:12px}
 
+
+header {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: relative;
+  z-index: 1;
+}
+
+.logo-row {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo {
+  width: 64px;
+  height: 64px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(90deg,#002b20,#004d2f);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+}
+
+.logo h1 {
+  margin: 0;
+  font-size: 20px;
+  color: var(--accent);
+}
+
+.title {
+  font-size: 20px;
+}
+
+.subtitle {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.header-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0 20px;
+}
+
+.left-controls {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
 
 .mode-toggle {
   font-size: 28px;
   cursor: pointer;
 }
 
-
-.header-bottom {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 20px;
-  position: relative;
-}
-
-.left-controls {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 120px;
-}
-
-
-
-/* زر القائمة */
 .hamburger {
   cursor: pointer;
   width: 30px;
   height: 3px;
   background-color: red;
-  position: absolute;
-  right: 20px;
+  position: relative;
   transition: 0.3s;
 }
 
-.hamburger::before, 
-.hamburger::after { 
-  content: ''; 
-  position: absolute; 
-  width: 30px; 
-  height: 3px; 
-  background-color: red; 
-  transition: 0.3s; 
+.hamburger::before,
+.hamburger::after {
+  content: '';
+  position: absolute;
+  width: 30px;
+  height: 3px;
+  background-color: red;
+  transition: 0.3s;
 }
 
 .hamburger::before { top: -10px; }
 .hamburger::after { top: 10px; }
 
-/* القائمة المنسدلة */
-nav { 
-  position: absolute; 
-  top: 50px; 
-  right: 20px; 
-  border: 1px solid #ccc; 
+nav {
+  position: absolute;
+  top: 50px;
+  right: 20px;
+  border: 1px solid #ccc;
   border-radius: 8px;
   background-color: #ffffff;
-  display: none; 
-  flex-direction: column; 
-  min-width: 150px; 
-  box-shadow: 0 5px 10px rgba(0,0,0,0.1); 
+  display: none;
+  flex-direction: column;
+  min-width: 150px;
+  box-shadow: 0 5px 10px rgba(0,0,0,0.1);
 }
 
-nav a { 
-  padding: 10px 15px; 
-  text-decoration: none; 
-  color: #333; 
-  transition: 0.2s; 
+nav a {
+  padding: 10px 15px;
+  text-decoration: none;
+  color: #333;
+  transition: 0.2s;
 }
 
-nav a:hover { background-color: #ddd; }
-nav.active { display: flex; }
+nav a:hover {
+  background-color: #ddd;
+}
 
-/* المحتوى الرئيسي */
+nav.active {
+  display: flex;
+}
 main { 
   padding: 20px;
   z-index: 1;
@@ -213,27 +242,25 @@ body {
 <div id="particles-js"></div>
 
 <header>
-<div class="logo"><h1>A0Z</h1></div>
+  <div class="logo-row">
+    <div class="logo"><h1>A0Z</h1></div>
     <div>
       <div class="title">A0Z-mp</div>
       <div class="subtitle">Self-Referential Symbolic System — v0.1 (interactive)</div>
     </div>
-<div class="header-bottom">
-  <div class="left-controls">
-    <div class="mode-toggle" id="modeToggle">☂️</div>
-    <div class="hamburger" id="hamburger"></div>
   </div>
-  <nav id="menu">
-    <a href="#home">Home</a>
-    <a href="#contact">Contact</a>
-    <a href="#over-ons">Over Ons</a>
-  </nav>
-</div>  <nav id="menu">
-    <a href="#home">Home</a>
-    <a href="#contact">Contact</a>
-    <a href="#over-ons">Over Ons</a>
-  </nav>
-</div>
+
+  <div class="header-bottom">
+    <div class="left-controls">
+      <div class="mode-toggle" id="modeToggle">☂️</div>
+      <div class="hamburger" id="hamburger"></div>
+    </div>
+    <nav id="menu">
+      <a href="#home">Home</a>
+      <a href="#contact">Contact</a>
+      <a href="#over-ons">Over Ons</a>
+    </nav>
+  </div>
 </header>
 
 <main>
