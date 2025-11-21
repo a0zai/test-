@@ -456,8 +456,9 @@ const commandActions = {
     terminal.innerHTML += "<div class='cmd-line'>∴ 🧪.</div>";
     document.body.style.boxShadow = "inset 0 0 80px #00ffcc";
     document.body.style.transition = "box-shadow 1.5s";
-  },
-  "arcaneQuiz": () => {
+},
+
+"arcaneQuiz": () => {
   const keys = Object.keys(symbolicMemory);
   if (keys.length === 0) {
     terminal.innerHTML += "<div class='cmd-line'>❌ No lessons learned yet. Use 'learn [cmd] [response]' first.</div>";
@@ -501,19 +502,21 @@ const commandActions = {
           feedback.textContent = `💀 Wrong! Shadows whisper the correct answer: "${correctAnswer}"`;
           document.body.style.background = "linear-gradient(45deg, #f00a, #200000)";
 
-          const shadow = document.createElement("div");
-          shadow.textContent = "👻";
-          shadow.style.position = "fixed";
-          shadow.style.fontSize = "80px";
-          shadow.style.left = Math.random() * window.innerWidth + "px";
-          shadow.style.top = Math.random() * window.innerHeight + "px";
-          shadow.style.opacity = 0.5;
-          shadow.style.zIndex = 1000;
-          document.body.appendChild(shadow);
-          setTimeout(() => document.body.removeChild(shadow), 800);
 
-          terminal.style.transform = "translateX(2px)";
-          setTimeout(() => terminal.style.transform = "translateX(-2px)", 50);
+          const ghost = document.createElement("div");
+          ghost.textContent = "👻";
+          ghost.style.position = "fixed";
+          ghost.style.left = Math.random() * window.innerWidth + "px";
+          ghost.style.top = Math.random() * window.innerHeight + "px";
+          ghost.style.fontSize = "80px";
+          ghost.style.opacity = 0.5;
+          ghost.style.zIndex = 1000;
+          document.body.appendChild(ghost);
+          setTimeout(() => document.body.removeChild(ghost), 800);
+
+
+          terminal.style.transform = "translateX(3px)";
+          setTimeout(() => terminal.style.transform = "translateX(-3px)", 50);
           setTimeout(() => terminal.style.transform = "translateX(0)", 100);
         }
 
@@ -533,6 +536,7 @@ const commandActions = {
 
   askNext();
 },
+
 "no way": () => {
     document.body.innerHTML = "";
     const voidDiv = document.createElement("div");
@@ -544,7 +548,7 @@ const commandActions = {
     voidDiv.style.left = "50%";
     voidDiv.style.transform = "translate(-50%, -50%)";
     document.body.appendChild(voidDiv);
-  },
+},
   "why?": () => {
   terminal.innerHTML += "<div class='cmd-line'>🧿Try~>(dose) Or ~>(No way):</div>";
   document.body.style.background = "#111111";
