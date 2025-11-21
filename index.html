@@ -458,85 +458,72 @@ const commandActions = {
     document.body.style.transition = "box-shadow 1.5s";
 },
 
-"arcaneQuiz": () => {
-  const keys = Object.keys(symbolicMemory);
-  if (keys.length === 0) {
-    terminal.innerHTML += "<div class='cmd-line'>❌ No lessons learned yet. Use 'learn [cmd] [response]' first.</div>";
-    return;
-  }
 
-  let score = 0;
-  let index = 0;
+"rollDice": () => {
+    const result = Math.floor(Math.random() * 6) + 1;
+    terminal.innerHTML += `<div class='cmd-line'>🎲 You rolled: ${result}</div>`;
+  },
 
-  function askNext() {
-    if (index >= keys.length) {
-      terminal.innerHTML += `<div class='cmd-line'>🏆 Quiz finished! Your score: ${score} / ${keys.length}</div>`;
-      document.body.style.background = "#111";
-      return;
+  "coinFlip": () => {
+    const result = Math.random() < 0.5 ? "Heads" : "Tails";
+    terminal.innerHTML += `<div class='cmd-line'>🪙 Coin flip: ${result}</div>`;
+  },
+
+  "sparkle": () => {
+    const sparkle = document.createElement("div");
+    sparkle.textContent = "✨";
+    sparkle.style.position = "fixed";
+    sparkle.style.left = Math.random() * window.innerWidth + "px";
+    sparkle.style.top = Math.random() * window.innerHeight + "px";
+    sparkle.style.fontSize = "50px";
+    sparkle.style.opacity = 0.8;
+    sparkle.style.zIndex = 1000;
+    document.body.appendChild(sparkle);
+    setTimeout(() => document.body.removeChild(sparkle), 1200);
+  },
+
+  "reverse": () => {
+    const text = prompt("Enter text to reverse:");
+    if (text) {
+      const reversed = text.split("").reverse().join("");
+      terminal.innerHTML += `<div class='cmd-line'>🔄 Reversed: ${reversed}</div>`;
     }
+  },
 
-    const key = keys[index];
-    const correctAnswer = symbolicMemory[key];
-
-    const msg = document.createElement("div");
-    msg.className = "cmd-line";
-    msg.textContent = `❓ [ARCANE] What is the response for "${key}"?`;
-    terminal.appendChild(msg);
-
-    input.disabled = false;
-    input.focus();
-
-    function handleAnswer(event) {
-      if (event.key === "Enter") {
-        const answer = input.value.trim();
-        input.value = "";
-
-        const feedback = document.createElement("div");
-        feedback.className = "cmd-line";
-
-        if (answer.toLowerCase() === correctAnswer.toLowerCase()) {
-          feedback.textContent = `✅ Correct! ✨ The arcane approves.`;
-          document.body.style.background = "linear-gradient(45deg, #0f0a, #05050f)";
-          score++;
+  "countdown": () => {
+    const seconds = parseInt(prompt("Enter countdown seconds:"), 10);
+    if (!isNaN(seconds)) {
+      let t = seconds;
+      const interval = setInterval(() => {
+        if (t >= 0) {
+          terminal.innerHTML += `<div class='cmd-line'>⏳ ${t} seconds remaining...</div>`;
+          t--;
         } else {
-          feedback.textContent = `💀 Wrong! Shadows whisper the correct answer: "${correctAnswer}"`;
-          document.body.style.background = "linear-gradient(45deg, #f00a, #200000)";
-
-
-          const ghost = document.createElement("div");
-          ghost.textContent = "👻";
-          ghost.style.position = "fixed";
-          ghost.style.left = Math.random() * window.innerWidth + "px";
-          ghost.style.top = Math.random() * window.innerHeight + "px";
-          ghost.style.fontSize = "80px";
-          ghost.style.opacity = 0.5;
-          ghost.style.zIndex = 1000;
-          document.body.appendChild(ghost);
-          setTimeout(() => document.body.removeChild(ghost), 800);
-
-
-          terminal.style.transform = "translateX(3px)";
-          setTimeout(() => terminal.style.transform = "translateX(-3px)", 50);
-          setTimeout(() => terminal.style.transform = "translateX(0)", 100);
+          clearInterval(interval);
+          terminal.innerHTML += `<div class='cmd-line'>✅ Countdown finished!</div>`;
         }
-
-        terminal.appendChild(feedback);
-        index++;
-        setTimeout(() => {
-          document.body.style.background = "#111";
-          askNext();
-        }, 1000);
-
-        input.removeEventListener("keydown", handleAnswer);
-      }
+        terminal.scrollTop = terminal.scrollHeight;
+      }, 1000);
     }
+  },
 
-    input.addEventListener("keydown", handleAnswer);
-  }
+  "ghostFlash": () => {
+    const ghost = document.createElement("div");
+    ghost.textContent = "👻";
+    ghost.style.position = "fixed";
+    ghost.style.fontSize = "80px";
+    ghost.style.left = Math.random() * window.innerWidth + "px";
+    ghost.style.top = Math.random() * window.innerHeight + "px";
+    ghost.style.opacity = 0.5;
+    ghost.style.zIndex = 1000;
+    document.body.appendChild(ghost);
+    setTimeout(() => document.body.removeChild(ghost), 800);
 
-  askNext();
-},
-
+    
+    terminal.style.transform = "translateX(3px)";
+    setTimeout(() => terminal.style.transform = "translateX(-3px)", 50);
+    setTimeout(() => terminal.style.transform = "translateX(0)", 100);
+  },
 "no way": () => {
     document.body.innerHTML = "";
     const voidDiv = document.createElement("div");
