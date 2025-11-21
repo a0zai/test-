@@ -457,7 +457,82 @@ const commandActions = {
     document.body.style.boxShadow = "inset 0 0 80px #00ffcc";
     document.body.style.transition = "box-shadow 1.5s";
   },
-  
+  "arcaneQuiz": () => {
+  const keys = Object.keys(symbolicMemory);
+  if (keys.length === 0) {
+    terminal.innerHTML += "<div class='cmd-line'>❌ No lessons learned yet. Use 'learn [cmd] [response]' first.</div>";
+    return;
+  }
+
+  let score = 0;
+  let index = 0;
+
+  function askNext() {
+    if (index >= keys.length) {
+      terminal.innerHTML += `<div class='cmd-line'>🏆 Quiz finished! Your score: ${score} / ${keys.length}</div>`;
+      document.body.style.background = "#111";
+      return;
+    }
+
+    const key = keys[index];
+    const correctAnswer = symbolicMemory[key];
+
+    const msg = document.createElement("div");
+    msg.className = "cmd-line";
+    msg.textContent = `❓ [ARCANE] What is the response for "${key}"?`;
+    terminal.appendChild(msg);
+
+    input.disabled = false;
+    input.focus();
+
+    function handleAnswer(event) {
+      if (event.key === "Enter") {
+        const answer = input.value.trim();
+        input.value = "";
+
+        const feedback = document.createElement("div");
+        feedback.className = "cmd-line";
+
+        if (answer.toLowerCase() === correctAnswer.toLowerCase()) {
+          feedback.textContent = `✅ Correct! ✨ The arcane approves.`;
+          document.body.style.background = "linear-gradient(45deg, #0f0a, #05050f)";
+          score++;
+        } else {
+          feedback.textContent = `💀 Wrong! Shadows whisper the correct answer: "${correctAnswer}"`;
+          document.body.style.background = "linear-gradient(45deg, #f00a, #200000)";
+
+          const shadow = document.createElement("div");
+          shadow.textContent = "👻";
+          shadow.style.position = "fixed";
+          shadow.style.fontSize = "80px";
+          shadow.style.left = Math.random() * window.innerWidth + "px";
+          shadow.style.top = Math.random() * window.innerHeight + "px";
+          shadow.style.opacity = 0.5;
+          shadow.style.zIndex = 1000;
+          document.body.appendChild(shadow);
+          setTimeout(() => document.body.removeChild(shadow), 800);
+
+          terminal.style.transform = "translateX(2px)";
+          setTimeout(() => terminal.style.transform = "translateX(-2px)", 50);
+          setTimeout(() => terminal.style.transform = "translateX(0)", 100);
+        }
+
+        terminal.appendChild(feedback);
+        index++;
+        setTimeout(() => {
+          document.body.style.background = "#111";
+          askNext();
+        }, 1000);
+
+        input.removeEventListener("keydown", handleAnswer);
+      }
+    }
+
+    input.addEventListener("keydown", handleAnswer);
+  }
+
+  askNext();
+},
 "no way": () => {
     document.body.innerHTML = "";
     const voidDiv = document.createElement("div");
