@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>A0Z</title>
+<title>A0Z-mp</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.46/Tone.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -25,40 +25,20 @@ html, body {
   height: 100%;
   z-index: 0;
 }
+header{display:flex;align-items:center;gap:12px}
+  .logo{width:64px;height:64px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:linear-gradient(90deg,#002b20,#004d2f);box-shadow:0 8px 30px rgba(0,0,0,0.6)}
+  .logo h1{margin:0;font-size:20px;color:var(--accent)}
+  .title{font-size:20px}
+  .subtitle{color:var(--muted);font-size:13px}
+  main{display:flex;gap:18px;flex:1;min-height:0}
+  .left{flex:1;display:flex;flex-direction:column;gap:12px}
 
-header {
-  width: 100%;
-  display: flex;
-  flex-direction: column; 
-  align-items: center;
-  border-bottom: 1px solid #ccc;
-  padding: 30px 0;
-  position: relative;
-  z-index: 2;
-}
-.logo-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  padding: 0 20px;
-}
 
 .mode-toggle {
   font-size: 28px;
   cursor: pointer;
 }
-.logo {
-  font-size: 40px;
-  font-weight: bold;
-  color: red;
-  letter-spacing: 2px;
-  margin-bottom: 25px;
-}
 
-.logo .highlight {
-  color: blue;
-}
 
 .header-bottom {
   width: 100%;
@@ -233,10 +213,11 @@ body {
 <div id="particles-js"></div>
 
 <header>
-<div class="logo-container">
-<span style="color: red;">(</span>
-<span style="color: blue;">)</span>
-</div>
+<div class="logo"><h1>A0Z</h1></div>
+    <div>
+      <div class="title">A0Z-mp</div>
+      <div class="subtitle">Self-Referential Symbolic System — v0.1 (interactive)</div>
+    </div>
 <div class="header-bottom">
   <div class="left-controls">
     <div class="mode-toggle" id="modeToggle">☂️</div>
