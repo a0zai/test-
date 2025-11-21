@@ -457,6 +457,49 @@ const commandActions = {
     document.body.style.boxShadow = "inset 0 0 80px #00ffcc";
     document.body.style.transition = "box-shadow 1.5s";
 },
+"chaosStorm": () => {
+  const storm = document.createElement("div");
+  storm.style.position = "fixed";
+  storm.style.top = 0;
+  storm.style.left = 0;
+  storm.style.width = "100%";
+  storm.style.height = "100%";
+  storm.style.zIndex = 1000;
+  storm.style.pointerEvents = "none";
+  document.body.appendChild(storm);
+
+  function randomColor() {
+    return `rgb(${Math.floor(Math.random()*255)}, ${Math.floor(Math.random()*255)}, ${Math.floor(Math.random()*255)})`;
+  }
+
+  let flashes = 0;
+  const interval = setInterval(() => {
+    storm.style.background = randomColor();
+    storm.style.opacity = Math.random() * 0.7 + 0.3;
+    terminal.style.transform = `translate(${Math.random()*20-10}px, ${Math.random()*20-10}px) rotate(${Math.random()*10-5}deg)`;
+
+    const symbol = document.createElement("div");
+    symbol.textContent = ["💀","👻","⚡","🔥","✨"][Math.floor(Math.random()*5)];
+    symbol.style.position = "fixed";
+    symbol.style.fontSize = `${Math.floor(Math.random()*50)+30}px`;
+    symbol.style.left = `${Math.random()*window.innerWidth}px`;
+    symbol.style.top = `${Math.random()*window.innerHeight}px`;
+    symbol.style.opacity = Math.random();
+    symbol.style.zIndex = 1001;
+    document.body.appendChild(symbol);
+    setTimeout(() => document.body.removeChild(symbol), 1200);
+
+    flashes++;
+    if (flashes > 20) {
+      clearInterval(interval);
+      document.body.removeChild(storm);
+      terminal.style.transform = "translate(0,0) rotate(0)";
+    }
+  }, 80);
+
+  terminal.innerHTML += "<div class='cmd-line'>🌪️ CHAOS STORM unleashed! Brace yourself...</div>";
+  terminal.scrollTop = terminal.scrollHeight;
+},
 "lightning": () => {
   document.body.style.background = "#111";
   const flash = document.createElement("div");
