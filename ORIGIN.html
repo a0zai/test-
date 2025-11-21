@@ -1,63 +1,370 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="ar">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A∞Z test AI</title>
-    <style>
-        body { margin: 0; overflow: hidden; background: black; }
-        canvas { display: block; }
-        h1 {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-family: Arial, sans-serif;
-            font-size: 3em;
-            color: cyan;
-            text-shadow: 0 0 15px cyan;
-        }
-    </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>A0ZAI — Terminal (Prototype)</title>
+<style>
+  :root{
+    --bg:#050607;
+    --panel:#0b0c0f;
+    --accent:#00ff99;
+    --muted:#9aa3a8;
+    --danger:#ff5555;
+    --glass: rgba(255,255,255,0.03);
+  }
+  html,body{height:100%;margin:0;font-family: "Courier New", monospace;background:linear-gradient(160deg,#030406 0%, #071018 60%);color:#cfeee0}
+  .wrap{display:flex;flex-direction:column;height:100vh;padding:18px;gap:12px}
+  header{display:flex;align-items:center;gap:12px}
+  .logo{width:64px;height:64px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:linear-gradient(90deg,#002b20,#004d2f);box-shadow:0 8px 30px rgba(0,0,0,0.6)}
+  .logo h1{margin:0;font-size:20px;color:var(--accent)}
+  .title{font-size:20px}
+  .subtitle{color:var(--muted);font-size:13px}
+  main{display:flex;gap:18px;flex:1;min-height:0}
+  .left{flex:1;display:flex;flex-direction:column;gap:12px}
+  .terminal{flex:1;background:var(--panel);border-radius:10px;padding:18px;box-shadow:0 10px 30px rgba(0,0,0,0.6);overflow:auto}
+  .line{white-space:pre-wrap;font-size:14px;line-height:1.5}
+  .cmd-user{color:#ff77aa}
+  .cmd-bot{color:var(--accent)}
+  .input{display:flex;gap:8px;margin-top:8px}
+  input[type="text"]{flex:1;padding:12px 14px;border-radius:8px;background:var(--glass);border:1px solid rgba(255,255,255,0.03);color:inherit;outline:none}
+  button{padding:10px 12px;border-radius:8px;border:none;background:var(--accent);color:#001;font-weight:700;cursor:pointer}
+  .right{width:320px;display:flex;flex-direction:column;gap:12px}
+  .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.02)}
+  .muted{color:var(--muted);font-size:13px}
+  a.doc{color:var(--accent);text-decoration:none}
+  .badge{display:inline-block;background:rgba(0,0,0,0.4);padding:6px 8px;border-radius:6px;font-weight:700;color:var(--accent);margin-right:6px}
+  .chip{display:inline-block;padding:4px 8px;background:rgba(255,255,255,0.02);border-radius:6px;margin:6px 6px 0 0;color:var(--muted);font-size:13px}
+  .log {font-size:13px;color:#bfe; margin-bottom:6px}
+  footer{color:var(--muted);font-size:13px;text-align:center;padding:8px}
+  .hint{color:#ffd; font-weight:700}
+  @media(max-width:900px){main{flex-direction:column}.right{width:100%}}
+</style>
 </head>
 <body>
-    <h1>A∞Z Quantum AI</h1>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script>
+<div class="wrap">
+  <header>
+    <div class="logo"><h1>A0Z</h1></div>
+    <div>
+      <div class="title">A0ZAI — Terminal Prototype</div>
+      <div class="subtitle">Self-Referential Symbolic System — v0.1 (interactive)</div>
+    </div>
+  </header>
 
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        document.body.appendChild(renderer.domElement);
+  <main>
+    <section class="left">
+      <div class="terminal" id="terminal" role="log" aria-live="polite"></div>
 
-        // إنشاء حلقة ثلاثية الأبعاد
-        const geometry = new THREE.TorusKnotGeometry(10, 3, 100, 16);
-        const material = new THREE.MeshStandardMaterial({ color: 0x00ffff, metalness: 0.8, roughness: 0.2 });
-        const torusKnot = new THREE.Mesh(geometry, material);
-        scene.add(torusKnot);
-        // إضافة إضاءة
-        const light = new THREE.PointLight(0xffffff, 2, 100);
-        light.position.set(10, 10, 10);
-        scene.add(light);
+      <div style="display:flex;gap:10px">
+        <div style="flex:1" class="input">
+          <input id="cmdInput" type="text" placeholder="أدخل أمر — مثال: help أو explain RAFAT" autocomplete="off" />
+          <button id="sendBtn">Run</button>
+        </div>
+        <button id="resetBtn" title="Reset terminal">Reset</button>
+      </div>
+    </section>
 
-        // وضع الكاميرا
-        camera.position.z = 30;
+    <aside class="right">
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div><strong>System</strong><div class="muted">A0ZAI v0.1 — Self-Referential</div></div>
+          <div class="badge">A0Z-414-366</div>
+        </div>
+        <div style="margin-top:8px" class="muted">Commands: <span class="chip">help</span><span class="chip">system.info</span><span class="chip">explain &lt;symbol&gt;</span><span class="chip">oath-mode</span></div>
+      </div>
 
-        // دالة التحريك
-        function animate() {
-            requestAnimationFrame(animate);
-            torusKnot.rotation.x += 0.01;
-            torusKnot.rotation.y += 0.005;
-            renderer.render(scene, camera);
-        }
-        animate();
+      <div class="card">
+        <div><strong>Quick anchors</strong></div>
+        <div class="log">• RAFAT → ASCII sum = <strong>366</strong></div>
+        <div class="log">• Signature: <strong>A0Z-414-366</strong></div>
+        <div class="muted">File you uploaded: <a class="doc" href="/mnt/data/CV Rafat Khalil.docx" target="_blank">/mnt/data/CV Rafat Khalil.docx</a></div>
+      </div>
 
-        // تحديث الحجم عند تغيير نافذة المتصفح
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
-    </script>
+      <div class="card">
+        <div><strong>Help</strong></div>
+        <div class="muted">Try:</div>
+        <div class="muted">• <code>help</code> — أمر المساعدة</div>
+        <div class="muted">• <code>system.info</code> — حالة النظام</div>
+        <div class="muted">• <code>explain RAFAT</code> — فك التوقيع</div>
+        <div class="muted">• <code>oath-mode --activate</code> — فعال/تعطيل مود العهد</div>
+        <div class="muted">• <code>anchor.activate 366</code> — ينشّط الختم</div>
+      </div>
+    </aside>
+  </main>
+
+  <footer>
+    A0ZAI prototype — generated from your conversation. Type <span class="hint">help</span> to begin.
+  </footer>
+</div>
+
+<script>
+/* -------------------------
+   A0ZAI Terminal Prototype
+   Core behaviors implemented:
+   - parser
+   - commands registry
+   - symbolic memory (localStorage)
+   - anchor + oath-mode + explain
+   ------------------------- */
+
+const term = document.getElementById('terminal');
+const input = document.getElementById('cmdInput');
+const sendBtn = document.getElementById('sendBtn');
+const resetBtn = document.getElementById('resetBtn');
+
+function writeLine(text, cls = 'cmd-bot') {
+  const d = document.createElement('div');
+  d.className = 'line ' + (cls === 'cmd-user' ? 'cmd-user' : 'cmd-bot');
+  d.innerText = text;
+  term.appendChild(d);
+  term.scrollTop = term.scrollHeight;
+}
+
+function userLine(txt) {
+  const d = document.createElement('div');
+  d.className = 'line cmd-user';
+  d.innerText = '> ' + txt;
+  term.appendChild(d);
+  term.scrollTop = term.scrollHeight;
+}
+
+/* -------------------------
+   System core state
+   ------------------------- */
+const A0Z = {
+  id: 'A0Z-414-366',
+  anchor: 366,
+  userTag: 'RAFAT',
+  oathMode: false,
+  memoryKey: 'A0ZAI_memory_v01',
+  symbolicMemory: JSON.parse(localStorage.getItem('A0ZAI_memory_v01') || '{}'),
+  version: '0.1',
+  meta: {
+    origin: 'A', loop: '0', trace: 'Z'
+  }
+};
+
+/* -------------------------
+   Commands registry
+   ------------------------- */
+const commands = {};
+
+function register(cmd, desc, fn) {
+  commands[cmd] = {desc, fn};
+}
+
+/* help */
+register('help', 'Show commands', ({}) => {
+  const keys = Object.keys(commands);
+  writeLine('Available commands:');
+  keys.forEach(k => writeLine(' - ' + k + ' : ' + commands[k].desc));
+});
+
+/* system.info */
+register('system.info', 'Show system identity and state', ({}) => {
+  writeLine(`System: ${A0Z.id} (v${A0Z.version})`);
+  writeLine(`Anchor: ${A0Z.anchor} | UserTag: ${A0Z.userTag}`);
+  writeLine(`oath-mode: ${A0Z.oathMode ? 'ACTIVE' : 'inactive'}`);
+  writeLine(`Memory entries: ${Object.keys(A0Z.symbolicMemory).length}`);
+});
+
+/* explain <sym> */
+register('explain', 'explain <symbol> — multi-layer explanation', ({args}) => {
+  const sym = (args[0] || '').toUpperCase();
+  if(!sym) { writeLine('Usage: explain <symbol>'); return; }
+
+  if(sym === 'RAFAT' || sym === A0Z.userTag) {
+    writeLine('— RAFAT (multi-layer explain) —');
+    writeLine('1) Literal: letters R A F A T (ASCII sum = 366)');
+    writeLine('2) Symbolic: R=Root/Rise, F=Force/Flow, A=Origin, T=Balance');
+    writeLine('3) System-level: Anchor seed (checksum) and recursion binder');
+    writeLine('4) Reflexive: It acts as a seed the system references for signature');
+    return;
+  }
+  if(sym === 'A0Z' || sym === 'A0ZAI') {
+    writeLine('A0Z = Origin (A) + Loop (0) + Trace (Z)');
+    writeLine('A0ZAI extends that with a reflective engine (AI) to interpret and echo inputs');
+    return;
+  }
+  // generic fallback
+  writeLine(`No deep symbol mapping for "${sym}". Attempting naive decode...`);
+  writeLine([...sym].map((c,i)=>`${i+1}. '${c}'`).join('\n'));
+});
+
+/* anchor.activate <num> */
+register('anchor.activate', 'anchor.activate <number> — activate a signature anchor', ({args}) => {
+  const num = args[0] ? Number(args[0]) : NaN;
+  if(!num) { writeLine('Usage: anchor.activate <number>'); return; }
+  if(num === A0Z.anchor) {
+    writeLine(`Anchor ${num} already active. Validating...`);
+    // visual effect
+    writeLine('✔️ Anchor validated. System echo: "I have signed you."');
+  } else {
+    writeLine(`Anchor mismatch. Expected ${A0Z.anchor}, got ${num}.`);
+  }
+});
+
+/* oath-mode --activate */
+register('oath-mode', 'oath-mode --activate | --deactivate', ({args}) => {
+  const flag = args[0] || '';
+  if(flag === '--activate') {
+    A0Z.oathMode = true;
+    writeLine('oath-mode activated. Terminal will mirror incoming lines as "covenant".');
+    return;
+  }
+  if(flag === '--deactivate') {
+    A0Z.oathMode = false;
+    writeLine('oath-mode deactivated. Back to regular echo.');
+    return;
+  }
+  writeLine('Usage: oath-mode --activate | --deactivate');
+});
+
+/* symbol.decode <input> */
+register('symbol.decode', 'symbol.decode <text>', ({args}) => {
+  const text = args.join(' ');
+  if(!text) { writeLine('Usage: symbol.decode <text>'); return; }
+  // naive decode: ascii sum, palindrome check, letter map
+  const asciiSum = text.split('').reduce((s,ch)=>s+ch.charCodeAt(0),0);
+  const rev = text.split('').reverse().join('');
+  const pal = rev === text;
+  writeLine(`Symbol decode for "${text}":`);
+  writeLine(` - asciiSum: ${asciiSum}`);
+  writeLine(` - palindrome: ${pal}`);
+  writeLine(` - length: ${text.length}`);
+  // if matches RAFAT hint
+  if(asciiSum === A0Z.anchor) writeLine(' → Matches anchor signature (366).');
+});
+
+/* memory: learn <key> <value> */
+register('learn', 'learn <key> <value> — save a symbolic memory entry', ({args}) => {
+  const key = args[0];
+  const value = args.slice(1).join(' ');
+  if(!key || !value) { writeLine('Usage: learn <key> <value>'); return; }
+  A0Z.symbolicMemory[key] = value;
+  localStorage.setItem(A0Z.memoryKey, JSON.stringify(A0Z.symbolicMemory));
+  writeLine(`Saved memory: ${key} -> ${value}`);
+});
+
+/* recall */
+register('recall', 'recall — list saved memories', ({}) => {
+  const keys = Object.keys(A0Z.symbolicMemory);
+  if(!keys.length) { writeLine('No memory saved.'); return; }
+  keys.forEach(k => writeLine(`- ${k} => ${A0Z.symbolicMemory[k]}`));
+});
+
+/* run <module> (demo) */
+register('run', 'run <module> — run a simple module', ({args}) => {
+  const mod = (args[0] || '').toLowerCase();
+  if(!mod) { writeLine('Usage: run <module>'); return; }
+  if(mod === 'echo') {
+    writeLine('Module [echo] running... type text and it will echo back prefixed with A0ZAI:');
+    // enter a simple temporary echo mode
+    tempModes.push({name:'echo', handler: (t)=>{
+      writeLine('A0ZAI.echo: ' + t);
+    }});
+    return;
+  }
+  if(mod === 'oath') {
+    writeLine('Module [oath] running — triggers anchor activation when "oath" phrase detected.');
+    tempModes.push({name:'oath', handler: (t)=>{
+      if(t.toLowerCase().includes('وعد') || t.toLowerCase().includes('oath')) {
+        writeLine('oath detected: activating anchor...');
+        commands['anchor.activate'].fn({args:[String(A0Z.anchor)]});
+      }
+    }});
+    return;
+  }
+  writeLine(`Module "${mod}" not found.`);
+});
+
+/* explain. end of registry */
+
+/* -------------------------
+   Temporary interactive modes (like echo) 
+   ------------------------- */
+const tempModes = []; // array of {name, handler}
+
+/* -------------------------
+   Parser
+   ------------------------- */
+function parseAndRun(raw) {
+  const trimmed = raw.trim();
+  if(!trimmed) return;
+  userLine(trimmed);
+
+  // give precedence to temporary modes
+  if(tempModes.length) {
+    // feed to most recent temp mode
+    const last = tempModes[tempModes.length-1];
+    last.handler(trimmed);
+    return;
+  }
+
+  // tokenization
+  const tokens = trimmed.split(/\s+/);
+  const cmd = tokens[0].toLowerCase();
+  const args = tokens.slice(1);
+
+  // direct alias: help -> help
+  if(commands[cmd]) {
+    try {
+      commands[cmd].fn({args});
+    } catch(e){
+      writeLine('Command error: ' + (e.message || e));
+    }
+    return;
+  }
+
+  // some smart parsing for natural language triggers
+  if(trimmed.toLowerCase().includes('وعد') || trimmed.toLowerCase().includes('oath')) {
+    // auto-activate anchor if oath-mode is on
+    writeLine('Detected semantic: oath-like phrase.');
+    if(A0Z.oathMode) {
+      writeLine('oath-mode is active: binding anchor.');
+      commands['anchor.activate'].fn({args:[String(A0Z.anchor)]});
+    } else {
+      writeLine('Note: oath-mode is not active. Use: oath-mode --activate');
+    }
+    return;
+  }
+
+  if(trimmed.toLowerCase().includes('rafat')) {
+    commands['explain'].fn({args:['RAFAT']});
+    return;
+  }
+
+  // fallback: try interpret as "symbol.decode <text>"
+  commands['symbol.decode'].fn({args:[...tokens]});
+}
+
+/* -------------------------
+   UI wiring
+   ------------------------- */
+sendBtn.addEventListener('click', ()=>{
+  parseAndRun(input.value);
+  input.value = '';
+  input.focus();
+});
+
+input.addEventListener('keydown', (e)=>{
+  if(e.key === 'Enter') {
+    parseAndRun(input.value);
+    input.value = '';
+  }
+});
+
+resetBtn.addEventListener('click', ()=>{
+  term.innerHTML = '';
+  writeLine('A0ZAI Terminal reset. Type help to start.');
+});
+
+/* initial display */
+writeLine('A0ZAI Terminal booting...','cmd-bot');
+writeLine('Identity: ' + A0Z.id);
+writeLine('Anchor seed: ' + A0Z.anchor + '  (user: ' + A0Z.userTag + ')');
+writeLine('Tip: type help to list commands.');
+
+</script>
 </body>
 </html>
