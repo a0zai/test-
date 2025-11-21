@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>A0Z-mp</title>
+<title>A0Z.mp-v0.1</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.46/Tone.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -144,7 +144,6 @@ main {
   padding: 20px;
   z-index: 1;
 }
-
 #terminalContainer {
   height: 200px;
   background: #111;
@@ -185,6 +184,8 @@ main {
   color: #ff0044;
   font-weight: bold;
 }
+
+/* --------------------- Footer --------------------- */
 footer {
   width: 100%;
   padding: 80px 20px;
@@ -212,6 +213,7 @@ footer {
   color: #00BFFF;
 }
 
+/* --------------------- Three.js Container --------------------- */
 #threeContainer {
   position: absolute;
   bottom: 10px;
@@ -220,15 +222,18 @@ footer {
   height: 100px;
   transform: translateX(-20px);
 }
+
+/* --------------------- Animations --------------------- */
 @keyframes moveLink {
   0% { transform: translateX(0); }
   50% { transform: translateX(10px); }
   100% { transform: translateX(0); }
 }
+
 @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(5px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
 @keyframes shake {
   0% { transform: translate(0px, 0px); }
@@ -237,6 +242,53 @@ footer {
   75% { transform: translate(2px, 2px); }
   100% { transform: translate(0px, 0px); }
 }
+
+/* --------------------- Right Sidebar Cards --------------------- */
+.right {
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.card {
+  background: rgba(255,255,255,0.02);
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.02);
+}
+
+.muted {
+  color: #9aa3a8;
+  font-size: 13px;
+}
+
+.badge {
+  display: inline-block;
+  background: rgba(0,0,0,0.4);
+  padding: 6px 8px;
+  border-radius: 6px;
+  font-weight: 700;
+  color: #00ff99;
+  margin-right: 6px;
+}
+
+.chip {
+  display: inline-block;
+  padding: 4px 8px;
+  background: rgba(255,255,255,0.02);
+  border-radius: 6px;
+  margin: 6px 6px 0 0;
+  color: #9aa3a8;
+  font-size: 13px;
+}
+
+.log {
+  font-size: 13px;
+  color: #bfe;
+  margin-bottom: 6px;
+}
+
 body {
   animation: none; 
 }
@@ -249,8 +301,8 @@ body {
   <div class="logo-row">
     <div class="logo"><h1>A0Z</h1></div>
     <div>
-      <div class="title">A0Z-mp</div>
-      <div class="subtitle">Self-Referential Symbolic System — v0.1 </div>
+      <div class="title">A0Z.mp-v0.1</div>
+      <div class="subtitle">Self-Referential Symbolic System</div>
     </div>
   </div>
 
@@ -305,37 +357,52 @@ body {
      alt="LinkedIn Profile" 
      style="width: 120px; height: 120px; border-radius: 50%; margin-top: 20px;">
    </section>
-  <!-- Over Ons Section -->
-  <section id="over-ons" style="min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;">
-    <h2>About Us</h2>
-    <p>🚀</p>
-  <div id="terminalContainer" style="width: 90%; max-width: 600px; background: #111; color: #0f0; font-family: monospace; padding: 15px; border-radius: 10px; margin-top: 30px; overflow-y: auto; height: 200px;">
-  <div id="terminal"></div>
+<section id="over-ons" style="min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 20px;">
+  <h2>About Us</h2>
+  <p>🚀</p>
 
-  <div class="input-line">
-      <div style="
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 150px;
-    height: 80px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: none;
-  "> 
-  <input type="text" id="commandInput" placeholder="🃏" autocomplete="off" style="
-      background: none;
-      border: none;
-      color: #00fff0;
-      outline: none;
-      font-size: 16px;
-      text-align: center;
-      width: 50%;
-    ">
+  <div style="display: flex; gap: 20px; width: 90%; max-width: 1000px;">
+    <!-- Terminal Left -->
+    <section class="left" style="flex: 1; display: flex; flex-direction: column; gap: 12px;">
+      <div id="terminalContainer">
+        <div id="terminal"></div>
+        <div class="input-line">
+          <input type="text" id="commandInput" placeholder="Try: help, explain RAFAT" autocomplete="off" style="flex:1; background:none; border:none; color:#0f0; outline:none; font-size:16px; text-align:center;">
+          <button id="sendBtn" style="padding:10px 12px; border-radius:8px; border:none; background:#00ff99; color:#001; font-weight:700; cursor:pointer;">Run</button>
+          <button id="resetBtn" style="padding:10px 12px; border-radius:8px; border:none; background:#ff5555; color:#fff; font-weight:700; cursor:pointer;">Reset</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Right Sidebar -->
+    <aside class="right">
+      <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <strong>System</strong>
+            <div class="muted">A0ZAI v0.1 — Self-Referential</div>
+          </div>
+          <div class="badge">A0Z-414-366</div>
+        </div>
+        <div style="margin-top:8px;" class="muted">
+          Commands: 
+          <span class="chip">help</span>
+          <span class="chip">system.info</span>
+          <span class="chip">explain &lt;symbol&gt;</span>
+          <span class="chip">oath-mode</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div><strong>Quick anchors</strong></div>
+        <div class="log">• RAFAT → ASCII sum = <strong>366</strong></div>
+        <div class="log">• Signature: <strong>A0Z-414-366</strong></div>
+        <div class="muted">
+        </div>
+      </div>
+    </aside>
   </div>
-  </section>
+</section>
 
 </main>
 
