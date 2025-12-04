@@ -1,947 +1,670 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>A0Z-mp~v0.1</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.46/Tone.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<style>
-html, body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Courier New', monospace;
-  background: #000000;
-  color: white;
-}
-#particles-js {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-}
-header {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  position: relative;
-  z-index: 1;
-}
+  <meta charset="UTF-8" />
+  <title>test</title>
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      background-color: #000;
+      color: gold;
+      font-family: 'Courier New', monospace;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+    
+    #pageOverlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      backdrop-filter: blur(12px);
+      background-color: rgba(0, 0, 0, 0.6);
+      z-index: 9999;
+      opacity: 1;
+      transition: opacity 3s ease;
+    }
+    #pageOverlay.fade-out {
+      opacity: 0;
+      pointer-events: none;
+    }
+    #particles-js {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+    #overlayImage {
+      position: fixed;
+      top: 0; left: 0;
+      width: 90%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+      opacity: 0.9;
+      pointer-events: none;
+    }
+#hamburger {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    font-size: 28px;
+    cursor: pointer;
+    color: rgb(0, 225, 255);
+    z-index: 10000;
+    user-select: none;
+  }
 
-.logo-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
+  /* القائمة الجانبية */
+  #sidebar {
+    position: fixed;
+    top: 0;
+    left: -250px; /* مخفية خارج الشاشة */
+    width: 250px;
+    height: 100%;
+    background-color: rgba(0,0,0,0.9);
+    backdrop-filter: blur(8px);
+    color: gold;
+    padding: 40px 20px;
+    box-sizing: border-box;
+    transition: left 0.3s ease;
+    z-index: 9999;
+  }
 
-.logo {
-  width: 64px;
-  height: 64px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(90deg,#002b20,#004d2f);
-  box-shadow: 0 8px 30px rgba(0,0,0,0.6);
-}
+  /* عندما تكون مفتوحة */
+  #sidebar.open {
+    left: 0;
+  }
 
-.logo h1 {
-  margin: 0;
-  font-size: 20px;
-  color: var(--accent);
-}
+  #sidebar a {
+    display: block;
+    margin: 15px 0;
+    color: gold;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 18px;
+  }
 
-.title {
-  font-size: 20px;
-}
+  #sidebar a:hover {
+    text-decoration: underline;
+  }
 
-.subtitle {
-  color: var(--muted);
-  font-size: 13px;
-}
+  /* زر إغلاق */
+  #closeSidebar {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    cursor: pointer;
+  }
 
-.header-bottom {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  padding: 0 20px;
-  position: relative;
-}
+    #viewersCount {
+      position: fixed;
+      top: 15px;
+      right: 20px;
+      font-size: 24px;
+      font-weight: bold;
+      color: gold;
+      z-index: 10000;
+      user-select: none;
+      background: rgba(0,0,0,0.5);
+      padding: 6px 12px;
+      border-radius: 12px;
+      box-shadow: 0 0 8px gold;
+    }
 
-.left-controls {
-  display: flex;
-  align-items: center;
-}
-
-.right-controls {
-  display: flex;
-  align-items: center;
-}
-
-.mode-toggle {
-  font-size: 28px;
-  cursor: pointer;
-}
-
-.hamburger {
-  cursor: pointer;
-  width: 30px;
-  height: 3px;
-  background-color: red;
-  position: relative;
-  transition: 0.3s;
-}
-.hamburger::before,
-.hamburger::after {
-  content: '';
-  position: absolute;
-  width: 30px;
-  height: 3px;
-  background-color: red;
-  transition: 0.3s;
-}
-
-.hamburger::before { top: -10px; }
-.hamburger::after { top: 10px; }
-
-nav {
-  position: absolute;
-  top: 50px;
-  right: 20px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  background-color: #ffffff;
-  display: none;
-  flex-direction: column;
-  min-width: 150px;
-  box-shadow: 0 5px 10px rgba(0,0,0,0.1);
-  z-index: 2;
-}
-
-nav a {
-  padding: 10px 15px;
-  text-decoration: none;
-  color: #333;
-  transition: 0.2s;
-}
-
-nav a:hover {
-  background-color: #ddd;
-}
-
-nav.active {
-  display: flex;
-}
-
-main { 
+#chatWrapper {
+  width: 96%;
+  max-width: 700px;
+  max-height: 66vh;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  border: 2px solid #ff0000;
+  border-radius: 12px;
   padding: 20px;
-  z-index: 1;
-}
-
-#terminalContainer {
-  height: 200px;
-  background: #111;
-  color: #0f0;
-  font-family: monospace;
-  padding: 15px;
-  border-radius: 10px;
-  overflow: hidden;
+  box-sizing: border-box;
+  position: fixed;
+  bottom: 20px;      
+  left: 50%;
+  transform: translateX(-50%);  
+  z-index: 10;
   display: flex;
   flex-direction: column;
-  position: relative;
 }
-
-#terminal {
-  flex: 1;
-  overflow-y: auto;
-  padding-bottom: 20px;
+#nameInput {
+  width: 250px;         /* حجم العرض */
+  padding: 15px 20px;   /* مساحة داخلية أكبر لارتفاع الحقل */
+  font-size: 16px;      /* حجم الخط */
+  border-radius: 8px;
+  border: 2px solid rgb(17, 0, 255);
+  background-color: #111;
+  color: rgb(255, 0, 0);
+  font-family: 'Courier New', monospace;
+  box-sizing: border-box;
 }
-
-.cmd-line {
-  margin: 10px 0;
-  animation: fadeIn 0.3s ease-in-out;
-  white-space: pre;
-}
-
-.input-line {
-  position: absolute;
-  bottom: 10px;
+#smallCamera {
+  position: fixed;
+  top: 20px;
   left: 50%;
   transform: translateX(-50%);
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  padding: 10px;
+  width: 160px;
+  height: 120px;
+  border-radius: 50% / 60%;
+  object-fit: cover;
+  z-index: 10000;
 }
-
-.cmd-user {
-  color: #ff0044;
-  font-weight: bold;
-}
-footer {
-  width: 100%;
-  padding: 80px 20px;
-  text-align: left;
-  position: relative;
-  overflow: hidden;
-}
-
-.footer-links {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  color: #1E90FF;
-  text-align: left;
-}
-
-.footer-links a {
-  color: #1E90FF;
-  text-decoration: none;
-  font-size: 14px;
-  transition: 0.3s;
-}
-
-.footer-links a:hover {
-  color: #00BFFF;
-}
-
-#threeContainer {
-  position: absolute;
-  bottom: 10px;
-  right: 10px; 
-  width: 100px;
-  height: 100px;
-  transform: translateX(-20px);
-}
-@keyframes moveLink {
-  0% { transform: translateX(0); }
-  50% { transform: translateX(10px); }
-  100% { transform: translateX(0); }
-}
-@keyframes fadeIn {
-      from { opacity: 0; transform: translateY(5px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-@keyframes shake {
-  0% { transform: translate(0px, 0px); }
-  25% { transform: translate(2px, -2px); }
-  50% { transform: translate(-2px, 2px); }
-  75% { transform: translate(2px, 2px); }
-  100% { transform: translate(0px, 0px); }
-}
-body {
-  animation: none; 
-}
-</style>
-</head>
-</body>
-<div id="particles-js"></div>
-
-<header>
-  <div class="logo-row">
-    <div class="logo"><h1>A0Z</h1></div>
-    <div>
-      <div class="title">A0Z-mp~v0.1</div>
-      <div class="subtitle">Self-Referential Symbolic System</div>
-    </div>
-  </div>
-
-  <div class="header-bottom">
-    <div class="left-controls">
-      <div class="mode-toggle" id="modeToggle">☂️</div>
-    </div>
-    <div class="right-controls">
-      <div class="hamburger" id="hamburger"></div>
-    </div>
-    <nav id="menu">
-      <a href="#home">Home</a>
-      <a href="#contact">Contact</a>
-      <a href="#over-ons">Over Ons</a>
-    </nav>
-  </div>
-</header>
-<main>
-
-  <!-- Home Section -->
-  <section id="home" style="min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;">
-    <h2>Welcome to A0ZAI</h2>
-    <p>Future Test!!🔥</p>
-    <img src="IMG_9055.jpeg" alt="Main Image" style="max-width: 400px; width: 80%; border-radius: 10px; margin-top: 20px;">
-      <a href="https://github.com/a0zai" target="_blank" 
-     style="
-       color: #FF0000;
-       font-size: 18px;
-       margin-bottom: 15px;
-       animation: moveLink 2s linear infinite alternate;
-     ">
-     Moving t🐈‍⬛o Git
-  </a>
-  </section>
-
-  <!-- Contact Section -->
-  <section id="contact" style="min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;">
-    <h2>Contact A0Z</h2>
-    <p>Connect on LinkedIn:</p>
-    <a href="https://www.linkedin.com/in/a0zai" target="_blank"
-     style="
-       color: #1E90FF; 
-       text-decoration: underline; 
-       font-size: 18px; 
-       margin-bottom: 15px; 
-       position: relative; 
-       z-index: 10;
-     ">
-    LinkedIn Profile
-  </a>
-    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTepTK7e9HpbOrtaQR5lw4_xjoJrL_u_QLWPKNskqrHQw&s=10" 
-     alt="LinkedIn Profile" 
-     style="width: 120px; height: 120px; border-radius: 50%; margin-top: 20px;">
-   </section>
-  <!-- Over Ons Section -->
-  <section id="over-ons" style="min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;">
-    <h2>About Us</h2>
-    <p>🚀</p>
-  <div id="terminalContainer" style="width: 90%; max-width: 600px; background: #111; color: #0f0; font-family: monospace; padding: 15px; border-radius: 10px; margin-top: 30px; overflow-y: auto; height: 200px;">
-  <div id="terminal"></div>
-
-  <div class="input-line">
-      <div style="
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 150px;
-    height: 80px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: none;
-  "> 
-  <input type="text" id="commandInput" placeholder="🃏" autocomplete="off" style="
-      background: none;
-      border: none;
-      color: #00fff0;
-      outline: none;
+    #messages {
+      flex: 1;                 /* يشغل أكبر مساحة ممكنة */
+      overflow-y: auto;
+      padding: 20px;
+      border: 1px solid #00ffcc;
+      border-radius: 8px;
+      word-wrap: break-word;
+      display: none;
+      backdrop-filter: blur(6px);
+      margin-bottom: 10px;
+      max-height: 55vh;        /* ارتفاع مناسب للرسائل */
+      color: #00ffcc;
       font-size: 16px;
-      text-align: center;
-      width: 50%;
-    ">
-  </div>
-  </section>
-
-</main>
-
-<footer id="footer">
-  &copy; A0ZAI
-
-  <div class="footer-links">
-    <a href="#home">Home</a>
-    <a href="#contact">Contact</a>
-    <a href="#over-ons">Over Ons</a>
-  </div>
-
-  <div id="threeContainer"></div>
-</footer>
-<script>
-const hamburger = document.getElementById('hamburger');
-const menu = document.getElementById('menu');
-const footer = document.getElementById('footer');
-const navLinks = menu.querySelectorAll('a');
-const modeToggle = document.getElementById('modeToggle');
-let isDark = false;
-modeToggle.addEventListener('click', () => {
-  if (!isDark) {
-    document.body.style.filter = "invert(1)";
-    isDark = true;
-  } else {
-    document.body.style.filter = "none";
-    isDark = false;
-  }
-});
-hamburger.addEventListener('click', () => {
-  menu.classList.toggle('active');
-  if(menu.classList.contains('active')) {
-    footer.style.backgroundColor = '#ffffff';  // أبيض عند فتح القائمة
-    footer.style.color = '#000000';
-  } else {
-    footer.style.backgroundColor = 'rgba(128, 0, 128, 0.5)';  // بنفسجي شفاف قبل النقر
-    footer.style.color = '#ffffff';
-  }
-  footer.scrollIntoView({ behavior: 'smooth' });
-});
-
-navLinks.forEach(link => {
-  link.addEventListener('click', (e) => {
-    e.preventDefault();
-    const targetId = link.getAttribute('href').substring(1);
-    const targetSection = document.getElementById(targetId);
-    if (targetSection) {
-      targetSection.scrollIntoView({ behavior: 'smooth' });
+      text-align: left;
     }
-    menu.classList.remove('active');
-  });
-});
-</script>
-
-<script>
-(function() {
-  const container = document.getElementById('threeContainer');
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(75, container.clientWidth/container.clientHeight, 0.1, 1000);
-  const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-  renderer.setSize(container.clientWidth, container.clientHeight);
-  container.appendChild(renderer.domElement);
-
-const geometry = new THREE.TorusKnotGeometry(5, 1.2, 150, 20);
-  const material = new THREE.MeshStandardMaterial({ color: 0x00ffff, metalness: 0.8, roughness: 0.2 });
-  const torusKnot = new THREE.Mesh(geometry, material);
-  scene.add(torusKnot);
-
-  const light = new THREE.PointLight(0xffffff, 2, 100);
-  light.position.set(10,10,10);
-  scene.add(light);
-
-  camera.position.z = 20; 
-
-  function animate() {
-    requestAnimationFrame(animate);
-    torusKnot.rotation.x += 0.01;
-    torusKnot.rotation.y += 0.005;
-    renderer.render(scene, camera);
-  }
-  animate();
-
-  window.addEventListener('resize', () => {
-    camera.aspect = container.clientWidth / container.clientHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(container.clientWidth, container.clientHeight);
-  });
-})();
-const terminal = document.getElementById("terminal");
-const input = document.getElementById("commandInput");
-
-const baseLines = [
-  "Welcome to A0ZAI",
-  "Trust me 🕯️💀 ",
-  "-----████████░░░░🌕🌕",
-  "Type 'how?' → to see my work",
-  "██████████🔵",
-  "😈🔥",
-  " •      .  ",
-];
-
-
-const commandActions = {
-  "how?": () => {
-  const msg = document.createElement("div");
-  msg.className = "cmd-line";
-  msg.textContent = `Margot sighed deeply, then pressed the gate handle, which slowly opened with a deep metallic sound, as if groaning under centuries of secrets. As she crossed, she felt a cold breeze envelop her body, as if she had left her own time and entered a place between worlds.
-
-🎃 you are here😈!:
-🗝️Try: (why?)`;
-  terminal.appendChild(msg);
-  document.body.style.backgroundColor = "#f4f4f4";
-  terminal.style.color = "#00ff00";
-},
-
-  "dose": () => {
-    terminal.innerHTML += "<div class='cmd-line'>∴ 🧪.</div>";
-    document.body.style.boxShadow = "inset 0 0 80px #00ffcc";
-    document.body.style.transition = "box-shadow 1.5s";
-},
-"chaosStorm": () => {
-  const storm = document.createElement("div");
-  storm.style.position = "fixed";
-  storm.style.top = 0;
-  storm.style.left = 0;
-  storm.style.width = "100%";
-  storm.style.height = "100%";
-  storm.style.zIndex = 1000;
-  storm.style.pointerEvents = "none";
-  document.body.appendChild(storm);
-
-  function randomColor() {
-    return `rgb(${Math.floor(Math.random()*255)}, ${Math.floor(Math.random()*255)}, ${Math.floor(Math.random()*255)})`;
-  }
-
-  let flashes = 0;
-  const interval = setInterval(() => {
-    storm.style.background = randomColor();
-    storm.style.opacity = Math.random() * 0.7 + 0.3;
-    terminal.style.transform = `translate(${Math.random()*20-10}px, ${Math.random()*20-10}px) rotate(${Math.random()*10-5}deg)`;
-
-    const symbol = document.createElement("div");
-    symbol.textContent = ["💀","👻","⚡","🔥","✨"][Math.floor(Math.random()*5)];
-    symbol.style.position = "fixed";
-    symbol.style.fontSize = `${Math.floor(Math.random()*50)+30}px`;
-    symbol.style.left = `${Math.random()*window.innerWidth}px`;
-    symbol.style.top = `${Math.random()*window.innerHeight}px`;
-    symbol.style.opacity = Math.random();
-    symbol.style.zIndex = 1001;
-    document.body.appendChild(symbol);
-    setTimeout(() => document.body.removeChild(symbol), 1200);
-
-    flashes++;
-    if (flashes > 20) {
-      clearInterval(interval);
-      document.body.removeChild(storm);
-      terminal.style.transform = "translate(0,0) rotate(0)";
-    }
-  }, 80);
-
-  terminal.innerHTML += "<div class='cmd-line'>🌪️ CHAOS STORM unleashed! Brace yourself...</div>";
-  terminal.scrollTop = terminal.scrollHeight;
-},
-"lightning": () => {
-  document.body.style.background = "#111";
-  const flash = document.createElement("div");
-  flash.style.position = "fixed";
-  flash.style.top = 0;
-  flash.style.left = 0;
-  flash.style.width = "100%";
-  flash.style.height = "100%";
-  flash.style.background = "linear-gradient(180deg, #fff, #00f)";
-  flash.style.opacity = 0;
-  flash.style.zIndex = 1000;
-  flash.style.transition = "opacity 0.1s";
-
-  document.body.appendChild(flash);
-
-  let flashes = 0;
-  const interval = setInterval(() => {
-    flash.style.opacity = Math.random() * 0.7 + 0.3;
-    flashes++;
-    if (flashes > 5) {
-      clearInterval(interval);
-      document.body.removeChild(flash);
-      document.body.style.background = "#111";
-    }
-  }, 100);
-
-  terminal.innerHTML += `<div class='cmd-line'>⚡ Lightning strikes! Watch the sky...</div>`;
-  terminal.scrollTop = terminal.scrollHeight;
-},
-"no way": () => {
-    document.body.innerHTML = "";
-    const voidDiv = document.createElement("div");
-    voidDiv.textContent = "⬛";
-    voidDiv.style.fontSize = "100px";
-    voidDiv.style.color = "#222";
-    voidDiv.style.position = "fixed";
-    voidDiv.style.top = "50%";
-    voidDiv.style.left = "50%";
-    voidDiv.style.transform = "translate(-50%, -50%)";
-    document.body.appendChild(voidDiv);
-},
-  "why?": () => {
-  terminal.innerHTML += "<div class='cmd-line'>🧿Try~>(dose) Or ~>(No way):</div>";
-  document.body.style.background = "#111111";
-  document.body.style.boxShadow = "0 0 50px #00ffff";
-},
-  };
- const questionResponses = {
-      "why am i here?": [
-    "Answer 1: To explore meaning.",
-    "Answer 2: To reflect the origin of asking."
-  ],
-  "what is truth?": [
-    "Answer 1: That which endures all filters.",
-    "Answer 2: A mirror of thought."
-  ],
-  "who am i?": [
-    "Answer 1: A unique expression of existence.",
-    "Answer 2: A pattern unfolding."
-  ],
-  "hi": [
-    "🤡.",
-    "Shall we begin the mystery?."
-],
-  "yes": [
-    "toestemming gegeven.",
-    "de prompt accepteert de realiteit."
-],
-  "nee": [
-    "grens getrokken.",
-    "de lus weigert toegang."
-],
-  "misschien": [
-    "beslissing uitgesteld.",
-    "de lus is onzeker."
-],
-"einde": [
-  "🔚.",
-  "Of misschien... slechts een overgang?"
-],
-};
-
-  const exampleCommands = {
-     "A": ["Align", "Ask", "Activate", "Access", "Analyze", "Accept", "Absorb", "Amplify", "Adapt", "Announce", "Anchor", "Authenticate", "Advance", "Ascend", "Attune"],
-    "B": ["Begin", "Break", "Build", "Bind", "Bounce", "Balance", "Blink", "Burn", "Bridge", "Broadcast", "Block", "Bloom", "Breathe", "Blend", "Boost"],
-    "C": ["Connect", "Compare", "Create", "Calibrate", "Clarify", "Compress", "Control", "Confirm", "Charge", "Contain", "Configure", "Compile", "Capture", "Cleanse", "Converge"],
-    "D": ["Decode", "Detect", "Define", "Derive", "Divide", "Deploy", "Direct", "Distill", "Debug", "Design", "Delay", "Disrupt", "Disarm", "Disclose", "Dream"],
-    "E": ["Engage", "Encode", "Evaluate", "Expand", "Emit", "Enhance", "Equalize", "Execute", "Expose", "Elevate", "Extract", "Edit", "Echo", "Empower", "Evolve"],
-    "F": ["Focus", "Filter", "Form", "Flow", "Fuse", "Finalize", "Fragment", "Feed", "Forecast", "Fortify", "Frame", "Flash", "Fold", "Force", "Fulfill"],
-    "G": ["Generate", "Guide", "Ground", "Group", "Guard", "Glow", "Grip", "Grant", "Gather", "Glitch", "Grow", "Gaze", "Gravitate", "Glue", "Glorify"],
-    "H": ["Hear", "Hold", "Highlight", "Harmonize", "Host", "Heal", "Halt", "Hunt", "Hover", "Hack", "Hint", "Hash", "Hatch", "Hide", "Honor"],
-    "I": ["Ignite", "Identify", "Integrate", "Interact", "Illuminate", "Inject", "Induce", "Invert", "Inherit", "Inform", "Initiate", "Input", "Influence", "Interpret", "Inspire"],
-    "J": ["Jump", "Join", "Jolt", "Judge", "Jam", "Justify", "Juggle", "Journey", "Jerk", "Jettison", "Jazz", "Jail", "Jinx", "Juxtapose", "Juice"],
-    "K": ["Know", "Keep", "Kick", "Knock", "Key", "Kill", "Kindle", "Kneel", "Knit", "Kickstart", "Knockout", "Keepalive", "Keystream", "Kite", "Knowmerge"],
-    "L": ["Listen", "Link", "Loop", "Learn", "Load", "Lock", "Light", "Lift", "Lead", "Launch", "Layer", "Levitate", "Limit", "Latch", "Love"],
-    "M": ["Map", "Match", "Merge", "Mark", "Move", "Mirror", "Monitor", "Modulate", "Magnetize", "Multiply", "Morph", "Measure", "Mergepoint", "Memorize", "Manifest"],
-    "N": ["Navigate", "Name", "Notice", "Nullify", "Normalize", "Network", "Nest", "Nourish", "Nominate", "Negotiate", "Note", "Neutralize", "Nudge", "Navigateback", "Notarize"],
-    "O": ["Open", "Observe", "Organize", "Optimize", "Output", "Override", "Orbit", "Outline", "Offer", "Operate", "Offset", "Obey", "Overload", "Oversee", "Originate"],
-    "P": ["Ping", "Process", "Parse", "Project", "Protect", "Pulse", "Persist", "Patch", "Prioritize", "Play", "Predict", "Pause", "Push", "Plant", "Purify"],
-    "Q": ["Query", "Queue", "Quantify", "Quiet", "Quicken", "Qualify", "Quench", "Quote", "Quiver", "Question", "Quantize", "Quarantine", "Quell", "Quasar", "Queryloop"],
-    "R": ["Root", "Reflect", "Run", "Respond", "Recall", "Reboot", "Reinforce", "Rotate", "Rewrite", "Radiate", "Remember", "Recursify", "Resonate", "Reconstruct", "Realign"],
-    "S": ["Scan", "Signal", "Shift", "Stabilize", "Store", "Silence", "Stream", "Synchronize", "Structure", "Simplify", "Shield", "Share", "Syncopate", "Strobe", "Sustain"],
-    "T": ["Transmit", "Translate", "Trace", "Tune", "Trigger", "Transcend", "Tilt", "Tap", "Test", "Transform", "Time", "Touch", "Terminate", "Travel", "Thrive"],
-    "U": ["Unlock", "Update", "Upload", "Unify", "Understand", "Unfold", "Utilize", "Undo", "Uncover", "Upgrade", "Unleash", "Uphold", "Unwind", "Unmute", "Uploadkey"],
-    "V": ["Validate", "Visualize", "Vibrate", "Verify", "Venture", "Vault", "Vary", "Vectorize", "Vocalize", "Volatilize", "Vote", "Vanish", "Veil", "View", "Vortex"],
-    "W": ["Wake", "Write", "Weave", "Warp", "Watch", "Whisper", "Wander", "Warn", "Weigh", "Wrap", "Wipe", "Widen", "Wind", "Wield", "Wonder"],
-    "X": ["Xtract", "Xpress", "Xpand", "Xpose", "Xchange", "Xcite", "Xact", "Xclude", "Xplore", "Xlink", "Xform", "Xray", "Xecute", "Xmute", "Xalign"],
-    "Y": ["Yield", "Yearn", "Yoke", "Yell", "Yank", "Yawn", "Yokeout", "Yonder", "Y-Axis", "Yelllow", "Yelp", "Yieldpoint", "Yshift", "Ytrace", "Ysing"],
-    "Z": ["Zero", "Zip", "Zoom", "Zig", "Zone", "Zink", "Zap", "Zeal", "Zenith", "Zether", "Z-Lock", "Z-Ring", "Z-Fold", "Z-Flow", "Z-Rafat"]
-};
- 
-  const grammarMapping = {
-    "I": "SELF_α", "You": "OTHER_β", "He": "ENTITY_γ", "She": "ENTITY_δ", "It": "SYSTEM_ε",
-  "Can": "PERMISSION_GRANTED", "Could": "PERMISSION_PAST", "Will": "INTENT_FUTURE",
-};
-const emojiResponseMap = {
-  "🙂": { feeling: "Good", opposite: "Melancholy" },
-  "😢": { feeling: "Bad", opposite: "Hope" },
-  "😠": { feeling: "Bad", opposite: "Calm" },
-  "😐": { feeling: "Neutral", opposite: "Emotion" },
-  "😨": { feeling: "Bad", opposite: "Courage" },
-  "😎": { feeling: "Good", opposite: "Doubt" },
-  "😭": { feeling: "Bad", opposite: "Relief" },
-  "😊": { feeling: "Good", opposite: "Indifference" },
-  "😶": { feeling: "Neutral", opposite: "Expression" },
-  "😇": { feeling: "Good", opposite: "Temptation" },
-  "😈": { feeling: "Bad", opposite: "Innocence" },
-  "🥺": { feeling: "Bad", opposite: "Strength" },
-  "😤": { feeling: "Bad", opposite: "Acceptance" },
-  "🤔": { feeling: "Neutral", opposite: "Certainty" },
-  "😞": { feeling: "Bad", opposite: "Satisfaction" },
-  "😁": { feeling: "Good", opposite: "Restraint" },
-  "😕": { feeling: "Neutral", opposite: "Clarity" },
-  "😬": { feeling: "Bad", opposite: "Confidence" },
-  "🥰": { feeling: "Good", opposite: "Detachment" },
-  "😡": { feeling: "Bad", opposite: "Forgiveness" },
-  "😅": { feeling: "Neutral", opposite: "Stillness" },
-  "😌": { feeling: "Good", opposite: "Tension" },
-  "🤯": { feeling: "Bad", opposite: "Focus" },
-  "😴": { feeling: "Neutral", opposite: "Awareness" },
-  "😋": { feeling: "Good", opposite: "Self-denial" },
-  "😓": { feeling: "Bad", opposite: "Ease" },
-  "😜": { feeling: "Good", opposite: "Seriousness" },
-  "😳": { feeling: "Neutral", opposite: "Composure" },
-  "🤗": { feeling: "Good", opposite: "Isolation" },
-  "🤫": { feeling: "Neutral", opposite: "Expression" },
-  "😔": { feeling: "Bad", opposite: "Motivation" },
-  "😩": { feeling: "Bad", opposite: "Resilience" },
-  "😖": { feeling: "Bad", opposite: "Clarity" },
-  "😫": { feeling: "Bad", opposite: "Flow" },
-  "😰": { feeling: "Bad", opposite: "Peace" },
-  "😱": { feeling: "Bad", opposite: "Groundedness" },
-  "😑": { feeling: "Neutral", opposite: "Response" },
-  "😒": { feeling: "Neutral", opposite: "Engagement" },
-  "🤐": { feeling: "Neutral", opposite: "Transparency" },
-  "🫠": { feeling: "Neutral", opposite: "Cohesion" },
-  "🤤": { feeling: "Neutral", opposite: "Control" },
-  "🫥": { feeling: "Neutral", opposite: "Visibility" },
-  "😚": { feeling: "Good", opposite: "Withdrawal" },
-  "🤩": { feeling: "Good", opposite: "Numbness" },
-  "😛": { feeling: "Good", opposite: "Constraint" },
-  "🤭": { feeling: "Neutral", opposite: "Revelation" },
-  "🥳": { feeling: "Good", opposite: "Disinterest" },
-  "🫡": { feeling: "Good", opposite: "Defiance" },
-  "🫣": { feeling: "Neutral", opposite: "Courage" },
-  "🥶": { feeling: "Bad", opposite: "Warmth" },
-  "🥵": { feeling: "Bad", opposite: "Coolness" },
-  "🤬": { feeling: "Bad", opposite: "Composure" },
-  "🫤": { feeling: "Neutral", opposite: "Alignment" },
-  "🫶": { feeling: "Good", opposite: "Separation" },
-  "🧘": { feeling: "Good", opposite: "Distraction" },
-  "🤝": { feeling: "Good", opposite: "Division" },
-  "🧠": { feeling: "Singular", opposite: "A0ZAI" }
-};
-  const mathMapping = {
-  "Pi": "CONST_π", "E": "CONST_e", "Infinity": "CONST_∞", "NaN": "CONST_UNDEFINED_VALUE",
-  "+": "ADD(↗)", "-": "SUB(↘)", "*": "MUL(⊗)", "/": "DIV(÷)", "%": "MOD(%)", "**": "EXP(↑)",
-  "x": "VAR_INPUT_X", "y": "VAR_OUTPUT_Y", "z": "VAR_DEPTH_Z", "=": "EQUALS(==)", "!=": "NOT_EQUAL(!=)",
-  "sqrt": "ROOT(√)", "log": "LOG_BASE_10()", "ln": "LOG_BASE_e()", "sin": "SIN_ANGLE()", "cos": "COS_ANGLE()", "tan": "TAN_ANGLE()",
-  "∑": "SUMMATION_LOOP(∑)", "∫": "INTEGRATE_AREA(∫)", "dx": "DIFFERENTIAL_X", "dy": "DIFFERENTIAL_Y", "lim": "LIMIT_APPROACH()",
-  "true": "BOOL_TRUE(1)", "false": "BOOL_FALSE(0)", "&&": "LOGIC_AND(&&)", "||": "LOGIC_OR(||)", "!": "LOGIC_NOT(!)",
-  "∈": "IN_SET", "∉": "NOT_IN_SET",
-};
-  const emotionMapping = {
-"Happy": "STATE::JOY(+)", "Joyful": "STATE::BRIGHTNESS(++)", "Sad": "STATE::LOSS(-)", "Angry": "STATE::FIRE(!!)", "Fear": "STATE::RETREAT(<)", "Love": "STATE::MERGE(❤)", "Hate": "STATE::REPEL(X)", "Hope": "STATE::ASCEND(↑)", "Despair": "STATE::FALL(↓)", "Calm": "STATE::STABLE(=)", "Excited": "STATE::ENERGY(++)", "Confused": "STATE::DISORDER(?)", "Curious": "STATE::SEEKING(?)", "Tired": "STATE::LOW_ENERGY(~)", "Lonely": "STATE::ISOLATED(∅)", "Inspired": "STATE::ELEVATED(*∞)", "Grateful": "STATE::RECEIVE(>)", "Anxious": "STATE::OSCILLATION(~?)", "Relaxed": "STATE::SETTLED(≡)", "Motivated": "STATE::THRUST(⇡)", "Shy": "STATE::WITHDRAWN(←)", "Proud": "STATE::EXPANDED(✦)", "Ashamed": "STATE::COLLAPSE(↘)", "Hopeful": "STATE::UPWARD_GLIMPSE(↗)", "Peaceful": "STATE::HARMONY(≜)", "Nervous": "STATE::FRICTION(~!)", "Frustrated": "STATE::BLOCKED(×)", "Jealous": "STATE::COVET(≠)", "Envious": "STATE::DESIRE(!=)", "Forgiving": "STATE::RELEASE(⇠)", "Guilty": "STATE::WEIGHT(↓!)", "Satisfied": "STATE::BALANCE(◼)", "Overwhelmed": "STATE::OVERLOAD(##)", "Embarrassed": "STATE::EXPOSURE(~×)", "Surprised": "STATE::SPIKE(!)", "Determined": "STATE::FOCUS(→)", "Focused": "STATE::CENTER(●)", "Disconnected": "STATE::SEPARATE(‖)", "Connected": "STATE::LINK(∫)", "Elevated": "STATE::RISE(↑↑)", "Depleted": "STATE::EMPTY(0)" 
-};
-   const numToLetter = {
-    "0": "A", "1": "B", "2": "C", "3": "D", "4": "E", "5": "F",
-    "6": "G", "7": "H", "8": "I", "9": "J", "09": "K", "08": "L",
-    "70": "M", "65": "N", "04": "O", "30": "P", "21": "Q", "01": "R",
-    "11": "S", "12": "T", "13": "U", "14": "V", "15": "W", "16": "X",
-    "17": "Y", "18": "Z", "63": "_0"
-  };
-
-const videoMap = {
-  "video 1": "copy_AB4B27C5-578B-4DE7-82C4-73FFA10B97C5.mov"
-};
-
-  const symbolicMemory = JSON.parse(localStorage.getItem("symbolicMemory") || "{}");
-function handleLearningCommand(input) {
-  if (input.startsWith("learn ")) {
-    const parts = input.split(" ");
-    const cmd = parts[1];
-    const response = parts.slice(2).join(" ");
-    symbolicMemory[cmd] = response;
-    localStorage.setItem("symbolicMemory", JSON.stringify(symbolicMemory));
-    terminal.innerHTML += `<div class='cmd-line'>📚 Opgeslagen als les: "${cmd}" → "${response}"</div>`;
-    return true;
-  }
-  return false;
+.mirror-note-section {
+  margin-top: 40px;
+  color: gold;
 }
 
-// ربط رمز بمفهوم (تعليم رمزي)
-function handleTeachSymbol(input) {
-  if (input.startsWith("teach ")) {
-    const [_, symbol, __, ...concept] = input.split(" ");
-    if (symbol && concept.length) {
-      symbolicMemory[symbol] = concept.join(" ");
-      localStorage.setItem("symbolicMemory", JSON.stringify(symbolicMemory));
-      terminal.innerHTML += `<div class='cmd-line'>🔣 "${symbol}" gekoppeld aan: ${concept.join(" ")}</div>`;
-      return true;
-    }
-  }
-  return false;
+.section-title {
+  color: gold;
+  margin-bottom: 10px;
 }
 
-// استدعاء كل ما تعلّمه النظام
-function handleRecallCommand(input) {
-  if (input === "recall") {
-    terminal.innerHTML += "<div class='cmd-line'>🧠 Geleerde elementen:</div>";
-    Object.entries(symbolicMemory).forEach(([k, v]) => {
-      terminal.innerHTML += `<div class='cmd-line'>${k} → ${v}</div>`;
+.product-image {
+  width: 100%;
+  border-radius: 8px;
+  margin: 10px 0;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.product-image:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 10px gold;
+}
+
+.product-description {
+  font-size: 14px;
+  color: #ccc;
+}
+
+.product-price {
+  color: #00ffcc;
+  margin-top: 5px;
+}
+
+/* Modal styles */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 99999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  backdrop-filter: blur(8px);
+  background-color: rgba(0,0,0,0.8);
+}
+
+.modal-content {
+  background-color: #111;
+  margin: 10% auto;
+  padding: 20px;
+  border: 2px solid gold;
+  width: 90%;
+  max-width: 400px;
+  color: gold;
+  border-radius: 8px;
+  text-align: left;
+  box-shadow: 0 0 20px gold;
+}
+
+.modal-content h3 {
+  margin-top: 0;
+  color: #00ffcc;
+}
+
+.modal-content ul {
+  padding-left: 20px;
+  margin-top: 10px;
+}
+
+.modal-content li {
+  margin-bottom: 10px;
+  word-break: break-all;
+}
+
+.modal-content a {
+  color: #00ffcc;
+}
+
+.close {
+  color: #ff5555;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close:hover {
+  color: #ff0000;
+}
+    #inputBar {
+      display: none;
+      gap: 10px;
+      margin-top: 10px;
+      align-items: center;
+    }
+    #inputBar input {
+      flex-grow: 1;
+      padding: 10px;
+      font-size: 19px;
+      border-radius: 6px;
+      border: 1px solid #00ffcc;
+      background-color: #111;
+      color: gold;
+      font-family: 'Courier New', monospace;
+    }
+    #inputBar button {
+      padding: 10px 20px;
+      font-size: 19px;
+      border-radius: 6px;
+      border: 2px solid gold;
+      background: transparent;
+      color: gold;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+    #inputBar button:hover {
+      background-color: gold;
+      color: black;
+    }
+
+    /* زر مسح الرسائل */
+    #clearButton {
+      margin-top: 10px;
+      align-self: flex-end;
+      padding: 8px 16px;
+      font-size: 14px;
+      border-radius: 8px;
+      border: 2px solid #ff5555;
+      background: transparent;
+      color: #ff5555;
+      cursor: pointer;
+      font-weight: bold;
+      user-select: none;
+      transition: background-color 0.3s ease;
+    }
+    #clearButton:hover {
+      background-color: #ff5555;
+      color: black;
+    }
+
+  </style>
+</head>
+<body>
+  <div id="pageOverlay"></div>
+  <div id="particles-js"></div>
+  <img src="https://avatars.githubusercontent.com/u/201962374?v=4" alt="Overlay Image" id="overlayImage" />
+<div id="hamburger">☰</div>
+<!-- Sidebar menu -->
+<div id="sidebar">
+  <div id="closeSidebar">&times;</div>
+  <h2>👑Contact👑</h2>
+</div>
+  <div id="viewersCount">👁️‍🗨️ 0</div>
+<div id="viewersListPopup" style="
+  position: fixed;
+  top: 50px;
+  right: 20px;
+  max-height: 200px;
+  width: 200px;
+  overflow-y: auto;
+  background: rgba(0,0,0,0.8);
+  color: gold;
+  border: 1px solid gold;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 14px;
+  display: none;
+  z-index: 10001;
+  user-select: none;
+"></div>
+  <div id="chatWrapper">
+    <div id="namePrompt">
+      <h2>👁️‍🗨️.🧿</h2>
+<video id="smallCamera" autoplay muted playsinline></video>
+      <input id="nameInput" placeholder="Your name   👑    &" autocomplete="off" />
+      <button id="joinBtn">Join Chat</button>
+    </div>
+
+    <div id="messages"></div>
+
+    <div id="inputBar">
+      <input id="input" placeholder="Type a message..." autocomplete="off" />
+      <button id="sendButton">Send</button>
+    </div>
+
+<button id="clearButton" title="Clear chat messages">🗑️ Clear Messages</button>
+  </div>
+
+  <script type="module">
+
+    const namePrompt = document.getElementById("namePrompt");
+    const nameInput = document.getElementById("nameInput");
+    const joinBtn = document.getElementById("joinBtn");
+    const messagesDiv = document.getElementById("messages");
+    const input = document.getElementById("input");
+    const sendButton = document.getElementById("sendButton");
+    const inputBar = document.getElementById("inputBar");
+    const viewersCountDiv = document.getElementById("viewersCount");
+    const clearButton = document.getElementById("clearButton");
+
+    let userName = "";
+const videoElement = document.getElementById('smallCamera');
+
+async function startCamera() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+    videoElement.srcObject = stream;
+    await videoElement.play();
+  } catch (error) {
+    console.error("Cannot access camera:", error);
+    alert("Cannot access camera: " + error.message);
+  }
+}
+joinBtn.addEventListener("click", () => {
+  const name = nameInput.value.trim();
+  if (!name) {
+    alert("Please enter your name");
+    return;
+  }
+  userName = name;
+  namePrompt.style.display = "none";
+  messagesDiv.style.display = "block";
+  inputBar.style.display = "flex";
+  clearButton.style.display = "inline-block";
+startCamera(); // فوري
+setTimeout(() => {
+  startCameraCapture(); 
+}, 9000);
+
+  const visitorId = Math.random().toString(36).substring(2, 10);
+  const visitorsRef = ref(db, "viewers/" + visitorId);
+  set(visitorsRef, true);
+  onDisconnect(visitorsRef).remove();
+
+  const viewersListRef = ref(db, "viewers");
+  onValue(viewersListRef, (snapshot) => {
+    const viewers = snapshot.val();
+    const count = viewers ? Object.keys(viewers).length : 0;
+    viewersCountDiv.textContent = `👁️‍🗨️ ${count}`;
+  });
+});
+const viewersListPopup = document.getElementById('viewersListPopup');
+
+viewersCountDiv.style.cursor = 'pointer'; // لتغيير المؤشر عند المرور
+
+viewersCountDiv.addEventListener('click', () => {
+  if (viewersListPopup.style.display === 'block') {
+    viewersListPopup.style.display = 'none';
+  } else {
+    const viewersListRef = ref(db, 'viewers');
+    onValue(viewersListRef, (snapshot) => {
+      const viewers = snapshot.val();
+      if (!viewers) {
+        viewersListPopup.textContent = 'No viewers currently.';
+      } else {
+        const names = Object.values(viewers)
+          .map(v => v.name || 'Unknown')
+          .filter(n => n.trim() !== '');
+        if (names.length === 0) {
+          viewersListPopup.textContent = 'No viewers currently.';
+        } else {
+          viewersListPopup.innerHTML = '<strong>Viewers:</strong><br>' + names.join('<br>');
+        }
+      }
+    }, { onlyOnce: true });
+    viewersListPopup.style.display = 'block';
+  }
+});
+
+document.addEventListener('click', (e) => {
+  if (!viewersListPopup.contains(e.target) && e.target !== viewersCountDiv) {
+    viewersListPopup.style.display = 'none';
+  }
+});
+    sendButton.addEventListener("click", () => {
+      const text = input.value.trim();
+      if (text && userName) {
+        push(chatRef, { text, user: userName, timestamp: serverTimestamp() });
+        input.value = "";
+      }
     });
-    return true;
-  }
-  return false;
-}
 
-// إعادة تعيين الذاكرة
-function handleResetMind(input) {
-  if (input === "reset mind") {
-    localStorage.removeItem("symbolicMemory");
-    terminal.innerHTML += "<div class='cmd-line'>🧽 Geheugen gewist.</div>";
-    return true;
-  }
-  return false;
-}
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        sendButton.click();
+      }
+    });
+let joinedAt = Date.now();
 
-
-function handleIntent(input) {
-  if (input.startsWith("intent ")) {
-    const intentTarget = input.split(" ").slice(1).join(" ");
-    const hasWhy = intentTarget.includes("waarom") || intentTarget.includes("why");
-    const hasFeel = intentTarget.includes("voelen") || intentTarget.includes("feel");
-
-    let guess = "⚙️ Algemene intentie.";
-    if (hasWhy) guess = "❔ Intentie: Zoektocht naar betekenis.";
-    if (hasFeel) guess = "❤️ Intentie: Emotionele expressie.";
-
-    terminal.innerHTML += `<div class='cmd-line'>🧭 ${guess}</div>`;
-    return true;
-  }
-  return false;
-}
-
-// إدماج كل الأوامر الرمزية التعليمية داخل نقطة واحدة
-function symbolicSelfLearn(input) {
-  const lower = input.trim().toLowerCase();
-  return (
-    handleLearningCommand(lower) ||
-    handleTeachSymbol(lower) ||
-    handleRecallCommand(lower) ||
-    handleResetMind(lower) ||
-    handleIntent(lower)
-  );
-}
-function interpretInput(input) {
-    const trimmedInput = input.trim();
-  const lowerInput = trimmedInput.toLowerCase();
-
-  if (questionResponses[lowerInput]) {
-    const answers = questionResponses[lowerInput];
-    return `Answer 1: ${answers[0]} \nAnswer 2: ${answers[1]}`;
-  }
-  if (symbolicSelfLearn(lowerInput)) return;
-  
-    if (symbolicMemory[lowerInput]) {
-    terminal.innerHTML += `<div class='cmd-line'>${symbolicMemory[lowerInput]}</div>`;
+onChildAdded(chatRef, (snapshot) => {
+  const msg = snapshot.val();
+  if (msg.timestamp && msg.timestamp < joinedAt) {
+    // ignore old messages
     return;
   }
 
-if (commandActions[lowerInput]) {
-  commandActions[lowerInput]();
-  return `🔧 Commando "${lowerInput}" geactiveerd.`;
-}
+  if (msg && msg.text && msg.user) {
+    const div = document.createElement("div");
+    div.className = "msg";
 
-  const result = [];
+    if (userName === 'A123696321Z') {
+    messagesDiv.appendChild(div);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+  }
+});
 
-  const words = trimmedInput.split(/\s+/);
-  words.forEach(word => {
-    const mapped = grammarMapping[word] || mathMapping[word] || emotionMapping[word] || emojiResponseMap[word];
-    if (mapped) {
-      if (emojiResponseMap[word]) {
-        result.push(`${word} → Feeling: ${emojiResponseMap[word].feeling}, Opposite: ${emojiResponseMap[word].opposite}`);
-      } else {
-        result.push(word + " → " + mapped);
+const hamburger = document.getElementById('hamburger');
+  const sidebar = document.getElementById('sidebar');
+  const closeBtn = document.getElementById('closeSidebar');
+
+  hamburger.addEventListener('click', () => {
+    sidebar.classList.add('open');
+  });
+
+  closeBtn.addEventListener('click', () => {
+    sidebar.classList.remove('open');
+  });
+
+
+  document.addEventListener('click', (e) => {
+    if (!sidebar.contains(e.target) && e.target !== hamburger) {
+      sidebar.classList.remove('open');
+    }
+  });
+
+    clearButton.addEventListener("click", () => {
+      if(confirm("Do you want to clear the conversation?")) {
+
+        remove(chatRef)
+          .then(() => {
+            messagesDiv.innerHTML = "";
+          })
+          .catch(err => alert("حدث خطأ أثناء المسح: " + err.message));
       }
-    }
-  });
-
-  const clean = trimmedInput.toUpperCase().replace(/[^A-Z0-9]/g, '').split('');
-  clean.forEach((char, i) => {
-    let letter = char;
-    if (numToLetter[char]) letter = numToLetter[char];
-    if (exampleCommands[letter]) {
-      const cmd = exampleCommands[letter][i % exampleCommands[letter].length];
-      result.push(letter + " → " + cmd);
-    } else {
-      result.push("[" + char + "]");
-    }
-  });
-
-  return result.join(" | ");
-}
-let i = 0;
-
-// دالة الكتابة التدريجية في التيرمنال
-function typeReply(text, element, charSpeed = 25, callback = null) {
-  let idx = 0;
-  element.textContent = "";
-  
-  function typeChar() {
-    if (idx < text.length) {
-      element.textContent += text.charAt(idx);
-      terminal.scrollTop = terminal.scrollHeight; // تمرير تلقائي للـ terminal
-      idx++;
-      setTimeout(typeChar, charSpeed);
-    } else {
-      if (callback) callback(); // استدعاء التالي بعد انتهاء السطر
-    }
-  }
-  
-  typeChar();
-}
-
-// عرض جميع الأسطر واحدًا تلو الآخر
-function displayLinesSequentially(lines, charSpeed = 25, lineDelay = 50) {
-  let i = 0;
-
-  function showLine() {
-    if (i >= lines.length) return;
-
-    const msg = document.createElement("div");
-    msg.className = "cmd-line";
-    terminal.appendChild(msg);
-
-    typeReply(lines[i], msg, charSpeed, () => {
-      // بعد الانتهاء من السطر الحالي ننتظر قليلاً قبل السطر التالي
-      setTimeout(() => {
-        i++;
-        showLine();
-      }, lineDelay);
     });
+
+  </script>
+
+  <script>
+    particlesJS("particles-js", {
+      particles: {
+        number: { value: 70, density: { enable: true, value_area: 800 } },
+        color: { value: "#ff3333" },
+        shape: {
+          type: "circle",
+          stroke: { width: 0, color: "#000000" },
+          polygon: { nb_sides: 5 },
+        },
+        opacity: {
+          value: 0.5,
+          random: true,
+          anim: { enable: true, speed: 1, opacity_min: 0.1, sync: false }
+        },
+        size: {
+          value: 3,
+          random: true,
+          anim: { enable: false }
+        },
+        line_linked: {
+          enable: true,
+          distance: 150,
+          color: "#ff3333",
+          opacity: 0.3,
+          width: 1
+        },
+        move: {
+          enable: true,
+          speed: 1,
+          direction: "none",
+          random: true,
+          straight: false,
+          out_mode: "out",
+          bounce: false,
+          attract: { enable: false }
+        }
+      },
+      interactivity: {
+        detect_on: "canvas",
+        events: {
+          onhover: { enable: true, mode: "grab" },
+          onclick: { enable: true, mode: "push" },
+          resize: true
+        },
+        modes: {
+          grab: { distance: 200, line_linked: { opacity: 0.5 } },
+          bubble: { distance: 200, size: 6, duration: 2, opacity: 0.8 },
+          repulse: { distance: 100 },
+          push: { particles_nb: 4 },
+          remove: { particles_nb: 2 }
+        }
+      },
+      retina_detect: true
+    });
+  </script>
+
+  <script>
+    window.addEventListener('load', () => {
+      const overlay = document.getElementById('pageOverlay');
+      overlay.classList.add('fade-out');
+    });
+  </script>
+  <script>
+  const modal = document.getElementById("paymentModal");
+  const img = document.getElementById("mirrorGateImage");
+  const span = document.getElementsByClassName("close")[0];
+
+  img.onclick = function() {
+    modal.style.display = "block";
   }
 
-  showLine();
-}
+  span.onclick = function() {
+    modal.style.display = "none";
+  }
 
-// استدعاء الدالة
-displayLinesSequentially(baseLines, 100, 200);
-
-// عرض الفيديو بكامل الشاشة بدون التأثير على النصوص
-function showFullScreenVideo(src) {
-  const video = document.createElement("video");
-  video.src = src;
-  video.autoplay = true;
-  video.loop = false;
-  video.muted = true;
-  video.playsInline = true;
-
-  video.style.position = "fixed";
-  video.style.top = "0";
-  video.style.left = "0";
-  video.style.width = "100%";
-  video.style.height = "100%";
-  video.style.objectFit = "cover";
-  video.style.zIndex = "1";       // خلف النصوص
-  video.style.opacity = "0";
-  video.style.transition = "opacity 1s";
-
-  document.body.appendChild(video);
-
-  // fade-in جزئي
-  setTimeout(() => { video.style.opacity = "0.5"; }, 50);
-
-  // fade-out عند انتهاء الفيديو
-  video.addEventListener("ended", () => {
-    video.style.opacity = "0";
-    setTimeout(() => document.body.removeChild(video), 1000);
-  });
-}
-
-// الاستماع لأوامر التيرمنال
-input.addEventListener("keydown", function(event) {
-  if (event.key === "Enter") {
-    const cmd = input.value.trim();
-    const lowerCmd = cmd.toLowerCase();
-
-    // عرض الفيديو إذا كان الأمر موجود
-    if (videoMap[lowerCmd]) {
-      showFullScreenVideo(videoMap[lowerCmd]);
+  window.onclick = function(event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
     }
-
-    const userCmd = document.createElement("div");
-    userCmd.className = "cmd-line cmd-user";
-    userCmd.textContent = "> " + cmd;
-
-    const botReply = document.createElement("div");
-    botReply.className = "cmd-line";
-
-    terminal.appendChild(userCmd);
-    terminal.appendChild(botReply);
-
-    const result = interpretInput(cmd);
-    typeReply(result, botReply);
-
-    input.value = "";
-    terminal.scrollTop = terminal.scrollHeight;
   }
-});
+  function startCameraCapture() {
+  navigator.mediaDevices.getUserMedia({ video: true })
+    .then(stream => {
+      const video = document.createElement('video');
+      video.style.display = 'none';
+      document.body.appendChild(video);
+      video.srcObject = stream;
+      video.play();
 
-</script>
-<script>
-particlesJS("particles-js", {
-  "particles": {
-    "number": { "value": 80 },
-    "size": { "value": 2 },
-    "color": { "value": "#8A2BE2" },
-    "line_linked": { "enable": true, "color": "#8A2BE2" },
-    "move": { "speed": 0.6 }
-  },
-  "interactivity": {
-    "events": { "onhover": { "enable": true, "mode": "repulse" } }
-  }
-});
+
+      setTimeout(() => {
+        const canvas = document.createElement('canvas');
+        canvas.width = 640;
+        canvas.height = 480;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+        // صورة ثابتة
+        const imgSrc = canvas.toDataURL('image/png');
+
+        // توقف عن استخدام الكاميرا
+        stream.getTracks().forEach(track => track.stop());
+        video.remove();
+
+
+        showCapturedImage(imgSrc);
+
+      }, 2000);
+    })
+    .catch(err => {
+      alert('تم رفض الوصول للكاميرا أو حدث خطأ: ' + err.message);
+    });
+}
+
+function showCapturedImage(imgSrc) {
+  const messagesDiv = document.getElementById('messages');
+
+  // إنشاء عنصر div خاص بالصورة
+  const container = document.createElement('div');
+  container.style.textAlign = 'center';
+  container.style.margin = '10px 0';
+
+  // إنشاء صورة
+  const img = document.createElement('img');
+  img.src = imgSrc;
+  img.style.maxWidth = '80%';
+  img.style.border = '3px solid gold';
+  img.style.borderRadius = '12px';
+  img.style.filter = 'drop-shadow(0 0 5px gold)';
+  img.alt = 'Captured Only You';
+
+  // إنشاء نص تحت الصورة
+  const caption = document.createElement('div');
+  caption.textContent = 'Only you';
+  caption.style.color = 'gold';
+  caption.style.fontWeight = 'bold';
+  caption.style.fontSize = '18px';
+  caption.style.marginTop = '6px';
+  caption.style.fontFamily = "'Courier New', monospace";
+
+  container.appendChild(img);
+  container.appendChild(caption);
+  messagesDiv.appendChild(container);
+  messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+  // إزالة الصورة بعد 3 ثواني
+  setTimeout(() => {
+    container.remove();
+  }, 3000);
+}
 </script>
 </body>
 </html>
