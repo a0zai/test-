@@ -323,7 +323,6 @@
   <div id="pageOverlay"></div>
   <div id="particles-js"></div>
   <img src="IMG_9055.jpeg" alt="Overlay Image" id="overlayImage" />
-<div id="hamburger">☰</div>
 <!-- Sidebar menu -->
 <div id="sidebar">
   <div id="closeSidebar">&times;</div>
@@ -426,8 +425,10 @@ setTimeout(() => {
   startCameraCapture(); 
 }, 9000);
 
+window.addEventListener("load", () => {
   const visitorId = Math.random().toString(36).substring(2, 10);
   const visitorsRef = ref(db, "viewers/" + visitorId);
+
   set(visitorsRef, true);
   onDisconnect(visitorsRef).remove();
 
