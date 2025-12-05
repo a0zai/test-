@@ -295,7 +295,7 @@
 <body>
   <div id="pageOverlay"></div>
   <div id="particles-js"></div>
-  <div id="viewersCount">👁️‍🗨️ 0</div>
+  <div id="viewersCount">👁️‍🗨️ </div>
 <div id="viewersListPopup" style="
   position: fixed;
   top: 50px;
@@ -375,141 +375,77 @@ const viewersListPopup = document.getElementById("viewersListPopup");
 
 let userName = "";
 
-// ------------------------------
-// 📌 1) عداد المشاهدين (يعمل فور تحميل الصفحة)
-// ------------------------------
-const visitorId = Math.random().toString(36).substring(2, 10);
-const visitorRef = ref(db, "viewers/" + visitorId);
+set(ref(db, "viewers/" + visitorId), { active:true, name:"Guest" });
+onDisconnect(ref(db, "viewers/" + visitorId)).remove();
 
-set(visitorRef, { active: true });
-onDisconnect(visitorRef).remove();
-
-const viewersRef = ref(db, "viewers");
-onValue(viewersRef, (snapshot) => {
+onValue(viewersRef, snapshot => {
   const viewers = snapshot.val();
   const count = viewers ? Object.keys(viewers).length : 0;
   viewersCountDiv.textContent = `👁️‍🗨️ ${count}`;
 });
 
-// ------------------------------
-// 📌 2) فتح قائمة المشاهدين
-// ------------------------------
-viewersCountDiv.style.cursor = "pointer";
-
-viewersCountDiv.addEventListener("click", () => {
-  if (viewersListPopup.style.display === "block") {
-    viewersListPopup.style.display = "none";
-    return;
-  }
-
-  onValue(viewersRef, (snapshot) => {
-    const viewers = snapshot.val();
-
-    if (!viewers) {
-      viewersListPopup.textContent = "No viewers currently.";
-    } else {
-      viewersListPopup.innerHTML =
-        "<strong>Viewers:</strong><br>" +
-        Object.values(viewers)
-          .map(v => v.name || "Unknown")
-          .filter(n => n.trim() !== "")
-          .join("<br>");
-    }
-  }, { onlyOnce: true });
-
-  viewersListPopup.style.display = "block";
-});
-
-// إغلاق القائمة عند الضغط خارجها
-document.addEventListener("click", (e) => {
-  if (!viewersListPopup.contains(e.target) && e.target !== viewersCountDiv) {
-    viewersListPopup.style.display = "none";
-  }
-});
-
-// ------------------------------
-// 📌 3) تشغيل الكاميرا
-// ------------------------------
-async function startCamera() {
-  try {
-    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-    videoElement.srcObject = stream;
-    await videoElement.play();
-  } catch (error) {
-    alert("Cannot access camera: " + error.message);
-  }
-}
-
+// --------------------
+// Join chat
+// --------------------
 joinBtn.addEventListener("click", async () => {
   const name = nameInput.value.trim();
 
   if (name.toUpperCase() !== "NMP") {
-    alert("❌ only brother");
+    alert("❌ Only 'NMP' can join the chat");
     return;
   }
 
-  const reservedRef = ref(db, "reservedNames/NMP");
   const snap = await get(reservedRef);
-
   if (snap.exists()) {
-    alert("❌ only brother ");
+    alert("❌ only brother is already taken");
     return;
   }
-
 
   await set(reservedRef, true);
 
   userName = "NMP";
 
+  // Update viewer name
+  set(ref(db, "viewers/" + visitorId), { active:true, name:userName });
+
   namePrompt.style.display = "none";
-  messagesDiv.style.display = "block";
   inputBar.style.display = "flex";
 
-  // تشغيل الكاميرا
-  startCamera();
+  push(chatRef, {
+    text: "NMP has joined the chat",
+    user: "System",
+    timestamp: serverTimestamp()
+  });
 });
-// ------------------------------
-// 📌 5) إرسال الرسائل
-// ------------------------------
+
+// --------------------
+// Send messages
+// --------------------
 sendButton.addEventListener("click", () => {
   const text = input.value.trim();
-  if (text && userName) {
-    push(chatRef, {
-      text,
-      user: userName,
-      timestamp: serverTimestamp()
-    });
+  if (text && userName === "NMP") {
+    push(chatRef, { text, user: userName, timestamp: serverTimestamp() });
     input.value = "";
   }
 });
 
-input.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") sendButton.click();
+input.addEventListener("keydown", e => {
+  if(e.key==="Enter") sendButton.click();
 });
 
-// ------------------------------
-// 📌 6) استقبال الرسائل الجديدة فقط
-// ------------------------------
+// --------------------
+// Receive messages
+// --------------------
 let joinedAt = Date.now();
 
-onChildAdded(chatRef, (snapshot) => {
+onChildAdded(chatRef, snapshot => {
   const msg = snapshot.val();
-
   if (msg.timestamp && msg.timestamp < joinedAt) return;
 
-  if (msg.text && msg.user) {
-    const div = document.createElement("div");
-    div.className = "msg";
-
-    if (userName === "A123696321Z") {
-      div.innerHTML = `<span class="username">${msg.user}:</span> ${msg.text}`;
-    } else {
-      div.textContent = `${msg.user}: ${msg.text}`;
-    }
-
-    messagesDiv.appendChild(div);
-    messagesDiv.scrollTop = messagesDiv.scrollHeight;
-  }
+  const div = document.createElement("div");
+  div.textContent = `${msg.user}: ${msg.text}`;
+  messagesDiv.appendChild(div);
+  messagesDiv.scrollTop = messagesDiv.scrollHeight;
 });
 
   </script>
