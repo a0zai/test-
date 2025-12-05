@@ -19,17 +19,18 @@
       text-align: center;
     }
     
-    #pageOverlay {
-      position: fixed;
-      top: 50; left: 50;
-      width: 100%; height: 100%;
-      transform: translate(-50%, -50%)
-      backdrop-filter: blur(12px);
-      background-color: rgba(0, 0, 0, 0.6);
-      z-index: 9999;
-      opacity: 1;
-      transition: opacity 3s ease;
-    }
+#pageOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(12px);
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 9999;
+  opacity: 1;
+  transition: opacity 3s ease;
+}
     #pageOverlay.fade-out {
       opacity: 0;
       pointer-events: none;
@@ -294,12 +295,6 @@
 <body>
   <div id="pageOverlay"></div>
   <div id="particles-js"></div>
-<!-- Sidebar menu -->
-<div id="sidebar">
-  <div id="closeSidebar">&times;</div>
-  <h2>👑Contact👑</h2>
-</div>
-</div>
   <div id="viewersCount">👁️‍🗨️ 0</div>
 <div id="viewersListPopup" style="
   position: fixed;
@@ -320,7 +315,7 @@
 "></div>
   <div id="chatWrapper">
     <div id="namePrompt">
-      <h2>👁️‍🗨️.🧿</h2>
+      <h2>🧿</h2>
 
 <video id="smallCamera" autoplay muted playsinline></video>
       <input id="nameInput" placeholder="🪶" autocomplete="off" />
@@ -337,10 +332,20 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-    import { getDatabase, ref, push, onChildAdded, onValue, set, onDisconnect, serverTimestamp, remove } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+import {
+  getDatabase,
+  ref,
+  push,
+  onChildAdded,
+  onValue,
+  set,
+  onDisconnect,
+  serverTimestamp,
+  remove
+} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
 
-      // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
+// Firebase config
+const firebaseConfig = {
   apiKey: "AIzaSyBUb10JpH6iTD1sqSN7xz_lYDZUNSVennQ",
   authDomain: "testing-9b30c.firebaseapp.com",
   databaseURL: "https://testing-9b30c-default-rtdb.europe-west1.firebasedatabase.app",
@@ -351,126 +356,154 @@
   measurementId: "G-EVQ2W6ZV79"
 };
 
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-    const chatRef = ref(db, "chat");
+// Init
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const chatRef = ref(db, "chat");
 
-    const namePrompt = document.getElementById("namePrompt");
-    const nameInput = document.getElementById("nameInput");
-    const joinBtn = document.getElementById("joinBtn");
-    const messagesDiv = document.getElementById("messages");
-    const input = document.getElementById("input");
-    const sendButton = document.getElementById("sendButton");
-    const inputBar = document.getElementById("inputBar");
-    const viewersCountDiv = document.getElementById("viewersCount");
-    const clearButton = document.getElementById("clearButton");
+// UI elements
+const namePrompt = document.getElementById("namePrompt");
+const nameInput = document.getElementById("nameInput");
+const joinBtn = document.getElementById("joinBtn");
+const messagesDiv = document.getElementById("messages");
+const input = document.getElementById("input");
+const sendButton = document.getElementById("sendButton");
+const inputBar = document.getElementById("inputBar");
+const viewersCountDiv = document.getElementById("viewersCount");
+const videoElement = document.getElementById("smallCamera");
+const viewersListPopup = document.getElementById("viewersListPopup");
 
-    let userName = "";
-const videoElement = document.getElementById('smallCamera');
+let userName = "";
 
+// ------------------------------
+// 📌 1) عداد المشاهدين (يعمل فور تحميل الصفحة)
+// ------------------------------
+const visitorId = Math.random().toString(36).substring(2, 10);
+const visitorRef = ref(db, "viewers/" + visitorId);
+
+set(visitorRef, { active: true });
+onDisconnect(visitorRef).remove();
+
+const viewersRef = ref(db, "viewers");
+onValue(viewersRef, (snapshot) => {
+  const viewers = snapshot.val();
+  const count = viewers ? Object.keys(viewers).length : 0;
+  viewersCountDiv.textContent = `👁️‍🗨️ ${count}`;
+});
+
+// ------------------------------
+// 📌 2) فتح قائمة المشاهدين
+// ------------------------------
+viewersCountDiv.style.cursor = "pointer";
+
+viewersCountDiv.addEventListener("click", () => {
+  if (viewersListPopup.style.display === "block") {
+    viewersListPopup.style.display = "none";
+    return;
+  }
+
+  onValue(viewersRef, (snapshot) => {
+    const viewers = snapshot.val();
+
+    if (!viewers) {
+      viewersListPopup.textContent = "No viewers currently.";
+    } else {
+      viewersListPopup.innerHTML =
+        "<strong>Viewers:</strong><br>" +
+        Object.values(viewers)
+          .map(v => v.name || "Unknown")
+          .filter(n => n.trim() !== "")
+          .join("<br>");
+    }
+  }, { onlyOnce: true });
+
+  viewersListPopup.style.display = "block";
+});
+
+// إغلاق القائمة عند الضغط خارجها
+document.addEventListener("click", (e) => {
+  if (!viewersListPopup.contains(e.target) && e.target !== viewersCountDiv) {
+    viewersListPopup.style.display = "none";
+  }
+});
+
+// ------------------------------
+// 📌 3) تشغيل الكاميرا
+// ------------------------------
 async function startCamera() {
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ video: true });
     videoElement.srcObject = stream;
     await videoElement.play();
   } catch (error) {
-    console.error("Cannot access camera:", error);
     alert("Cannot access camera: " + error.message);
   }
 }
+
+// ------------------------------
+// 📌 4) زر الانضمام
+// ------------------------------
 joinBtn.addEventListener("click", () => {
   const name = nameInput.value.trim();
   if (!name) {
     alert("Please enter your name");
     return;
   }
+
   userName = name;
+
   namePrompt.style.display = "none";
   messagesDiv.style.display = "block";
   inputBar.style.display = "flex";
   clearButton.style.display = "inline-block";
-startCamera(); // فوري
-setTimeout(() => {
-  startCameraCapture(); 
-}, 9000);
 
-  const visitorId = Math.random().toString(36).substring(2, 10);
-  const visitorsRef = ref(db, "viewers/" + visitorId);
-  set(visitorsRef, true);
-  onDisconnect(visitorsRef).remove();
+  // تشغيل الكاميرا فوراً
+  startCamera();
 
-  const viewersListRef = ref(db, "viewers");
-  onValue(viewersListRef, (snapshot) => {
-    const viewers = snapshot.val();
-    const count = viewers ? Object.keys(viewers).length : 0;
-    viewersCountDiv.textContent = 👁️‍🗨️ ${count};
-  });
+  // بدأ التقاط الصورة بعد 9 ثواني
+  setTimeout(() => {
+    if (typeof startCameraCapture === "function") {
+      startCameraCapture();
+    }
+  }, 9000);
 });
 
-const viewersListPopup = document.getElementById('viewersListPopup');
-
-viewersCountDiv.style.cursor = 'pointer'; // لتغيير المؤشر عند المرور
-
-viewersCountDiv.addEventListener('click', () => {
-  if (viewersListPopup.style.display === 'block') {
-    viewersListPopup.style.display = 'none';
-  } else {
-    const viewersListRef = ref(db, 'viewers');
-    onValue(viewersListRef, (snapshot) => {
-      const viewers = snapshot.val();
-      if (!viewers) {
-        viewersListPopup.textContent = 'No viewers currently.';
-      } else {
-        const names = Object.values(viewers)
-          .map(v => v.name || 'Unknown')
-          .filter(n => n.trim() !== '');
-        if (names.length === 0) {
-          viewersListPopup.textContent = 'No viewers currently.';
-        } else {
-          viewersListPopup.innerHTML = '<strong>Viewers:</strong><br>' + names.join('<br>');
-        }
-      }
-    }, { onlyOnce: true });
-    viewersListPopup.style.display = 'block';
+// ------------------------------
+// 📌 5) إرسال الرسائل
+// ------------------------------
+sendButton.addEventListener("click", () => {
+  const text = input.value.trim();
+  if (text && userName) {
+    push(chatRef, {
+      text,
+      user: userName,
+      timestamp: serverTimestamp()
+    });
+    input.value = "";
   }
 });
 
-document.addEventListener('click', (e) => {
-  if (!viewersListPopup.contains(e.target) && e.target !== viewersCountDiv) {
-    viewersListPopup.style.display = 'none';
-  }
+input.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") sendButton.click();
 });
-    sendButton.addEventListener("click", () => {
-      const text = input.value.trim();
-      if (text && userName) {
-        push(chatRef, { text, user: userName, timestamp: serverTimestamp() });
-        input.value = "";
-      }
-    });
 
-    input.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") {
-        sendButton.click();
-      }
-    });
+// ------------------------------
+// 📌 6) استقبال الرسائل الجديدة فقط
+// ------------------------------
 let joinedAt = Date.now();
 
 onChildAdded(chatRef, (snapshot) => {
   const msg = snapshot.val();
-  if (msg.timestamp && msg.timestamp < joinedAt) {
-    // ignore old messages
-    return;
-  }
 
-  if (msg && msg.text && msg.user) {
+  if (msg.timestamp && msg.timestamp < joinedAt) return;
+
+  if (msg.text && msg.user) {
     const div = document.createElement("div");
     div.className = "msg";
 
-    if (userName === 'A123696321Z') {
-
+    if (userName === "A123696321Z") {
       div.innerHTML = `<span class="username">${msg.user}:</span> ${msg.text}`;
     } else {
-
       div.textContent = `${msg.user}: ${msg.text}`;
     }
 
@@ -478,36 +511,6 @@ onChildAdded(chatRef, (snapshot) => {
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
   }
 });
-
-const hamburger = document.getElementById('hamburger');
-  const sidebar = document.getElementById('sidebar');
-  const closeBtn = document.getElementById('closeSidebar');
-
-  hamburger.addEventListener('click', () => {
-    sidebar.classList.add('open');
-  });
-
-  closeBtn.addEventListener('click', () => {
-    sidebar.classList.remove('open');
-  });
-
-
-  document.addEventListener('click', (e) => {
-    if (!sidebar.contains(e.target) && e.target !== hamburger) {
-      sidebar.classList.remove('open');
-    }
-  });
-
-    clearButton.addEventListener("click", () => {
-      if(confirm("Do you want to clear the conversation?")) {
-
-        remove(chatRef)
-          .then(() => {
-            messagesDiv.innerHTML = "";
-          })
-          .catch(err => alert("حدث خطأ أثناء المسح: " + err.message));
-      }
-    });
 
   </script>
 
