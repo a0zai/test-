@@ -41,16 +41,7 @@
       z-index: 0;
       pointer-events: none;
     }
-    #overlayImage {
-      position: fixed;
-      top: 0; left: 0;
-      width: 90%;
-      height: 100%;
-      object-fit: cover;
-      z-index: -1;
-      opacity: 0.9;
-      pointer-events: none;
-    }
+
 #hamburger {
     position: fixed;
     top: 20px;
@@ -108,7 +99,8 @@
     #viewersCount {
       position: fixed;
       top: 15px;
-      right: 20px;
+      left: 50%;
+      transform: translateX(-50%);
       font-size: 24px;
       font-weight: bold;
       color: gold;
@@ -302,7 +294,6 @@
 <body>
   <div id="pageOverlay"></div>
   <div id="particles-js"></div>
-  <img src="" alt="Overlay Image" id="overlayImage" />
 <!-- Sidebar menu -->
 <div id="sidebar">
   <div id="closeSidebar">&times;</div>
