@@ -439,11 +439,12 @@ async function startCamera() {
     alert("Cannot access camera: " + error.message);
   }
 }
-joinBtn.addEventListener("click", async () => {
-  const name = nameInput.value.trim().toLowerCase();
 
-  if (name !== "nmp") {
-    alert("only brother");
+joinBtn.addEventListener("click", async () => {
+  const name = nameInput.value.trim();
+
+  if (name.toUpperCase() !== "NMP") {
+    alert("❌ only brother");
     return;
   }
 
@@ -451,19 +452,21 @@ joinBtn.addEventListener("click", async () => {
   const snap = await get(reservedRef);
 
   if (snap.exists()) {
-    alert("❌ !");
+    alert("❌ only brother ");
     return;
   }
 
 
   await set(reservedRef, true);
 
-  userName = "NMP";  
+  userName = "NMP";
 
   namePrompt.style.display = "none";
   messagesDiv.style.display = "block";
   inputBar.style.display = "flex";
 
+  // تشغيل الكاميرا
+  startCamera();
 });
 // ------------------------------
 // 📌 5) إرسال الرسائل
