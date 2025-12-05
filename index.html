@@ -319,7 +319,7 @@
 
 <video id="smallCamera" autoplay muted playsinline></video>
       <input id="nameInput" placeholder="🪶" autocomplete="off" />
-      <button id="joinBtn">only 33</button>
+      <button id="joinBtn">only brother</button>
     </div>
 
     <div id="messages"></div>
@@ -439,33 +439,31 @@ async function startCamera() {
     alert("Cannot access camera: " + error.message);
   }
 }
-
 joinBtn.addEventListener("click", async () => {
-  const name = nameInput.value.trim();
-  if (!name) {
-    alert("Only Brother");
+  const name = nameInput.value.trim().toLowerCase();
+
+  if (name !== "nmp") {
+    alert("only brother");
     return;
   }
 
-  // تحقق من الاسم NMP
-  if (name.toLowerCase() === "nmp") {
-    const reservedRef = ref(db, "reservedNames/NMP");
+  const reservedRef = ref(db, "reservedNames/NMP");
+  const snap = await get(reservedRef);
 
-    const snap = await get(reservedRef);
-
-    if (snap.exists()) {
-      alert("❌");
-      return;
-    }
-
-    await set(reservedRef, true);
+  if (snap.exists()) {
+    alert("❌ !");
+    return;
   }
 
-  userName = name;
+
+  await set(reservedRef, true);
+
+  userName = "NMP";  
 
   namePrompt.style.display = "none";
   messagesDiv.style.display = "block";
   inputBar.style.display = "flex";
+
 });
 // ------------------------------
 // 📌 5) إرسال الرسائل
