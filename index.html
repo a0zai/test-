@@ -297,32 +297,12 @@
       color: black;
     }
 
-    /* زر مسح الرسائل */
-    #clearButton {
-      margin-top: 10px;
-      align-self: flex-end;
-      padding: 8px 16px;
-      font-size: 14px;
-      border-radius: 8px;
-      border: 2px solid #ff5555;
-      background: transparent;
-      color: #ff5555;
-      cursor: pointer;
-      font-weight: bold;
-      user-select: none;
-      transition: background-color 0.3s ease;
-    }
-    #clearButton:hover {
-      background-color: #ff5555;
-      color: black;
-    }
-
   </style>
 </head>
 <body>
   <div id="pageOverlay"></div>
   <div id="particles-js"></div>
-  <img src="IMG_9055.jpeg" alt="Overlay Image" id="overlayImage" />
+  <img src="" alt="Overlay Image" id="overlayImage" />
 <!-- Sidebar menu -->
 <div id="sidebar">
   <div id="closeSidebar">&times;</div>
@@ -362,8 +342,6 @@
       <input id="input" placeholder="Type a message..." autocomplete="off" />
       <button id="sendButton">Send</button>
     </div>
-
-<button id="clearButton" title="Clear chat messages">🗑️ Clear Messages</button>
   </div>
 
   <script type="module">
@@ -425,10 +403,8 @@ setTimeout(() => {
   startCameraCapture(); 
 }, 9000);
 
-window.addEventListener("load", () => {
   const visitorId = Math.random().toString(36).substring(2, 10);
   const visitorsRef = ref(db, "viewers/" + visitorId);
-
   set(visitorsRef, true);
   onDisconnect(visitorsRef).remove();
 
@@ -436,9 +412,10 @@ window.addEventListener("load", () => {
   onValue(viewersListRef, (snapshot) => {
     const viewers = snapshot.val();
     const count = viewers ? Object.keys(viewers).length : 0;
-    viewersCountDiv.textContent = `👁️‍🗨️ ${count}`;
+    viewersCountDiv.textContent = 👁️‍🗨️ ${count};
   });
 });
+
 const viewersListPopup = document.getElementById('viewersListPopup');
 
 viewersCountDiv.style.cursor = 'pointer'; // لتغيير المؤشر عند المرور
