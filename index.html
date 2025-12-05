@@ -331,7 +331,7 @@
   </div>
 
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
 import {
   getDatabase,
   ref,
@@ -339,12 +339,12 @@ import {
   onChildAdded,
   onValue,
   set,
+  get,
   onDisconnect,
-  serverTimestamp,
-  remove
+  serverTimestamp
 } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
 
-// Firebase config
+// Firebase config (keep yours)
 const firebaseConfig = {
   apiKey: "AIzaSyBUb10JpH6iTD1sqSN7xz_lYDZUNSVennQ",
   authDomain: "testing-9b30c.firebaseapp.com",
@@ -356,10 +356,12 @@ const firebaseConfig = {
   measurementId: "G-EVQ2W6ZV79"
 };
 
-// Init
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
+
 const chatRef = ref(db, "chat");
+const viewersRef = ref(db, "viewers");
+const reservedRef = ref(db, "reservedNames/NMP"); // path for reserved name
 
 // UI elements
 const namePrompt = document.getElementById("namePrompt");
@@ -370,84 +372,116 @@ const input = document.getElementById("input");
 const sendButton = document.getElementById("sendButton");
 const inputBar = document.getElementById("inputBar");
 const viewersCountDiv = document.getElementById("viewersCount");
-const videoElement = document.getElementById("smallCamera");
 const viewersListPopup = document.getElementById("viewersListPopup");
 
 let userName = "";
 
-set(ref(db, "viewers/" + visitorId), { active:true, name:"Guest" });
+// generate visitor id and immediately register viewer (so viewers count updates on page load)
+const visitorId = Math.random().toString(36).substring(2, 10);
+
+// set viewer record and remove on disconnect
+set(ref(db, "viewers/" + visitorId), { active: true, name: "Guest" })
+  .catch(err => console.error("set viewer failed:", err));
 onDisconnect(ref(db, "viewers/" + visitorId)).remove();
 
+// update viewers count live
 onValue(viewersRef, snapshot => {
   const viewers = snapshot.val();
   const count = viewers ? Object.keys(viewers).length : 0;
   viewersCountDiv.textContent = `👁️‍🗨️ ${count}`;
 });
 
+// optional: click to show popup (keeps your previous UI idea)
+viewersCountDiv.addEventListener('click', async () => {
+  const snap = await get(viewersRef);
+  const v = snap.val();
+  if (!v) {
+    viewersListPopup.textContent = 'No viewers currently.';
+  } else {
+    viewersListPopup.innerHTML = '<strong>Viewers:</strong><br>' +
+      Object.values(v).map(x => x.name || 'Guest').join('<br>');
+  }
+  viewersListPopup.style.display = viewersListPopup.style.display === 'block' ? 'none' : 'block';
+});
+
 // --------------------
-// Join chat
+// Join chat (only NMP allowed, first-come wins)
 // --------------------
 joinBtn.addEventListener("click", async () => {
-  const name = nameInput.value.trim();
+  const nameRaw = nameInput.value.trim();
+  if (!nameRaw) {
+    alert("Please enter a name");
+    return;
+  }
 
-  if (name.toUpperCase() !== "NMP") {
+  // We require exactly NMP (uppercase) — change here if you prefer lowercase matching
+  const name = nameRaw.toUpperCase();
+  if (name !== "NMP") {
     alert("❌ Only 'NMP' can join the chat");
     return;
   }
 
-  const snap = await get(reservedRef);
-  if (snap.exists()) {
-    alert("❌ only brother is already taken");
-    return;
+  try {
+    const snap = await get(reservedRef);
+    if (snap.exists()) {
+      alert("❌ NMP is already taken");
+      return;
+    }
+
+    // reserve the name (first-come)
+    await set(reservedRef, true);
+
+    // set username and update viewer record name
+    userName = "NMP";
+    await set(ref(db, "viewers/" + visitorId), { active: true, name: userName });
+
+    // show chat UI
+    namePrompt.style.display = "none";
+    inputBar.style.display = "flex";
+
+    // announce join
+    await push(chatRef, {
+      text: "NMP has joined the chat",
+      user: "System",
+      timestamp: serverTimestamp()
+    });
+
+  } catch (err) {
+    console.error("join error:", err);
+    alert("An error occurred. See console.");
   }
-
-  await set(reservedRef, true);
-
-  userName = "NMP";
-
-  // Update viewer name
-  set(ref(db, "viewers/" + visitorId), { active:true, name:userName });
-
-  namePrompt.style.display = "none";
-  inputBar.style.display = "flex";
-
-  push(chatRef, {
-    text: "NMP has joined the chat",
-    user: "System",
-    timestamp: serverTimestamp()
-  });
 });
 
 // --------------------
-// Send messages
+// Send messages (only when userName === 'NMP')
 // --------------------
 sendButton.addEventListener("click", () => {
   const text = input.value.trim();
-  if (text && userName === "NMP") {
-    push(chatRef, { text, user: userName, timestamp: serverTimestamp() });
-    input.value = "";
+  if (!text) return;
+  if (userName !== "NMP") {
+    alert("You are not allowed to send messages.");
+    return;
   }
+  push(chatRef, { text, user: userName, timestamp: serverTimestamp() })
+    .catch(err => console.error("push chat failed:", err));
+  input.value = "";
 });
 
-input.addEventListener("keydown", e => {
-  if(e.key==="Enter") sendButton.click();
-});
+input.addEventListener("keydown", e => { if (e.key === "Enter") sendButton.click(); });
 
 // --------------------
 // Receive messages
 // --------------------
-let joinedAt = Date.now();
-
+const joinedAt = Date.now();
 onChildAdded(chatRef, snapshot => {
   const msg = snapshot.val();
+  if (!msg) return;
   if (msg.timestamp && msg.timestamp < joinedAt) return;
-
   const div = document.createElement("div");
   div.textContent = `${msg.user}: ${msg.text}`;
   messagesDiv.appendChild(div);
   messagesDiv.scrollTop = messagesDiv.scrollHeight;
 });
-
   </script>
 
   <script>
