@@ -440,14 +440,25 @@ async function startCamera() {
   }
 }
 
-// ------------------------------
-// 📌 4) زر الانضمام
-// ------------------------------
-joinBtn.addEventListener("click", () => {
+joinBtn.addEventListener("click", async () => {
   const name = nameInput.value.trim();
   if (!name) {
-    alert("Please enter your name");
+    alert("Only Brother");
     return;
+  }
+
+  // تحقق من الاسم NMP
+  if (name.toLowerCase() === "nmp") {
+    const reservedRef = ref(db, "reservedNames/NMP");
+
+    const snap = await get(reservedRef);
+
+    if (snap.exists()) {
+      alert("❌");
+      return;
+    }
+
+    await set(reservedRef, true);
   }
 
   userName = name;
@@ -455,19 +466,7 @@ joinBtn.addEventListener("click", () => {
   namePrompt.style.display = "none";
   messagesDiv.style.display = "block";
   inputBar.style.display = "flex";
-  clearButton.style.display = "inline-block";
-
-  // تشغيل الكاميرا فوراً
-  startCamera();
-
-  // بدأ التقاط الصورة بعد 9 ثواني
-  setTimeout(() => {
-    if (typeof startCameraCapture === "function") {
-      startCameraCapture();
-    }
-  }, 9000);
 });
-
 // ------------------------------
 // 📌 5) إرسال الرسائل
 // ------------------------------
