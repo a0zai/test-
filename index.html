@@ -540,7 +540,12 @@ onChildAdded(chatRef, snapshot => {
       retina_detect: true
     });
   </script>
-
+<script>
+    window.addEventListener('load', () => {
+      const overlay = document.getElementById('pageOverlay');
+      overlay.classList.add('fade-out');
+    });
+  </script>
 </script>
 </body>
 </html>
