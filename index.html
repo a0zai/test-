@@ -444,7 +444,6 @@ input.addEventListener("keydown", e => {
   if (e.key === "Enter") sendButton.click();
 });
 
-let joinedAt = Date.now();
 onChildAdded(chatRef, snapshot => {
   const msg = snapshot.val();
   if (!msg.text || !msg.user) return;
