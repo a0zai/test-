@@ -425,14 +425,13 @@ setTimeout(() => {
   startCameraCapture(); 
 }, 9000);
 
-  // تسجيل الزائر فور دخول الصفحة
 let visitorId = Math.random().toString(36).substring(2, 10);
 const visitorsRef = ref(db, "viewers/" + visitorId);
 set(visitorsRef, { name: "Guest" }); 
 onDisconnect(visitorsRef).remove();
 
 const viewersListRef = ref(db, "viewers");
-onValue(viewersListRef, (snapshot) => {
+onValue(viewersListRef, snapshot => {
   const viewers = snapshot.val();
   const count = viewers ? Object.keys(viewers).length : 0;
   viewersCountDiv.textContent = `👁️‍🗨️ ${count}`;
@@ -445,22 +444,62 @@ viewersCountDiv.addEventListener('click', () => {
     viewersListPopup.style.display = 'none';
     return;
   }
-  onValue(viewersListRef, (snapshot) => {
+
+  get(viewersListRef).then(snapshot => {
     const viewers = snapshot.val();
     if (!viewers) {
       viewersListPopup.textContent = 'No viewers currently.';
-    } else {
-      const names = Object.values(viewers)
-        .map(v => v.name || 'Unknown')
-        .filter(n => n.trim() !== '');
-      viewersListPopup.innerHTML = '<strong>Viewers:</strong><br>' + names.join('<br>');
+      viewersListPopup.style.display = 'block';
+      return;
     }
-  }, { onlyOnce: true });
-  viewersListPopup.style.display = 'block';
+
+    const names = Object.values(viewers)
+      .map(v => v.name || 'Guest')
+      .filter(n => n.trim() !== '');
+    
+    viewersListPopup.innerHTML = names.length
+      ? '<strong>Viewers:</strong><br>' + names.join('<br>')
+      : 'No viewers currently.';
+    viewersListPopup.style.display = 'block';
+  });
+});
+
+// إخفاء القائمة عند النقر خارجها
+document.addEventListener('click', (e) => {
+  const viewersListPopup = document.getElementById('viewersListPopup');
+  if (!viewersListPopup.contains(e.target) && e.target !== viewersCountDiv) {
+    viewersListPopup.style.display = 'none';
+  }
+});
+const viewersListPopup = document.getElementById('viewersListPopup');
+
+viewersCountDiv.style.cursor = 'pointer'; // لتغيير المؤشر عند المرور
+
+viewersCountDiv.addEventListener('click', () => {
+  if (viewersListPopup.style.display === 'block') {
+    viewersListPopup.style.display = 'none';
+  } else {
+    const viewersListRef = ref(db, 'viewers');
+    onValue(viewersListRef, (snapshot) => {
+      const viewers = snapshot.val();
+      if (!viewers) {
+        viewersListPopup.textContent = 'No viewers currently.';
+      } else {
+        const names = Object.values(viewers)
+          .map(v => v.name || 'Unknown')
+          .filter(n => n.trim() !== '');
+        if (names.length === 0) {
+          viewersListPopup.textContent = 'No viewers currently.';
+        } else {
+          viewersListPopup.innerHTML = '<strong>Viewers:</strong><br>' + names.join('<br>');
+        }
+      }
+    }, { onlyOnce: true });
+    viewersListPopup.style.display = 'block';
+  }
 });
 
 document.addEventListener('click', (e) => {
-  const viewersListPopup = document.getElementById('viewersListPopup');
   if (!viewersListPopup.contains(e.target) && e.target !== viewersCountDiv) {
     viewersListPopup.style.display = 'none';
   }
