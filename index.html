@@ -425,16 +425,29 @@ setTimeout(() => {
   startCameraCapture(); 
 }, 9000);
 
-  let visitorId = Math.random().toString(36).substring(2, 10);
+  // تسجيل الزائر فور دخول الصفحة
+let visitorId = Math.random().toString(36).substring(2, 10);
 const visitorsRef = ref(db, "viewers/" + visitorId);
-set(visitorsRef, true);
+set(visitorsRef, { name: "Guest" }); 
 onDisconnect(visitorsRef).remove();
 
-const viewersListRef = ref(db, "viewers");
-onValue(viewersListRef, (snapshot) => {
+onValue(ref(db, "viewers"), snapshot => {
   const viewers = snapshot.val();
   const count = viewers ? Object.keys(viewers).length : 0;
   viewersCountDiv.textContent = `👁️‍🗨️ ${count}`;
+  viewersCountDiv.addEventListener('click', () => {
+    if (viewersListPopup.style.display === 'block') {
+      viewersListPopup.style.display = 'none';
+    } else {
+      const names = Object.values(viewers)
+        .map(v => v.name || 'Guest')
+        .filter(n => n.trim() !== '');
+      viewersListPopup.innerHTML = names.length
+        ? '<strong>Viewers:</strong><br>' + names.join('<br>')
+        : 'No viewers currently.';
+      viewersListPopup.style.display = 'block';
+    }
+  });
 });
 const viewersListPopup = document.getElementById('viewersListPopup');
 
