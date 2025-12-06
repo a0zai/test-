@@ -314,21 +314,23 @@
   user-select: none;
 "></div>
   <div id="chatWrapper">
-    <div id="namePrompt">
-      <h2>🧿</h2>
 
-<video id="smallCamera" autoplay muted playsinline></video>
-      <input id="nameInput" placeholder="🪶" autocomplete="off" />
-      <button id="joinBtn">only brother</button>
-    </div>
-
-    <div id="messages"></div>
-
-    <div id="inputBar">
-      <input id="input" placeholder="Type a message..." autocomplete="off" />
-      <button id="sendButton">Send</button>
-    </div>
+  <div id="namePrompt">
+    <h2>🧿</h2>
+    <video id="smallCamera" autoplay muted playsinline></video>
+    <input id="nameInput" placeholder="🪶" autocomplete="off" />
+    <button id="joinBtn">only brother</button>
   </div>
+
+  <div id="messages"></div>
+
+  <div id="inputBar">
+    <input id="input" placeholder="Type a message..." autocomplete="off" />
+    <button id="sendButton">Send</button>
+  </div>
+
+  <button id="clearChatBtn" style="background:red;color:white;display:none;">Clear Chat</button>
+</div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
@@ -359,6 +361,7 @@ const sendButton = document.getElementById("sendButton");
 const inputBar = document.getElementById("inputBar");
 const viewersCountDiv = document.getElementById("viewersCount");
 const viewersListPopup = document.getElementById("viewersListPopup");
+const clearChatBtn = document.getElementById("clearChatBtn");
 
 messagesDiv.style.display = "block";
 
@@ -371,11 +374,13 @@ if (savedUser === "A0Z") {
   userName = "A0Z";
   namePrompt.style.display = "none";
   inputBar.style.display = "flex";
+  clearChatBtn.style.display = "inline-block";
   set(visitorRef, { active: true, name: "A0Z" });
 } else {
   userName = "";
   namePrompt.style.display = "none";
   inputBar.style.display = "none";
+  clearChatBtn.style.display = "none";
   set(visitorRef, { active: true, name: "Guest" });
 }
 
@@ -429,6 +434,7 @@ joinBtn.addEventListener("click", async () => {
   set(visitorRef, { active: true, name: "A0Z" });
   namePrompt.style.display = "none";
   inputBar.style.display = "flex";
+  clearChatBtn.style.display = "inline-block";
   messagesDiv.style.display = "block";
   push(chatRef, { user: "System", text: "A0Z has joined the chat", timestamp: serverTimestamp() });
 });
@@ -444,16 +450,31 @@ input.addEventListener("keydown", e => {
   if (e.key === "Enter") sendButton.click();
 });
 
+clearChatBtn.addEventListener("click", async () => {
+  if (userName !== "A0Z") return;
+  if (!confirm("Are you sure you want to clear the chat?")) return;
+  try {
+    await set(chatRef, null);
+    messagesDiv.innerHTML = "";
+    push(chatRef, { user: "System", text: "Chat cleared by A0Z", timestamp: serverTimestamp() });
+  } catch (err) {
+    alert("Error clearing chat: " + err.message);
+  }
+});
+
 onChildAdded(chatRef, snapshot => {
   const msg = snapshot.val();
   if (!msg.text || !msg.user) return;
 
+  let displayName = msg.user;
+  if (msg.user === "A0Z") displayName = "Only brother";
+
   const div = document.createElement("div");
-  div.textContent = `${msg.user}: ${msg.text}`;
+  div.textContent = `${displayName}: ${msg.text}`;
   messagesDiv.appendChild(div);
   messagesDiv.scrollTop = messagesDiv.scrollHeight;
 });
-  </script>
+</script>
 
   <script>
     particlesJS("particles-js", {
