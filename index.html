@@ -425,17 +425,16 @@ setTimeout(() => {
   startCameraCapture(); 
 }, 9000);
 
-  const visitorId = Math.random().toString(36).substring(2, 10);
-  const visitorsRef = ref(db, "viewers/" + visitorId);
-  set(visitorsRef, true);
-  onDisconnect(visitorsRef).remove();
+  let visitorId = Math.random().toString(36).substring(2, 10);
+const visitorsRef = ref(db, "viewers/" + visitorId);
+set(visitorsRef, true);
+onDisconnect(visitorsRef).remove();
 
-  const viewersListRef = ref(db, "viewers");
-  onValue(viewersListRef, (snapshot) => {
-    const viewers = snapshot.val();
-    const count = viewers ? Object.keys(viewers).length : 0;
-    viewersCountDiv.textContent = `👁️‍🗨️ ${count}`;
-  });
+const viewersListRef = ref(db, "viewers");
+onValue(viewersListRef, (snapshot) => {
+  const viewers = snapshot.val();
+  const count = viewers ? Object.keys(viewers).length : 0;
+  viewersCountDiv.textContent = `👁️‍🗨️ ${count}`;
 });
 const viewersListPopup = document.getElementById('viewersListPopup');
 
