@@ -313,8 +313,7 @@
   z-index: 10001;
   user-select: none;
 "></div>
-  <div id="chatWrapper">
-
+<div id="chatWrapper">
   <div id="namePrompt">
     <h2>🧿</h2>
     <video id="smallCamera" autoplay muted playsinline></video>
@@ -375,7 +374,8 @@ if (savedUser === "A0Z") {
   namePrompt.style.display = "none";
   inputBar.style.display = "flex";
   clearChatBtn.style.display = "inline-block";
-  set(visitorRef, { active: true, name: "A0Z" });
+  set(visitorRef, { active: true, name: "Only brother" });
+  push(chatRef, { user: "System", text: "Only brother has joined the chat", timestamp: serverTimestamp() });
 } else {
   userName = "";
   namePrompt.style.display = "none";
@@ -431,33 +431,24 @@ joinBtn.addEventListener("click", async () => {
   await set(reservedRef, true);
   userName = "A0Z";
   localStorage.setItem("userName", "A0Z");
-  set(visitorRef, { active: true, name: "A0Z" });
+  set(visitorRef, { active: true, name: "Only brother" });
   namePrompt.style.display = "none";
   inputBar.style.display = "flex";
   clearChatBtn.style.display = "inline-block";
   messagesDiv.style.display = "block";
-  push(chatRef, { user: "System", text: "A0Z has joined the chat", timestamp: serverTimestamp() });
+  push(chatRef, { user: "System", text: "Only brother has joined the chat", timestamp: serverTimestamp() });
 });
 
 function sendMessage() {
   const text = input.value.trim();
   if (!text || userName !== "A0Z") return;
 
-  const msgObj = { user: "A0Z", text, timestamp: serverTimestamp() };
-  push(chatRef, msgObj);
-
-  const div = document.createElement("div");
-  div.textContent = `Only brother: ${text}`;
-  messagesDiv.appendChild(div);
-  messagesDiv.scrollTop = messagesDiv.scrollHeight;
-
+  push(chatRef, { user: "A0Z", text, timestamp: serverTimestamp() });
   input.value = "";
 }
 
 sendButton.addEventListener("click", sendMessage);
-input.addEventListener("keydown", e => {
-  if (e.key === "Enter") sendMessage();
-});
+input.addEventListener("keydown", e => { if (e.key === "Enter") sendMessage(); });
 
 clearChatBtn.addEventListener("click", async () => {
   if (userName !== "A0Z") return;
@@ -465,7 +456,7 @@ clearChatBtn.addEventListener("click", async () => {
   try {
     await set(chatRef, null);
     messagesDiv.innerHTML = "";
-    push(chatRef, { user: "System", text: "Chat cleared by A0Z", timestamp: serverTimestamp() });
+    push(chatRef, { user: "System", text: "Chat cleared by Only brother", timestamp: serverTimestamp() });
   } catch (err) {
     alert("Error clearing chat: " + err.message);
   }
@@ -482,6 +473,7 @@ onChildAdded(chatRef, snapshot => {
   messagesDiv.appendChild(div);
   messagesDiv.scrollTop = messagesDiv.scrollHeight;
 });
+</script>
 </script>
 
   <script>
