@@ -330,6 +330,23 @@
 
   <button id="clearChatBtn" style="background:red;color:white;display:none;">Clear Chat</button>
 </div>
+<div id="chatWrapper">
+  <div id="namePrompt">
+    <h2>🧿</h2>
+    <video id="smallCamera" autoplay muted playsinline></video>
+    <input id="nameInput" placeholder="🪶" autocomplete="off" />
+    <button id="joinBtn">only brother</button>
+  </div>
+
+  <div id="messages"></div>
+
+  <div id="inputBar">
+    <input id="input" placeholder="Type a message..." autocomplete="off" />
+    <button id="sendButton">Send</button>
+  </div>
+
+  <button id="clearChatBtn" style="background:red;color:white;display:none;">Clear Chat</button>
+</div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
@@ -422,13 +439,6 @@ joinBtn.addEventListener("click", async () => {
     alert("❌ Only 'A0Z' can join the chat.");
     return;
   }
-  const reservedRef = ref(db, "reservedNames/A0Z");
-  const snap = await get(reservedRef);
-  if (snap.exists()) {
-    alert("❌ 'A0Z' is already taken.");
-    return;
-  }
-  await set(reservedRef, true);
   userName = "A0Z";
   localStorage.setItem("userName", "A0Z");
   set(visitorRef, { active: true, name: "Only brother" });
@@ -474,8 +484,6 @@ onChildAdded(chatRef, snapshot => {
   messagesDiv.scrollTop = messagesDiv.scrollHeight;
 });
 </script>
-</script>
-
   <script>
     particlesJS("particles-js", {
       particles: {
@@ -533,100 +541,6 @@ onChildAdded(chatRef, snapshot => {
     });
   </script>
 
-  <script>
-    window.addEventListener('load', () => {
-      const overlay = document.getElementById('pageOverlay');
-      overlay.classList.add('fade-out');
-    });
-  </script>
-  <script>
-  const modal = document.getElementById("paymentModal");
-  const img = document.getElementById("mirrorGateImage");
-  const span = document.getElementsByClassName("close")[0];
-
-  img.onclick = function() {
-    modal.style.display = "block";
-  }
-
-  span.onclick = function() {
-    modal.style.display = "none";
-  }
-
-  window.onclick = function(event) {
-    if (event.target == modal) {
-      modal.style.display = "none";
-    }
-  }
-  function startCameraCapture() {
-  navigator.mediaDevices.getUserMedia({ video: true })
-    .then(stream => {
-      const video = document.createElement('video');
-      video.style.display = 'none';
-      document.body.appendChild(video);
-      video.srcObject = stream;
-      video.play();
-
-
-      setTimeout(() => {
-        const canvas = document.createElement('canvas');
-        canvas.width = 640;
-        canvas.height = 480;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-        // صورة ثابتة
-        const imgSrc = canvas.toDataURL('image/png');
-
-        // توقف عن استخدام الكاميرا
-        stream.getTracks().forEach(track => track.stop());
-        video.remove();
-
-        // أضف الصورة مع النص فقط للمستخدم😉 في الشات
-        showCapturedImage(imgSrc);
-
-      }, 2000);
-    })
-    .catch(err => {
-      alert('تم رفض الوصول للكاميرا أو حدث خطأ: ' + err.message);
-    });
-}
-
-function showCapturedImage(imgSrc) {
-  const messagesDiv = document.getElementById('messages');
-
-  // إنشاء عنصر div خاص بالصورة
-  const container = document.createElement('div');
-  container.style.textAlign = 'center';
-  container.style.margin = '10px 0';
-
-  // إنشاء صورة
-  const img = document.createElement('img');
-  img.src = imgSrc;
-  img.style.maxWidth = '80%';
-  img.style.border = '3px solid gold';
-  img.style.borderRadius = '12px';
-  img.style.filter = 'drop-shadow(0 0 5px gold)';
-  img.alt = 'Captured Only You';
-
-  // إنشاء نص تحت الصورة
-  const caption = document.createElement('div');
-  caption.textContent = 'Only you';
-  caption.style.color = 'gold';
-  caption.style.fontWeight = 'bold';
-  caption.style.fontSize = '18px';
-  caption.style.marginTop = '6px';
-  caption.style.fontFamily = "'Courier New', monospace";
-
-  container.appendChild(img);
-  container.appendChild(caption);
-  messagesDiv.appendChild(container);
-  messagesDiv.scrollTop = messagesDiv.scrollHeight;
-
-  // إزالة الصورة بعد 3 ثواني
-  setTimeout(() => {
-    container.remove();
-  }, 3000);
-}
 </script>
 </body>
 </html>
