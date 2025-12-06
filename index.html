@@ -1,134 +1,120 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar">
 <head>
-<meta charset="UTF-8" />
-<title>testoo</title>
-<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Neon Ultra Chat v5 — Auth</title>
 <style>
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  background-color: #000;
-  color: gold;
-  font-family: 'Courier New', monospace;
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-#pageOverlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  backdrop-filter: blur(12px);
-  background-color: rgba(0, 0, 0, 0.6);
-  z-index: 9999;
-  opacity: 1;
-  transition: opacity 3s ease;
-}
-#pageOverlay.fade-out { opacity: 0; pointer-events: none; }
-#particles-js { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
-
-#viewersCount {
-  position: fixed;
-  top: 15px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 24px;
-  font-weight: bold;
-  color: gold;
-  z-index: 10000;
-  user-select: none;
-  background: rgba(0,0,0,0.5);
-  padding: 6px 12px;
-  border-radius: 12px;
-  box-shadow: 0 0 8px gold;
-}
-
-#chatWrapper {
-  width: 96%;
-  max-width: 700px;
-  max-height: 66vh;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(8px);
-  border-radius: 12px;
-  padding: 20px;
-  position: fixed;
-  bottom: 20px;      
-  left: 50%;
-  transform: translateX(-50%);  
-  z-index: 10;
-  display: flex;
-  flex-direction: column;
-}
-
-#messages {
-  flex: 1;
-  overflow-y: auto;
-  padding: 20px;
-  border: 1px solid #00ffcc;
-  border-radius: 8px;
-  margin-bottom: 10px;
-  max-height: 55vh;
-  color: #00ffcc;
-  font-size: 16px;
-  text-align: left;
-}
-
-#inputBar {
-  display: none;
-  gap: 10px;
-  margin-top: 10px;
-  align-items: center;
-}
-#inputBar input {
-  flex-grow: 1;
-  padding: 10px;
-  font-size: 19px;
-  border-radius: 6px;
-  border: 1px solid #00ffcc;
-  background-color: #111;
-  color: gold;
-  font-family: 'Courier New', monospace;
-}
-#inputBar button {
-  padding: 10px 20px;
-  font-size: 19px;
-  border-radius: 6px;
-  border: 2px solid gold;
-  background: transparent;
-  color: gold;
-  cursor: pointer;
-  font-weight: bold;
-}
-#inputBar button:hover {
-  background-color: gold;
-  color: black;
-}
+  html,body{height:100%;margin:0;padding:0;background:#000;color:gold;font-family:"Courier New",monospace;display:flex;align-items:center;justify-content:center}
+  #app{width:96%;max-width:1100px;padding:18px;border-radius:12px;background:rgba(0,0,0,0.55);border:2px solid rgba(0,255,204,0.08);backdrop-filter:blur(8px);box-shadow:0 0 30px rgba(0,255,204,0.06)}
+  .header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+  .title{color:gold;font-size:20px}
+  .controls{display:flex;gap:10px;align-items:center}
+  select, input[type="text"]{padding:8px;border-radius:8px;border:1px solid #00ffcc;background:#111;color:gold;font-family:'Courier New';}
+  #main{display:flex;gap:14px}
+  #left{flex:1;display:flex;flex-direction:column}
+  #messages{flex:1;background:rgba(0,0,0,0.3);border:1px solid #00ffcc;padding:14px;border-radius:10px;height:60vh;overflow:auto;color:#00ffcc}
+  .msg{margin-bottom:10px;word-break:break-word;display:flex;align-items:flex-start;gap:8px}
+  .msg .meta{display:flex;align-items:center;gap:8px;min-width:150px}
+  .msg .who{color:gold;font-weight:bold}
+  .msg .badge{background:gold;color:black;padding:2px 6px;border-radius:8px;font-size:12px;margin-left:6px}
+  .msg .vip{color:#ffd700}
+  .msg .time{color:#99ffea;font-size:12px;margin-left:8px}
+  #right{width:300px;display:flex;flex-direction:column;gap:12px}
+  #roomsList{background:rgba(0,0,0,0.25);border:1px solid #00ffcc;padding:10px;border-radius:8px;height:180px;overflow:auto}
+  .roomItem{padding:6px;border-radius:6px;cursor:pointer}
+  .roomItem.active{background:rgba(255,215,0,0.12);border:1px solid gold}
+  #inputBar{display:flex;gap:8px;margin-top:8px}
+  #inputBar input[type="text"]{flex:1;padding:10px;border-radius:8px;border:1px solid #00ffcc;background:#111;color:gold}
+  #inputBar button{padding:10px 16px;border-radius:8px;border:2px solid gold;background:transparent;color:gold;cursor:pointer}
+  #emojiPicker{position:absolute;background:#111;border:1px solid #00ffcc;padding:8px;border-radius:8px;display:none;max-width:240px;flex-wrap:wrap;gap:6px}
+  .emojiBtn{cursor:pointer;padding:6px;border-radius:6px;background:transparent;color:gold;border:1px solid transparent}
+  .emojiBtn:hover{background:#00ffcc;color:black;border-color:#00ffcc}
+  #typingNotice{color:#ffd700;font-size:14px;height:20px;margin-top:6px}
+  .adminControls{display:flex;gap:8px;flex-wrap:wrap}
+  .small{font-size:13px;color:#99ffea}
+  .msgActions{display:flex;gap:6px}
+  .actionBtn{padding:4px 8px;border-radius:6px;border:1px solid #00ffcc;background:transparent;color:gold;cursor:pointer;font-size:12px}
+  .actionBtn:hover{background:#00ffcc;color:black}
+  .lockedOverlay{position:absolute;inset:0;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;color:gold;font-size:20px;border-radius:12px}
+  #authArea{display:flex;gap:8px;align-items:center}
+  #signInBtn,#signOutBtn{padding:8px 12px;border-radius:8px;border:1px solid #00ffcc;background:transparent;color:gold;cursor:pointer}
+  @media(max-width:900px){#main{flex-direction:column}#right{width:100%}}
 </style>
 </head>
 <body>
 
-<div id="pageOverlay"></div>
-<div id="particles-js"></div>
-<div id="viewersCount">👁️‍🗨️ </div>
+<div id="app">
 
-<div id="chatWrapper">
-  <div id="messages"></div>
-  <div id="inputBar">
-    <input id="input" placeholder="Type a message..." autocomplete="off" />
-    <button id="sendButton">Send</button>
+  <div class="header">
+    <div class="title">🔮 Neon Ultra Chat v5 (Auth)</div>
+    <div class="controls">
+      <div id="authArea">
+        <button id="signInBtn">Sign in with Google</button>
+        <button id="signOutBtn" style="display:none">Sign out</button>
+        <span id="meLabel" class="small" style="margin-left:8px"></span>
+      </div>
+      <select id="roomSelect"></select>
+    </div>
+  </div>
+
+  <div id="main">
+    <div id="left">
+      <div id="messages"></div>
+
+      <div id="inputBar">
+        <input id="textInput" type="text" placeholder="Write a message..." maxlength="500" />
+        <button id="emojiBtn">😊</button>
+        <button id="sendBtn">Send</button>
+      </div>
+
+      <div id="typingNotice"></div>
+    </div>
+
+    <div id="right">
+      <div>
+        <div style="color:gold;margin-bottom:6px">Rooms</div>
+        <div id="roomsList"></div>
+        <div style="margin-top:8px" class="small">Click a room to enter. Create new room below.</div>
+        <div style="margin-top:8px">
+          <button id="createRoomBtn" class="actionBtn">+ Create Room</button>
+          <button id="clearRoomBtn" class="actionBtn">Clear Room</button>
+        </div>
+      </div>
+
+      <div>
+        <div style="color:gold;margin-bottom:6px">Admin</div>
+        <div class="small">Only accounts marked under <code>/admins/&lt;uid&gt; = true</code> have admin powers.</div>
+        <div id="adminPanel" style="display:none;margin-top:8px" class="adminControls">
+          <button id="lockRoomBtn" class="actionBtn">Lock Room</button>
+          <button id="unlockRoomBtn" class="actionBtn" style="display:none">Unlock Room</button>
+          <button id="alertBtn" class="actionBtn">Send Alert</button>
+          <input id="vipNameInput" type="text" placeholder="Name to VIP" style="padding:6px;border-radius:6px;background:#111;border:1px solid #00ffcc;color:gold" />
+          <button id="setVipBtn" class="actionBtn">Set VIP</button>
+          <button id="removeVipBtn" class="actionBtn">Remove VIP</button>
+        </div>
+      </div>
+
+      <div>
+        <div style="color:gold;margin-bottom:6px">Online Viewers</div>
+        <div id="viewersList" class="small" style="background:rgba(0,0,0,0.25);border:1px solid #00ffcc;padding:8px;border-radius:8px;height:120px;overflow:auto"></div>
+      </div>
+    </div>
   </div>
 </div>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-import { getDatabase, ref, push, onChildAdded, onValue, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+<div id="emojiPicker"></div>
+<audio id="msgSound"><source src="https://cdn.pixabay.com/audio/2021/08/04/audio_7e63c875b7.mp3"></audio>
 
+<script type="module">
+/* Firebase SDK (modular) */
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+import {
+  getDatabase, ref, push, onChildAdded, onValue, set, remove
+} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+
+/* ---------- CONFIG - ضع config مشروعك هنا إن احتجت تغييره ---------- */
 const firebaseConfig = {
   apiKey: "AIzaSyBUb10JpH6iTD1sqSN7xz_lYDZUNSVennQ",
   authDomain: "testing-9b30c.firebaseapp.com",
@@ -136,89 +122,312 @@ const firebaseConfig = {
   projectId: "testing-9b30c",
   storageBucket: "testing-9b30c.appspot.com",
   messagingSenderId: "569390736740",
-  appId: "1:569390736740:web:4f017178b0b3df5ef28671",
-  measurementId: "G-EVQ2W6ZV79"
+  appId: "1:569390736740:web:4f017178b0b3df5ef28671"
 };
+/* ------------------------------------------------------------------ */
 
 const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 const db = getDatabase(app);
-const chatRef = ref(db, "chat");
-const viewersRef = ref(db, "viewers");
 
-const messagesDiv = document.getElementById("messages");
-const inputBar = document.getElementById("inputBar");
-const input = document.getElementById("input");
-const sendButton = document.getElementById("sendButton");
-const viewersCountDiv = document.getElementById("viewersCount");
+/* DOM */
+const signInBtn = document.getElementById('signInBtn');
+const signOutBtn = document.getElementById('signOutBtn');
+const meLabel = document.getElementById('meLabel');
 
-// Visitor ID for tracking viewers
-let visitorId = Math.random().toString(36).substring(2, 10);
-let visitorRef = ref(db, "viewers/" + visitorId);
-let userName = localStorage.getItem("userName") === "A0Z" ? "A0Z" : "";
+const roomSelect = document.getElementById('roomSelect');
+const roomsList = document.getElementById('roomsList');
+const messagesDiv = document.getElementById('messages');
+const textInput = document.getElementById('textInput');
+const sendBtn = document.getElementById('sendBtn');
+const emojiBtn = document.getElementById('emojiBtn');
+const emojiPicker = document.getElementById('emojiPicker');
+const typingNotice = document.getElementById('typingNotice');
+const viewersList = document.getElementById('viewersList');
+const createRoomBtn = document.getElementById('createRoomBtn');
+const clearRoomBtn = document.getElementById('clearRoomBtn');
 
-// Show input only for A0Z
-if(userName === "A0Z") {
-  inputBar.style.display = "flex";
-}
+const adminPanel = document.getElementById('adminPanel');
+const lockRoomBtn = document.getElementById('lockRoomBtn');
+const unlockRoomBtn = document.getElementById('unlockRoomBtn');
+const alertBtn = document.getElementById('alertBtn');
+const vipNameInput = document.getElementById('vipNameInput');
+const setVipBtn = document.getElementById('setVipBtn');
+const removeVipBtn = document.getElementById('removeVipBtn');
 
-// Track viewers
-set(visitorRef, { active: true, name: userName || "Guest" });
-import { onDisconnect } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
-onDisconnect(visitorRef).remove();
+const msgSound = document.getElementById('msgSound');
 
-// Update viewers count
-onValue(viewersRef, snapshot => {
-  const viewers = snapshot.val();
-  const count = viewers ? Object.keys(viewers).length : 0;
-  viewersCountDiv.textContent = `👁️‍🗨️ ${count}`;
+/* Data refs */
+const viewersRef = ref(db, 'viewers');
+const roomsRef = ref(db, 'rooms');
+let currentRoom = 'General';
+let messagesRef = ref(db, `rooms/${currentRoom}/messages`);
+
+/* visitor id */
+const visitorId = Math.random().toString(36).slice(2,10);
+let viewerRef = ref(db, `viewers/${visitorId}`);
+
+/* anti-spam */
+let sendTimestamps = [];
+let lastSentText = '';
+
+/* typing */
+let typingTimer = null;
+
+/* vip map cache */
+let vipMap = {};
+
+/* auth state */
+let currentUser = null;
+let isAdmin = false;
+
+/* emoji list */
+const emojis = ["😀","😎","😂","😍","🔥","✨","👍","🤝","🧿","💥","🎯","🎵","🚀","🌙","👑","🥇","🏆"];
+
+/* ------------------ Auth handlers ------------------ */
+const provider = new GoogleAuthProvider();
+
+signInBtn.addEventListener('click', ()=> signInWithPopup(auth, provider).catch(e=>alert(e.message)));
+signOutBtn.addEventListener('click', ()=> signOut(auth).catch(e=>alert(e.message)));
+
+onAuthStateChanged(auth, async (user) => {
+  currentUser = user;
+  if(user){
+    meLabel.textContent = user.displayName || user.email;
+    signInBtn.style.display = 'none';
+    signOutBtn.style.display = 'inline-block';
+    // register viewer under authenticated uid
+    viewerRef = ref(db, `viewers/${user.uid}`);
+    set(viewerRef, { name: user.displayName || user.email, ts: Date.now() });
+    window.addEventListener('beforeunload', ()=> { try{ remove(viewerRef);}catch(e){} });
+
+    // check admin list in DB
+    onValue(ref(db, `admins/${user.uid}`), snap => {
+      isAdmin = !!snap.val();
+      adminPanel.style.display = isAdmin ? 'flex' : 'none';
+    });
+
+  } else {
+    meLabel.textContent = '(not signed in)';
+    signInBtn.style.display = 'inline-block';
+    signOutBtn.style.display = 'none';
+    // fallback viewer as guest (temporary id)
+    viewerRef = ref(db, `viewers/${visitorId}`);
+    set(viewerRef, { name: 'Guest-'+visitorId, ts: Date.now() });
+    window.addEventListener('beforeunload', ()=> { try{ remove(viewerRef);}catch(e){} });
+    adminPanel.style.display = false;
+  }
 });
 
-// Load chat messages
-onChildAdded(chatRef, snapshot => {
-  const msg = snapshot.val();
-  if(!msg.text || !msg.user) return;
+/* ------------------ Utilities ------------------ */
+function fmt(ts){ if(!ts) return ''; const d = new Date(ts); return d.toLocaleTimeString(); }
+function playBeep(){ try{ msgSound.currentTime = 0; msgSound.play().catch(()=>{}); }catch(e){} }
 
-  const displayName = msg.user === "A0Z" ? "Only brother" : msg.user;
-  const div = document.createElement("div");
-  div.textContent = `${displayName}: ${msg.text}`;
+/* ------------------ Rooms UI ------------------ */
+function renderRooms(list){
+  roomsList.innerHTML = ''; roomSelect.innerHTML = '';
+  list.forEach(r=>{
+    const div = document.createElement('div');
+    div.className = 'roomItem' + (r===currentRoom ? ' active' : '');
+    div.textContent = r; div.onclick = ()=> switchRoom(r);
+    roomsList.appendChild(div);
+    const opt = document.createElement('option'); opt.value=r; opt.textContent=r;
+    if(r===currentRoom) opt.selected=true; roomSelect.appendChild(opt);
+  });
+}
+
+/* switch room */
+function switchRoom(roomName){
+  messagesDiv.innerHTML = '';
+  currentRoom = roomName;
+  messagesRef = ref(db, `rooms/${currentRoom}/messages`);
+  document.querySelectorAll('.roomItem').forEach(el=>el.classList.remove('active'));
+  [...document.querySelectorAll('.roomItem')].find(i=>i && i.textContent===roomName)?.classList.add('active');
+  [...roomSelect.options].forEach(o=>o.selected = (o.value === roomName));
+  attachMessagesListener();
+  attachTypingListener();
+  loadRoomMeta();
+}
+
+/* attach message listener */
+function attachMessagesListener(){
+  onChildAdded(messagesRef, snap=>{
+    const msg = snap.val();
+    if(!msg) return;
+    addMsgToDOM(snap.key, msg);
+  });
+}
+
+/* add message to DOM */
+function addMsgToDOM(key, msg){
+  // avoid duplicates simple: check last child key attr
+  const div = document.createElement('div'); div.className='msg'; div.dataset.msgKey = key;
+  const meta = document.createElement('div'); meta.className='meta';
+  const who = document.createElement('span'); who.className='who'; who.textContent = msg.user;
+  meta.appendChild(who);
+  if(vipMap[msg.user]){ const badge = document.createElement('span'); badge.className='badge'; badge.textContent = vipMap[msg.user]; meta.appendChild(badge); }
+  const content = document.createElement('div'); content.style.flex='1';
+  const textNode = document.createElement('div'); textNode.textContent = msg.text;
+  content.appendChild(textNode);
+  const t = document.createElement('div'); t.className='time'; t.textContent = fmt(msg.timestamp || Date.now());
+
+  const actions = document.createElement('div'); actions.className='msgActions';
+  if(isAdmin){
+    const del = document.createElement('button'); del.className='actionBtn'; del.textContent='Delete';
+    del.onclick = async ()=> {
+      if(!confirm('Delete this message?')) return;
+      await set(ref(db, `rooms/${currentRoom}/messages/${key}`), null);
+      div.remove();
+    };
+    actions.appendChild(del);
+  }
+
+  div.appendChild(meta); div.appendChild(content); div.appendChild(actions); div.appendChild(t);
   messagesDiv.appendChild(div);
   messagesDiv.scrollTop = messagesDiv.scrollHeight;
-});
-
-// Send message (only for A0Z)
-function sendMessage() {
-  const text = input.value.trim();
-  if(!text || userName !== "A0Z") return;
-  push(chatRef, { user: "A0Z", text, timestamp: serverTimestamp() });
-  input.value = "";
+  if(currentUser && msg.uid && currentUser.uid !== msg.uid) playBeep();
+  if(!currentUser && msg.uid) playBeep();
 }
 
-sendButton.addEventListener("click", sendMessage);
-input.addEventListener("keydown", e => { if(e.key === "Enter") sendMessage(); });
-</script>
+/* ensure default rooms */
+function ensureDefaultRooms(){
+  onValue(roomsRef, snap=>{
+    const data = snap.val() || {};
+    const keys = Object.keys(data);
+    if(keys.length === 0){
+      const defs = ['General','Random','Gaming','VIP'];
+      defs.forEach(rn => set(ref(db, `rooms/${rn}`), { created: Date.now() }));
+      renderRooms(defs); switchRoom(defs[0]);
+    } else {
+      renderRooms(keys);
+      if(!keys.includes(currentRoom)) currentRoom = keys[0];
+      switchRoom(currentRoom);
+    }
+  }, { onlyOnce: false });
+}
+ensureDefaultRooms();
 
-<script>
-particlesJS("particles-js", {
-  particles: {
-    number: { value: 70, density: { enable: true, value_area: 800 } },
-    color: { value: "#ff3333" },
-    shape: { type: "circle" },
-    opacity: { value: 0.5, random: true, anim: { enable: true, speed: 1, opacity_min: 0.1, sync: false } },
-    size: { value: 3, random: true, anim: { enable: false } },
-    line_linked: { enable: true, distance: 150, color: "#ff3333", opacity: 0.3, width: 1 },
-    move: { enable: true, speed: 1, random: true, straight: false, out_mode: "out" }
-  },
-  interactivity: {
-    detect_on: "canvas",
-    events: { onhover: { enable: true, mode: "grab" }, onclick: { enable: true, mode: "push" } },
-    modes: { grab: { distance: 200, line_linked: { opacity: 0.5 } } }
-  },
-  retina_detect: true
+/* viewers list */
+onValue(viewersRef, snap=>{
+  const v = snap.val() || {};
+  viewersList.innerHTML = '';
+  Object.values(v).forEach(it=>{
+    const d = document.createElement('div'); d.textContent = it.name; viewersList.appendChild(d);
+  });
 });
 
-window.addEventListener('load', () => {
-  const overlay = document.getElementById('pageOverlay');
-  overlay.classList.add('fade-out');
+/* load room meta */
+function loadRoomMeta(){
+  onValue(ref(db, `rooms/${currentRoom}/meta`), snap=>{
+    const meta = snap.val() || {};
+    // locked?
+    const overlayId = 'lockedOverlay';
+    if(meta.locked){
+      if(!document.getElementById(overlayId)){
+        const ov = document.createElement('div'); ov.id=overlayId; ov.className='lockedOverlay'; ov.textContent='🔒 Room is locked';
+        messagesDiv.appendChild(ov);
+      }
+      lockRoomBtn.style.display='none'; unlockRoomBtn.style.display='inline-block';
+    } else {
+      const ov = document.getElementById(overlayId); if(ov) ov.remove();
+      lockRoomBtn.style.display='inline-block'; unlockRoomBtn.style.display='none';
+    }
+    vipMap = meta.vips || {};
+  }, { onlyOnce: false });
+}
+
+/* send message (requires auth) */
+async function sendMessage(){
+  if(!currentUser){ alert('Please sign in to send messages.'); return; }
+  const name = currentUser.displayName || currentUser.email;
+  const text = (textInput.value||'').trim();
+  if(!text) return;
+
+  // check locked
+  const metaSnap = await new Promise(res=> onValue(ref(db, `rooms/${currentRoom}/meta`), s=>res(s.val()), { onlyOnce: true }));
+  if(metaSnap && metaSnap.locked && !isAdmin){ alert('Room locked'); return; }
+
+  // anti-spam
+  const now = Date.now();
+  sendTimestamps = sendTimestamps.filter(t => now - t < 3000);
+  if(sendTimestamps.length >= 5 && !isAdmin){ alert('Too many messages — slow down.'); return; }
+  if(text.length > 500){ alert('Message too long (500 max).'); return; }
+  if(text === lastSentText && !isAdmin){ alert('Avoid repeating the same message.'); return; }
+
+  const payload = { user: name, text, timestamp: Date.now(), uid: currentUser.uid };
+  await push(ref(db, `rooms/${currentRoom}/messages`), payload);
+  sendTimestamps.push(now); lastSentText = text;
+  textInput.value = '';
+  set(ref(db, `rooms/${currentRoom}/typing/${currentUser.uid}`), null);
+}
+
+/* events */
+sendBtn.addEventListener('click', sendMessage);
+textInput.addEventListener('keydown', e=> { if(e.key==='Enter') sendMessage(); });
+
+/* emoji picker */
+function showEmojiPicker(){ emojiPicker.innerHTML=''; emojis.forEach(e=>{ const b=document.createElement('button'); b.className='emojiBtn'; b.textContent=e; b.onclick=()=>{ textInput.value += e; emojiPicker.style.display='none'; textInput.focus(); }; emojiPicker.appendChild(b); }); const r = emojiBtn.getBoundingClientRect(); emojiPicker.style.left=(r.left)+'px'; emojiPicker.style.top=(r.bottom+8)+'px'; emojiPicker.style.display='flex'; }
+emojiBtn.addEventListener('click', ()=>{ if(emojiPicker.style.display==='flex') emojiPicker.style.display='none'; else showEmojiPicker(); });
+document.addEventListener('click', e=>{ if(!emojiPicker.contains(e.target) && e.target !== emojiBtn) emojiPicker.style.display='none'; });
+
+/* typing indicator */
+textInput.addEventListener('input', ()=>{
+  if(currentUser) set(ref(db, `rooms/${currentRoom}/typing/${currentUser.uid}`), { name: currentUser.displayName || currentUser.email, ts: Date.now() });
+  if(typingTimer) clearTimeout(typingTimer);
+  typingTimer = setTimeout(()=>{ if(currentUser) set(ref(db, `rooms/${currentRoom}/typing/${currentUser.uid}`), null); }, 1500);
+});
+function attachTypingListener(){
+  onValue(ref(db, `rooms/${currentRoom}/typing`), snap=>{
+    const v = snap.val()||{};
+    const names = Object.values(v).map(x=>x.name).filter(n=>n && (!currentUser || n !== (currentUser.displayName||currentUser.email)));
+    typingNotice.textContent = names.length ? `${names.join(', ')} is typing...` : '';
+  });
+}
+attachTypingListener();
+
+/* create/clear room */
+createRoomBtn.addEventListener('click', ()=>{ const rn = prompt('Room name:'); if(!rn) return; set(ref(db, `rooms/${rn}`), { created: Date.now() }); });
+clearRoomBtn.addEventListener('click', async ()=>{ if(!isAdmin && !confirm('Clear this room?')) return; await set(ref(db, `rooms/${currentRoom}/messages`), null); messagesDiv.innerHTML=''; await push(ref(db, `rooms/${currentRoom}/messages`), { user:'System', text:'Room cleared', timestamp: Date.now() }); });
+
+/* admin actions */
+lockRoomBtn.addEventListener('click', ()=>{ if(!isAdmin) return; set(ref(db, `rooms/${currentRoom}/meta/locked`), true); push(ref(db, `rooms/${currentRoom}/messages`), { user:'System', text:'Room locked by admin', timestamp: Date.now() }); });
+unlockRoomBtn.addEventListener('click', ()=>{ if(!isAdmin) return; set(ref(db, `rooms/${currentRoom}/meta/locked`), null); push(ref(db, `rooms/${currentRoom}/messages`), { user:'System', text:'Room unlocked by admin', timestamp: Date.now() }); });
+alertBtn.addEventListener('click', ()=>{ if(!isAdmin) return; const t = prompt('Alert text:'); if(!t) return; push(ref(db, `rooms/${currentRoom}/messages`), { user:'Admin', text:`⚠️ ${t}`, timestamp: Date.now() }); });
+setVipBtn.addEventListener('click', async ()=>{ if(!isAdmin) return; const nm = (vipNameInput.value||'').trim(); if(!nm) return alert('Enter name'); await set(ref(db, `rooms/${currentRoom}/meta/vips/${nm}`), 'legend VIP'); alert(nm+' set as legend VIP'); });
+removeVipBtn.addEventListener('click', async ()=>{ if(!isAdmin) return; const nm = (vipNameInput.value||'').trim(); if(!nm) return alert('Enter name'); await set(ref(db, `rooms/${currentRoom}/meta/vips/${nm}`), null); alert('VIP removed for '+nm); });
+
+/* watch rooms & vip changes */
+onValue(roomsRef, snap => {
+  const rooms = snap.val() || {};
+  const keys = Object.keys(rooms);
+  if(keys.length) renderRooms(keys);
+});
+onValue(ref(db, `rooms/${currentRoom}/meta`), snap => {
+  const meta = snap.val() || {};
+  vipMap = meta.vips || {};
+});
+
+/* messages listener initial */
+attachMessagesListener();
+loadRoomMeta();
+
+/* viewers list live */
+onValue(viewersRef, snap=>{
+  const v = snap.val() || {};
+  viewersList.innerHTML = '';
+  Object.values(v).forEach(it=>{ const d=document.createElement('div'); d.textContent = it.name; viewersList.appendChild(d); });
+});
+
+/* auth UI wiring (update admin panel after auth state changes) */
+onAuthStateChanged(auth, user => {
+  if(user){
+    meLabel.textContent = user.displayName || user.email;
+    signInBtn.style.display = 'none'; signOutBtn.style.display = 'inline-block';
+    // viewer ref changed above in onAuthStateChanged during sign-in earlier; handled there
+  } else {
+    meLabel.textContent = '(not signed)';
+    signInBtn.style.display = 'inline-block'; signOutBtn.style.display='none';
+  }
 });
 </script>
 
