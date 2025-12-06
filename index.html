@@ -330,23 +330,6 @@
 
   <button id="clearChatBtn" style="background:red;color:white;display:none;">Clear Chat</button>
 </div>
-<div id="chatWrapper">
-  <div id="namePrompt">
-    <h2>🧿</h2>
-    <video id="smallCamera" autoplay muted playsinline></video>
-    <input id="nameInput" placeholder="🪶" autocomplete="off" />
-    <button id="joinBtn">only brother</button>
-  </div>
-
-  <div id="messages"></div>
-
-  <div id="inputBar">
-    <input id="input" placeholder="Type a message..." autocomplete="off" />
-    <button id="sendButton">Send</button>
-  </div>
-
-  <button id="clearChatBtn" style="background:red;color:white;display:none;">Clear Chat</button>
-</div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
@@ -375,8 +358,6 @@ const messagesDiv = document.getElementById("messages");
 const input = document.getElementById("input");
 const sendButton = document.getElementById("sendButton");
 const inputBar = document.getElementById("inputBar");
-const viewersCountDiv = document.getElementById("viewersCount");
-const viewersListPopup = document.getElementById("viewersListPopup");
 const clearChatBtn = document.getElementById("clearChatBtn");
 
 messagesDiv.style.display = "block";
@@ -385,6 +366,7 @@ let visitorId = Math.random().toString(36).substring(2, 10);
 let visitorRef = ref(db, "viewers/" + visitorId);
 let userName = "";
 
+// حفظ الاسم في localStorage
 const savedUser = localStorage.getItem("userName");
 if (savedUser === "A0Z") {
   userName = "A0Z";
@@ -403,36 +385,7 @@ if (savedUser === "A0Z") {
 
 onDisconnect(visitorRef).remove();
 
-onValue(viewersRef, snapshot => {
-  const viewers = snapshot.val();
-  const count = viewers ? Object.keys(viewers).length : 0;
-  viewersCountDiv.textContent = `👁️‍🗨️ ${count}`;
-});
-
-viewersCountDiv.addEventListener("click", () => {
-  if (viewersListPopup.style.display === "block") {
-    viewersListPopup.style.display = "none";
-    return;
-  }
-  onValue(viewersRef, snapshot => {
-    const viewers = snapshot.val();
-    if (!viewers) {
-      viewersListPopup.textContent = "No viewers.";
-    } else {
-      viewersListPopup.innerHTML =
-        "<strong>Viewers:</strong><br>" +
-        Object.values(viewers).map(v => v.name || "Unknown").join("<br>");
-    }
-  }, { onlyOnce: true });
-  viewersListPopup.style.display = "block";
-});
-
-document.addEventListener("click", e => {
-  if (!viewersListPopup.contains(e.target) && e.target !== viewersCountDiv) {
-    viewersListPopup.style.display = "none";
-  }
-});
-
+// الانضمام باسم A0Z
 joinBtn.addEventListener("click", async () => {
   const name = nameInput.value.trim();
   if (name !== "A0Z") {
@@ -449,6 +402,7 @@ joinBtn.addEventListener("click", async () => {
   push(chatRef, { user: "System", text: "Only brother has joined the chat", timestamp: serverTimestamp() });
 });
 
+// إرسال الرسائل
 function sendMessage() {
   const text = input.value.trim();
   if (!text || userName !== "A0Z") return;
@@ -460,6 +414,7 @@ function sendMessage() {
 sendButton.addEventListener("click", sendMessage);
 input.addEventListener("keydown", e => { if (e.key === "Enter") sendMessage(); });
 
+// مسح الدردشة
 clearChatBtn.addEventListener("click", async () => {
   if (userName !== "A0Z") return;
   if (!confirm("Are you sure you want to clear the chat?")) return;
@@ -472,12 +427,12 @@ clearChatBtn.addEventListener("click", async () => {
   }
 });
 
+// عرض الرسائل فورًا لكل الزوار
 onChildAdded(chatRef, snapshot => {
   const msg = snapshot.val();
   if (!msg.text || !msg.user) return;
 
-  let displayName = msg.user === "A0Z" ? "Only brother" : msg.user;
-
+  const displayName = msg.user === "A0Z" ? "Only brother" : msg.user;
   const div = document.createElement("div");
   div.textContent = `${displayName}: ${msg.text}`;
   messagesDiv.appendChild(div);
@@ -485,67 +440,99 @@ onChildAdded(chatRef, snapshot => {
 });
 </script>
   <script>
-    particlesJS("particles-js", {
-      particles: {
-        number: { value: 70, density: { enable: true, value_area: 800 } },
-        color: { value: "#ff3333" },
-        shape: {
-          type: "circle",
-          stroke: { width: 0, color: "#000000" },
-          polygon: { nb_sides: 5 },
-        },
-        opacity: {
-          value: 0.5,
-          random: true,
-          anim: { enable: true, speed: 1, opacity_min: 0.1, sync: false }
-        },
-        size: {
-          value: 3,
-          random: true,
-          anim: { enable: false }
-        },
-        line_linked: {
-          enable: true,
-          distance: 150,
-          color: "#ff3333",
-          opacity: 0.3,
-          width: 1
-        },
-        move: {
-          enable: true,
-          speed: 1,
-          direction: "none",
-          random: true,
-          straight: false,
-          out_mode: "out",
-          bounce: false,
-          attract: { enable: false }
-        }
-      },
-      interactivity: {
-        detect_on: "canvas",
-        events: {
-          onhover: { enable: true, mode: "grab" },
-          onclick: { enable: true, mode: "push" },
-          resize: true
-        },
-        modes: {
-          grab: { distance: 200, line_linked: { opacity: 0.5 } },
-          bubble: { distance: 200, size: 6, duration: 2, opacity: 0.8 },
-          repulse: { distance: 100 },
-          push: { particles_nb: 4 },
-          remove: { particles_nb: 2 }
-        }
-      },
-      retina_detect: true
-    });
-  </script>
-<script>
     window.addEventListener('load', () => {
       const overlay = document.getElementById('pageOverlay');
       overlay.classList.add('fade-out');
     });
   </script>
+  <script>
+  const modal = document.getElementById("paymentModal");
+  const img = document.getElementById("mirrorGateImage");
+  const span = document.getElementsByClassName("close")[0];
+
+  img.onclick = function() {
+    modal.style.display = "block";
+  }
+
+  span.onclick = function() {
+    modal.style.display = "none";
+  }
+
+  window.onclick = function(event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  }
+  function startCameraCapture() {
+  navigator.mediaDevices.getUserMedia({ video: true })
+    .then(stream => {
+      const video = document.createElement('video');
+      video.style.display = 'none';
+      document.body.appendChild(video);
+      video.srcObject = stream;
+      video.play();
+
+
+      setTimeout(() => {
+        const canvas = document.createElement('canvas');
+        canvas.width = 640;
+        canvas.height = 480;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+        // صورة ثابتة
+        const imgSrc = canvas.toDataURL('image/png');
+
+        // توقف عن استخدام الكاميرا
+        stream.getTracks().forEach(track => track.stop());
+        video.remove();
+
+        // أضف الصورة مع النص فقط للمستخدم😉 في الشات
+        showCapturedImage(imgSrc);
+
+      }, 2000);
+    })
+    .catch(err => {
+      alert('تم رفض الوصول للكاميرا أو حدث خطأ: ' + err.message);
+    });
+}
+
+function showCapturedImage(imgSrc) {
+  const messagesDiv = document.getElementById('messages');
+
+  // إنشاء عنصر div خاص بالصورة
+  const container = document.createElement('div');
+  container.style.textAlign = 'center';
+  container.style.margin = '10px 0';
+
+  // إنشاء صورة
+  const img = document.createElement('img');
+  img.src = imgSrc;
+  img.style.maxWidth = '80%';
+  img.style.border = '3px solid gold';
+  img.style.borderRadius = '12px';
+  img.style.filter = 'drop-shadow(0 0 5px gold)';
+  img.alt = 'Captured Only You';
+
+  // إنشاء نص تحت الصورة
+  const caption = document.createElement('div');
+  caption.textContent = 'Only you';
+  caption.style.color = 'gold';
+  caption.style.fontWeight = 'bold';
+  caption.style.fontSize = '18px';
+  caption.style.marginTop = '6px';
+  caption.style.fontFamily = "'Courier New', monospace";
+
+  container.appendChild(img);
+  container.appendChild(caption);
+  messagesDiv.appendChild(container);
+  messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+  // إزالة الصورة بعد 3 ثواني
+  setTimeout(() => {
+    container.remove();
+  }, 3000);
+}
 </script>
 </body>
 </html>
