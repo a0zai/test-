@@ -370,11 +370,11 @@ if (savedUser === "A0Z") {
   namePrompt.style.display = "none";
   inputBar.style.display = "flex";
   set(visitorRef, { active: true, name: "A0Z" });
+} else {
+  set(visitorRef, { active: true, name: "Guest" });
 }
 
-set(visitorRef, { active: true, name: "Guest" });
 onDisconnect(visitorRef).remove();
-
 onValue(viewersRef, snapshot => {
   const viewers = snapshot.val();
   const count = viewers ? Object.keys(viewers).length : 0;
