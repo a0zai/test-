@@ -360,6 +360,8 @@ const inputBar = document.getElementById("inputBar");
 const viewersCountDiv = document.getElementById("viewersCount");
 const viewersListPopup = document.getElementById("viewersListPopup");
 
+messagesDiv.style.display = "block";
+
 let visitorId = Math.random().toString(36).substring(2, 10);
 let visitorRef = ref(db, "viewers/" + visitorId);
 let userName = "";
@@ -369,13 +371,16 @@ if (savedUser === "A0Z") {
   userName = "A0Z";
   namePrompt.style.display = "none";
   inputBar.style.display = "flex";
-  messagesDiv.style.display = "block";
   set(visitorRef, { active: true, name: "A0Z" });
 } else {
+  userName = "";
+  namePrompt.style.display = "none";
+  inputBar.style.display = "none";
   set(visitorRef, { active: true, name: "Guest" });
 }
 
 onDisconnect(visitorRef).remove();
+
 onValue(viewersRef, snapshot => {
   const viewers = snapshot.val();
   const count = viewers ? Object.keys(viewers).length : 0;
