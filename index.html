@@ -119,7 +119,7 @@
   max-height: 66vh;
   background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(8px);
-  border: 2px solid #ff0000;
+  border: none;
   border-radius: 12px;
   padding: 20px;
   box-sizing: border-box;
@@ -423,6 +423,7 @@ joinBtn.addEventListener("click", async () => {
   set(visitorRef, { active: true, name: "A0Z" });
   namePrompt.style.display = "none";
   inputBar.style.display = "flex";
+  messagesDiv.style.display = "block";
   push(chatRef, { user: "System", text: "A0Z has joined the chat", timestamp: serverTimestamp() });
 });
 
