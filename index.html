@@ -341,7 +341,7 @@ const firebaseConfig = {
   authDomain: "testing-9b30c.firebaseapp.com",
   databaseURL: "https://testing-9b30c-default-rtdb.europe-west1.firebasedatabase.app",
   projectId: "testing-9b30c",
-  storageBucket: "testing-9b30c.firebasestorage.app",
+  storageBucket: "testing-9b30c.appspot.com",
   messagingSenderId: "569390736740",
   appId: "1:569390736740:web:4f017178b0b3df5ef28671",
   measurementId: "G-EVQ2W6ZV79"
@@ -439,15 +439,24 @@ joinBtn.addEventListener("click", async () => {
   push(chatRef, { user: "System", text: "A0Z has joined the chat", timestamp: serverTimestamp() });
 });
 
-sendButton.addEventListener("click", () => {
+function sendMessage() {
   const text = input.value.trim();
   if (!text || userName !== "A0Z") return;
-  push(chatRef, { user: "A0Z", text, timestamp: serverTimestamp() });
-  input.value = "";
-});
 
+  const msgObj = { user: "A0Z", text, timestamp: serverTimestamp() };
+  push(chatRef, msgObj);
+
+  const div = document.createElement("div");
+  div.textContent = `Only brother: ${text}`;
+  messagesDiv.appendChild(div);
+  messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+  input.value = "";
+}
+
+sendButton.addEventListener("click", sendMessage);
 input.addEventListener("keydown", e => {
-  if (e.key === "Enter") sendButton.click();
+  if (e.key === "Enter") sendMessage();
 });
 
 clearChatBtn.addEventListener("click", async () => {
@@ -466,8 +475,7 @@ onChildAdded(chatRef, snapshot => {
   const msg = snapshot.val();
   if (!msg.text || !msg.user) return;
 
-  let displayName = msg.user;
-  if (msg.user === "A0Z") displayName = "Only brother";
+  let displayName = msg.user === "A0Z" ? "Only brother" : msg.user;
 
   const div = document.createElement("div");
   div.textContent = `${displayName}: ${msg.text}`;
