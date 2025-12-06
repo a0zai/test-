@@ -358,6 +358,8 @@ const messagesDiv = document.getElementById("messages");
 const input = document.getElementById("input");
 const sendButton = document.getElementById("sendButton");
 const inputBar = document.getElementById("inputBar");
+const viewersCountDiv = document.getElementById("viewersCount");
+const viewersListPopup = document.getElementById("viewersListPopup");
 const clearChatBtn = document.getElementById("clearChatBtn");
 
 messagesDiv.style.display = "block";
@@ -366,7 +368,6 @@ let visitorId = Math.random().toString(36).substring(2, 10);
 let visitorRef = ref(db, "viewers/" + visitorId);
 let userName = "";
 
-// حفظ الاسم في localStorage
 const savedUser = localStorage.getItem("userName");
 if (savedUser === "A0Z") {
   userName = "A0Z";
@@ -385,13 +386,49 @@ if (savedUser === "A0Z") {
 
 onDisconnect(visitorRef).remove();
 
-// الانضمام باسم A0Z
+onValue(viewersRef, snapshot => {
+  const viewers = snapshot.val();
+  const count = viewers ? Object.keys(viewers).length : 0;
+  viewersCountDiv.textContent = `👁️‍🗨️ ${count}`;
+});
+
+viewersCountDiv.addEventListener("click", () => {
+  if (viewersListPopup.style.display === "block") {
+    viewersListPopup.style.display = "none";
+    return;
+  }
+  onValue(viewersRef, snapshot => {
+    const viewers = snapshot.val();
+    if (!viewers) {
+      viewersListPopup.textContent = "No viewers.";
+    } else {
+      viewersListPopup.innerHTML =
+        "<strong>Viewers:</strong><br>" +
+        Object.values(viewers).map(v => v.name || "Unknown").join("<br>");
+    }
+  }, { onlyOnce: true });
+  viewersListPopup.style.display = "block";
+});
+
+document.addEventListener("click", e => {
+  if (!viewersListPopup.contains(e.target) && e.target !== viewersCountDiv) {
+    viewersListPopup.style.display = "none";
+  }
+});
+
 joinBtn.addEventListener("click", async () => {
   const name = nameInput.value.trim();
   if (name !== "A0Z") {
     alert("❌ Only 'A0Z' can join the chat.");
     return;
   }
+  const reservedRef = ref(db, "reservedNames/A0Z");
+  const snap = await get(reservedRef);
+  if (snap.exists()) {
+    alert("❌ 'A0Z' is already taken.");
+    return;
+  }
+  await set(reservedRef, true);
   userName = "A0Z";
   localStorage.setItem("userName", "A0Z");
   set(visitorRef, { active: true, name: "Only brother" });
@@ -402,7 +439,6 @@ joinBtn.addEventListener("click", async () => {
   push(chatRef, { user: "System", text: "Only brother has joined the chat", timestamp: serverTimestamp() });
 });
 
-// إرسال الرسائل
 function sendMessage() {
   const text = input.value.trim();
   if (!text || userName !== "A0Z") return;
@@ -414,7 +450,6 @@ function sendMessage() {
 sendButton.addEventListener("click", sendMessage);
 input.addEventListener("keydown", e => { if (e.key === "Enter") sendMessage(); });
 
-// مسح الدردشة
 clearChatBtn.addEventListener("click", async () => {
   if (userName !== "A0Z") return;
   if (!confirm("Are you sure you want to clear the chat?")) return;
@@ -427,18 +462,75 @@ clearChatBtn.addEventListener("click", async () => {
   }
 });
 
-// عرض الرسائل فورًا لكل الزوار
 onChildAdded(chatRef, snapshot => {
   const msg = snapshot.val();
   if (!msg.text || !msg.user) return;
 
-  const displayName = msg.user === "A0Z" ? "Only brother" : msg.user;
+  let displayName = msg.user === "A0Z" ? "Only brother" : msg.user;
+
   const div = document.createElement("div");
   div.textContent = `${displayName}: ${msg.text}`;
   messagesDiv.appendChild(div);
   messagesDiv.scrollTop = messagesDiv.scrollHeight;
 });
 </script>
+  <script>
+    particlesJS("particles-js", {
+      particles: {
+        number: { value: 70, density: { enable: true, value_area: 800 } },
+        color: { value: "#ff3333" },
+        shape: {
+          type: "circle",
+          stroke: { width: 0, color: "#000000" },
+          polygon: { nb_sides: 5 },
+        },
+        opacity: {
+          value: 0.5,
+          random: true,
+          anim: { enable: true, speed: 1, opacity_min: 0.1, sync: false }
+        },
+        size: {
+          value: 3,
+          random: true,
+          anim: { enable: false }
+        },
+        line_linked: {
+          enable: true,
+          distance: 150,
+          color: "#ff3333",
+          opacity: 0.3,
+          width: 1
+        },
+        move: {
+          enable: true,
+          speed: 1,
+          direction: "none",
+          random: true,
+          straight: false,
+          out_mode: "out",
+          bounce: false,
+          attract: { enable: false }
+        }
+      },
+      interactivity: {
+        detect_on: "canvas",
+        events: {
+          onhover: { enable: true, mode: "grab" },
+          onclick: { enable: true, mode: "push" },
+          resize: true
+        },
+        modes: {
+          grab: { distance: 200, line_linked: { opacity: 0.5 } },
+          bubble: { distance: 200, size: 6, duration: 2, opacity: 0.8 },
+          repulse: { distance: 100 },
+          push: { particles_nb: 4 },
+          remove: { particles_nb: 2 }
+        }
+      },
+      retina_detect: true
+    });
+  </script>
+
   <script>
     window.addEventListener('load', () => {
       const overlay = document.getElementById('pageOverlay');
