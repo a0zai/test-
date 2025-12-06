@@ -1,121 +1,376 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Neon Ultra Chat v5 — Auth</title>
-<style>
-  html,body{height:100%;margin:0;padding:0;background:#000;color:gold;font-family:"Courier New",monospace;display:flex;align-items:center;justify-content:center}
-  #app{width:96%;max-width:1100px;padding:18px;border-radius:12px;background:rgba(0,0,0,0.55);border:2px solid rgba(0,255,204,0.08);backdrop-filter:blur(8px);box-shadow:0 0 30px rgba(0,255,204,0.06)}
-  .header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-  .title{color:gold;font-size:20px}
-  .controls{display:flex;gap:10px;align-items:center}
-  select, input[type="text"]{padding:8px;border-radius:8px;border:1px solid #00ffcc;background:#111;color:gold;font-family:'Courier New';}
-  #main{display:flex;gap:14px}
-  #left{flex:1;display:flex;flex-direction:column}
-  #messages{flex:1;background:rgba(0,0,0,0.3);border:1px solid #00ffcc;padding:14px;border-radius:10px;height:60vh;overflow:auto;color:#00ffcc}
-  .msg{margin-bottom:10px;word-break:break-word;display:flex;align-items:flex-start;gap:8px}
-  .msg .meta{display:flex;align-items:center;gap:8px;min-width:150px}
-  .msg .who{color:gold;font-weight:bold}
-  .msg .badge{background:gold;color:black;padding:2px 6px;border-radius:8px;font-size:12px;margin-left:6px}
-  .msg .vip{color:#ffd700}
-  .msg .time{color:#99ffea;font-size:12px;margin-left:8px}
-  #right{width:300px;display:flex;flex-direction:column;gap:12px}
-  #roomsList{background:rgba(0,0,0,0.25);border:1px solid #00ffcc;padding:10px;border-radius:8px;height:180px;overflow:auto}
-  .roomItem{padding:6px;border-radius:6px;cursor:pointer}
-  .roomItem.active{background:rgba(255,215,0,0.12);border:1px solid gold}
-  #inputBar{display:flex;gap:8px;margin-top:8px}
-  #inputBar input[type="text"]{flex:1;padding:10px;border-radius:8px;border:1px solid #00ffcc;background:#111;color:gold}
-  #inputBar button{padding:10px 16px;border-radius:8px;border:2px solid gold;background:transparent;color:gold;cursor:pointer}
-  #emojiPicker{position:absolute;background:#111;border:1px solid #00ffcc;padding:8px;border-radius:8px;display:none;max-width:240px;flex-wrap:wrap;gap:6px}
-  .emojiBtn{cursor:pointer;padding:6px;border-radius:6px;background:transparent;color:gold;border:1px solid transparent}
-  .emojiBtn:hover{background:#00ffcc;color:black;border-color:#00ffcc}
-  #typingNotice{color:#ffd700;font-size:14px;height:20px;margin-top:6px}
-  .adminControls{display:flex;gap:8px;flex-wrap:wrap}
-  .small{font-size:13px;color:#99ffea}
-  .msgActions{display:flex;gap:6px}
-  .actionBtn{padding:4px 8px;border-radius:6px;border:1px solid #00ffcc;background:transparent;color:gold;cursor:pointer;font-size:12px}
-  .actionBtn:hover{background:#00ffcc;color:black}
-  .lockedOverlay{position:absolute;inset:0;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;color:gold;font-size:20px;border-radius:12px}
-  #authArea{display:flex;gap:8px;align-items:center}
-  #signInBtn,#signOutBtn{padding:8px 12px;border-radius:8px;border:1px solid #00ffcc;background:transparent;color:gold;cursor:pointer}
-  @media(max-width:900px){#main{flex-direction:column}#right{width:100%}}
-</style>
+  <meta charset="UTF-8" />
+  <title>Support & Contact</title>
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      background-color: #000;
+      color: gold;
+      font-family: 'Courier New', monospace;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+    
+    #pageOverlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      backdrop-filter: blur(12px);
+      background-color: rgba(0, 0, 0, 0.6);
+      z-index: 9999;
+      opacity: 1;
+      transition: opacity 3s ease;
+    }
+    #pageOverlay.fade-out {
+      opacity: 0;
+      pointer-events: none;
+    }
+    #particles-js {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+    #overlayImage {
+      position: fixed;
+      top: 0; left: 0;
+      width: 90%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+      opacity: 0.9;
+      pointer-events: none;
+    }
+#hamburger {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    font-size: 28px;
+    cursor: pointer;
+    color: rgb(0, 225, 255);
+    z-index: 10000;
+    user-select: none;
+  }
+
+  /* القائمة الجانبية */
+  #sidebar {
+    position: fixed;
+    top: 0;
+    left: -250px; /* مخفية خارج الشاشة */
+    width: 250px;
+    height: 100%;
+    background-color: rgba(0,0,0,0.9);
+    backdrop-filter: blur(8px);
+    color: gold;
+    padding: 40px 20px;
+    box-sizing: border-box;
+    transition: left 0.3s ease;
+    z-index: 9999;
+  }
+
+  /* عندما تكون مفتوحة */
+  #sidebar.open {
+    left: 0;
+  }
+
+  #sidebar a {
+    display: block;
+    margin: 15px 0;
+    color: gold;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 18px;
+  }
+
+  #sidebar a:hover {
+    text-decoration: underline;
+  }
+
+  /* زر إغلاق */
+  #closeSidebar {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    cursor: pointer;
+  }
+
+    #viewersCount {
+      position: fixed;
+      top: 15px;
+      right: 20px;
+      font-size: 24px;
+      font-weight: bold;
+      color: gold;
+      z-index: 10000;
+      user-select: none;
+      background: rgba(0,0,0,0.5);
+      padding: 6px 12px;
+      border-radius: 12px;
+      box-shadow: 0 0 8px gold;
+    }
+
+#chatWrapper {
+  width: 96%;
+  max-width: 700px;
+  max-height: 66vh;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  border: 2px solid #ff0000;
+  border-radius: 12px;
+  padding: 20px;
+  box-sizing: border-box;
+  position: fixed;
+  bottom: 20px;      
+  left: 50%;
+  transform: translateX(-50%);  
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+}
+#nameInput {
+  width: 250px;         /* حجم العرض */
+  padding: 15px 20px;   /* مساحة داخلية أكبر لارتفاع الحقل */
+  font-size: 16px;      /* حجم الخط */
+  border-radius: 8px;
+  border: 2px solid rgb(17, 0, 255);
+  background-color: #111;
+  color: rgb(255, 0, 0);
+  font-family: 'Courier New', monospace;
+  box-sizing: border-box;
+}
+#smallCamera {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 160px;
+  height: 120px;
+  border-radius: 50% / 60%;
+  object-fit: cover;
+  z-index: 10000;
+}
+    #messages {
+      flex: 1;                 /* يشغل أكبر مساحة ممكنة */
+      overflow-y: auto;
+      padding: 20px;
+      border: 1px solid #00ffcc;
+      border-radius: 8px;
+      word-wrap: break-word;
+      display: none;
+      backdrop-filter: blur(6px);
+      margin-bottom: 10px;
+      max-height: 55vh;        /* ارتفاع مناسب للرسائل */
+      color: #00ffcc;
+      font-size: 16px;
+      text-align: left;
+    }
+.mirror-note-section {
+  margin-top: 40px;
+  color: gold;
+}
+
+.section-title {
+  color: gold;
+  margin-bottom: 10px;
+}
+
+.product-image {
+  width: 100%;
+  border-radius: 8px;
+  margin: 10px 0;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.product-image:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 10px gold;
+}
+
+.product-description {
+  font-size: 14px;
+  color: #ccc;
+}
+
+.product-price {
+  color: #00ffcc;
+  margin-top: 5px;
+}
+
+/* Modal styles */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 99999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  backdrop-filter: blur(8px);
+  background-color: rgba(0,0,0,0.8);
+}
+
+.modal-content {
+  background-color: #111;
+  margin: 10% auto;
+  padding: 20px;
+  border: 2px solid gold;
+  width: 90%;
+  max-width: 400px;
+  color: gold;
+  border-radius: 8px;
+  text-align: left;
+  box-shadow: 0 0 20px gold;
+}
+
+.modal-content h3 {
+  margin-top: 0;
+  color: #00ffcc;
+}
+
+.modal-content ul {
+  padding-left: 20px;
+  margin-top: 10px;
+}
+
+.modal-content li {
+  margin-bottom: 10px;
+  word-break: break-all;
+}
+
+.modal-content a {
+  color: #00ffcc;
+}
+
+.close {
+  color: #ff5555;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close:hover {
+  color: #ff0000;
+}
+    #inputBar {
+      display: none;
+      gap: 10px;
+      margin-top: 10px;
+      align-items: center;
+    }
+    #inputBar input {
+      flex-grow: 1;
+      padding: 10px;
+      font-size: 19px;
+      border-radius: 6px;
+      border: 1px solid #00ffcc;
+      background-color: #111;
+      color: gold;
+      font-family: 'Courier New', monospace;
+    }
+    #inputBar button {
+      padding: 10px 20px;
+      font-size: 19px;
+      border-radius: 6px;
+      border: 2px solid gold;
+      background: transparent;
+      color: gold;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+    #inputBar button:hover {
+      background-color: gold;
+      color: black;
+    }
+
+    /* زر مسح الرسائل */
+    #clearButton {
+      margin-top: 10px;
+      align-self: flex-end;
+      padding: 8px 16px;
+      font-size: 14px;
+      border-radius: 8px;
+      border: 2px solid #ff5555;
+      background: transparent;
+      color: #ff5555;
+      cursor: pointer;
+      font-weight: bold;
+      user-select: none;
+      transition: background-color 0.3s ease;
+    }
+    #clearButton:hover {
+      background-color: #ff5555;
+      color: black;
+    }
+
+  </style>
 </head>
 <body>
-
-<div id="app">
-
-  <div class="header">
-    <div class="title">🔮 Neon Ultra Chat v5 (Auth)</div>
-    <div class="controls">
-      <div id="authArea">
-        <button id="signInBtn">Sign in with Google</button>
-        <button id="signOutBtn" style="display:none">Sign out</button>
-        <span id="meLabel" class="small" style="margin-left:8px"></span>
-      </div>
-      <select id="roomSelect"></select>
-    </div>
-  </div>
-
-  <div id="main">
-    <div id="left">
-      <div id="messages"></div>
-
-      <div id="inputBar">
-        <input id="textInput" type="text" placeholder="Write a message..." maxlength="500" />
-        <button id="emojiBtn">😊</button>
-        <button id="sendBtn">Send</button>
-      </div>
-
-      <div id="typingNotice"></div>
-    </div>
-
-    <div id="right">
-      <div>
-        <div style="color:gold;margin-bottom:6px">Rooms</div>
-        <div id="roomsList"></div>
-        <div style="margin-top:8px" class="small">Click a room to enter. Create new room below.</div>
-        <div style="margin-top:8px">
-          <button id="createRoomBtn" class="actionBtn">+ Create Room</button>
-          <button id="clearRoomBtn" class="actionBtn">Clear Room</button>
-        </div>
-      </div>
-
-      <div>
-        <div style="color:gold;margin-bottom:6px">Admin</div>
-        <div class="small">Only accounts marked under <code>/admins/&lt;uid&gt; = true</code> have admin powers.</div>
-        <div id="adminPanel" style="display:none;margin-top:8px" class="adminControls">
-          <button id="lockRoomBtn" class="actionBtn">Lock Room</button>
-          <button id="unlockRoomBtn" class="actionBtn" style="display:none">Unlock Room</button>
-          <button id="alertBtn" class="actionBtn">Send Alert</button>
-          <input id="vipNameInput" type="text" placeholder="Name to VIP" style="padding:6px;border-radius:6px;background:#111;border:1px solid #00ffcc;color:gold" />
-          <button id="setVipBtn" class="actionBtn">Set VIP</button>
-          <button id="removeVipBtn" class="actionBtn">Remove VIP</button>
-        </div>
-      </div>
-
-      <div>
-        <div style="color:gold;margin-bottom:6px">Online Viewers</div>
-        <div id="viewersList" class="small" style="background:rgba(0,0,0,0.25);border:1px solid #00ffcc;padding:8px;border-radius:8px;height:120px;overflow:auto"></div>
-      </div>
-    </div>
-  </div>
+  <div id="pageOverlay"></div>
+  <div id="particles-js"></div>
+<div id="hamburger">☰</div>
+<!-- Sidebar menu -->
+<div id="sidebar">
+  <div id="closeSidebar">&times;</div>
+  <h2>👑Contact👑</h2>
+  <a href="https://www.linkedin.com/in/a0zai?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app" target="_blank">🔗 LinkedIn</a>
+ </div>
 </div>
+  <div id="viewersCount">👁️‍🗨️ 0</div>
+<div id="viewersListPopup" style="
+  position: fixed;
+  top: 50px;
+  right: 20px;
+  max-height: 200px;
+  width: 200px;
+  overflow-y: auto;
+  background: rgba(0,0,0,0.8);
+  color: gold;
+  border: 1px solid gold;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 14px;
+  display: none;
+  z-index: 10001;
+  user-select: none;
+"></div>
+  <div id="chatWrapper">
+    <div id="namePrompt">
+      <h2>👁️‍🗨️ join the chat👁️‍🗨️</h2>
+      <!-- أضف هذا في body الصفحة -->
+<video id="smallCamera" autoplay muted playsinline></video>
+      <input id="nameInput" placeholder="Your name   👑    &" autocomplete="off" />
+      <button id="joinBtn">Join</button>
+    </div>
 
-<div id="emojiPicker"></div>
-<audio id="msgSound"><source src="https://cdn.pixabay.com/audio/2021/08/04/audio_7e63c875b7.mp3"></audio>
+    <div id="messages"></div>
 
-<script type="module">
-/* Firebase SDK (modular) */
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
-import {
-  getDatabase, ref, push, onChildAdded, onValue, set, remove
-} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+    <div id="inputBar">
+      <input id="input" placeholder="Type a message..." autocomplete="off" />
+      <button id="sendButton">Send</button>
+    </div>
 
-/* ---------- CONFIG - ضع config مشروعك هنا إن احتجت تغييره ---------- */
-const firebaseConfig = {
+<button id="clearButton" title="Clear chat messages">🗑️ Clear Messages</button>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+    import { getDatabase, ref, push, onChildAdded, onValue, set, onDisconnect, serverTimestamp, remove } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+
+   const firebaseConfig = {
   apiKey: "AIzaSyBUb10JpH6iTD1sqSN7xz_lYDZUNSVennQ",
   authDomain: "testing-9b30c.firebaseapp.com",
   databaseURL: "https://testing-9b30c-default-rtdb.europe-west1.firebasedatabase.app",
@@ -124,312 +379,319 @@ const firebaseConfig = {
   messagingSenderId: "569390736740",
   appId: "1:569390736740:web:4f017178b0b3df5ef28671"
 };
-/* ------------------------------------------------------------------ */
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getDatabase(app);
 
-/* DOM */
-const signInBtn = document.getElementById('signInBtn');
-const signOutBtn = document.getElementById('signOutBtn');
-const meLabel = document.getElementById('meLabel');
 
-const roomSelect = document.getElementById('roomSelect');
-const roomsList = document.getElementById('roomsList');
-const messagesDiv = document.getElementById('messages');
-const textInput = document.getElementById('textInput');
-const sendBtn = document.getElementById('sendBtn');
-const emojiBtn = document.getElementById('emojiBtn');
-const emojiPicker = document.getElementById('emojiPicker');
-const typingNotice = document.getElementById('typingNotice');
-const viewersList = document.getElementById('viewersList');
-const createRoomBtn = document.getElementById('createRoomBtn');
-const clearRoomBtn = document.getElementById('clearRoomBtn');
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const chatRef = ref(db, "chat");
 
-const adminPanel = document.getElementById('adminPanel');
-const lockRoomBtn = document.getElementById('lockRoomBtn');
-const unlockRoomBtn = document.getElementById('unlockRoomBtn');
-const alertBtn = document.getElementById('alertBtn');
-const vipNameInput = document.getElementById('vipNameInput');
-const setVipBtn = document.getElementById('setVipBtn');
-const removeVipBtn = document.getElementById('removeVipBtn');
+    const namePrompt = document.getElementById("namePrompt");
+    const nameInput = document.getElementById("nameInput");
+    const joinBtn = document.getElementById("joinBtn");
+    const messagesDiv = document.getElementById("messages");
+    const input = document.getElementById("input");
+    const sendButton = document.getElementById("sendButton");
+    const inputBar = document.getElementById("inputBar");
+    const viewersCountDiv = document.getElementById("viewersCount");
+    const clearButton = document.getElementById("clearButton");
 
-const msgSound = document.getElementById('msgSound');
+    let userName = "";
+const videoElement = document.getElementById('smallCamera');
 
-/* Data refs */
-const viewersRef = ref(db, 'viewers');
-const roomsRef = ref(db, 'rooms');
-let currentRoom = 'General';
-let messagesRef = ref(db, `rooms/${currentRoom}/messages`);
+async function startCamera() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+    videoElement.srcObject = stream;
+    await videoElement.play();
+  } catch (error) {
+    console.error("Cannot access camera:", error);
+    alert("Cannot access camera: " + error.message);
+  }
+}
+joinBtn.addEventListener("click", () => {
+  const name = nameInput.value.trim();
+  if (!name) {
+    alert("Please enter your name");
+    return;
+  }
+  userName = name;
+  namePrompt.style.display = "none";
+  messagesDiv.style.display = "block";
+  inputBar.style.display = "flex";
+  clearButton.style.display = "inline-block";
+startCamera(); // فوري
+setTimeout(() => {
+  startCameraCapture(); 
+}, 9000);
 
-/* visitor id */
-const visitorId = Math.random().toString(36).slice(2,10);
-let viewerRef = ref(db, `viewers/${visitorId}`);
+  const visitorId = Math.random().toString(36).substring(2, 10);
+  const visitorsRef = ref(db, "viewers/" + visitorId);
+  set(visitorsRef, true);
+  onDisconnect(visitorsRef).remove();
 
-/* anti-spam */
-let sendTimestamps = [];
-let lastSentText = '';
+  const viewersListRef = ref(db, "viewers");
+  onValue(viewersListRef, (snapshot) => {
+    const viewers = snapshot.val();
+    const count = viewers ? Object.keys(viewers).length : 0;
+    viewersCountDiv.textContent = `👁️‍🗨️ ${count}`;
+  });
+});
+const viewersListPopup = document.getElementById('viewersListPopup');
 
-/* typing */
-let typingTimer = null;
+viewersCountDiv.style.cursor = 'pointer'; // لتغيير المؤشر عند المرور
 
-/* vip map cache */
-let vipMap = {};
+viewersCountDiv.addEventListener('click', () => {
+  if (viewersListPopup.style.display === 'block') {
+    viewersListPopup.style.display = 'none';
+  } else {
+    const viewersListRef = ref(db, 'viewers');
+    onValue(viewersListRef, (snapshot) => {
+      const viewers = snapshot.val();
+      if (!viewers) {
+        viewersListPopup.textContent = 'No viewers currently.';
+      } else {
+        const names = Object.values(viewers)
+          .map(v => v.name || 'Unknown')
+          .filter(n => n.trim() !== '');
+        if (names.length === 0) {
+          viewersListPopup.textContent = 'No viewers currently.';
+        } else {
+          viewersListPopup.innerHTML = '<strong>Viewers:</strong><br>' + names.join('<br>');
+        }
+      }
+    }, { onlyOnce: true });
+    viewersListPopup.style.display = 'block';
+  }
+});
 
-/* auth state */
-let currentUser = null;
-let isAdmin = false;
-
-/* emoji list */
-const emojis = ["😀","😎","😂","😍","🔥","✨","👍","🤝","🧿","💥","🎯","🎵","🚀","🌙","👑","🥇","🏆"];
-
-/* ------------------ Auth handlers ------------------ */
-const provider = new GoogleAuthProvider();
-
-signInBtn.addEventListener('click', ()=> signInWithPopup(auth, provider).catch(e=>alert(e.message)));
-signOutBtn.addEventListener('click', ()=> signOut(auth).catch(e=>alert(e.message)));
-
-onAuthStateChanged(auth, async (user) => {
-  currentUser = user;
-  if(user){
-    meLabel.textContent = user.displayName || user.email;
-    signInBtn.style.display = 'none';
-    signOutBtn.style.display = 'inline-block';
-    // register viewer under authenticated uid
-    viewerRef = ref(db, `viewers/${user.uid}`);
-    set(viewerRef, { name: user.displayName || user.email, ts: Date.now() });
-    window.addEventListener('beforeunload', ()=> { try{ remove(viewerRef);}catch(e){} });
-
-    // check admin list in DB
-    onValue(ref(db, `admins/${user.uid}`), snap => {
-      isAdmin = !!snap.val();
-      adminPanel.style.display = isAdmin ? 'flex' : 'none';
+document.addEventListener('click', (e) => {
+  if (!viewersListPopup.contains(e.target) && e.target !== viewersCountDiv) {
+    viewersListPopup.style.display = 'none';
+  }
+});
+    sendButton.addEventListener("click", () => {
+      const text = input.value.trim();
+      if (text && userName) {
+        push(chatRef, { text, user: userName, timestamp: serverTimestamp() });
+        input.value = "";
+      }
     });
 
-  } else {
-    meLabel.textContent = '(not signed in)';
-    signInBtn.style.display = 'inline-block';
-    signOutBtn.style.display = 'none';
-    // fallback viewer as guest (temporary id)
-    viewerRef = ref(db, `viewers/${visitorId}`);
-    set(viewerRef, { name: 'Guest-'+visitorId, ts: Date.now() });
-    window.addEventListener('beforeunload', ()=> { try{ remove(viewerRef);}catch(e){} });
-    adminPanel.style.display = false;
-  }
-});
-
-/* ------------------ Utilities ------------------ */
-function fmt(ts){ if(!ts) return ''; const d = new Date(ts); return d.toLocaleTimeString(); }
-function playBeep(){ try{ msgSound.currentTime = 0; msgSound.play().catch(()=>{}); }catch(e){} }
-
-/* ------------------ Rooms UI ------------------ */
-function renderRooms(list){
-  roomsList.innerHTML = ''; roomSelect.innerHTML = '';
-  list.forEach(r=>{
-    const div = document.createElement('div');
-    div.className = 'roomItem' + (r===currentRoom ? ' active' : '');
-    div.textContent = r; div.onclick = ()=> switchRoom(r);
-    roomsList.appendChild(div);
-    const opt = document.createElement('option'); opt.value=r; opt.textContent=r;
-    if(r===currentRoom) opt.selected=true; roomSelect.appendChild(opt);
-  });
-}
-
-/* switch room */
-function switchRoom(roomName){
-  messagesDiv.innerHTML = '';
-  currentRoom = roomName;
-  messagesRef = ref(db, `rooms/${currentRoom}/messages`);
-  document.querySelectorAll('.roomItem').forEach(el=>el.classList.remove('active'));
-  [...document.querySelectorAll('.roomItem')].find(i=>i && i.textContent===roomName)?.classList.add('active');
-  [...roomSelect.options].forEach(o=>o.selected = (o.value === roomName));
-  attachMessagesListener();
-  attachTypingListener();
-  loadRoomMeta();
-}
-
-/* attach message listener */
-function attachMessagesListener(){
-  onChildAdded(messagesRef, snap=>{
-    const msg = snap.val();
-    if(!msg) return;
-    addMsgToDOM(snap.key, msg);
-  });
-}
-
-/* add message to DOM */
-function addMsgToDOM(key, msg){
-  // avoid duplicates simple: check last child key attr
-  const div = document.createElement('div'); div.className='msg'; div.dataset.msgKey = key;
-  const meta = document.createElement('div'); meta.className='meta';
-  const who = document.createElement('span'); who.className='who'; who.textContent = msg.user;
-  meta.appendChild(who);
-  if(vipMap[msg.user]){ const badge = document.createElement('span'); badge.className='badge'; badge.textContent = vipMap[msg.user]; meta.appendChild(badge); }
-  const content = document.createElement('div'); content.style.flex='1';
-  const textNode = document.createElement('div'); textNode.textContent = msg.text;
-  content.appendChild(textNode);
-  const t = document.createElement('div'); t.className='time'; t.textContent = fmt(msg.timestamp || Date.now());
-
-  const actions = document.createElement('div'); actions.className='msgActions';
-  if(isAdmin){
-    const del = document.createElement('button'); del.className='actionBtn'; del.textContent='Delete';
-    del.onclick = async ()=> {
-      if(!confirm('Delete this message?')) return;
-      await set(ref(db, `rooms/${currentRoom}/messages/${key}`), null);
-      div.remove();
-    };
-    actions.appendChild(del);
-  }
-
-  div.appendChild(meta); div.appendChild(content); div.appendChild(actions); div.appendChild(t);
-  messagesDiv.appendChild(div);
-  messagesDiv.scrollTop = messagesDiv.scrollHeight;
-  if(currentUser && msg.uid && currentUser.uid !== msg.uid) playBeep();
-  if(!currentUser && msg.uid) playBeep();
-}
-
-/* ensure default rooms */
-function ensureDefaultRooms(){
-  onValue(roomsRef, snap=>{
-    const data = snap.val() || {};
-    const keys = Object.keys(data);
-    if(keys.length === 0){
-      const defs = ['General','Random','Gaming','VIP'];
-      defs.forEach(rn => set(ref(db, `rooms/${rn}`), { created: Date.now() }));
-      renderRooms(defs); switchRoom(defs[0]);
-    } else {
-      renderRooms(keys);
-      if(!keys.includes(currentRoom)) currentRoom = keys[0];
-      switchRoom(currentRoom);
-    }
-  }, { onlyOnce: false });
-}
-ensureDefaultRooms();
-
-/* viewers list */
-onValue(viewersRef, snap=>{
-  const v = snap.val() || {};
-  viewersList.innerHTML = '';
-  Object.values(v).forEach(it=>{
-    const d = document.createElement('div'); d.textContent = it.name; viewersList.appendChild(d);
-  });
-});
-
-/* load room meta */
-function loadRoomMeta(){
-  onValue(ref(db, `rooms/${currentRoom}/meta`), snap=>{
-    const meta = snap.val() || {};
-    // locked?
-    const overlayId = 'lockedOverlay';
-    if(meta.locked){
-      if(!document.getElementById(overlayId)){
-        const ov = document.createElement('div'); ov.id=overlayId; ov.className='lockedOverlay'; ov.textContent='🔒 Room is locked';
-        messagesDiv.appendChild(ov);
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        sendButton.click();
       }
-      lockRoomBtn.style.display='none'; unlockRoomBtn.style.display='inline-block';
+    });
+let joinedAt = Date.now();
+
+onChildAdded(chatRef, (snapshot) => {
+  const msg = snapshot.val();
+  if (msg.timestamp && msg.timestamp < joinedAt) {
+    // ignore old messages
+    return;
+  }
+
+  if (msg && msg.text && msg.user) {
+    const div = document.createElement("div");
+    div.className = "msg";
+
+    if (userName === 'A123696321Z') {
+
+      div.innerHTML = `<span class="username">${msg.user}:</span> ${msg.text}`;
     } else {
-      const ov = document.getElementById(overlayId); if(ov) ov.remove();
-      lockRoomBtn.style.display='inline-block'; unlockRoomBtn.style.display='none';
+
+      div.textContent = `${msg.user}: ${msg.text}`;
     }
-    vipMap = meta.vips || {};
-  }, { onlyOnce: false });
-}
 
-/* send message (requires auth) */
-async function sendMessage(){
-  if(!currentUser){ alert('Please sign in to send messages.'); return; }
-  const name = currentUser.displayName || currentUser.email;
-  const text = (textInput.value||'').trim();
-  if(!text) return;
-
-  // check locked
-  const metaSnap = await new Promise(res=> onValue(ref(db, `rooms/${currentRoom}/meta`), s=>res(s.val()), { onlyOnce: true }));
-  if(metaSnap && metaSnap.locked && !isAdmin){ alert('Room locked'); return; }
-
-  // anti-spam
-  const now = Date.now();
-  sendTimestamps = sendTimestamps.filter(t => now - t < 3000);
-  if(sendTimestamps.length >= 5 && !isAdmin){ alert('Too many messages — slow down.'); return; }
-  if(text.length > 500){ alert('Message too long (500 max).'); return; }
-  if(text === lastSentText && !isAdmin){ alert('Avoid repeating the same message.'); return; }
-
-  const payload = { user: name, text, timestamp: Date.now(), uid: currentUser.uid };
-  await push(ref(db, `rooms/${currentRoom}/messages`), payload);
-  sendTimestamps.push(now); lastSentText = text;
-  textInput.value = '';
-  set(ref(db, `rooms/${currentRoom}/typing/${currentUser.uid}`), null);
-}
-
-/* events */
-sendBtn.addEventListener('click', sendMessage);
-textInput.addEventListener('keydown', e=> { if(e.key==='Enter') sendMessage(); });
-
-/* emoji picker */
-function showEmojiPicker(){ emojiPicker.innerHTML=''; emojis.forEach(e=>{ const b=document.createElement('button'); b.className='emojiBtn'; b.textContent=e; b.onclick=()=>{ textInput.value += e; emojiPicker.style.display='none'; textInput.focus(); }; emojiPicker.appendChild(b); }); const r = emojiBtn.getBoundingClientRect(); emojiPicker.style.left=(r.left)+'px'; emojiPicker.style.top=(r.bottom+8)+'px'; emojiPicker.style.display='flex'; }
-emojiBtn.addEventListener('click', ()=>{ if(emojiPicker.style.display==='flex') emojiPicker.style.display='none'; else showEmojiPicker(); });
-document.addEventListener('click', e=>{ if(!emojiPicker.contains(e.target) && e.target !== emojiBtn) emojiPicker.style.display='none'; });
-
-/* typing indicator */
-textInput.addEventListener('input', ()=>{
-  if(currentUser) set(ref(db, `rooms/${currentRoom}/typing/${currentUser.uid}`), { name: currentUser.displayName || currentUser.email, ts: Date.now() });
-  if(typingTimer) clearTimeout(typingTimer);
-  typingTimer = setTimeout(()=>{ if(currentUser) set(ref(db, `rooms/${currentRoom}/typing/${currentUser.uid}`), null); }, 1500);
-});
-function attachTypingListener(){
-  onValue(ref(db, `rooms/${currentRoom}/typing`), snap=>{
-    const v = snap.val()||{};
-    const names = Object.values(v).map(x=>x.name).filter(n=>n && (!currentUser || n !== (currentUser.displayName||currentUser.email)));
-    typingNotice.textContent = names.length ? `${names.join(', ')} is typing...` : '';
-  });
-}
-attachTypingListener();
-
-/* create/clear room */
-createRoomBtn.addEventListener('click', ()=>{ const rn = prompt('Room name:'); if(!rn) return; set(ref(db, `rooms/${rn}`), { created: Date.now() }); });
-clearRoomBtn.addEventListener('click', async ()=>{ if(!isAdmin && !confirm('Clear this room?')) return; await set(ref(db, `rooms/${currentRoom}/messages`), null); messagesDiv.innerHTML=''; await push(ref(db, `rooms/${currentRoom}/messages`), { user:'System', text:'Room cleared', timestamp: Date.now() }); });
-
-/* admin actions */
-lockRoomBtn.addEventListener('click', ()=>{ if(!isAdmin) return; set(ref(db, `rooms/${currentRoom}/meta/locked`), true); push(ref(db, `rooms/${currentRoom}/messages`), { user:'System', text:'Room locked by admin', timestamp: Date.now() }); });
-unlockRoomBtn.addEventListener('click', ()=>{ if(!isAdmin) return; set(ref(db, `rooms/${currentRoom}/meta/locked`), null); push(ref(db, `rooms/${currentRoom}/messages`), { user:'System', text:'Room unlocked by admin', timestamp: Date.now() }); });
-alertBtn.addEventListener('click', ()=>{ if(!isAdmin) return; const t = prompt('Alert text:'); if(!t) return; push(ref(db, `rooms/${currentRoom}/messages`), { user:'Admin', text:`⚠️ ${t}`, timestamp: Date.now() }); });
-setVipBtn.addEventListener('click', async ()=>{ if(!isAdmin) return; const nm = (vipNameInput.value||'').trim(); if(!nm) return alert('Enter name'); await set(ref(db, `rooms/${currentRoom}/meta/vips/${nm}`), 'legend VIP'); alert(nm+' set as legend VIP'); });
-removeVipBtn.addEventListener('click', async ()=>{ if(!isAdmin) return; const nm = (vipNameInput.value||'').trim(); if(!nm) return alert('Enter name'); await set(ref(db, `rooms/${currentRoom}/meta/vips/${nm}`), null); alert('VIP removed for '+nm); });
-
-/* watch rooms & vip changes */
-onValue(roomsRef, snap => {
-  const rooms = snap.val() || {};
-  const keys = Object.keys(rooms);
-  if(keys.length) renderRooms(keys);
-});
-onValue(ref(db, `rooms/${currentRoom}/meta`), snap => {
-  const meta = snap.val() || {};
-  vipMap = meta.vips || {};
-});
-
-/* messages listener initial */
-attachMessagesListener();
-loadRoomMeta();
-
-/* viewers list live */
-onValue(viewersRef, snap=>{
-  const v = snap.val() || {};
-  viewersList.innerHTML = '';
-  Object.values(v).forEach(it=>{ const d=document.createElement('div'); d.textContent = it.name; viewersList.appendChild(d); });
-});
-
-/* auth UI wiring (update admin panel after auth state changes) */
-onAuthStateChanged(auth, user => {
-  if(user){
-    meLabel.textContent = user.displayName || user.email;
-    signInBtn.style.display = 'none'; signOutBtn.style.display = 'inline-block';
-    // viewer ref changed above in onAuthStateChanged during sign-in earlier; handled there
-  } else {
-    meLabel.textContent = '(not signed)';
-    signInBtn.style.display = 'inline-block'; signOutBtn.style.display='none';
+    messagesDiv.appendChild(div);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
   }
 });
-</script>
 
+const hamburger = document.getElementById('hamburger');
+  const sidebar = document.getElementById('sidebar');
+  const closeBtn = document.getElementById('closeSidebar');
+
+  hamburger.addEventListener('click', () => {
+    sidebar.classList.add('open');
+  });
+
+  closeBtn.addEventListener('click', () => {
+    sidebar.classList.remove('open');
+  });
+
+
+  document.addEventListener('click', (e) => {
+    if (!sidebar.contains(e.target) && e.target !== hamburger) {
+      sidebar.classList.remove('open');
+    }
+  });
+
+    clearButton.addEventListener("click", () => {
+      if(confirm("Do you want to clear the conversation?")) {
+
+        remove(chatRef)
+          .then(() => {
+            messagesDiv.innerHTML = "";
+          })
+          .catch(err => alert("حدث خطأ أثناء المسح: " + err.message));
+      }
+    });
+
+  </script>
+
+  <script>
+    particlesJS("particles-js", {
+      particles: {
+        number: { value: 70, density: { enable: true, value_area: 800 } },
+        color: { value: "#ff3333" },
+        shape: {
+          type: "circle",
+          stroke: { width: 0, color: "#000000" },
+          polygon: { nb_sides: 5 },
+        },
+        opacity: {
+          value: 0.5,
+          random: true,
+          anim: { enable: true, speed: 1, opacity_min: 0.1, sync: false }
+        },
+        size: {
+          value: 3,
+          random: true,
+          anim: { enable: false }
+        },
+        line_linked: {
+          enable: true,
+          distance: 150,
+          color: "#ff3333",
+          opacity: 0.3,
+          width: 1
+        },
+        move: {
+          enable: true,
+          speed: 1,
+          direction: "none",
+          random: true,
+          straight: false,
+          out_mode: "out",
+          bounce: false,
+          attract: { enable: false }
+        }
+      },
+      interactivity: {
+        detect_on: "canvas",
+        events: {
+          onhover: { enable: true, mode: "grab" },
+          onclick: { enable: true, mode: "push" },
+          resize: true
+        },
+        modes: {
+          grab: { distance: 200, line_linked: { opacity: 0.5 } },
+          bubble: { distance: 200, size: 6, duration: 2, opacity: 0.8 },
+          repulse: { distance: 100 },
+          push: { particles_nb: 4 },
+          remove: { particles_nb: 2 }
+        }
+      },
+      retina_detect: true
+    });
+  </script>
+
+  <script>
+    window.addEventListener('load', () => {
+      const overlay = document.getElementById('pageOverlay');
+      overlay.classList.add('fade-out');
+    });
+  </script>
+  <script>
+  const modal = document.getElementById("paymentModal");
+  const img = document.getElementById("mirrorGateImage");
+  const span = document.getElementsByClassName("close")[0];
+
+  img.onclick = function() {
+    modal.style.display = "block";
+  }
+
+  span.onclick = function() {
+    modal.style.display = "none";
+  }
+
+  window.onclick = function(event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  }
+  function startCameraCapture() {
+  navigator.mediaDevices.getUserMedia({ video: true })
+    .then(stream => {
+      const video = document.createElement('video');
+      video.style.display = 'none';
+      document.body.appendChild(video);
+      video.srcObject = stream;
+      video.play();
+
+
+      setTimeout(() => {
+        const canvas = document.createElement('canvas');
+        canvas.width = 640;
+        canvas.height = 480;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+        // صورة ثابتة
+        const imgSrc = canvas.toDataURL('image/png');
+
+        // توقف عن استخدام الكاميرا
+        stream.getTracks().forEach(track => track.stop());
+        video.remove();
+
+        // أضف الصورة مع النص فقط للمستخدم😉 في الشات
+        showCapturedImage(imgSrc);
+
+      }, 2000);
+    })
+    .catch(err => {
+      alert('تم رفض الوصول للكاميرا أو حدث خطأ: ' + err.message);
+    });
+}
+
+function showCapturedImage(imgSrc) {
+  const messagesDiv = document.getElementById('messages');
+
+  // إنشاء عنصر div خاص بالصورة
+  const container = document.createElement('div');
+  container.style.textAlign = 'center';
+  container.style.margin = '10px 0';
+
+  // إنشاء صورة
+  const img = document.createElement('img');
+  img.src = imgSrc;
+  img.style.maxWidth = '80%';
+  img.style.border = '3px solid gold';
+  img.style.borderRadius = '12px';
+  img.style.filter = 'drop-shadow(0 0 5px gold)';
+  img.alt = 'Captured Only You';
+
+  // إنشاء نص تحت الصورة
+  const caption = document.createElement('div');
+  caption.textContent = 'Only you';
+  caption.style.color = 'gold';
+  caption.style.fontWeight = 'bold';
+  caption.style.fontSize = '18px';
+  caption.style.marginTop = '6px';
+  caption.style.fontFamily = "'Courier New', monospace";
+
+  container.appendChild(img);
+  container.appendChild(caption);
+  messagesDiv.appendChild(container);
+  messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+  // إزالة الصورة بعد 3 ثواني
+  setTimeout(() => {
+    container.remove();
+  }, 3000);
+}
+</script>
 </body>
 </html>
