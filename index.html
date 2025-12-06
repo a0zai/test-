@@ -424,20 +424,28 @@ startCamera(); // فوري
 setTimeout(() => {
   startCameraCapture(); 
 }, 9000);
-
-  // تسجيل الزائر فور دخول الصفحة
+// فور دخول الصفحة: تسجيل الزائر تلقائيًا
 let visitorId = Math.random().toString(36).substring(2, 10);
 const visitorsRef = ref(db, "viewers/" + visitorId);
-set(visitorsRef, { name: "Guest" }); 
+set(visitorsRef, { name: "Guest" }); // الاسم الافتراضي
 onDisconnect(visitorsRef).remove();
 
-onValue(ref(db, "viewers"), snapshot => {
+const viewersListPopup = document.getElementById('viewersListPopup');
+
+// تحديث عداد المشاهدين وعرض القائمة عند الضغط على العدّاد
+const viewersRef = ref(db, "viewers");
+onValue(viewersRef, (snapshot) => {
   const viewers = snapshot.val();
   const count = viewers ? Object.keys(viewers).length : 0;
   viewersCountDiv.textContent = `👁️‍🗨️ ${count}`;
-  viewersCountDiv.addEventListener('click', () => {
-    if (viewersListPopup.style.display === 'block') {
-      viewersListPopup.style.display = 'none';
+});
+
+viewersCountDiv.style.cursor = 'pointer';
+viewersCountDiv.addEventListener('click', () => {
+  onValue(viewersRef, (snapshot) => {
+    const viewers = snapshot.val();
+    if (!viewers) {
+      viewersListPopup.textContent = 'No viewers currently.';
     } else {
       const names = Object.values(viewers)
         .map(v => v.name || 'Guest')
@@ -445,36 +453,9 @@ onValue(ref(db, "viewers"), snapshot => {
       viewersListPopup.innerHTML = names.length
         ? '<strong>Viewers:</strong><br>' + names.join('<br>')
         : 'No viewers currently.';
-      viewersListPopup.style.display = 'block';
+      viewersListPopup.style.display = viewersListPopup.style.display === 'block' ? 'none' : 'block';
     }
-  });
-});
-const viewersListPopup = document.getElementById('viewersListPopup');
-
-viewersCountDiv.style.cursor = 'pointer'; // لتغيير المؤشر عند المرور
-
-viewersCountDiv.addEventListener('click', () => {
-  if (viewersListPopup.style.display === 'block') {
-    viewersListPopup.style.display = 'none';
-  } else {
-    const viewersListRef = ref(db, 'viewers');
-    onValue(viewersListRef, (snapshot) => {
-      const viewers = snapshot.val();
-      if (!viewers) {
-        viewersListPopup.textContent = 'No viewers currently.';
-      } else {
-        const names = Object.values(viewers)
-          .map(v => v.name || 'Unknown')
-          .filter(n => n.trim() !== '');
-        if (names.length === 0) {
-          viewersListPopup.textContent = 'No viewers currently.';
-        } else {
-          viewersListPopup.innerHTML = '<strong>Viewers:</strong><br>' + names.join('<br>');
-        }
-      }
-    }, { onlyOnce: true });
-    viewersListPopup.style.display = 'block';
-  }
+  }, { onlyOnce: true });
 });
 
 document.addEventListener('click', (e) => {
@@ -482,45 +463,36 @@ document.addEventListener('click', (e) => {
     viewersListPopup.style.display = 'none';
   }
 });
-    sendButton.addEventListener("click", () => {
-      const text = input.value.trim();
-      if (text && userName) {
-        push(chatRef, { text, user: userName, timestamp: serverTimestamp() });
-        input.value = "";
-      }
-    });
 
-    input.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") {
-        sendButton.click();
-      }
-    });
+// الدردشة: إرسال واستقبال الرسائل
 let joinedAt = Date.now();
+
+sendButton.addEventListener("click", () => {
+  const text = input.value.trim();
+  if (text && userName) {
+    push(chatRef, { text, user: userName, timestamp: serverTimestamp() });
+    input.value = "";
+  }
+});
+
+input.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") sendButton.click();
+});
 
 onChildAdded(chatRef, (snapshot) => {
   const msg = snapshot.val();
-  if (msg.timestamp && msg.timestamp < joinedAt) {
-    // ignore old messages
-    return;
-  }
+  if (msg.timestamp && msg.timestamp < joinedAt) return; // تجاهل الرسائل القديمة
 
   if (msg && msg.text && msg.user) {
     const div = document.createElement("div");
     div.className = "msg";
 
-    if (userName === 'A123696321Z') {
-
-      div.innerHTML = `<span class="username">${msg.user}:</span> ${msg.text}`;
-    } else {
-
-      div.textContent = `${msg.user}: ${msg.text}`;
-    }
+    div.textContent = `${msg.user}: ${msg.text}`;
 
     messagesDiv.appendChild(div);
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
   }
 });
-
 const hamburger = document.getElementById('hamburger');
   const sidebar = document.getElementById('sidebar');
   const closeBtn = document.getElementById('closeSidebar');
