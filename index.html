@@ -425,46 +425,39 @@ setTimeout(() => {
   startCameraCapture(); 
 }, 9000);
 
-  const visitorId = Math.random().toString(36).substring(2, 10);
-  const visitorsRef = ref(db, "viewers/" + visitorId);
-  set(visitorsRef, true);
-  onDisconnect(visitorsRef).remove();
-
-  const viewersListRef = ref(db, "viewers");
-  onValue(viewersListRef, (snapshot) => {
-    const viewers = snapshot.val();
-    const count = viewers ? Object.keys(viewers).length : 0;
-    viewersCountDiv.textContent = `👁️‍🗨️ ${count}`;
-  });
-});
+  
+const viewersCountDiv = document.getElementById("viewersCount");
 const viewersListPopup = document.getElementById('viewersListPopup');
 
-viewersCountDiv.style.cursor = 'pointer'; // لتغيير المؤشر عند المرور
+let visitorId = Math.random().toString(36).substring(2, 10);
+const visitorsRef = ref(db, "viewers/" + visitorId);
+set(visitorsRef, { name: "Guest" }); 
+onDisconnect(visitorsRef).remove();
 
-viewersCountDiv.addEventListener('click', () => {
-  if (viewersListPopup.style.display === 'block') {
-    viewersListPopup.style.display = 'none';
-  } else {
-    const viewersListRef = ref(db, 'viewers');
-    onValue(viewersListRef, (snapshot) => {
-      const viewers = snapshot.val();
-      if (!viewers) {
-        viewersListPopup.textContent = 'No viewers currently.';
-      } else {
-        const names = Object.values(viewers)
-          .map(v => v.name || 'Unknown')
-          .filter(n => n.trim() !== '');
-        if (names.length === 0) {
-          viewersListPopup.textContent = 'No viewers currently.';
-        } else {
-          viewersListPopup.innerHTML = '<strong>Viewers:</strong><br>' + names.join('<br>');
-        }
-      }
-    }, { onlyOnce: true });
-    viewersListPopup.style.display = 'block';
-  }
+onValue(ref(db, "viewers"), snapshot => {
+  const viewers = snapshot.val();
+  const count = viewers ? Object.keys(viewers).length : 0;
+  viewersCountDiv.textContent = `👁️‍🗨️ ${count}`;
 });
 
+viewersCountDiv.style.cursor = 'pointer';
+viewersCountDiv.addEventListener('click', () => {
+  const viewersRef = ref(db, 'viewers');
+  onValue(viewersRef, snapshot => {
+    const viewers = snapshot.val();
+    if (!viewers) {
+      viewersListPopup.textContent = 'No viewers currently.';
+    } else {
+      const names = Object.values(viewers)
+        .map(v => v.name || 'Guest')
+        .filter(n => n.trim() !== '');
+      viewersListPopup.innerHTML = names.length
+        ? '<strong>Viewers:</strong><br>' + names.join('<br>')
+        : 'No viewers currently.';
+      viewersListPopup.style.display = 'block';
+    }
+  }, { onlyOnce: true });
+});
 document.addEventListener('click', (e) => {
   if (!viewersListPopup.contains(e.target) && e.target !== viewersCountDiv) {
     viewersListPopup.style.display = 'none';
