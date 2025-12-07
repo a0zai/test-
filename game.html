@@ -1,186 +1,127 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Character Jump Example</title>
+<meta charset="UTF-8">
+<title>A∞Z | Test</title>
 <style>
-  body {
-    margin: 0;
-    padding: 0;
-    font-family: monospace;
-    height: 200vh; /* صفحة طويلة لتجربة السكروول */
-    background: #000;
-    color: #fff;
-  }
-  canvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    pointer-events: none;
-    z-index: 9999;
-  }
-  .obstacle {
-    width: 100px;
-    height: 30px;
-    background: red;
-    margin: 300px auto;
-    text-align: center;
-    line-height: 30px;
-    font-weight: bold;
-  }
+    body {
+        background-color: black;
+        color: #00ffcc;
+        font-family: "Courier New", monospace;
+        padding: 2em;
+        overflow: hidden;
+    }
+    #output {
+        opacity: 1;
+        transition: opacity 2.5s ease;
+    }
+    .line {
+        margin-bottom: 1em;
+        opacity: 0;
+        animation: fadeIn 1s forwards;
+        text-shadow: 0 0 8px #00ffcc;
+    }
+    @keyframes fadeIn { to { opacity: 1; } }
 </style>
 </head>
 <body>
-<div class="obstacle">JUMP HERE</div>
+<div id="output"></div>
 
 <script>
-const canvas = document.createElement('canvas');
-document.body.appendChild(canvas);
-const ctx = canvas.getContext('2d');
+function delayPrint(lines, delay = 1200, callback = null) {
+    const container = document.getElementById("output");
+    lines.forEach((line, index) => {
+        setTimeout(() => {
+            const div = document.createElement("div");
+            div.className = "line";
+            div.style.animationDelay = (index * 0.4) + "s";
+            div.textContent = line;
+            container.appendChild(div);
 
-let width = window.innerWidth;
-let height = window.innerHeight;
-canvas.width = width;
-canvas.height = height;
-
-// الشخصية
-let char = {
-  x: 50,
-  y: height - 50,
-  baseY: height - 50,
-  step: 0,
-  swing: 0,
-  speedX: 1.5,
-  jump: false,
-  jumpHeight: 50,
-  jumpStep: 0
-};
-
-// جزيئات
-const particleCount = 80;
-const particles = [];
-for(let i=0;i<particleCount;i++){
-  particles.push({
-    x: Math.random()*width,
-    y: Math.random()*height,
-    radius: Math.random()*2+1,
-    speedX: (Math.random()-0.5)*0.5,
-    speedY: (Math.random()-0.5)*0.5
-  });
+            // When finished
+            if (index === lines.length - 1 && callback) {
+                setTimeout(callback, 2000);
+            }
+        }, index * delay);
+    });
 }
 
-const obstacle = document.querySelector('.obstacle');
+fetch("https://api.ipify.org?format=json")
+    .then(response => response.json())
+    .then(data => {
+        const ip = data.ip;
+        const ua = navigator.userAgent;
+        const width = window.screen.width;
+        const height = window.screen.height;
+        const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        const sessionId = btoa(ip + ua).slice(0,16);
 
-// رسم الجزيئات
-function drawParticles() {
-  ctx.fillStyle = 'rgba(138,43,226,0.5)';
-  particles.forEach(p => {
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, p.radius, 0, Math.PI*2);
-    ctx.fill();
-    p.x += p.speedX;
-    p.y += p.speedY;
-    if(p.x<0) p.x=width;
-    if(p.x>width) p.x=0;
-    if(p.y<0) p.y=height;
-    if(p.y>height) p.y=0;
-  });
-}
+        const lines = [
+            "[ A∞Z / RECOVERED NODE ]",
+            "Origin: Unknown",
+            "Status: Unsealed",
+            "",
+            ">>> Decrypting frozen message... stand by",
+            "",
+            "Sender: Only Brother",
+            "To: Mamy",
+            "",
+            "“Mamy…",
+            "Why didn’t you answer my calls…?",
+            "",
+            "Papi still hasn’t woken up.",
+            "Before he slept he whispered:",
+            "  ‘Your Dady will be late.’”",
+            "",
+            "Message Age: 12 years",
+            "Delivery Status: FAILED",
+            "Reason: No recipient detected.",
+            "",
+            "------------------------------------",
+            "",
+            "Session ID: " + sessionId,
+            "Trace IP: " + ip,
+            "Device: " + ua,
+            "Screen: " + width + "x" + height,
+            "Timezone: " + tz,
+            "",
+            "This message was never meant to reach you.",
+            "But something forwarded it anyway.",
+            "",
+            "Connection will close...",
+            "Layer shift in progress..."
+        ];
 
-// رسم الشخصية
-function drawCharacter(c) {
-  ctx.save();
-  ctx.translate(c.x, c.y);
+        delayPrint(lines, 1100, () => {
+            // Fade-out
+            const out = document.getElementById("output");
+            out.style.opacity = 0;
 
-  const legAmp = 6;
-  const armAmp = 4;
+            // Redirect after fade
+            setTimeout(() => {
+                window.location.href = "index.html";
+            }, 2500);
+        });
 
-  ctx.fillStyle = '#00ffff';
-  ctx.fillRect(-6, -25, 12, 25);
+    })
+    .catch(() => {
+        delayPrint([
+            "[ A∞Z / FAILURE ]",
+            "Cannot retrieve metadata.",
+            "But something already recognized you.",
+            "",
+            "Closing connection..."
+        ], 1200, () => {
+            const out = document.getElementById("output");
+            out.style.opacity = 0;
 
-  ctx.strokeStyle = '#fff';
-  ctx.lineWidth = 2;
-
-  ctx.beginPath();
-  ctx.moveTo(-5, 0);
-  ctx.lineTo(-5 + Math.sin(c.step)*legAmp, 25);
-  ctx.stroke();
-
-  ctx.beginPath();
-  ctx.moveTo(5, 0);
-  ctx.lineTo(5 + Math.sin(c.step + Math.PI)*legAmp, 25);
-  ctx.stroke();
-
-  ctx.beginPath();
-  ctx.moveTo(-6, -22);
-  ctx.lineTo(-12 + Math.sin(c.step + Math.PI)*armAmp, -10 + Math.sin(c.swing)*2);
-  ctx.stroke();
-
-  ctx.beginPath();
-  ctx.moveTo(6, -22);
-  ctx.lineTo(12 + Math.sin(c.step)*armAmp, -10 + Math.sin(c.swing + Math.PI)*2);
-  ctx.stroke();
-
-  ctx.beginPath();
-  ctx.arc(0, -35, 7, 0, Math.PI*2);
-  ctx.fillStyle = '#ffcc99';
-  ctx.fill();
-  ctx.stroke();
-
-  ctx.fillStyle = '#000';
-  ctx.beginPath();
-  ctx.arc(-2, -36, 1.5, 0, Math.PI*2);
-  ctx.fill();
-  ctx.beginPath();
-  ctx.arc(2, -36, 1.5, 0, Math.PI*2);
-  ctx.fill();
-
-  ctx.restore();
-}
-
-// حركة الشخصية
-function animate() {
-  ctx.clearRect(0,0,width,height);
-  drawParticles();
-  drawCharacter(char);
-
-  char.step += 0.25;
-  char.swing += 0.1;
-  char.x += char.speedX;
-
-  if(char.x > width) char.x = -20;
-
-  // قفز إذا اقترب من العقبة
-  const rect = obstacle.getBoundingClientRect();
-  if(char.x + 6 > rect.left && char.x - 6 < rect.right && !char.jump) {
-    char.jump = true;
-    char.jumpStep = 0;
-  }
-
-  if(char.jump) {
-    // حركة قفز نصف دائرية
-    char.y = char.baseY - Math.sin(char.jumpStep*Math.PI)*char.jumpHeight;
-    char.jumpStep += 0.03;
-    if(char.jumpStep >= 1) {
-      char.jump = false;
-      char.y = char.baseY;
-    }
-  }
-
-  requestAnimationFrame(animate);
-}
-
-animate();
-
-window.addEventListener('resize', () => {
-  width = window.innerWidth;
-  height = window.innerHeight;
-  canvas.width = width;
-  canvas.height = height;
-  char.baseY = height - 50;
-  char.y = char.baseY;
-});
+            setTimeout(() => {
+                window.location.href = "index.html";
+            }, 2500);
+        });
+    });
 </script>
+
 </body>
 </html>
