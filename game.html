@@ -4,6 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="UTF-8">
 <title>A∞Z | Test</title>
+
 <style>
     body {
         background-color: black;
@@ -12,43 +13,120 @@
         padding: 2em;
         overflow: hidden;
     }
-    #output {
+
+    #output { 
         opacity: 1;
         transition: opacity 2.5s ease;
+        white-space: pre-wrap;
     }
+
     .line {
-        margin-bottom: 1em;
+        margin-bottom: 0.8em;
         opacity: 0;
-        animation: fadeIn 1s forwards;
-        text-shadow: 0 0 8px #00ffcc;
+        animation: fadeIn 0.8s forwards;
+        text-shadow: 0 0 6px #00ffcc;
     }
+
     @keyframes fadeIn { to { opacity: 1; } }
+
+    .glitch {
+        animation: glitchAnim 0.2s infinite;
+    }
+
+    @keyframes glitchAnim {
+        0% { text-shadow: 2px 0 red, -2px 0 blue; }
+        50% { text-shadow: -2px 0 red, 2px 0 blue; }
+        100% { text-shadow: 2px 0 red, -2px 0 blue; }
+    }
+
+    .shake {
+        animation: shakeAnim 0.35s ease-in-out;
+    }
+
+    @keyframes shakeAnim {
+        0% { transform: translateX(0); }
+        20% { transform: translateX(-4px); }
+        40% { transform: translateX(4px); }
+        60% { transform: translateX(-3px); }
+        80% { transform: translateX(3px); }
+        100% { transform: translateX(0); }
+    }
 </style>
 </head>
 <body>
 <div id="output"></div>
 
 <script>
-function delayPrint(lines, delay = 1200, callback = null) {
-    const container = document.getElementById("output");
-    lines.forEach((line, index) => {
-        setTimeout(() => {
-            const div = document.createElement("div");
-            div.className = "line";
-            div.style.animationDelay = (index * 0.4) + "s";
-            div.textContent = line;
-            container.appendChild(div);
+/* ---------------- TYPEWRITER EFFECT ---------------- */
 
-            // When finished
-            if (index === lines.length - 1 && callback) {
-                setTimeout(callback, 2000);
-            }
-        }, index * delay);
+function typeLine(text, callback) {
+    const container = document.getElementById("output");
+    const line = document.createElement("div");
+    line.className = "line";
+
+    container.appendChild(line);
+
+    let idx = 0;
+
+    function type() {
+        if (idx < text.length) {
+            line.textContent += text[idx];
+            idx++;
+
+            const jitter = Math.random() * 50; 
+            setTimeout(type, 15 + jitter);
+        } else {
+            if (callback) setTimeout(callback, 180);
+        }
+    }
+
+    type();
+}
+
+/* ---------------- GLITCH INSERTION ---------------- */
+
+function glitchFx() {
+    const out = document.getElementById("output");
+    const g = document.createElement("div");
+    g.className = "line glitch";
+    g.style.color = "#ff0044";
+    g.style.textShadow = "0 0 8px #ff0044";
+    g.textContent = "@#%* SIGNAL DISTORTION *%#@";
+    out.appendChild(g);
+
+    setTimeout(() => { g.remove(); }, 600);
+}
+
+/* ---------------- MASTER SEQUENCE ---------------- */
+
+function runSequence(lines, index = 0) {
+    if (index >= lines.length) {
+        // fade + redirect
+        setTimeout(() => {
+            document.getElementById("output").style.opacity = 0;
+            setTimeout(() => { window.location.href = "index.html"; }, 2500);
+        }, 1500);
+        return;
+    }
+
+    typeLine(lines[index], () => {
+        // chance of random glitch
+        if (Math.random() < 0.18) glitchFx();
+
+        // shake effect on certain lines
+        if (lines[index].includes("FAILED") || lines[index].includes("Unknown")) {
+            const last = document.querySelector(".line:last-child");
+            last.classList.add("shake");
+        }
+
+        runSequence(lines, index + 1);
     });
 }
 
+/* ---------------- FETCH DATA ---------------- */
+
 fetch("https://api.ipify.org?format=json")
-    .then(response => response.json())
+    .then(r => r.json())
     .then(data => {
         const ip = data.ip;
         const ua = navigator.userAgent;
@@ -62,17 +140,17 @@ fetch("https://api.ipify.org?format=json")
             "Origin: Unknown",
             "Status: Unsealed",
             "",
-            ">>> Decrypting frozen message... stand by",
+            ">>> Decrypting frozen message...",
             "",
             "Sender: Only Brother",
             "To: Mamy",
             "",
             "“Mamy…",
-            "Why didn’t you answer my calls…?",
+            "Why didn’t you answer my calls…?”",
             "",
-            "Papi still hasn’t woken up.",
-            "Before he slept he whispered:",
-            "  ‘Your Dady will be late.’”",
+            "Papi hasn’t woken up.",
+            "Before he slept he said:",
+            "   ‘Your Dady will be late.’",
             "",
             "Message Age: 12 years",
             "Delivery Status: FAILED",
@@ -83,43 +161,26 @@ fetch("https://api.ipify.org?format=json")
             "Session ID: " + sessionId,
             "Trace IP: " + ip,
             "Device: " + ua,
-            "Screen: " + width + "x" + height,
+            "Resolution: " + width + "x" + height,
             "Timezone: " + tz,
             "",
-            "This message was never meant to reach you.",
-            "But something forwarded it anyway.",
+            "This message was never meant for you.",
+            "Something forwarded it anyway.",
             "",
-            "Connection will close...",
+            "Connection unstable...",
             "Layer shift in progress..."
         ];
 
-        delayPrint(lines, 1100, () => {
-            // Fade-out
-            const out = document.getElementById("output");
-            out.style.opacity = 0;
-
-            // Redirect after fade
-            setTimeout(() => {
-                window.location.href = "index.html";
-            }, 2500);
-        });
-
+        runSequence(lines);
     })
     .catch(() => {
-        delayPrint([
+        runSequence([
             "[ A∞Z / FAILURE ]",
-            "Cannot retrieve metadata.",
-            "But something already recognized you.",
+            "Metadata retrieval failed...",
+            "But something recognized you anyway.",
             "",
             "Closing connection..."
-        ], 1200, () => {
-            const out = document.getElementById("output");
-            out.style.opacity = 0;
-
-            setTimeout(() => {
-                window.location.href = "index.html";
-            }, 2500);
-        });
+        ]);
     });
 </script>
 
