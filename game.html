@@ -74,7 +74,7 @@ function typeLine(text, callback) {
             idx++;
 
             const jitter = Math.random() * 50; 
-            setTimeout(type, 15 + jitter);
+            setTimeout(type, 90 + jitter);
         } else {
             if (callback) setTimeout(callback, 180);
         }
@@ -157,15 +157,6 @@ fetch("https://api.ipify.org?format=json")
             "Reason: No recipient detected.",
             "",
             "------------------------------------",
-            "",
-            "Session ID: " + sessionId,
-            "Trace IP: " + ip,
-            "Device: " + ua,
-            "Resolution: " + width + "x" + height,
-            "Timezone: " + tz,
-            "",
-            "This message was never meant for you.",
-            "Something forwarded it anyway.",
             "",
             "Connection unstable...",
             "Layer shift in progress..."
