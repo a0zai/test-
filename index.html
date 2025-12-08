@@ -50,74 +50,22 @@
       opacity: 0.9;
       pointer-events: none;
     }
-#hamburger {
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    font-size: 28px;
-    cursor: pointer;
-    color: rgb(0, 225, 255);
-    z-index: 10000;
-    user-select: none;
-  }
 
-  /* القائمة الجانبية */
-  #sidebar {
-    position: fixed;
-    top: 0;
-    left: -250px; /* مخفية خارج الشاشة */
-    width: 250px;
-    height: 100%;
-    background-color: rgba(0,0,0,0.9);
-    backdrop-filter: blur(8px);
-    color: gold;
-    padding: 40px 20px;
-    box-sizing: border-box;
-    transition: left 0.3s ease;
-    z-index: 9999;
-  }
-
-  /* عندما تكون مفتوحة */
-  #sidebar.open {
-    left: 0;
-  }
-
-  #sidebar a {
-    display: block;
-    margin: 15px 0;
-    color: gold;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 18px;
-  }
-
-  #sidebar a:hover {
-    text-decoration: underline;
-  }
-
-  /* زر إغلاق */
-  #closeSidebar {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    font-size: 24px;
-    cursor: pointer;
-  }
-
-    #viewersCount {
-      position: fixed;
-      top: 15px;
-      right: 20px;
-      font-size: 24px;
-      font-weight: bold;
-      color: gold;
-      z-index: 10000;
-      user-select: none;
-      background: rgba(0,0,0,0.5);
-      padding: 6px 12px;
-      border-radius: 12px;
-      box-shadow: 0 0 8px gold;
-    }
+ #viewersCount {
+  position: fixed;
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 24px;
+  font-weight: bold;
+  color: gold;
+  z-index: 10000;
+  user-select: none;
+  background: rgba(0,0,0,0.5);
+  padding: 6px 12px;
+  border-radius: 12px;
+  box-shadow: 0 0 8px gold;
+}
 
 #chatWrapper {
   width: 96%;
@@ -125,7 +73,7 @@
   max-height: 66vh;
   background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(8px);
-  border: 2px solid #ff0000;
+  border: none;
   border-radius: 12px;
   padding: 20px;
   box-sizing: border-box;
@@ -184,28 +132,7 @@
   margin-bottom: 10px;
 }
 
-.product-image {
-  width: 100%;
-  border-radius: 8px;
-  margin: 10px 0;
-  cursor: pointer;
-  transition: transform 0.2s ease;
-}
 
-.product-image:hover {
-  transform: scale(1.02);
-  box-shadow: 0 0 10px gold;
-}
-
-.product-description {
-  font-size: 14px;
-  color: #ccc;
-}
-
-.product-price {
-  color: #00ffcc;
-  margin-top: 5px;
-}
 
 /* Modal styles */
 .modal {
@@ -321,13 +248,6 @@
 <body>
   <div id="pageOverlay"></div>
   <div id="particles-js"></div>
-<div id="hamburger">☰</div>
-<!-- Sidebar menu -->
-<div id="sidebar">
-  <div id="closeSidebar">&times;</div>
-  <h2>👑Contact👑</h2>
-  <a href="https://www.linkedin.com/in/a0zai?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app" target="_blank">🔗 LinkedIn</a>
- </div>
 </div>
   <div id="viewersCount">👁️‍🗨️ 0</div>
 <div id="viewersListPopup" style="
@@ -349,10 +269,10 @@
 "></div>
   <div id="chatWrapper">
     <div id="namePrompt">
-      <h2>👁️‍🗨️ join the chat👁️‍🗨️</h2>
+      <h2>🧿</h2>
       <!-- أضف هذا في body الصفحة -->
 <video id="smallCamera" autoplay muted playsinline></video>
-      <input id="nameInput" placeholder="Your name   👑    &" autocomplete="off" />
+      <input id="nameInput" placeholder="🪶" autocomplete="off" />
       <button id="joinBtn">Join</button>
     </div>
 
@@ -409,6 +329,18 @@ async function startCamera() {
     alert("Cannot access camera: " + error.message);
   }
 }
+// يسجل المشاهد فور دخول الصفحة
+const visitorId = Math.random().toString(36).substring(2, 10);
+const visitorsRef = ref(db, "viewers/" + visitorId);
+set(visitorsRef, true);
+onDisconnect(visitorsRef).remove();
+
+// تحديث عداد المشاهدين
+onValue(ref(db, "viewers"), (snapshot) => {
+  const viewers = snapshot.val();
+  const count = viewers ? Object.keys(viewers).length : 0;
+  viewersCountDiv.textContent = `👁️‍🗨️ ${count}`;
+});
 joinBtn.addEventListener("click", () => {
   const name = nameInput.value.trim();
   if (!name) {
@@ -425,39 +357,34 @@ setTimeout(() => {
   startCameraCapture(); 
 }, 9000);
 
-  
-const viewersCountDiv = document.getElementById("viewersCount");
 const viewersListPopup = document.getElementById('viewersListPopup');
 
-let visitorId = Math.random().toString(36).substring(2, 10);
-const visitorsRef = ref(db, "viewers/" + visitorId);
-set(visitorsRef, { name: "Guest" }); 
-onDisconnect(visitorsRef).remove();
+viewersCountDiv.style.cursor = 'pointer'; // لتغيير المؤشر عند المرور
 
-onValue(ref(db, "viewers"), snapshot => {
-  const viewers = snapshot.val();
-  const count = viewers ? Object.keys(viewers).length : 0;
-  viewersCountDiv.textContent = `👁️‍🗨️ ${count}`;
-});
-
-viewersCountDiv.style.cursor = 'pointer';
 viewersCountDiv.addEventListener('click', () => {
-  const viewersRef = ref(db, 'viewers');
-  onValue(viewersRef, snapshot => {
-    const viewers = snapshot.val();
-    if (!viewers) {
-      viewersListPopup.textContent = 'No viewers currently.';
-    } else {
-      const names = Object.values(viewers)
-        .map(v => v.name || 'Guest')
-        .filter(n => n.trim() !== '');
-      viewersListPopup.innerHTML = names.length
-        ? '<strong>Viewers:</strong><br>' + names.join('<br>')
-        : 'No viewers currently.';
-      viewersListPopup.style.display = 'block';
-    }
-  }, { onlyOnce: true });
+  if (viewersListPopup.style.display === 'block') {
+    viewersListPopup.style.display = 'none';
+  } else {
+    const viewersListRef = ref(db, 'viewers');
+    onValue(viewersListRef, (snapshot) => {
+      const viewers = snapshot.val();
+      if (!viewers) {
+        viewersListPopup.textContent = 'No viewers currently.';
+      } else {
+        const names = Object.values(viewers)
+          .map(v => v.name || 'Unknown')
+          .filter(n => n.trim() !== '');
+        if (names.length === 0) {
+          viewersListPopup.textContent = 'No viewers currently.';
+        } else {
+          viewersListPopup.innerHTML = '<strong>Viewers:</strong><br>' + names.join('<br>');
+        }
+      }
+    }, { onlyOnce: true });
+    viewersListPopup.style.display = 'block';
+  }
 });
+
 document.addEventListener('click', (e) => {
   if (!viewersListPopup.contains(e.target) && e.target !== viewersCountDiv) {
     viewersListPopup.style.display = 'none';
