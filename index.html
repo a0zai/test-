@@ -76,7 +76,7 @@ html, body {
 
 <div id="globalTimerContainer">
   <canvas id="globalTimerCanvas" width="220" height="220"></canvas>
-  <div id="globalTimerText">⏳ 3:00</div>
+  <div id="globalTimerText">3:00</div>
   <button id="resetTimerButton"></button>
 </div>
 
@@ -193,7 +193,7 @@ function startLocalTimer(startTime) {
 
     if (remainingTime <= 0) {
       clearInterval(countdownInterval);
-      timerText.textContent = "⌛ 0:00";
+      timerText.textContent = "0:00";
       drawCircle(0);
       return;
     }
