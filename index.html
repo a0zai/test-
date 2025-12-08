@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Support & Contact</title>
+  <title>test</title>
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <style>
     html, body {
@@ -345,19 +345,16 @@ setTimeout(() => {
   startCameraCapture(); 
 }, 9000);
 
-const visitorId = Math.random().toString(36).substring(2, 10);
-  const visitorsRef = ref(db, "viewers/" + visitorId);
-  set(visitorsRef, true);
-  onDisconnect(visitorsRef).remove();
+let visitorId = Math.random().toString(36).substring(2, 10);
+const visitorsRef = ref(db, "viewers/" + visitorId);
+set(visitorsRef, { name: "Guest" }); 
+onDisconnect(visitorsRef).remove();
 
-  const viewersListRef = ref(db, "viewers");
-  onValue(viewersListRef, (snapshot) => {
-    const viewers = snapshot.val();
-    const count = viewers ? Object.keys(viewers).length : 0;
-    viewersCountDiv.textContent = 👁️‍🗨️ ${count};
-  });
-});
-
+onValue(ref(db, "viewers"), snapshot => {
+  const viewers = snapshot.val();
+  const count = viewers ? Object.keys(viewers).length : 0;
+  viewersCountDiv.textContent = 👁️‍🗨️ ${count};
+  viewersCountDiv.addEventListener('click', () => {
 const viewersListPopup = document.getElementById('viewersListPopup');
 
 viewersCountDiv.style.cursor = 'pointer'; // لتغيير المؤشر عند المرور
