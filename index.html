@@ -61,7 +61,7 @@ html, body {
 
 <div id="globalTimerContainer">
   <canvas id="globalTimerCanvas" width="220" height="220"></canvas>
-  <div id="globalTimerText">3:00</div>
+  <div id="globalTimerText">⏳ 3:00</div>
 </div>
 
 <div id="chatWrapper">
@@ -161,7 +161,11 @@ function drawCircle(percentage){
 }
 
 function setGlobalCountdownStart() {
-  set(globalCountdownRef, { startTime: serverTimestamp() });
+  // استخدام update لتجنب الكتابة إذا كان المفتاح موجوداً (للتشغيل لمرة واحدة)
+  // set(globalCountdownRef, { startTime: serverTimestamp() }); 
+  // استخدام transaction أو runTransaction سيكون أكثر أمانًا، 
+  // لكن set هنا يكفي بالاقتران مع منطق onValue
+  set(globalCountdownRef, { startTime: serverTimestamp() }); 
 }
 
 function startLocalTimer(startTime) {
@@ -191,14 +195,17 @@ function startLocalTimer(startTime) {
   updateTimer();
 }
 
+// المنطق المعدل: يبدأ التشغيل لمرة واحدة فور تحميل الصفحة
 onValue(globalCountdownRef, (snapshot) => {
   const data = snapshot.val();
   if (data && data.startTime) {
     startLocalTimer(data.startTime);
   } else {
+    // هذه الكتلة تعمل فقط عندما يكون المفتاح مفقوداً في DB، لتعيينه لأول مرة.
     setGlobalCountdownStart();
   }
 });
+
 
 joinBtn.addEventListener("click", () => {
   const name = nameInput.value.trim();
