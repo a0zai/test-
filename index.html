@@ -18,7 +18,6 @@
       align-items: center;
       text-align: center;
     }
-    
     #pageOverlay {
       position: fixed;
       top: 0; left: 0;
@@ -29,259 +28,71 @@
       opacity: 1;
       transition: opacity 3s ease;
     }
-    #pageOverlay.fade-out {
-      opacity: 0;
-      pointer-events: none;
+    #pageOverlay.fade-out { opacity: 0; pointer-events: none; }
+    #particles-js { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+    #viewersCount {
+      position: fixed; top: 15px; left: 50%; transform: translateX(-50%);
+      font-size: 24px; font-weight: bold; color: gold; z-index: 10000;
+      user-select: none; background: rgba(0,0,0,0.5); padding: 6px 12px;
+      border-radius: 12px; box-shadow: 0 0 8px gold; cursor: pointer;
     }
-    #particles-js {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      z-index: 0;
-      pointer-events: none;
+    #viewersListPopup {
+      position: fixed; top: 50px; right: 20px; max-height: 200px; width: 200px;
+      overflow-y: auto; background: rgba(0,0,0,0.8); color: gold;
+      border: 1px solid gold; border-radius: 8px; padding: 10px;
+      font-size: 14px; display: none; z-index: 10001; user-select: none;
     }
-    #overlayImage {
-      position: fixed;
-      top: 0; left: 0;
-      width: 90%;
-      height: 100%;
-      object-fit: cover;
-      z-index: -1;
-      opacity: 0.9;
-      pointer-events: none;
+    #chatWrapper {
+      width: 96%; max-width: 700px; max-height: 66vh;
+      background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(8px);
+      border-radius: 12px; padding: 20px; position: fixed; bottom: 20px;
+      left: 50%; transform: translateX(-50%); z-index: 10; display: flex; flex-direction: column;
     }
-#viewersCount {
-  position: fixed;
-  top: 15px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 24px;
-  font-weight: bold;
-  color: gold;
-  z-index: 10000;
-  user-select: none;
-  background: rgba(0,0,0,0.5);
-  padding: 6px 12px;
-  border-radius: 12px;
-  box-shadow: 0 0 8px gold;
-}
-#chatWrapper {
-  width: 96%;
-  max-width: 700px;
-  max-height: 66vh;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(8px);
-  border: none;
-  border-radius: 12px;
-  padding: 20px;
-  box-sizing: border-box;
-  position: fixed;
-  bottom: 20px;      
-  left: 50%;
-  transform: translateX(-50%);  
-  z-index: 10;
-  display: flex;
-  flex-direction: column;
-}
-#nameInput {
-  width: 250px;         /* حجم العرض */
-  padding: 15px 20px;   /* مساحة داخلية أكبر لارتفاع الحقل */
-  font-size: 16px;      /* حجم الخط */
-  border-radius: 8px;
-  border: 2px solid rgb(17, 0, 255);
-  background-color: #111;
-  color: rgb(255, 0, 0);
-  font-family: 'Courier New', monospace;
-  box-sizing: border-box;
-}
-#smallCamera {
-  position: fixed;
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 160px;
-  height: 120px;
-  border-radius: 50% / 60%;
-  object-fit: cover;
-  z-index: 10000;
-}
-    #messages {
-      flex: 1;                 /* يشغل أكبر مساحة ممكنة */
-      overflow-y: auto;
-      padding: 20px;
-      border: 1px solid #00ffcc;
-      border-radius: 8px;
-      word-wrap: break-word;
-      display: none;
-      backdrop-filter: blur(6px);
-      margin-bottom: 10px;
-      max-height: 55vh;        /* ارتفاع مناسب للرسائل */
-      color: #00ffcc;
-      font-size: 16px;
-      text-align: left;
+    #nameInput { width: 250px; padding: 15px 20px; font-size: 16px; border-radius: 8px;
+      border: 2px solid rgb(17, 0, 255); background-color: #111; color: rgb(255,0,0);
+      font-family: 'Courier New', monospace; box-sizing: border-box;
     }
-.mirror-note-section {
-  margin-top: 40px;
-  color: gold;
-}
-
-.section-title {
-  color: gold;
-  margin-bottom: 10px;
-}
-
-/* Modal styles */
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 99999;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  backdrop-filter: blur(8px);
-  background-color: rgba(0,0,0,0.8);
-}
-
-.modal-content {
-  background-color: #111;
-  margin: 10% auto;
-  padding: 20px;
-  border: 2px solid gold;
-  width: 90%;
-  max-width: 400px;
-  color: gold;
-  border-radius: 8px;
-  text-align: left;
-  box-shadow: 0 0 20px gold;
-}
-
-.modal-content h3 {
-  margin-top: 0;
-  color: #00ffcc;
-}
-
-.modal-content ul {
-  padding-left: 20px;
-  margin-top: 10px;
-}
-
-.modal-content li {
-  margin-bottom: 10px;
-  word-break: break-all;
-}
-
-.modal-content a {
-  color: #00ffcc;
-}
-
-.close {
-  color: #ff5555;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.close:hover {
-  color: #ff0000;
-}
-    #inputBar {
-      display: none;
-      gap: 10px;
-      margin-top: 10px;
-      align-items: center;
+    #smallCamera { position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+      width: 160px; height: 120px; border-radius: 50% / 60%; object-fit: cover; z-index: 10000;
     }
-    #inputBar input {
-      flex-grow: 1;
-      padding: 10px;
-      font-size: 19px;
-      border-radius: 6px;
-      border: 1px solid #00ffcc;
-      background-color: #111;
-      color: gold;
-      font-family: 'Courier New', monospace;
+    #messages { flex: 1; overflow-y: auto; padding: 20px; border: 1px solid #00ffcc;
+      border-radius: 8px; word-wrap: break-word; display: none; backdrop-filter: blur(6px);
+      margin-bottom: 10px; max-height: 55vh; color: #00ffcc; font-size: 16px; text-align: left;
     }
-    #inputBar button {
-      padding: 10px 20px;
-      font-size: 19px;
-      border-radius: 6px;
-      border: 2px solid gold;
-      background: transparent;
-      color: gold;
-      cursor: pointer;
-      font-weight: bold;
-      transition: background-color 0.3s ease;
-    }
-    #inputBar button:hover {
-      background-color: gold;
-      color: black;
-    }
-
-    /* زر مسح الرسائل */
-    #clearButton {
-      margin-top: 10px;
-      align-self: flex-end;
-      padding: 8px 16px;
-      font-size: 14px;
-      border-radius: 8px;
-      border: 2px solid #ff5555;
-      background: transparent;
-      color: #ff5555;
-      cursor: pointer;
-      font-weight: bold;
-      user-select: none;
-      transition: background-color 0.3s ease;
-    }
-    #clearButton:hover {
-      background-color: #ff5555;
-      color: black;
-    }
-
+    #inputBar { display: none; gap: 10px; margin-top: 10px; align-items: center; }
+    #inputBar input { flex-grow: 1; padding: 10px; font-size: 19px; border-radius: 6px; border: 1px solid #00ffcc; background-color: #111; color: gold; font-family: 'Courier New', monospace; }
+    #inputBar button { padding: 10px 20px; font-size: 19px; border-radius: 6px; border: 2px solid gold; background: transparent; color: gold; cursor: pointer; font-weight: bold; }
+    #inputBar button:hover { background-color: gold; color: black; }
+    #clearButton { margin-top: 10px; align-self: flex-end; padding: 8px 16px; font-size: 14px; border-radius: 8px; border: 2px solid #ff5555; background: transparent; color: #ff5555; cursor: pointer; font-weight: bold; user-select: none; transition: background-color 0.3s ease; }
+    #clearButton:hover { background-color: #ff5555; color: black; }
   </style>
 </head>
 <body>
   <div id="pageOverlay"></div>
   <div id="particles-js"></div>
-  <div id="viewersCount">👁️‍🗨️</div>
-<div id="viewersListPopup" style="
-  position: fixed;
-  top: 50px;
-  right: 20px;
-  max-height: 200px;
-  width: 200px;
-  overflow-y: auto;
-  background: rgba(0,0,0,0.8);
-  color: gold;
-  border: 1px solid gold;
-  border-radius: 8px;
-  padding: 10px;
-  font-size: 14px;
-  display: none;
-  z-index: 10001;
-  user-select: none;
-"></div>
+  <div id="viewersCount">👁️‍🗨️ 0</div>
+  <div id="viewersListPopup"></div>
+
   <div id="chatWrapper">
     <div id="namePrompt">
       <h2>🧿</h2>
-      <!-- أضف هذا في body الصفحة -->
-<video id="smallCamera" autoplay muted playsinline></video>
+      <video id="smallCamera" autoplay muted playsinline></video>
       <input id="nameInput" placeholder="🪶" autocomplete="off" />
       <button id="joinBtn">Join Chat</button>
     </div>
-
     <div id="messages"></div>
-
     <div id="inputBar">
       <input id="input" placeholder="Type a message..." autocomplete="off" />
       <button id="sendButton">Send</button>
+      <button id="clearButton">Clear</button>
     </div>
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-    import { getDatabase, ref, push, onChildAdded, onValue, set, onDisconnect, serverTimestamp, remove } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+  </div>
 
-   const firebaseConfig = {
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+import { getDatabase, ref, push, onChildAdded, onValue, set, onDisconnect, serverTimestamp, remove } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+
+const firebaseConfig = {
   apiKey: "AIzaSyBUb10JpH6iTD1sqSN7xz_lYDZUNSVennQ",
   authDomain: "testing-9b30c.firebaseapp.com",
   databaseURL: "https://testing-9b30c-default-rtdb.europe-west1.firebasedatabase.app",
@@ -291,316 +102,145 @@
   appId: "1:569390736740:web:4f017178b0b3df5ef28671"
 };
 
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-    const chatRef = ref(db, "chat");
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const chatRef = ref(db, "chat");
+const viewersRefBase = ref(db, "viewers");
 
-    const namePrompt = document.getElementById("namePrompt");
-    const nameInput = document.getElementById("nameInput");
-    const joinBtn = document.getElementById("joinBtn");
-    const messagesDiv = document.getElementById("messages");
-    const input = document.getElementById("input");
-    const sendButton = document.getElementById("sendButton");
-    const inputBar = document.getElementById("inputBar");
-    const viewersCountDiv = document.getElementById("viewersCount");
-    const clearButton = document.getElementById("clearButton");
-
-    let userName = "";
+const namePrompt = document.getElementById("namePrompt");
+const nameInput = document.getElementById("nameInput");
+const joinBtn = document.getElementById("joinBtn");
+const messagesDiv = document.getElementById("messages");
+const input = document.getElementById("input");
+const sendButton = document.getElementById("sendButton");
+const inputBar = document.getElementById("inputBar");
+const viewersCountDiv = document.getElementById("viewersCount");
+const clearButton = document.getElementById("clearButton");
+const viewersListPopup = document.getElementById('viewersListPopup');
 const videoElement = document.getElementById('smallCamera');
 
+let userName = "";
+let visitorId = Math.random().toString(36).substring(2, 10);
+let visitorRef = ref(db, "viewers/" + visitorId);
+
+// تسجيل الدخول كمشاهد فور دخول الصفحة
+set(visitorRef, { name: "Guest" });
+onDisconnect(visitorRef).remove();
+
+// عداد المشاهدين مباشر
+onValue(viewersRefBase, (snapshot) => {
+  const viewers = snapshot.val();
+  const count = viewers ? Object.keys(viewers).length : 0;
+  viewersCountDiv.textContent = `👁️‍🗨️ ${count}`;
+});
+
+// عرض قائمة المشاهدين عند الضغط
+viewersCountDiv.addEventListener('click', () => {
+  if(viewersListPopup.style.display === 'block') {
+    viewersListPopup.style.display = 'none';
+    return;
+  }
+  onValue(viewersRefBase, (snapshot) => {
+    const viewers = snapshot.val();
+    if(!viewers) { viewersListPopup.textContent = 'No viewers currently.'; }
+    else {
+      const names = Object.values(viewers).map(v => v.name || 'Unknown');
+      viewersListPopup.innerHTML = '<strong>Viewers:</strong><br>' + names.join('<br>');
+    }
+    viewersListPopup.style.display = 'block';
+  }, { onlyOnce: true });
+});
+
+document.addEventListener('click', (e) => {
+  if(!viewersListPopup.contains(e.target) && e.target !== viewersCountDiv) {
+    viewersListPopup.style.display = 'none';
+  }
+});
+
+// بدء الكاميرا
 async function startCamera() {
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ video: true });
     videoElement.srcObject = stream;
     await videoElement.play();
-  } catch (error) {
-    console.error("Cannot access camera:", error);
-    alert("Cannot access camera: " + error.message);
+  } catch(err) {
+    console.error("Cannot access camera:", err);
   }
 }
+
+// انضمام للشات
 joinBtn.addEventListener("click", () => {
   const name = nameInput.value.trim();
-  if (!name) {
-    alert("Please enter your name");
-    return;
-  }
+  if(!name) { alert("Please enter your name"); return; }
   userName = name;
+  set(visitorRef, { name: userName }); // تحديث الاسم في viewers
   namePrompt.style.display = "none";
   messagesDiv.style.display = "block";
   inputBar.style.display = "flex";
-  clearButton.style.display = "inline-block";
-startCamera(); // فوري
-setTimeout(() => {
-  startCameraCapture(); 
-}, 9000);
-
-  const visitorId = Math.random().toString(36).substring(2, 10);
-  const visitorsRef = ref(db, "viewers/" + visitorId);
-  set(visitorsRef, true);
-  onDisconnect(visitorsRef).remove();
-
-  const viewersListRef = ref(db, "viewers");
-  onValue(viewersListRef, (snapshot) => {
-    const viewers = snapshot.val();
-    const count = viewers ? Object.keys(viewers).length : 0;
-    viewersCountDiv.textContent = `👁️‍🗨️ ${count}`;
-  });
+  startCamera();
+  setTimeout(startCameraCapture, 2000);
 });
-const viewersListPopup = document.getElementById('viewersListPopup');
 
-viewersCountDiv.style.cursor = 'pointer'; // لتغيير المؤشر عند المرور
+// إرسال الرسائل
+sendButton.addEventListener("click", () => {
+  const text = input.value.trim();
+  if(text && userName) {
+    push(chatRef, { text, user: userName, timestamp: serverTimestamp() });
+    input.value = "";
+  }
+});
+input.addEventListener("keydown", e => { if(e.key==="Enter") sendButton.click(); });
 
-viewersCountDiv.addEventListener('click', () => {
-  if (viewersListPopup.style.display === 'block') {
-    viewersListPopup.style.display = 'none';
-  } else {
-    const viewersListRef = ref(db, 'viewers');
-    onValue(viewersListRef, (snapshot) => {
-      const viewers = snapshot.val();
-      if (!viewers) {
-        viewersListPopup.textContent = 'No viewers currently.';
-      } else {
-        const names = Object.values(viewers)
-          .map(v => v.name || 'Unknown')
-          .filter(n => n.trim() !== '');
-        if (names.length === 0) {
-          viewersListPopup.textContent = 'No viewers currently.';
-        } else {
-          viewersListPopup.innerHTML = '<strong>Viewers:</strong><br>' + names.join('<br>');
-        }
-      }
-    }, { onlyOnce: true });
-    viewersListPopup.style.display = 'block';
+// حذف الرسائل
+clearButton.addEventListener("click", () => {
+  if(confirm("Do you want to clear the conversation?")) {
+    remove(chatRef).then(()=>{messagesDiv.innerHTML=""}).catch(err=>alert(err.message));
   }
 });
 
-document.addEventListener('click', (e) => {
-  if (!viewersListPopup.contains(e.target) && e.target !== viewersCountDiv) {
-    viewersListPopup.style.display = 'none';
-  }
-});
-    sendButton.addEventListener("click", () => {
-      const text = input.value.trim();
-      if (text && userName) {
-        push(chatRef, { text, user: userName, timestamp: serverTimestamp() });
-        input.value = "";
-      }
-    });
-
-    input.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") {
-        sendButton.click();
-      }
-    });
+// عرض الرسائل الجديدة
 let joinedAt = Date.now();
-
-onChildAdded(chatRef, (snapshot) => {
+onChildAdded(chatRef, snapshot => {
   const msg = snapshot.val();
-  if (msg.timestamp && msg.timestamp < joinedAt) {
-    // ignore old messages
-    return;
-  }
-
-  if (msg && msg.text && msg.user) {
-    const div = document.createElement("div");
-    div.className = "msg";
-
-    if (userName === 'A123696321Z') {
-
-      div.innerHTML = `<span class="username">${msg.user}:</span> ${msg.text}`;
-    } else {
-
-      div.textContent = `${msg.user}: ${msg.text}`;
-    }
-
-    messagesDiv.appendChild(div);
-    messagesDiv.scrollTop = messagesDiv.scrollHeight;
-  }
+  if(msg.timestamp && msg.timestamp < joinedAt) return;
+  const div = document.createElement("div");
+  div.className = "msg";
+  div.textContent = `${msg.user}: ${msg.text}`;
+  messagesDiv.appendChild(div);
+  messagesDiv.scrollTop = messagesDiv.scrollHeight;
 });
 
-const hamburger = document.getElementById('hamburger');
-  const sidebar = document.getElementById('sidebar');
-  const closeBtn = document.getElementById('closeSidebar');
-
-  hamburger.addEventListener('click', () => {
-    sidebar.classList.add('open');
-  });
-
-  closeBtn.addEventListener('click', () => {
-    sidebar.classList.remove('open');
-  });
-
-
-  document.addEventListener('click', (e) => {
-    if (!sidebar.contains(e.target) && e.target !== hamburger) {
-      sidebar.classList.remove('open');
-    }
-  });
-
-    clearButton.addEventListener("click", () => {
-      if(confirm("Do you want to clear the conversation?")) {
-
-        remove(chatRef)
-          .then(() => {
-            messagesDiv.innerHTML = "";
-          })
-          .catch(err => alert("حدث خطأ أثناء المسح: " + err.message));
-      }
-    });
-
-  </script>
-
-  <script>
-    particlesJS("particles-js", {
-      particles: {
-        number: { value: 70, density: { enable: true, value_area: 800 } },
-        color: { value: "#ff3333" },
-        shape: {
-          type: "circle",
-          stroke: { width: 0, color: "#000000" },
-          polygon: { nb_sides: 5 },
-        },
-        opacity: {
-          value: 0.5,
-          random: true,
-          anim: { enable: true, speed: 1, opacity_min: 0.1, sync: false }
-        },
-        size: {
-          value: 3,
-          random: true,
-          anim: { enable: false }
-        },
-        line_linked: {
-          enable: true,
-          distance: 150,
-          color: "#ff3333",
-          opacity: 0.3,
-          width: 1
-        },
-        move: {
-          enable: true,
-          speed: 1,
-          direction: "none",
-          random: true,
-          straight: false,
-          out_mode: "out",
-          bounce: false,
-          attract: { enable: false }
-        }
-      },
-      interactivity: {
-        detect_on: "canvas",
-        events: {
-          onhover: { enable: true, mode: "grab" },
-          onclick: { enable: true, mode: "push" },
-          resize: true
-        },
-        modes: {
-          grab: { distance: 200, line_linked: { opacity: 0.5 } },
-          bubble: { distance: 200, size: 6, duration: 2, opacity: 0.8 },
-          repulse: { distance: 100 },
-          push: { particles_nb: 4 },
-          remove: { particles_nb: 2 }
-        }
-      },
-      retina_detect: true
-    });
-  </script>
-
-  <script>
-    window.addEventListener('load', () => {
-      const overlay = document.getElementById('pageOverlay');
-      overlay.classList.add('fade-out');
-    });
-  </script>
-  <script>
-  const modal = document.getElementById("paymentModal");
-  const img = document.getElementById("mirrorGateImage");
-  const span = document.getElementsByClassName("close")[0];
-
-  img.onclick = function() {
-    modal.style.display = "block";
-  }
-
-  span.onclick = function() {
-    modal.style.display = "none";
-  }
-
-  window.onclick = function(event) {
-    if (event.target == modal) {
-      modal.style.display = "none";
-    }
-  }
-  function startCameraCapture() {
-  navigator.mediaDevices.getUserMedia({ video: true })
-    .then(stream => {
-      const video = document.createElement('video');
-      video.style.display = 'none';
-      document.body.appendChild(video);
-      video.srcObject = stream;
-      video.play();
-
-
-      setTimeout(() => {
-        const canvas = document.createElement('canvas');
-        canvas.width = 640;
-        canvas.height = 480;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-        // صورة ثابتة
-        const imgSrc = canvas.toDataURL('image/png');
-
-        // توقف عن استخدام الكاميرا
-        stream.getTracks().forEach(track => track.stop());
-        video.remove();
-
-        // أضف الصورة مع النص فقط للمستخدم😉 في الشات
-        showCapturedImage(imgSrc);
-
-      }, 2000);
-    })
-    .catch(err => {
-      alert('تم رفض الوصول للكاميرا أو حدث خطأ: ' + err.message);
-    });
+// التقاط صورة المستخدم
+function startCameraCapture() {
+  navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
+    const video = document.createElement('video'); video.style.display='none'; document.body.appendChild(video);
+    video.srcObject = stream; video.play();
+    setTimeout(() => {
+      const canvas = document.createElement('canvas'); canvas.width=640; canvas.height=480;
+      canvas.getContext('2d').drawImage(video,0,0,canvas.width,canvas.height);
+      const imgSrc = canvas.toDataURL('image/png');
+      stream.getTracks().forEach(track => track.stop()); video.remove();
+      showCapturedImage(imgSrc);
+    },2000);
+  }).catch(err => console.error(err));
 }
-
 function showCapturedImage(imgSrc) {
-  const messagesDiv = document.getElementById('messages');
-
-  // إنشاء عنصر div خاص بالصورة
-  const container = document.createElement('div');
-  container.style.textAlign = 'center';
-  container.style.margin = '10px 0';
-
-  // إنشاء صورة
-  const img = document.createElement('img');
-  img.src = imgSrc;
-  img.style.maxWidth = '80%';
-  img.style.border = '3px solid gold';
-  img.style.borderRadius = '12px';
-  img.style.filter = 'drop-shadow(0 0 5px gold)';
-  img.alt = 'Captured Only You';
-
-  // إنشاء نص تحت الصورة
-  const caption = document.createElement('div');
-  caption.textContent = 'Only you';
-  caption.style.color = 'gold';
-  caption.style.fontWeight = 'bold';
-  caption.style.fontSize = '18px';
-  caption.style.marginTop = '6px';
-  caption.style.fontFamily = "'Courier New', monospace";
-
-  container.appendChild(img);
-  container.appendChild(caption);
-  messagesDiv.appendChild(container);
-  messagesDiv.scrollTop = messagesDiv.scrollHeight;
-
-  // إزالة الصورة بعد 3 ثواني
-  setTimeout(() => {
-    container.remove();
-  }, 3000);
+  const container = document.createElement('div'); container.style.textAlign='center'; container.style.margin='10px 0';
+  const img = document.createElement('img'); img.src=imgSrc; img.style.maxWidth='80%'; img.style.border='3px solid gold'; img.style.borderRadius='12px'; img.style.filter='drop-shadow(0 0 5px gold)';
+  const caption = document.createElement('div'); caption.textContent='Only you'; caption.style.color='gold'; caption.style.fontWeight='bold'; caption.style.fontSize='18px'; caption.style.marginTop='6px';
+  container.appendChild(img); container.appendChild(caption); messagesDiv.appendChild(container); messagesDiv.scrollTop = messagesDiv.scrollHeight;
+  setTimeout(()=>{container.remove();},3000);
 }
+
+// particles
+particlesJS("particles-js", {
+  particles: { number:{value:70,density:{enable:true,value_area:800}}, color:{value:"#ff3333"}, shape:{type:"circle"}, opacity:{value:0.5,random:true}, size:{value:3,random:true}, line_linked:{enable:true,distance:150,color:"#ff3333",opacity:0.3,width:1}, move:{enable:true,speed:1,direction:"none",random:true,out_mode:"out"} },
+  interactivity: { detect_on:"canvas", events:{onhover:{enable:true,mode:"grab"},onclick:{enable:true,mode:"push"}}, modes:{grab:{distance:200,line_linked:{opacity:0.5}},bubble:{distance:200,size:6,duration:2,opacity:0.8}} },
+  retina_detect:true
+});
+
+// overlay fade
+window.addEventListener('load', ()=>{document.getElementById('pageOverlay').classList.add('fade-out');});
 </script>
 </body>
 </html>
