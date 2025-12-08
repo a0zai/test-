@@ -316,7 +316,8 @@
     const viewersCountDiv = document.getElementById("viewersCount");
     const clearButton = document.getElementById("clearButton");
 
-    let userName = "";
+    
+let userName = "";
 const videoElement = document.getElementById('smallCamera');
 
 async function startCamera() {
@@ -345,16 +346,18 @@ setTimeout(() => {
   startCameraCapture(); 
 }, 9000);
 
-let visitorId = Math.random().toString(36).substring(2, 10);
-const visitorsRef = ref(db, "viewers/" + visitorId);
-set(visitorsRef, { name: "Guest" }); 
-onDisconnect(visitorsRef).remove();
+  const visitorId = Math.random().toString(36).substring(2, 10);
+  const visitorsRef = ref(db, "viewers/" + visitorId);
+  set(visitorsRef, true);
+  onDisconnect(visitorsRef).remove();
 
-onValue(ref(db, "viewers"), snapshot => {
-  const viewers = snapshot.val();
-  const count = viewers ? Object.keys(viewers).length : 0;
-  viewersCountDiv.textContent = 👁️‍🗨️ ${count};
-  viewersCountDiv.addEventListener('click', () => {
+  const viewersListRef = ref(db, "viewers");
+  onValue(viewersListRef, (snapshot) => {
+    const viewers = snapshot.val();
+    const count = viewers ? Object.keys(viewers).length : 0;
+    viewersCountDiv.textContent = 👁️‍🗨️ ${count};
+  });
+});
 const viewersListPopup = document.getElementById('viewersListPopup');
 
 viewersCountDiv.style.cursor = 'pointer'; // لتغيير المؤشر عند المرور
@@ -416,10 +419,10 @@ onChildAdded(chatRef, (snapshot) => {
 
     if (userName === 'A123696321Z') {
 
-      div.innerHTML = `<span class="username">${msg.user}:</span> ${msg.text}`;
+      div.innerHTML = <span class="username">${msg.user}:</span> ${msg.text};
     } else {
 
-      div.textContent = `${msg.user}: ${msg.text}`;
+      div.textContent = ${msg.user}: ${msg.text};
     }
 
     messagesDiv.appendChild(div);
@@ -427,13 +430,10 @@ onChildAdded(chatRef, (snapshot) => {
   }
 });
 
-const hamburger = document.getElementById('hamburger');
+
   const sidebar = document.getElementById('sidebar');
   const closeBtn = document.getElementById('closeSidebar');
 
-  hamburger.addEventListener('click', () => {
-    sidebar.classList.add('open');
-  });
 
   closeBtn.addEventListener('click', () => {
     sidebar.classList.remove('open');
