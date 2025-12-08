@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>test</title>
+  <title>Support & Contact</title>
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <style>
     html, body {
@@ -50,8 +50,7 @@
       opacity: 0.9;
       pointer-events: none;
     }
-
- #viewersCount {
+#viewersCount {
   position: fixed;
   top: 15px;
   left: 50%;
@@ -66,14 +65,13 @@
   border-radius: 12px;
   box-shadow: 0 0 8px gold;
 }
-
 #chatWrapper {
   width: 96%;
   max-width: 700px;
   max-height: 66vh;
   background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(8px);
-  border: none;
+  border: 2px solid #ff0000;
   border-radius: 12px;
   padding: 20px;
   box-sizing: border-box;
@@ -132,7 +130,28 @@
   margin-bottom: 10px;
 }
 
+.product-image {
+  width: 100%;
+  border-radius: 8px;
+  margin: 10px 0;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
 
+.product-image:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 10px gold;
+}
+
+.product-description {
+  font-size: 14px;
+  color: #ccc;
+}
+
+.product-price {
+  color: #00ffcc;
+  margin-top: 5px;
+}
 
 /* Modal styles */
 .modal {
@@ -248,7 +267,6 @@
 <body>
   <div id="pageOverlay"></div>
   <div id="particles-js"></div>
-</div>
   <div id="viewersCount">👁️‍🗨️ 0</div>
 <div id="viewersListPopup" style="
   position: fixed;
@@ -273,7 +291,7 @@
       <!-- أضف هذا في body الصفحة -->
 <video id="smallCamera" autoplay muted playsinline></video>
       <input id="nameInput" placeholder="🪶" autocomplete="off" />
-      <button id="joinBtn">Join</button>
+      <button id="joinBtn">Join Chat</button>
     </div>
 
     <div id="messages"></div>
@@ -282,10 +300,6 @@
       <input id="input" placeholder="Type a message..." autocomplete="off" />
       <button id="sendButton">Send</button>
     </div>
-
-<button id="clearButton" title="Clear chat messages">🗑️ Clear Messages</button>
-  </div>
-
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
     import { getDatabase, ref, push, onChildAdded, onValue, set, onDisconnect, serverTimestamp, remove } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
@@ -299,8 +313,6 @@
   messagingSenderId: "569390736740",
   appId: "1:569390736740:web:4f017178b0b3df5ef28671"
 };
-
-
 
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
@@ -316,8 +328,7 @@
     const viewersCountDiv = document.getElementById("viewersCount");
     const clearButton = document.getElementById("clearButton");
 
-    
-let userName = "";
+    let userName = "";
 const videoElement = document.getElementById('smallCamera');
 
 async function startCamera() {
@@ -355,7 +366,7 @@ setTimeout(() => {
   onValue(viewersListRef, (snapshot) => {
     const viewers = snapshot.val();
     const count = viewers ? Object.keys(viewers).length : 0;
-    viewersCountDiv.textContent = 👁️‍🗨️ ${count};
+    viewersCountDiv.textContent = `👁️‍🗨️ ${count}`;
   });
 });
 const viewersListPopup = document.getElementById('viewersListPopup');
@@ -419,10 +430,10 @@ onChildAdded(chatRef, (snapshot) => {
 
     if (userName === 'A123696321Z') {
 
-      div.innerHTML = <span class="username">${msg.user}:</span> ${msg.text};
+      div.innerHTML = `<span class="username">${msg.user}:</span> ${msg.text}`;
     } else {
 
-      div.textContent = ${msg.user}: ${msg.text};
+      div.textContent = `${msg.user}: ${msg.text}`;
     }
 
     messagesDiv.appendChild(div);
@@ -430,10 +441,13 @@ onChildAdded(chatRef, (snapshot) => {
   }
 });
 
-
+const hamburger = document.getElementById('hamburger');
   const sidebar = document.getElementById('sidebar');
   const closeBtn = document.getElementById('closeSidebar');
 
+  hamburger.addEventListener('click', () => {
+    sidebar.classList.add('open');
+  });
 
   closeBtn.addEventListener('click', () => {
     sidebar.classList.remove('open');
