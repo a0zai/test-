@@ -189,11 +189,9 @@ function startLocalTimer(startTime) {
 
 // 1. استخدام runTransaction للتشغيل لمرة واحدة فقط بأمان
 runTransaction(globalCountdownRef, (currentData) => {
-    // إذا كان وقت البداية غير موجود، قم بتعيينه باستخدام ختم الوقت للخادم
     if (currentData === null || !currentData.startTime) {
         return { startTime: serverTimestamp() };
     }
-    // إذا كان موجودًا، لا تقم بأي تغيير
     return;
 });
 
