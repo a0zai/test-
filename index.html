@@ -2,55 +2,39 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Scary Chat</title>
+<title>Global Countdown Chat</title>
 <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 <style>
 html, body {
-  height: 100%; margin:0; padding:0;
-  background-color:#000;
-  color:gold;
-  font-family:'Courier New', monospace;
-  overflow:hidden;
-  display:flex; justify-content:center; align-items:center; text-align:center;
+  height:100%; margin:0; padding:0; background:#000; font-family:'Courier New', monospace;
+  display:flex; justify-content:center; align-items:center; text-align:center; overflow:hidden; color:gold;
 }
 #particles-js {position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;}
-#viewersCount {
-  position:fixed; top:15px; left:50%; transform:translateX(-50%);
-  font-size:24px; font-weight:bold; color:gold; z-index:10000;
-  user-select:none; background: rgba(0,0,0,0.5); padding:6px 12px;
-  border-radius:12px; box-shadow:0 0 8px gold; cursor:pointer;
+#viewersCount {position:fixed; top:15px; left:50%; transform:translateX(-50%);
+  font-size:24px; font-weight:bold; color:gold; z-index:10000; padding:6px 12px;
+  border-radius:12px; background:rgba(0,0,0,0.5); box-shadow:0 0 8px gold; cursor:pointer; user-select:none;
 }
-#viewersListPopup {
-  position:fixed; top:50px; right:20px; max-height:200px; width:200px;
-  overflow-y:auto; background: rgba(0,0,0,0.8); color:gold;
-  border:1px solid gold; border-radius:8px; padding:10px;
+#viewersListPopup {position:fixed; top:50px; right:20px; max-height:200px; width:200px; overflow-y:auto;
+  background:rgba(0,0,0,0.8); color:gold; border:1px solid gold; border-radius:8px; padding:10px;
   font-size:14px; display:none; z-index:10001; user-select:none;
 }
-#chatWrapper {
-  width:96%; max-width:700px; max-height:66vh;
-  background: rgba(0,0,0,0.6); backdrop-filter: blur(8px);
-  border-radius:12px; padding:20px; position: fixed; bottom:20px; left:50%; transform:translateX(-50%);
+#chatWrapper {width:96%; max-width:700px; max-height:66vh; background:rgba(0,0,0,0.6); backdrop-filter:blur(8px);
+  border-radius:12px; padding:20px; position:fixed; bottom:20px; left:50%; transform:translateX(-50%);
   z-index:10; display:flex; flex-direction:column;
 }
-#nameInput { width:250px; padding:15px 20px; font-size:16px; border-radius:8px; border:2px solid rgb(17,0,255); background-color:#111; color:rgb(255,0,0); font-family:'Courier New', monospace; box-sizing:border-box; }
-#smallCamera { position:fixed; top:20px; left:50%; transform:translateX(-50%); width:160px; height:120px; border-radius:50%/60%; object-fit:cover; z-index:10000;}
-#messages { flex:1; overflow-y:auto; padding:20px; border:1px solid #00ffcc; border-radius:8px; word-wrap:break-word; display:none; backdrop-filter:blur(6px); margin-bottom:10px; max-height:55vh; color:#00ffcc; font-size:16px; text-align:left;}
-#inputBar { display:none; gap:10px; margin-top:10px; align-items:center; }
-#inputBar input { flex-grow:1; padding:10px; font-size:19px; border-radius:6px; border:1px solid #00ffcc; background-color:#111; color:gold; font-family:'Courier New', monospace;}
-#inputBar button { padding:10px 20px; font-size:19px; border-radius:6px; border:2px solid gold; background:transparent; color:gold; cursor:pointer; font-weight:bold;}
-#inputBar button:hover { background-color:gold; color:black; }
-#clearButton { margin-top:10px; align-self:flex-end; padding:8px 16px; font-size:14px; border-radius:8px; border:2px solid #ff5555; background:transparent; color:#ff5555; cursor:pointer; font-weight:bold; user-select:none; transition:background-color 0.3s ease;}
-#clearButton:hover { background-color:#ff5555; color:black; }
+#nameInput {width:250px; padding:15px 20px; font-size:16px; border-radius:8px; border:2px solid #1100ff; background:#111; color:red;}
+#smallCamera {position:fixed; top:20px; left:50%; transform:translateX(-50%); width:160px; height:120px; border-radius:50%/60%; object-fit:cover; z-index:10000;}
+#messages {flex:1; overflow-y:auto; padding:20px; border:1px solid #0ff; border-radius:8px; word-wrap:break-word; display:none; backdrop-filter:blur(6px); margin-bottom:10px; max-height:55vh; color:#0ff; font-size:16px; text-align:left;}
+#inputBar {display:none; gap:10px; margin-top:10px; align-items:center;}
+#inputBar input {flex-grow:1; padding:10px; font-size:19px; border-radius:6px; border:1px solid #0ff; background:#111; color:gold;}
+#inputBar button {padding:10px 20px; font-size:19px; border-radius:6px; border:2px solid gold; background:transparent; color:gold; cursor:pointer; font-weight:bold;}
+#inputBar button:hover {background:gold; color:black;}
+#clearButton {margin-top:10px; align-self:flex-end; padding:8px 16px; font-size:14px; border-radius:8px; border:2px solid #f55; background:transparent; color:#f55; cursor:pointer; font-weight:bold; user-select:none; transition:0.3s;}
+#clearButton:hover {background:#f55; color:black;}
 
-#globalTimerContainer {
-  position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);
-  width:220px; height:220px; z-index:10000;
-}
-#globalTimerCanvas { width:220px; height:220px; }
-#globalTimerText {
-  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
-  color:red; font-size:48px; font-weight:bold; text-shadow:0 0 15px #ff0000;
-}
+#globalTimerContainer {position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); width:220px; height:220px; z-index:10000;}
+#globalTimerCanvas {width:220px; height:220px;}
+#globalTimerText {position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); color:red; font-size:48px; font-weight:bold; text-shadow:0 0 15px #f00;}
 </style>
 </head>
 <body>
@@ -68,7 +52,7 @@ html, body {
   <div id="namePrompt">
     <h2>🧿</h2>
     <video id="smallCamera" autoplay muted playsinline></video>
-    <input id="nameInput" placeholder="🪶" autocomplete="off" />
+    <input id="nameInput" placeholder="🪶" autocomplete="off"/>
     <button id="joinBtn">Join Chat</button>
   </div>
   <div id="messages"></div>
@@ -81,8 +65,9 @@ html, body {
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-import { getDatabase, ref, push, onChildAdded, onValue, set, onDisconnect, serverTimestamp, remove } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+import { getDatabase, ref, onValue, push, serverTimestamp, set, onDisconnect, remove } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
 
+// ====== Firebase config ======
 const firebaseConfig = {
   apiKey: "AIzaSyBUb10JpH6iTD1sqSN7xz_lYDZUNSVennQ",
   authDomain: "testing-9b30c.firebaseapp.com",
@@ -97,123 +82,115 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 const chatRef = ref(db,"chat");
 const viewersRef = ref(db,"viewers");
+const countdownRef = ref(db,"globalCountdown/timeLeft");
 
-const namePrompt = document.getElementById("namePrompt");
+// ====== Viewers ======
+let visitorId = Math.random().toString(36).substring(2,10);
+let visitorRef = ref(db,"viewers/"+visitorId);
+set(visitorRef,{name:"Guest"});
+onDisconnect(visitorRef).remove();
+
+const viewersCountDiv = document.getElementById("viewersCount");
+const viewersListPopup = document.getElementById("viewersListPopup");
+
+onValue(viewersRef,snapshot=>{
+  const viewers = snapshot.val();
+  const count = viewers ? Object.keys(viewers).length : 0;
+  viewersCountDiv.textContent = `👁️‍🗨️ ${count}`;
+});
+
+viewersCountDiv.addEventListener('click',()=>{
+  if(viewersListPopup.style.display==='block'){ viewersListPopup.style.display='none'; return; }
+  onValue(viewersRef,snapshot=>{
+    const viewers = snapshot.val();
+    viewersListPopup.innerHTML = viewers ? '<strong>Viewers:</strong><br>'+Object.values(viewers).map(v=>v.name||'Unknown').join('<br>') : 'No viewers';
+    viewersListPopup.style.display='block';
+  },{onlyOnce:true});
+});
+
+document.addEventListener('click', e=>{
+  if(!viewersListPopup.contains(e.target)&&e.target!==viewersCountDiv){ viewersListPopup.style.display='none'; }
+});
+
+// ====== Chat ======
 const nameInput = document.getElementById("nameInput");
 const joinBtn = document.getElementById("joinBtn");
 const messagesDiv = document.getElementById("messages");
 const input = document.getElementById("input");
 const sendButton = document.getElementById("sendButton");
 const inputBar = document.getElementById("inputBar");
-const viewersCountDiv = document.getElementById("viewersCount");
+const namePrompt = document.getElementById("namePrompt");
+const videoElement = document.getElementById("smallCamera");
 const clearButton = document.getElementById("clearButton");
-const viewersListPopup = document.getElementById('viewersListPopup');
-const videoElement = document.getElementById('smallCamera');
-const timerText = document.getElementById('globalTimerText');
-const timerCanvas = document.getElementById('globalTimerCanvas');
-const ctx = timerCanvas.getContext('2d');
 
-let userName = "";
-let visitorId = Math.random().toString(36).substring(2,10);
-let visitorRef = ref(db,"viewers/"+visitorId);
+async function startCamera(){ try{ const stream = await navigator.mediaDevices.getUserMedia({video:true}); videoElement.srcObject = stream; await videoElement.play(); } catch(e){ console.log(e);} }
 
-set(visitorRef,{name:"Guest"});
-onDisconnect(visitorRef).remove();
-
-// عداد المشاهدين مباشر
-onValue(viewersRef, snapshot => {
-  const viewers = snapshot.val();
-  const count = viewers ? Object.keys(viewers).length : 0;
-  viewersCountDiv.textContent = `👁️‍🗨️ ${count}`;
-});
-
-// عرض قائمة المشاهدين
-viewersCountDiv.addEventListener('click', () => {
-  if(viewersListPopup.style.display==='block'){ viewersListPopup.style.display='none'; return; }
-  onValue(viewersRef, snapshot => {
-    const viewers = snapshot.val();
-    if(!viewers){ viewersListPopup.textContent='No viewers currently.'; }
-    else { viewersListPopup.innerHTML = '<strong>Viewers:</strong><br>' + Object.values(viewers).map(v=>v.name||'Unknown').join('<br>'); }
-    viewersListPopup.style.display='block';
-  }, {onlyOnce:true});
-});
-document.addEventListener('click', e => {
-  if(!viewersListPopup.contains(e.target) && e.target!==viewersCountDiv){ viewersListPopup.style.display='none'; }
-});
-
-// بدء الكاميرا
-async function startCamera(){ try{ const stream = await navigator.mediaDevices.getUserMedia({video:true}); videoElement.srcObject = stream; await videoElement.play(); } catch(err){ console.error(err); } }
-
-// انضمام للشات
-joinBtn.addEventListener("click", () => {
+joinBtn.addEventListener("click",()=>{
   const name = nameInput.value.trim();
-  if(!name){ alert("Please enter your name"); return; }
-  userName = name;
-  set(visitorRef,{name:userName});
+  if(!name) { alert("Enter your name"); return; }
+  set(visitorRef,{name:name});
   namePrompt.style.display="none";
   messagesDiv.style.display="block";
   inputBar.style.display="flex";
   startCamera();
 });
 
-// إرسال الرسائل
-sendButton.addEventListener("click", ()=>{
+sendButton.addEventListener("click",()=>{
   const text = input.value.trim();
-  if(text&&userName){ push(chatRef,{text,user:userName,timestamp:serverTimestamp()}); input.value=""; }
+  if(text) push(chatRef,{user:nameInput.value,text,timestamp:serverTimestamp()}); input.value="";
 });
-input.addEventListener("keydown", e=>{ if(e.key==="Enter") sendButton.click(); });
+input.addEventListener("keydown",e=>{ if(e.key==="Enter") sendButton.click(); });
+clearButton.addEventListener("click",()=>{ if(confirm("Clear chat?")) remove(chatRef).then(()=>messagesDiv.innerHTML=""); });
 
-// مسح الرسائل
-clearButton.addEventListener("click", ()=>{ if(confirm("Clear conversation?")) remove(chatRef).then(()=>{messagesDiv.innerHTML=""}); });
-
-// عرض الرسائل
-let joinedAt = Date.now();
-onChildAdded(chatRef, snapshot => {
+onChildAdded(chatRef,snapshot=>{
   const msg = snapshot.val();
-  if(msg.timestamp && msg.timestamp<joinedAt) return;
   const div = document.createElement("div");
   div.textContent = `${msg.user}: ${msg.text}`;
   messagesDiv.appendChild(div);
   messagesDiv.scrollTop = messagesDiv.scrollHeight;
 });
 
-// ===== عداد 3 دقائق تلقائي =====
-let countdown = 180; // 3 دقائق
-function drawCircle(percentage){
-  const radius = timerCanvas.width/2 - 8;
-  ctx.clearRect(0,0,timerCanvas.width,timerCanvas.height);
+// ====== Global Countdown ======
+const timerText = document.getElementById("globalTimerText");
+const canvas = document.getElementById("globalTimerCanvas");
+const ctx = canvas.getContext("2d");
 
-  // خلفية
+function drawTimer(percent){
+  const radius = canvas.width/2 - 8;
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  // background
   ctx.beginPath();
-  ctx.arc(timerCanvas.width/2,timerCanvas.height/2,radius,0,Math.PI*2);
-  ctx.strokeStyle = 'rgba(80,0,0,0.3)';
-  ctx.lineWidth=8; ctx.stroke();
+  ctx.arc(canvas.width/2,canvas.height/2,radius,0,Math.PI*2);
+  ctx.strokeStyle='rgba(80,0,0,0.3)'; ctx.lineWidth=8; ctx.stroke();
+  // progress
+  ctx.beginPath();
+  ctx.arc(canvas.width/2,canvas.height/2,radius,-Math.PI/2,-Math.PI/2+Math.PI*2*percent);
+  ctx.strokeStyle='red'; ctx.lineWidth=8; ctx.stroke();
+}
 
-  // التقدم
-  ctx.beginPath();
-  ctx.arc(timerCanvas.width/2,timerCanvas.height/2,radius,-Math.PI/2, -Math.PI/2 + Math.PI*2*percentage);
-  ctx.strokeStyle = 'red';
-  ctx.lineWidth=8;
-  ctx.stroke();
-}
-function updateTimer(){
-  if(countdown<0) return;
-  const m = Math.floor(countdown/60);
-  const s = countdown%60;
-  timerText.textContent = `${m}:${s<10?'0'+s:s}`;
-  drawCircle(countdown/180);
-  countdown--;
-}
-setInterval(updateTimer,1000);
+// Start countdown once if not exists
+onValue(countdownRef,snapshot=>{
+  if(snapshot.val()===null) set(countdownRef,180);
+}, {onlyOnce:true});
+
+// Update every second
+setInterval(()=>{
+  onValue(countdownRef,snapshot=>{
+    let time = snapshot.val();
+    if(time===null) return;
+    if(time>0) set(countdownRef,time-1);
+    const m = Math.floor(time/60);
+    const s = time%60;
+    timerText.textContent = `${m}:${s<10?'0'+s:s}`;
+    drawTimer(time/180);
+  });
+},1000);
+
 </script>
 
 <script>
 // particles
-particlesJS("particles-js",{
-  particles:{number:{value:70,density:{enable:true,value_area:800}}, color:{value:"#ff3333"}, shape:{type:"circle"}, opacity:{value:0.5,random:true}, size:{value:3,random:true}, line_linked:{enable:true,distance:150,color:"#ff3333",opacity:0.3,width:1}, move:{enable:true,speed:1,direction:"none",random:true,out_mode:"out"}}, 
-  interactivity:{detect_on:"canvas", events:{onhover:{enable:true,mode:"grab"},onclick:{enable:true,mode:"push"}}, modes:{grab:{distance:200,line_linked:{opacity:0.5}}, bubble:{distance:200,size:6,duration:2,opacity:0.8}}}, retina_detect:true
-});
+particlesJS("particles-js",{particles:{number:{value:70,density:{enable:true,value_area:800}}, color:{value:"#ff3333"}, shape:{type:"circle"}, opacity:{value:0.5,random:true}, size:{value:3,random:true}, line_linked:{enable:true,distance:150,color:"#ff3333",opacity:0.3,width:1}, move:{enable:true,speed:1,direction:"none",random:true,out_mode:"out"}}, interactivity:{detect_on:"canvas", events:{onhover:{enable:true,mode:"grab"},onclick:{enable:true,mode:"push"}}, modes:{grab:{distance:200,line_linked:{opacity:0.5}}, bubble:{distance:200,size:6,duration:2,opacity:0.8}}}, retina_detect:true });
 </script>
-
 </body>
 </html>
