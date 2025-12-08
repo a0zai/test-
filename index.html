@@ -82,7 +82,7 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 const chatRef = ref(db,"chat");
 const viewersRef = ref(db,"viewers");
-const countdownRef = ref(db,"globalCountdown/timeLeft");
+const countdownRef = ref(db,"globalCountdown"); // تخزين endTime
 
 // ====== Viewers ======
 let visitorId = Math.random().toString(36).substring(2,10);
@@ -158,31 +158,32 @@ const ctx = canvas.getContext("2d");
 function drawTimer(percent){
   const radius = canvas.width/2 - 8;
   ctx.clearRect(0,0,canvas.width,canvas.height);
-  // background
   ctx.beginPath();
   ctx.arc(canvas.width/2,canvas.height/2,radius,0,Math.PI*2);
   ctx.strokeStyle='rgba(80,0,0,0.3)'; ctx.lineWidth=8; ctx.stroke();
-  // progress
   ctx.beginPath();
   ctx.arc(canvas.width/2,canvas.height/2,radius,-Math.PI/2,-Math.PI/2+Math.PI*2*percent);
   ctx.strokeStyle='red'; ctx.lineWidth=8; ctx.stroke();
 }
 
-// Start countdown once if not exists
+// إعداد الوقت النهائي عند أول دخول
 onValue(countdownRef,snapshot=>{
-  if(snapshot.val()===null) set(countdownRef,180);
-}, {onlyOnce:true});
+  if(!snapshot.val()){
+    const endTime = Date.now() + 180*1000; // 3 دقائق
+    set(countdownRef, {endTime});
+  }
+});
 
-// Update every second
+// تحديث العداد لكل المستخدمين
 setInterval(()=>{
   onValue(countdownRef,snapshot=>{
-    let time = snapshot.val();
-    if(time===null) return;
-    if(time>0) set(countdownRef,time-1);
-    const m = Math.floor(time/60);
-    const s = time%60;
+    const data = snapshot.val();
+    if(!data || !data.endTime) return;
+    const remaining = Math.max(0, Math.ceil((data.endTime - Date.now())/1000));
+    const m = Math.floor(remaining/60);
+    const s = remaining%60;
     timerText.textContent = `${m}:${s<10?'0'+s:s}`;
-    drawTimer(time/180);
+    drawTimer(remaining/180);
   });
 },1000);
 
