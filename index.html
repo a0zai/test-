@@ -1,80 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Scary Countdown Chat</title>
+<meta charset="UTF-8" />
+<title>:</title>
 <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 <style>
-html, body {
-  height: 100%; margin: 0; padding: 0;
-  background-color: #000; color: gold;
-  font-family: 'Courier New', monospace;
-  overflow: hidden; display: flex; justify-content: center; align-items: center;
-  text-align: center;
-}
-
-#pageOverlay {
-  position: fixed; top:0; left:0; width:100%; height:100%;
-  backdrop-filter: blur(12px); background-color: rgba(0,0,0,0.6);
-  z-index:9999; opacity:1; transition: opacity 3s ease;
-}
-#pageOverlay.fade-out { opacity:0; pointer-events:none; }
-
-#particles-js { position: fixed; top:0; left:0; width:100%; height:100%; z-index:0; pointer-events:none; }
-
-#globalTimerContainer {
-  position: fixed; top:50%; left:50%;
-  transform: translate(-50%,-50%);
-  width: 250px; height: 250px; z-index:10000;
-}
-#globalTimerCanvas {
-  width: 100%; height: 100%;
-}
-#globalTimerText {
-  position: absolute; top:50%; left:50%;
-  transform: translate(-50%,-50%);
-  color: red; font-size: 48px; font-weight:bold; text-shadow:0 0 20px #ff0000;
-  user-select: none;
-}
-
-#chatWrapper {
-  width:96%; max-width:700px; max-height:66vh;
-  background: rgba(0,0,0,0.6); backdrop-filter: blur(8px);
-  border-radius:12px; padding:20px;
-  position: fixed; bottom:20px; left:50%; transform: translateX(-50%);
-  z-index:10; display:flex; flex-direction:column;
-}
-#nameInput { width:250px; padding:15px 20px; font-size:16px; border-radius:8px; border:2px solid rgb(17,0,255); background-color:#111; color:rgb(255,0,0); font-family:'Courier New', monospace; box-sizing:border-box; }
-#smallCamera { position: fixed; top:20px; left:50%; transform:translateX(-50%); width:160px; height:120px; border-radius:50%/60%; object-fit:cover; z-index:10000;}
-#messages { flex:1; overflow-y:auto; padding:20px; border:1px solid #00ffcc; border-radius:8px; word-wrap:break-word; display:none; backdrop-filter:blur(6px); margin-bottom:10px; max-height:55vh; color:#00ffcc; font-size:16px; text-align:left;}
-#inputBar { display:none; gap:10px; margin-top:10px; align-items:center; }
-#inputBar input { flex-grow:1; padding:10px; font-size:19px; border-radius:6px; border:1px solid #00ffcc; background-color:#111; color:gold; font-family:'Courier New', monospace; }
-#inputBar button { padding:10px 20px; font-size:19px; border-radius:6px; border:2px solid gold; background:transparent; color:gold; cursor:pointer; font-weight:bold; }
-#inputBar button:hover { background-color: gold; color:black; }
-#clearButton { margin-top:10px; align-self:flex-end; padding:8px 16px; font-size:14px; border-radius:8px; border:2px solid #ff5555; background:transparent; color:#ff5555; cursor:pointer; font-weight:bold; user-select:none; transition:background-color 0.3s ease;}
-#clearButton:hover { background-color:#ff5555; color:black;}
+html, body { height:100%; margin:0; padding:0; background:#000; font-family:'Courier New', monospace; color:gold; display:flex; justify-content:center; align-items:center; text-align:center; overflow:hidden;}
+#pageOverlay{position:fixed;top:0;left:0;width:100%;height:100%;backdrop-filter:blur(12px);background:rgba(0,0,0,0.6);z-index:9999;opacity:1;transition:opacity 3s ease;}
+#pageOverlay.fade-out{opacity:0;pointer-events:none;}
+#particles-js{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;}
+#viewersCount{position:fixed;top:15px;left:50%;transform:translateX(-50%);font-size:24px;font-weight:bold;color:gold;z-index:10000;background:rgba(0,0,0,0.5);padding:6px 12px;border-radius:12px;box-shadow:0 0 8px gold;user-select:none;cursor:pointer;}
+#globalTimerContainer{position:fixed;top:60px;left:50%;transform:translateX(-50%);width:180px;height:180px;z-index:10000;}
+#globalTimerCanvas{width:180px;height:180px;}
+#globalTimerText{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:red;font-size:36px;font-weight:bold;text-shadow:0 0 15px #ff0000;}
+#viewersListPopup{position:fixed;top:250px;right:20px;width:200px;max-height:200px;overflow-y:auto;background:rgba(0,0,0,0.8);color:gold;border:1px solid gold;border-radius:8px;padding:10px;font-size:14px;display:none;z-index:10001;}
+#chatWrapper{width:96%;max-width:700px;max-height:66vh;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);border-radius:12px;padding:20px;position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:10;display:flex;flex-direction:column;}
+#nameInput{width:250px;padding:15px 20px;font-size:16px;border-radius:8px;border:2px solid rgb(17,0,255);background-color:#111;color:rgb(255,0,0);font-family:'Courier New', monospace;box-sizing:border-box;}
+#smallCamera{position:fixed;top:20px;left:50%;transform:translateX(-50%);width:160px;height:120px;border-radius:50%/60%;object-fit:cover;z-index:10000;}
+#messages{flex:1;overflow-y:auto;padding:20px;border:1px solid #00ffcc;border-radius:8px;word-wrap:break-word;display:none;backdrop-filter:blur(6px);margin-bottom:10px;max-height:55vh;color:#00ffcc;font-size:16px;text-align:left;}
+#inputBar{display:none;gap:10px;margin-top:10px;align-items:center;}
+#inputBar input{flex-grow:1;padding:10px;font-size:19px;border-radius:6px;border:1px solid #00ffcc;background-color:#111;color:gold;font-family:'Courier New', monospace;}
+#inputBar button{padding:10px 20px;font-size:19px;border-radius:6px;border:2px solid gold;background:transparent;color:gold;cursor:pointer;font-weight:bold;}
+#inputBar button:hover{background-color:gold;color:black;}
+#clearButton{margin-top:10px;align-self:flex-end;padding:8px 16px;font-size:14px;border-radius:8px;border:2px solid #ff5555;background:transparent;color:#ff5555;cursor:pointer;font-weight:bold;user-select:none;transition:background-color 0.3s ease;}
+#clearButton:hover{background-color:#ff5555;color:black;}
 </style>
 </head>
 <body>
-
 <div id="pageOverlay"></div>
 <div id="particles-js"></div>
+<div id="viewersCount">👁️‍🗨️ 0</div>
 
 <div id="globalTimerContainer">
-  <canvas id="globalTimerCanvas" width="250" height="250"></canvas>
-  <div id="globalTimerText">3:00</div>
+  <canvas id="globalTimerCanvas" width="180" height="180"></canvas>
+  <div id="globalTimerText">03:00</div>
 </div>
 
 <div id="chatWrapper">
   <div id="namePrompt">
     <h2>🧿</h2>
     <video id="smallCamera" autoplay muted playsinline></video>
-    <input id="nameInput" placeholder="Your name" autocomplete="off" />
+    <input id="nameInput" placeholder="🪶" autocomplete="off"/>
     <button id="joinBtn">Join Chat</button>
   </div>
   <div id="messages"></div>
   <div id="inputBar">
-    <input id="input" placeholder="Type a message..." autocomplete="off" />
+    <input id="input" placeholder="Type a message..." autocomplete="off"/>
     <button id="sendButton">Send</button>
     <button id="clearButton">Clear</button>
   </div>
@@ -82,9 +53,9 @@ html, body {
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-import { getDatabase, ref, push, onChildAdded, onValue, set, onDisconnect, serverTimestamp, remove, runTransaction } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+import { getDatabase, ref, push, onChildAdded, onValue, set, onDisconnect, serverTimestamp, remove } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
 
-// --- Firebase config ---
+// === Firebase config ===
 const firebaseConfig = {
   apiKey: "AIzaSyBUb10JpH6iTD1sqSN7xz_lYDZUNSVennQ",
   authDomain: "testing-9b30c.firebaseapp.com",
@@ -97,10 +68,12 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
+
 const chatRef = ref(db,"chat");
 const viewersRef = ref(db,"viewers");
 const countdownRef = ref(db,"globalCountdown/timeLeft");
 
+// === DOM elements ===
 const namePrompt = document.getElementById("namePrompt");
 const nameInput = document.getElementById("nameInput");
 const joinBtn = document.getElementById("joinBtn");
@@ -108,96 +81,100 @@ const messagesDiv = document.getElementById("messages");
 const input = document.getElementById("input");
 const sendButton = document.getElementById("sendButton");
 const inputBar = document.getElementById("inputBar");
+const viewersCountDiv = document.getElementById("viewersCount");
 const clearButton = document.getElementById("clearButton");
+const viewersListPopup = document.getElementById("viewersListPopup");
 const videoElement = document.getElementById("smallCamera");
-const timerText = document.getElementById("globalTimerText");
+const globalTimerText = document.getElementById("globalTimerText");
 const canvas = document.getElementById("globalTimerCanvas");
 const ctx = canvas.getContext("2d");
+const radius = canvas.width/2 - 8;
 
-let userName = "";
+// === User ===
+let userName="";
 let visitorId = Math.random().toString(36).substring(2,10);
 let visitorRef = ref(db,"viewers/"+visitorId);
 
-// تسجيل دخول كمشاهد
+// تسجيل دخول زائر
 set(visitorRef,{name:"Guest"});
 onDisconnect(visitorRef).remove();
 
-// --- عداد شات ورسائل ---
-onValue(viewersRef, snapshot=>{
-  const viewers = snapshot.val();
-  // هنا يمكنك عرض عدد المشاهدين لو أحببت
+// عداد المشاهدين مباشر
+onValue(viewersRef,snap=>{
+  const viewers = snap.val();
+  const count = viewers?Object.keys(viewers).length:0;
+  viewersCountDiv.textContent=`👁️‍🗨️ ${count}`;
 });
 
-// --- الكاميرا ---
-async function startCamera(){ try{ const stream = await navigator.mediaDevices.getUserMedia({video:true}); videoElement.srcObject=stream; await videoElement.play(); } catch(err){console.error(err);} }
+// عرض قائمة المشاهدين
+viewersCountDiv.addEventListener("click",()=>{
+  if(viewersListPopup.style.display==='block'){ viewersListPopup.style.display='none'; return; }
+  onValue(viewersRef,snap=>{
+    const viewers = snap.val();
+    if(!viewers) { viewersListPopup.textContent='No viewers.'; } 
+    else { viewersListPopup.innerHTML='<strong>Viewers:</strong><br>'+Object.values(viewers).map(v=>v.name||'Unknown').join('<br>'); }
+    viewersListPopup.style.display='block';
+  }, {onlyOnce:true});
+});
+document.addEventListener('click',e=>{
+  if(!viewersListPopup.contains(e.target)&&e.target!==viewersCountDiv) viewersListPopup.style.display='none';
+});
 
-// --- انضمام للشات ---
+// === Chat join/send ===
+async function startCamera(){try{const s=await navigator.mediaDevices.getUserMedia({video:true}); videoElement.srcObject=s; await videoElement.play();}catch(err){console.error(err);}}
 joinBtn.addEventListener("click",()=>{
-  const name=nameInput.value.trim(); if(!name){alert("Enter name"); return;}
+  const name=nameInput.value.trim();
+  if(!name){ alert("Enter your name"); return;}
   userName=name;
   set(visitorRef,{name:userName});
-  namePrompt.style.display="none"; messagesDiv.style.display="block"; inputBar.style.display="flex";
+  namePrompt.style.display="none";
+  messagesDiv.style.display="block";
+  inputBar.style.display="flex";
   startCamera();
 });
-
-// إرسال الرسائل
 sendButton.addEventListener("click",()=>{
-  const text=input.value.trim(); if(text&&userName){ push(chatRef,{text,user:userName,timestamp:serverTimestamp()}); input.value=""; }
+  const text=input.value.trim();
+  if(text&&userName){ push(chatRef,{text,user:userName,timestamp:serverTimestamp()}); input.value=""; }
 });
 input.addEventListener("keydown",e=>{if(e.key==="Enter") sendButton.click();});
-
-// مسح الرسائل
-clearButton.addEventListener("click",()=>{
-  if(confirm("Clear chat?")){ remove(chatRef).then(()=>{messagesDiv.innerHTML=""}); }
-});
+clearButton.addEventListener("click",()=>{if(confirm("Clear conversation?")){remove(chatRef).then(()=>messagesDiv.innerHTML="").catch(err=>alert(err.message));}});
 
 // عرض الرسائل
 let joinedAt = Date.now();
-onChildAdded(chatRef, snapshot=>{
-  const msg = snapshot.val();
+onChildAdded(chatRef,snap=>{
+  const msg = snap.val();
   if(msg.timestamp && msg.timestamp<joinedAt) return;
-  const div=document.createElement("div"); div.textContent=`${msg.user}: ${msg.text}`;
-  messagesDiv.appendChild(div); messagesDiv.scrollTop=messagesDiv.scrollHeight;
+  const div=document.createElement("div"); div.textContent=`${msg.user}: ${msg.text}`; messagesDiv.appendChild(div); messagesDiv.scrollTop=messagesDiv.scrollHeight;
 });
 
-// --- Countdown Timer ---
-const TOTAL_SECONDS = 180;
-const alarmSound = new Audio('https://actions.google.com/sounds/v1/alarms/beep_short.ogg');
-
-// تهيئة الوقت إذا لم يكن موجود
-onValue(countdownRef,snap=>{ if(snap.val()===null) set(countdownRef,TOTAL_SECONDS); }, {onlyOnce:true});
-
-// تحديث الوقت لكل المشاهدين
-setInterval(()=>{ runTransaction(countdownRef,current=>{
-  if(current===null) return TOTAL_SECONDS;
-  if(current<=0) return 0;
-  return current-1;
-}); },1000);
-
-// رسم العداد الدائري
-function drawCircle(percentage){
+// === Countdown Timer ===
+function drawCircle(perc){
   ctx.clearRect(0,0,canvas.width,canvas.height);
-  const radius = canvas.width/2 - 10;
-  // الخلفية
-  ctx.beginPath(); ctx.arc(canvas.width/2,canvas.height/2,radius,0,Math.PI*2); ctx.strokeStyle="rgba(80,0,0,0.3)"; ctx.lineWidth=12; ctx.stroke();
-  // التقدم
-  ctx.beginPath(); ctx.arc(canvas.width/2,canvas.height/2,radius,-Math.PI/2, -Math.PI/2 + 2*Math.PI*percentage); ctx.strokeStyle="red"; ctx.lineWidth=12; ctx.shadowBlur=10; ctx.shadowColor="red"; ctx.stroke();
+  ctx.beginPath();
+  ctx.arc(canvas.width/2,canvas.height/2,radius,0,Math.PI*2);
+  ctx.strokeStyle='rgba(80,0,0,0.3)'; ctx.lineWidth=8; ctx.stroke();
+  ctx.beginPath();
+  ctx.arc(canvas.width/2,canvas.height/2,radius,-Math.PI/2,-Math.PI/2+Math.PI*2*perc);
+  ctx.strokeStyle='red'; ctx.lineWidth=8; ctx.shadowBlur=10; ctx.shadowColor='red'; ctx.stroke();
 }
 
-// تحديث الوقت والعداد
-onValue(countdownRef, snap=>{
-  let time = snap.val(); if(time===null) time=TOTAL_SECONDS; if(time<0) time=0;
-  const m=Math.floor(time/60); const s=time%60;
-  timerText.textContent = `${m}:${s<10?'0'+s:s}`;
-  const percent = time/TOTAL_SECONDS;
-  drawCircle(percent);
-  if(time===0 && !alarmSound.played.length) alarmSound.play().catch(()=>{});
+// تحديث العداد من Firebase
+onValue(countdownRef,snap=>{
+  let time = snap.val();
+  if(time===null) time=180;
+  if(time<0) time=0;
+  const m = Math.floor(time/60);
+  const s = time%60;
+  globalTimerText.textContent = `${m<10?"0"+m:m}:${s<10?"0"+s:s}`;
+  drawCircle(time/180);
 });
+</script>
 
+<script>
 // particles
 particlesJS("particles-js",{particles:{number:{value:70,density:{enable:true,value_area:800}}, color:{value:"#ff3333"}, shape:{type:"circle"}, opacity:{value:0.5,random:true}, size:{value:3,random:true}, line_linked:{enable:true,distance:150,color:"#ff3333",opacity:0.3,width:1}, move:{enable:true,speed:1,direction:"none",random:true,out_mode:"out"}}, interactivity:{detect_on:"canvas", events:{onhover:{enable:true,mode:"grab"},onclick:{enable:true,mode:"push"}}, modes:{grab:{distance:200,line_linked:{opacity:0.5}},bubble:{distance:200,size:6,duration:2,opacity:0.8}}}, retina_detect:true });
 
-// overlay fade
+// fade overlay
 window.addEventListener('load',()=>{document.getElementById('pageOverlay').classList.add('fade-out');});
 </script>
 </body>
