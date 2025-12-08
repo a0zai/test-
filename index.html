@@ -81,7 +81,7 @@ html, body {
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-import { getDatabase, ref, push, onChildAdded, onValue, set, onDisconnect, serverTimestamp, remove } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+import { getDatabase, ref, push, onChildAdded, onValue, set, onDisconnect, serverTimestamp, remove, runTransaction } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBUb10JpH6iTD1sqSN7xz_lYDZUNSVennQ",
@@ -160,14 +160,6 @@ function drawCircle(percentage){
   ctx.stroke();
 }
 
-function setGlobalCountdownStart() {
-  // استخدام update لتجنب الكتابة إذا كان المفتاح موجوداً (للتشغيل لمرة واحدة)
-  // set(globalCountdownRef, { startTime: serverTimestamp() }); 
-  // استخدام transaction أو runTransaction سيكون أكثر أمانًا، 
-  // لكن set هنا يكفي بالاقتران مع منطق onValue
-  set(globalCountdownRef, { startTime: serverTimestamp() }); 
-}
-
 function startLocalTimer(startTime) {
   if (countdownInterval) {
     clearInterval(countdownInterval);
@@ -195,17 +187,23 @@ function startLocalTimer(startTime) {
   updateTimer();
 }
 
-// المنطق المعدل: يبدأ التشغيل لمرة واحدة فور تحميل الصفحة
+// 1. استخدام runTransaction للتشغيل لمرة واحدة فقط بأمان
+runTransaction(globalCountdownRef, (currentData) => {
+    // إذا كان وقت البداية غير موجود، قم بتعيينه باستخدام ختم الوقت للخادم
+    if (currentData === null || !currentData.startTime) {
+        return { startTime: serverTimestamp() };
+    }
+    // إذا كان موجودًا، لا تقم بأي تغيير
+    return;
+});
+
+// 2. الاستماع لقيمة العداد لتشغيله محليًا
 onValue(globalCountdownRef, (snapshot) => {
   const data = snapshot.val();
   if (data && data.startTime) {
     startLocalTimer(data.startTime);
-  } else {
-    // هذه الكتلة تعمل فقط عندما يكون المفتاح مفقوداً في DB، لتعيينه لأول مرة.
-    setGlobalCountdownStart();
   }
 });
-
 
 joinBtn.addEventListener("click", () => {
   const name = nameInput.value.trim();
