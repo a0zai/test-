@@ -56,10 +56,6 @@ html, body {
   padding:5px 10px; font-size:12px; border-radius:5px; border:1px solid white; 
   background:rgba(0,0,0,0.5); color:white; cursor:pointer; user-select:none;
 }
-#resetTimerButton:disabled {
-  opacity: 0.5;
-  cursor: default;
-}
 </style>
 </head>
 <body>
@@ -71,7 +67,7 @@ html, body {
 <div id="globalTimerContainer">
   <canvas id="globalTimerCanvas" width="220" height="220"></canvas>
   <div id="globalTimerText">⏳ 3:00</div>
-  <button id="resetTimerButton">إعادة ضبط</button>
+  <button id="resetTimerButton"></button>
 </div>
 
 <div id="chatWrapper">
@@ -122,7 +118,7 @@ const viewersListPopup = document.getElementById('viewersListPopup');
 const videoElement = document.getElementById('smallCamera');
 const timerText = document.getElementById('globalTimerText');
 const timerCanvas = document.getElementById('globalTimerCanvas');
-const resetTimerButton = document.getElementById('resetTimerButton'); 
+const resetTimerButton = document.getElementById('resetTimerButton');
 const ctx = timerCanvas.getContext('2d');
 
 let userName = "";
@@ -133,56 +129,6 @@ let countdownInterval;
 
 set(visitorRef,{name:"Guest"});
 onDisconnect(visitorRef).remove();
-
-function setGlobalCountdownStart() {
-  set(globalCountdownRef, { startTime: serverTimestamp() })
-    .then(() => {
-        resetTimerButton.style.display = 'none';
-    })
-    .catch(error => {
-        console.warn("SET failed (likely blocked by security rules):", error.message);
-        resetTimerButton.style.display = 'none'; 
-    });
-}
-
-function startLocalTimer(startTime) {
-  if (countdownInterval) {
-    clearInterval(countdownInterval);
-  }
-
-  function updateTimer() {
-    const now = Date.now();
-    const elapsedTime = Math.floor((now - startTime) / 1000);
-    const remainingTime = totalDuration - elapsedTime;
-
-    if (remainingTime <= 0) {
-      clearInterval(countdownInterval);
-      timerText.textContent = "⌛ 0:00";
-      drawCircle(0);
-      return;
-    }
-
-    const m = Math.floor(remainingTime / 60);
-    const s = remainingTime % 60;
-    timerText.textContent = `⏳ ${m}:${s < 10 ? '0' + s : s}`;
-    drawCircle(remainingTime / totalDuration);
-  }
-
-  countdownInterval = setInterval(updateTimer, 1000);
-  updateTimer();
-}
-
-onValue(globalCountdownRef, (snapshot) => {
-  const data = snapshot.val();
-  if (data && data.startTime) {
-    startLocalTimer(data.startTime);
-    resetTimerButton.style.display = 'none'; 
-  } else {
-    resetTimerButton.style.display = 'block'; 
-  }
-});
-
-resetTimerButton.addEventListener('click', setGlobalCountdownStart);
 
 onValue(viewersRef, snapshot => {
   const viewers = snapshot.val();
@@ -220,6 +166,48 @@ function drawCircle(percentage){
   ctx.lineWidth=8;
   ctx.stroke();
 }
+
+function setGlobalCountdownStart() {
+  set(globalCountdownRef, { startTime: serverTimestamp() });
+}
+
+function startLocalTimer(startTime) {
+  if (countdownInterval) {
+    clearInterval(countdownInterval);
+  }
+
+  function updateTimer() {
+    const now = Date.now();
+    const elapsedTime = Math.floor((now - startTime) / 1000);
+    const remainingTime = totalDuration - elapsedTime;
+
+    if (remainingTime <= 0) {
+      clearInterval(countdownInterval);
+      timerText.textContent = "⌛ 0:00";
+      drawCircle(0);
+      return;
+    }
+
+    const m = Math.floor(remainingTime / 60);
+    const s = remainingTime % 60;
+    timerText.textContent = `⏳ ${m}:${s < 10 ? '0' + s : s}`;
+    drawCircle(remainingTime / totalDuration);
+  }
+
+  countdownInterval = setInterval(updateTimer, 1000);
+  updateTimer();
+}
+
+onValue(globalCountdownRef, (snapshot) => {
+  const data = snapshot.val();
+  if (data && data.startTime) {
+    startLocalTimer(data.startTime);
+  } else if (userName) {
+     setGlobalCountdownStart();
+  }
+});
+
+resetTimerButton.addEventListener('click', setGlobalCountdownStart);
 
 joinBtn.addEventListener("click", () => {
   const name = nameInput.value.trim();
