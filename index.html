@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>teat Chat</title>
+<title>Scary Chat</title>
 <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 <style>
 html, body {
@@ -91,7 +91,6 @@ html, body {
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-// تم إزالة runTransaction لأنه لم يعد ضرورياً مع القواعد الجديدة
 import { getDatabase, ref, push, onChildAdded, onValue, set, onDisconnect, serverTimestamp, remove } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
 
 const firebaseConfig = {
@@ -135,6 +134,56 @@ let countdownInterval;
 set(visitorRef,{name:"Guest"});
 onDisconnect(visitorRef).remove();
 
+function setGlobalCountdownStart() {
+  set(globalCountdownRef, { startTime: serverTimestamp() })
+    .then(() => {
+        resetTimerButton.style.display = 'none';
+    })
+    .catch(error => {
+        console.warn("SET failed (likely blocked by security rules):", error.message);
+        resetTimerButton.style.display = 'none'; 
+    });
+}
+
+function startLocalTimer(startTime) {
+  if (countdownInterval) {
+    clearInterval(countdownInterval);
+  }
+
+  function updateTimer() {
+    const now = Date.now();
+    const elapsedTime = Math.floor((now - startTime) / 1000);
+    const remainingTime = totalDuration - elapsedTime;
+
+    if (remainingTime <= 0) {
+      clearInterval(countdownInterval);
+      timerText.textContent = "⌛ 0:00";
+      drawCircle(0);
+      return;
+    }
+
+    const m = Math.floor(remainingTime / 60);
+    const s = remainingTime % 60;
+    timerText.textContent = `⏳ ${m}:${s < 10 ? '0' + s : s}`;
+    drawCircle(remainingTime / totalDuration);
+  }
+
+  countdownInterval = setInterval(updateTimer, 1000);
+  updateTimer();
+}
+
+onValue(globalCountdownRef, (snapshot) => {
+  const data = snapshot.val();
+  if (data && data.startTime) {
+    startLocalTimer(data.startTime);
+    resetTimerButton.style.display = 'none'; 
+  } else {
+    resetTimerButton.style.display = 'block'; 
+  }
+});
+
+resetTimerButton.addEventListener('click', setGlobalCountdownStart);
+
 onValue(viewersRef, snapshot => {
   const viewers = snapshot.val();
   const count = viewers ? Object.keys(viewers).length : 0;
@@ -171,52 +220,6 @@ function drawCircle(percentage){
   ctx.lineWidth=8;
   ctx.stroke();
 }
-
-// الدالة بسيطة الآن، تعتمد على قواعد Firebase لرفض التغيير بعد المرة الأولى
-function setGlobalCountdownStart() {
-  set(globalCountdownRef, { startTime: serverTimestamp() });
-}
-
-function startLocalTimer(startTime) {
-  if (countdownInterval) {
-    clearInterval(countdownInterval);
-  }
-
-  function updateTimer() {
-    const now = Date.now();
-    const elapsedTime = Math.floor((now - startTime) / 1000);
-    const remainingTime = totalDuration - elapsedTime;
-
-    if (remainingTime <= 0) {
-      clearInterval(countdownInterval);
-      timerText.textContent = "⌛ 0:00";
-      drawCircle(0);
-      return;
-    }
-
-    const m = Math.floor(remainingTime / 60);
-    const s = remainingTime % 60;
-    timerText.textContent = `⏳ ${m}:${s < 10 ? '0' + s : s}`;
-    drawCircle(remainingTime / totalDuration);
-  }
-
-  countdownInterval = setInterval(updateTimer, 1000);
-  updateTimer();
-}
-
-// يتم تعطيل الزر في الواجهة فقط إذا كان هناك وقت بداية بالفعل
-onValue(globalCountdownRef, (snapshot) => {
-  const data = snapshot.val();
-  if (data && data.startTime) {
-    startLocalTimer(data.startTime);
-    resetTimerButton.disabled = true; // تعطيل الزر لجميع المستخدمين الذين يشاهدون القيمة
-  } else {
-    resetTimerButton.disabled = false; // تمكين الزر إذا كانت القيمة مفقودة (لم يتم تعيينها بعد)
-  }
-});
-
-// عند النقر، يحاول تعيين القيمة. إذا كانت القيمة موجودة بالفعل، Firebase ترفض العملية.
-resetTimerButton.addEventListener('click', setGlobalCountdownStart);
 
 joinBtn.addEventListener("click", () => {
   const name = nameInput.value.trim();
