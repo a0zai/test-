@@ -51,11 +51,6 @@ html, body {
   position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
   color:red; font-size:48px; font-weight:bold; text-shadow:0 0 15px #ff0000;
 }
-#resetTimerButton {
-  position:absolute; bottom:0; left:50%; transform:translateX(-50%);
-  padding:5px 10px; font-size:12px; border-radius:5px; border:1px solid white; 
-  background:rgba(0,0,0,0.5); color:white; cursor:pointer; user-select:none;
-}
 </style>
 </head>
 <body>
@@ -66,8 +61,7 @@ html, body {
 
 <div id="globalTimerContainer">
   <canvas id="globalTimerCanvas" width="220" height="220"></canvas>
-  <div id="globalTimerText">⏳ 3:00</div>
-  <button id="resetTimerButton">إعادة ضبط</button>
+  <div id="globalTimerText">3:00</div>
 </div>
 
 <div id="chatWrapper">
@@ -118,7 +112,6 @@ const viewersListPopup = document.getElementById('viewersListPopup');
 const videoElement = document.getElementById('smallCamera');
 const timerText = document.getElementById('globalTimerText');
 const timerCanvas = document.getElementById('globalTimerCanvas');
-const resetTimerButton = document.getElementById('resetTimerButton');
 const ctx = timerCanvas.getContext('2d');
 
 let userName = "";
@@ -202,12 +195,10 @@ onValue(globalCountdownRef, (snapshot) => {
   const data = snapshot.val();
   if (data && data.startTime) {
     startLocalTimer(data.startTime);
-  } else if (userName) {
-     setGlobalCountdownStart();
+  } else {
+    setGlobalCountdownStart();
   }
 });
-
-resetTimerButton.addEventListener('click', setGlobalCountdownStart);
 
 joinBtn.addEventListener("click", () => {
   const name = nameInput.value.trim();
