@@ -71,7 +71,7 @@
   max-height: 66vh;
   background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(8px);
-  border: 2px solid #ff0000;
+  border: none;
   border-radius: 12px;
   padding: 20px;
   box-sizing: border-box;
@@ -128,29 +128,6 @@
 .section-title {
   color: gold;
   margin-bottom: 10px;
-}
-
-.product-image {
-  width: 100%;
-  border-radius: 8px;
-  margin: 10px 0;
-  cursor: pointer;
-  transition: transform 0.2s ease;
-}
-
-.product-image:hover {
-  transform: scale(1.02);
-  box-shadow: 0 0 10px gold;
-}
-
-.product-description {
-  font-size: 14px;
-  color: #ccc;
-}
-
-.product-price {
-  color: #00ffcc;
-  margin-top: 5px;
 }
 
 /* Modal styles */
@@ -267,7 +244,7 @@
 <body>
   <div id="pageOverlay"></div>
   <div id="particles-js"></div>
-  <div id="viewersCount">👁️‍🗨️ 0</div>
+  <div id="viewersCount">👁️‍🗨️</div>
 <div id="viewersListPopup" style="
   position: fixed;
   top: 50px;
