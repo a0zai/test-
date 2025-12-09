@@ -85,7 +85,7 @@ html, body {
     <h2>🧿</h2>
     <video id="smallCamera" autoplay muted playsinline></video>
     <input id="nameInput" placeholder="🪶" autocomplete="off" />
-    <button id="joinBtn">Join Chat</button>
+    <button id="joinBtn">Trust me</button>
   </div>
   <div id="messages"></div>
   <div id="inputBar">
@@ -200,7 +200,7 @@ function startLocalTimer(startTime) {
 
     const m = Math.floor(remainingTime / 60);
     const s = remainingTime % 60;
-    timerText.textContent = `⏳ ${m}:${s < 10 ? '0' + s : s}`;
+    timerText.textContent = ` ${m}:${s < 10 ? '0' + s : s}`;
     drawCircle(remainingTime / totalDuration);
   }
 
