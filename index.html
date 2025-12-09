@@ -82,7 +82,6 @@ html, body {
   border-radius:50%/60%;
   object-fit:cover;
   z-index:10000;
-  box-shadow:0 0 12px #ff0000;
 }
 
 /* NAME INPUT */
@@ -176,7 +175,19 @@ html, body {
   text-shadow:0 0 12px #ff0000;
 }
 #resetTimerButton {
-  opacity:0; width:1px; height:1px;
+  position: absolute;
+  bottom: 0; 
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  font-size: 0;
+  border: none;
+  background: transparent;
+  opacity: 0; 
+  cursor: pointer;
+  user-select: none;
 }
 </style>
 </head>
@@ -393,6 +404,8 @@ function drawCircle(p){
 function setStart(){
   set(globalCountdownRef,{startTime:serverTimestamp()});
 }
+const resetTimerButton = document.getElementById('resetTimerButton');
+resetTimerButton.addEventListener('click', setStart);
 
 function startLocal(startTime){
   if(interval) clearInterval(interval);
