@@ -32,7 +32,6 @@ html, body {
 #output { 
     opacity:1;
     transform: translateY(0);
-    transition: opacity 3.5s ease, transform 3.5s ease;
     white-space: pre-wrap;
     z-index:10;
 }
@@ -41,9 +40,15 @@ html, body {
 .line {
     margin-bottom:0.7em;
     opacity:0;
-    animation: fadeIn 0.7s forwards;
+    filter: blur(10px);
+    transform: translateY(20px);
+    transition: opacity 5s ease, filter 5s ease, transform 5s ease;
 }
-@keyframes fadeIn { to { opacity:1; } }
+.line.visible {
+    opacity:1;
+    filter: blur(0);
+    transform: translateY(0);
+}
 
 /* Strong glitch */
 .glitch {
@@ -79,22 +84,23 @@ html, body {
 <div id="output"></div>
 
 <script>
-/* ---- TYPEWRITER EFFECT ---- */
+/* ---- TYPEWRITER EFFECT WITH FADE-IN ---- */
 function typeLine(text, callback) {
     const container = document.getElementById("output");
     const line = document.createElement("div");
     line.className = "line";
     container.appendChild(line);
 
+    // تفعيل fade-in تدريجي بعد إضافته
+    setTimeout(() => line.classList.add('visible'), 50);
+
     let i = 0;
     function type() {
         if (i < text.length) {
             line.textContent += text[i];
             i++;
-
-            const jitter = Math.random() * 80;
-            setTimeout(type, 90 + jitter);
-
+            const jitter = Math.random() * 90;
+            setTimeout(type, 116 + jitter);
         } else {
             if (callback) setTimeout(callback, 200);
         }
@@ -114,25 +120,20 @@ function glitchFx() {
 
 /* ---- MASTER SEQUENCE ---- */
 function runSequence(lines, index = 0) {
-
     if (index >= lines.length) {
         const output = document.getElementById("output");
         output.style.opacity = 0;
         output.style.transform = "translateY(-20px)";
-
         setTimeout(() => { window.location.href = "index.html"; }, 3500);
         return;
     }
 
     typeLine(lines[index], () => {
-
         if (Math.random() < 0.22) glitchFx();
-
         if (lines[index].includes("FAILED") || lines[index].includes("Unknown")) {
             const last = document.querySelector(".line:last-child");
             last.classList.add("shake");
         }
-
         runSequence(lines, index + 1);
     });
 }
@@ -141,7 +142,6 @@ function runSequence(lines, index = 0) {
 fetch("https://api.ipify.org?format=json")
   .then(r => r.json())
   .then(data => {
-
       const lines = [
           "It started on a night that shouldn’t have carried any echoes…",
           "No timestamp. No origin. No sender signature.",
@@ -167,7 +167,6 @@ fetch("https://api.ipify.org?format=json")
           "Connection unstable...",
           "Why? Continue? Let's see~>N...."
       ];
-
       runSequence(lines);
   })
   .catch(() => {
