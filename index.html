@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <title>Scary Chat</title>
 <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <style>
 html, body {
   height: 100%; margin:0; padding:0;
@@ -19,6 +20,16 @@ html, body {
   font-size:24px; font-weight:bold; color:gold; z-index:10000;
   user-select:none; background: rgba(0,0,0,0.5); padding:6px 12px;
   border-radius:12px; box-shadow:0 0 8px gold; cursor:pointer;
+}
+#threeSphere {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 220px; 
+  height: 220px;
+  z-index: 9999;  
+  pointer-events: none; 
 }
 #viewersListPopup {
   position:fixed; top:50px; right:20px; max-height:200px; width:200px;
@@ -73,7 +84,7 @@ html, body {
 <div id="particles-js"></div>
 <div id="viewersCount">👁️‍🗨️ 0</div>
 <div id="viewersListPopup"></div>
-
+<div id="threeSphere"></div>
 <div id="globalTimerContainer">
   <canvas id="globalTimerCanvas" width="220" height="220"></canvas>
   <div id="globalTimerText">3:00</div>
@@ -82,9 +93,9 @@ html, body {
 
 <div id="chatWrapper">
   <div id="namePrompt">
-    <h2>🧿</h2>
+    <h2>🕯️</h2>
     <video id="smallCamera" autoplay muted playsinline></video>
-    <input id="nameInput" placeholder="🪶" autocomplete="off" />
+    <input id="nameInput" placeholder="🧿" autocomplete="off" />
     <button id="joinBtn">Trust me</button>
   </div>
   <div id="messages"></div>
@@ -94,7 +105,38 @@ html, body {
     <button id="clearButton">Clear</button>
   </div>
 </div>
+<script>
+const container = document.getElementById("threeSphere");
 
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(
+  75,
+  container.clientWidth / container.clientHeight,
+  0.1,
+  1000
+);
+const renderer = new THREE.WebGLRenderer({ alpha: true });
+renderer.setSize(container.clientWidth, container.clientHeight);
+container.appendChild(renderer.domElement);
+const geometry = new THREE.SphereGeometry(2, 32, 32);
+const material = new THREE.MeshBasicMaterial({
+  color: 0xff3333,
+  wireframe: true
+});
+const sphere = new THREE.Mesh(geometry, material);
+
+scene.add(sphere);
+camera.position.z = 5;
+
+function animate() {
+  requestAnimationFrame(animate);
+  sphere.rotation.x += 0.01;
+  sphere.rotation.y += 0.01;
+  renderer.render(scene, camera);
+}
+
+animate();
+</script>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
 import { getDatabase, ref, push, onChildAdded, onValue, set, onDisconnect, serverTimestamp, remove } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
