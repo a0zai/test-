@@ -4,158 +4,206 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="UTF-8">
 <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-<title>A∞Z | Test</title>
+<title>A∞Z | Transmission</title>
+
 <style>
 html, body {
-  height: 100%; margin:0; padding:0;
-  background-color:#000;
+  height: 100%;
+  margin:0;
+  padding:0;
+  background:#000;
   color:#00ff00;
   font-family:'Courier New', monospace;
   overflow:hidden;
-  display:flex; justify-content:center; align-items:center; text-align:center;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
 }
-#particles-js {position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;}
+
+#particles-js {
+    position:fixed;
+    top:0; left:0;
+    width:100%; height:100%;
+    z-index:0;
+    pointer-events:none;
+}
+
 #output { 
-    opacity: 1;
+    opacity:1;
     transform: translateY(0);
-    transition: opacity 4s ease-in-out, transform 4s ease-in-out;
+    transition: opacity 3.5s ease, transform 3.5s ease;
     white-space: pre-wrap;
+    z-index:10;
 }
 
+/* Typewriter output */
 .line {
-    margin-bottom: 0.8em;
-    opacity: 0;
-    animation: fadeIn 0.8s forwards;
+    margin-bottom:0.7em;
+    opacity:0;
+    animation: fadeIn 0.7s forwards;
 }
+@keyframes fadeIn { to { opacity:1; } }
 
-@keyframes fadeIn { to { opacity: 1; } }
-
+/* Strong glitch */
 .glitch {
-    animation: glitchAnim 0.2s infinite;
+    font-weight:bold;
+    letter-spacing:1px;
+    color:#00ff00;
+    text-shadow:0 0 7px #00ff00, 0 0 12px #00ff00;
+    animation: glitchAnim 0.12s steps(2, jump-end) infinite;
 }
-
 @keyframes glitchAnim {
-    0%, 50%, 100% { }
+    0% { transform:translate(1px, -1px); }
+    50% { transform:translate(-2px, 2px); }
+    100% { transform:translate(1px, -1px); }
 }
 
+/* Shake error lines */
 .shake {
     animation: shakeAnim 0.35s ease-in-out;
 }
-
 @keyframes shakeAnim {
-    0% { transform: translateX(0); }
-    20% { transform: translateX(-4px); }
-    40% { transform: translateX(4px); }
-    60% { transform: translateX(-3px); }
-    80% { transform: translateX(3px); }
-    100% { transform: translateX(0); }
+    0% { transform:translateX(0); }
+    20% { transform:translateX(-4px); }
+    40% { transform:translateX(4px); }
+    60% { transform:translateX(-3px); }
+    80% { transform:translateX(3px); }
+    100% { transform:translateX(0); }
 }
 </style>
 </head>
+
 <body>
 <div id="particles-js"></div>
 <div id="output"></div>
 
 <script>
-/* ---------------- TYPEWRITER EFFECT ---------------- */
+/* ---- TYPEWRITER EFFECT ---- */
 function typeLine(text, callback) {
     const container = document.getElementById("output");
     const line = document.createElement("div");
     line.className = "line";
     container.appendChild(line);
 
-    let idx = 0;
+    let i = 0;
     function type() {
-        if (idx < text.length) {
-            line.textContent += text[idx];
-            idx++;
-            const jitter = Math.random() * 50; 
-            setTimeout(type, 116 + jitter);
+        if (i < text.length) {
+            line.textContent += text[i];
+            i++;
+
+            const jitter = Math.random() * 80;
+            setTimeout(type, 90 + jitter);
+
         } else {
-            if (callback) setTimeout(callback, 180);
+            if (callback) setTimeout(callback, 200);
         }
     }
     type();
 }
 
-/* ---------------- GLITCH INSERTION ---------------- */
+/* ---- RANDOM GLITCH FX ---- */
 function glitchFx() {
     const out = document.getElementById("output");
     const g = document.createElement("div");
     g.className = "line glitch";
-    g.style.color = "#00ff00";
-    g.textContent = "@#%* SIGNAL DISTORTION *%#@";
+    g.textContent = "!! SIGNAL DISTORTION DETECTED !!";
     out.appendChild(g);
-    setTimeout(() => { g.remove(); }, 600);
+    setTimeout(() => g.remove(), 500);
 }
 
-/* ---------------- MASTER SEQUENCE ---------------- */
+/* ---- MASTER SEQUENCE ---- */
 function runSequence(lines, index = 0) {
+
     if (index >= lines.length) {
         const output = document.getElementById("output");
         output.style.opacity = 0;
         output.style.transform = "translateY(-20px)";
-        setTimeout(() => { window.location.href = "index.html"; }, 4000);
+
+        setTimeout(() => { window.location.href = "index.html"; }, 3500);
         return;
     }
 
     typeLine(lines[index], () => {
-        if (Math.random() < 0.18) glitchFx();
+
+        if (Math.random() < 0.22) glitchFx();
+
         if (lines[index].includes("FAILED") || lines[index].includes("Unknown")) {
             const last = document.querySelector(".line:last-child");
             last.classList.add("shake");
         }
+
         runSequence(lines, index + 1);
     });
 }
 
-/* ---------------- FETCH DATA ---------------- */
+/* ---- FETCH USER DATA + START ---- */
 fetch("https://api.ipify.org?format=json")
-    .then(r => r.json())
-    .then(data => {
-        const lines = [
-            "It started on a night that shouldn’t have carried any echoes…",
-            "No timestamp. No origin. No sender signature.",
-            "A message that had been trying to arrive for 12 years,",
-            "",
-            "Tonight…",
-            "",
-            ">>> Decrypting frozen message...",
-            "Sender: Only Brother",
-            "To: Mamy",
-            "",
-            "“Mamy…",
-            "Why didn’t you answer my calls…?”",
-            "",
-            "Papi hasn’t woken up.",
-            "Before he slept he said:",
-            "   ‘Your Dady will be late.’",
-            "",
-            "Message Age: 12 years",
-            "Delivery Status: FAILED",
-            "Reason: No recipient detected.",
-            "-----",
-            "Connection unstable...",
-            "Why? Continue? Let's see~>N...."
-        ];
-        runSequence(lines);
-    })
-    .catch(() => {
-        runSequence([
-            "[ A∞Z / FAILURE ]",
-            "Metadata retrieval failed...",
-            "But something recognized you anyway.",
-            "",
-            "Closing connection..."
-        ]);
-    });
+  .then(r => r.json())
+  .then(data => {
+
+      const lines = [
+          "It started on a night that shouldn’t have carried any echoes…",
+          "No timestamp. No origin. No sender signature.",
+          "A message that had been trying to arrive for 12 years,",
+          "",
+          "Tonight…",
+          "",
+          ">>> Decrypting frozen message...",
+          "Sender: Only Brother",
+          "To: Mamy",
+          "",
+          "“Mamy…",
+          "Why didn’t you answer my calls…?”",
+          "",
+          "Papi hasn’t woken up.",
+          "Before he slept he said:",
+          "   ‘Your Dady will be late.’",
+          "",
+          "Message Age: 12 years",
+          "Delivery Status: FAILED",
+          "Reason: No recipient detected.",
+          "-----",
+          "Connection unstable...",
+          "Why? Continue? Let's see~>N...."
+      ];
+
+      runSequence(lines);
+  })
+  .catch(() => {
+      runSequence([
+          "[ A∞Z / FAILURE ]",
+          "Metadata retrieval failed...",
+          "But something recognized you anyway.",
+          "",
+          "Closing connection..."
+      ]);
+  });
 </script>
 
+<!-- PARTICLES -->
 <script>
 particlesJS("particles-js",{
-  particles:{number:{value:70,density:{enable:true,value_area:800}}, color:{value:"#00ff00"}, shape:{type:"circle"}, opacity:{value:0.5,random:true}, size:{value:3,random:true}, line_linked:{enable:true,distance:150,color:"#00ff00",opacity:0.3,width:1}, move:{enable:true,speed:1,direction:"none",random:true,out_mode:"out"}}, 
-  interactivity:{detect_on:"canvas", events:{onhover:{enable:true,mode:"grab"},onclick:{enable:true,mode:"push"}}, modes:{grab:{distance:200,line_linked:{opacity:0.5}}, bubble:{distance:200,size:6,duration:2,opacity:0.8}}}, retina_detect:true
+  particles:{
+    number:{value:80,density:{enable:true,value_area:900}},
+    color:{value:"#00ff00"},
+    shape:{type:"circle"},
+    opacity:{value:0.45,random:true},
+    size:{value:3,random:true},
+    line_linked:{enable:true,distance:150,color:"#00ff00",opacity:0.25,width:1},
+    move:{enable:true,speed:1.1,random:true,out_mode:"out"}
+  },
+  interactivity:{
+    detect_on:"canvas",
+    events:{onhover:{enable:true,mode:"grab"},onclick:{enable:true,mode:"push"}},
+    modes:{
+      grab:{distance:200,line_linked:{opacity:0.5}},
+      bubble:{distance:200,size:6,duration:2,opacity:0.8}
+    }
+  },
+  retina_detect:true
 });
 </script>
+
 </body>
 </html>
