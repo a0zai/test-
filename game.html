@@ -9,46 +9,47 @@
 html, body {
   height: 100%; margin:0; padding:0;
   background-color:#000;
-  color: #00ff00;
+  color:#00ff00;
   font-family:'Courier New', monospace;
   overflow:hidden;
   display:flex; justify-content:center; align-items:center; text-align:center;
 }
 #particles-js {position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;}
-  #output { 
-        opacity: 1;
-        transition: opacity 2.5s ease;
-        white-space: pre-wrap;
-    }
+#output { 
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 4s ease-in-out, transform 4s ease-in-out;
+    white-space: pre-wrap;
+}
 
-    .line {
-        margin-bottom: 0.8em;
-        opacity: 0;
-        animation: fadeIn 0.8s forwards;
-    }
+.line {
+    margin-bottom: 0.8em;
+    opacity: 0;
+    animation: fadeIn 0.8s forwards;
+}
 
-    @keyframes fadeIn { to { opacity: 1; } }
+@keyframes fadeIn { to { opacity: 1; } }
 
-    .glitch {
-        animation: glitchAnim 0.2s infinite;
-    }
+.glitch {
+    animation: glitchAnim 0.2s infinite;
+}
 
-    @keyframes glitchAnim {
+@keyframes glitchAnim {
     0%, 50%, 100% { }
 }
 
-    .shake {
-        animation: shakeAnim 0.35s ease-in-out;
-    }
+.shake {
+    animation: shakeAnim 0.35s ease-in-out;
+}
 
-    @keyframes shakeAnim {
-        0% { transform: translateX(0); }
-        20% { transform: translateX(-4px); }
-        40% { transform: translateX(4px); }
-        60% { transform: translateX(-3px); }
-        80% { transform: translateX(3px); }
-        100% { transform: translateX(0); }
-    }
+@keyframes shakeAnim {
+    0% { transform: translateX(0); }
+    20% { transform: translateX(-4px); }
+    40% { transform: translateX(4px); }
+    60% { transform: translateX(-3px); }
+    80% { transform: translateX(3px); }
+    100% { transform: translateX(0); }
+}
 </style>
 </head>
 <body>
@@ -57,33 +58,27 @@ html, body {
 
 <script>
 /* ---------------- TYPEWRITER EFFECT ---------------- */
-
 function typeLine(text, callback) {
     const container = document.getElementById("output");
     const line = document.createElement("div");
     line.className = "line";
-
     container.appendChild(line);
 
     let idx = 0;
-
     function type() {
         if (idx < text.length) {
             line.textContent += text[idx];
             idx++;
-
             const jitter = Math.random() * 50; 
-            setTimeout(type, 102 + jitter);
+            setTimeout(type, 116 + jitter);
         } else {
             if (callback) setTimeout(callback, 180);
         }
     }
-
     type();
 }
 
 /* ---------------- GLITCH INSERTION ---------------- */
-
 function glitchFx() {
     const out = document.getElementById("output");
     const g = document.createElement("div");
@@ -91,48 +86,33 @@ function glitchFx() {
     g.style.color = "#00ff00";
     g.textContent = "@#%* SIGNAL DISTORTION *%#@";
     out.appendChild(g);
-
     setTimeout(() => { g.remove(); }, 600);
 }
 
 /* ---------------- MASTER SEQUENCE ---------------- */
-
 function runSequence(lines, index = 0) {
     if (index >= lines.length) {
-        // fade + redirect
-        setTimeout(() => {
-            document.getElementById("output").style.opacity = 0;
-            setTimeout(() => { window.location.href = "index.html"; }, 2500);
-        }, 1500);
+        const output = document.getElementById("output");
+        output.style.opacity = 0;
+        output.style.transform = "translateY(-20px)";
+        setTimeout(() => { window.location.href = "index.html"; }, 4000);
         return;
     }
 
     typeLine(lines[index], () => {
-        // chance of random glitch
         if (Math.random() < 0.18) glitchFx();
-
-        // shake effect on certain lines
         if (lines[index].includes("FAILED") || lines[index].includes("Unknown")) {
             const last = document.querySelector(".line:last-child");
             last.classList.add("shake");
         }
-
         runSequence(lines, index + 1);
     });
 }
 
 /* ---------------- FETCH DATA ---------------- */
-
 fetch("https://api.ipify.org?format=json")
     .then(r => r.json())
     .then(data => {
-        const ip = data.ip;
-        const ua = navigator.userAgent;
-        const width = window.screen.width;
-        const height = window.screen.height;
-        const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        const sessionId = btoa(ip + ua).slice(0,16);
-
         const lines = [
             "It started on a night that shouldn’t have carried any echoes…",
             "No timestamp. No origin. No sender signature.",
@@ -158,7 +138,6 @@ fetch("https://api.ipify.org?format=json")
             "Connection unstable...",
             "Why? Continue? Let's see~>N...."
         ];
-
         runSequence(lines);
     })
     .catch(() => {
@@ -171,9 +150,10 @@ fetch("https://api.ipify.org?format=json")
         ]);
     });
 </script>
+
 <script>
 particlesJS("particles-js",{
-  particles:{number:{value:70,density:{enable:true,value_area:800}}, color:{value:"#00ff00"}, shape:{type:"circle"}, opacity:{value:0.5,random:true}, size:{value:3,random:true}, line_linked:{enable:true,distance:150,color:"#ff3333",opacity:0.3,width:1}, move:{enable:true,speed:1,direction:"none",random:true,out_mode:"out"}}, 
+  particles:{number:{value:70,density:{enable:true,value_area:800}}, color:{value:"#00ff00"}, shape:{type:"circle"}, opacity:{value:0.5,random:true}, size:{value:3,random:true}, line_linked:{enable:true,distance:150,color:"#00ff00",opacity:0.3,width:1}, move:{enable:true,speed:1,direction:"none",random:true,out_mode:"out"}}, 
   interactivity:{detect_on:"canvas", events:{onhover:{enable:true,mode:"grab"},onclick:{enable:true,mode:"push"}}, modes:{grab:{distance:200,line_linked:{opacity:0.5}}, bubble:{distance:200,size:6,duration:2,opacity:0.8}}}, retina_detect:true
 });
 </script>
