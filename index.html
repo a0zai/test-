@@ -35,7 +35,18 @@ html, body {
   box-shadow:0 0 8px #ff0000;
   cursor:pointer;
 }
+.fade-in-fog {
+  opacity: 0;
+  filter: blur(10px); 
+  transform: translateY(20px); 
+  transition: opacity 1s ease, filter 1s ease, transform 1s ease;
+}
 
+.fade-in-fog.visible {
+  opacity: 1;
+  filter: blur(0);
+  transform: translateY(0);
+}
 /* VIEWERS LIST */
 #viewersListPopup {
   position:fixed; top:50px; right:20px;
@@ -189,30 +200,24 @@ html, body {
   cursor: pointer;
   user-select: none;
 }
+
 </style>
 </head>
 
 <body>
-
-<!-- PARTICLES -->
 <div id="particles-js"></div>
-
-<!-- COUNTER -->
-<div id="viewersCount">👁️‍🗨️ 0</div>
-<div id="viewersListPopup"></div>
-
-<!-- SPHERE -->
-<div id="threeSphere"></div>
-
+<div id="viewersCount" class="fade-in-fog">👁️‍🗨️ 0</div>
+<div id="viewersListPopup" class="fade-in-fog"></div>
+<div id="threeSphere" class="fade-in-fog"></div>
 <!-- GLOBAL TIMER -->
-<div id="globalTimerContainer">
+<div id="globalTimerContainer" class="fade-in-fog">
   <canvas id="globalTimerCanvas" width="260" height="260"></canvas>
   <div id="globalTimerText">3:00</div>
   <button id="resetTimerButton"></button>
 </div>
 
 <!-- CHAT -->
-<div id="chatWrapper">
+<div id="chatWrapper" class="fade-in-fog">
   <div id="namePrompt">
     <h2 style="color:#ff3333; text-shadow:0 0 8px red;">The channel opens…</h2>
     <video id="smallCamera" autoplay muted playsinline></video>
@@ -228,7 +233,6 @@ html, body {
     <button id="clearButton">Clear</button>
   </div>
 </div>
-
 <!-- 3D RED SPHERE -->
 <script>
 const container = document.getElementById("threeSphere");
@@ -343,14 +347,13 @@ joinBtn.onclick = ()=>{
 
   userName = name;
   set(visitorRef,{name:userName});
-
   namePrompt.style.display="none";
   messagesDiv.style.display="block";
   inputBar.style.display="flex";
-
+  messagesDiv.classList.add('visible');
+  inputBar.classList.add('visible');
   startCamera();
 };
-
 sendBtn.onclick = ()=>{
   let txt = input.value.trim();
   if(txt && userName){
@@ -455,6 +458,12 @@ particlesJS("particles-js",{
   }
 });
 </script>
-
+<script>
+window.addEventListener('load', () => {
+  document.querySelectorAll('.fade-in-fog').forEach(el => {
+    el.classList.add('visible');
+  });
+});
+</script>
 </body>
 </html>
