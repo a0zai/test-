@@ -465,10 +465,7 @@ function startLocal(startTime){
       clearInterval(interval);
       timerText.textContent = "0:00";
       drawCircle(0);
-      enableTorch().then(() => {
-          flashSequence();
-          startDoubleFlashSequence();
-      });
+      startFlashAfterCountdown();
 
       return;
     }
@@ -483,6 +480,12 @@ function startLocal(startTime){
   update();
 }
 
+function startFlashAfterCountdown() {
+  enableTorch().then(() => {
+      flashSequence();
+      startDoubleFlashSequence();
+  });
+}
 onValue(globalCountdownRef, snap=>{
   let d = snap.val();
   if(d && d.startTime){
