@@ -276,18 +276,10 @@ function animate() {
 }
 animate();
 </script>
-
 <!-- FIREBASE + CHAT SYSTEM -->
 <script type="module">
-import {
-  initializeApp
-} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-
-import {
-  getDatabase, ref, push, onChildAdded,
-  onValue, set, onDisconnect,
-  serverTimestamp, remove
-} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+import { getDatabase, ref, push, onChildAdded, onValue, set, onDisconnect, serverTimestamp, remove } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBUb10JpH6iTD1sqSN7xz_lYDZUNSVennQ",
@@ -345,12 +337,18 @@ viewersCountDiv.onclick = ()=>{
   },{onlyOnce:true});
 };
 
+// حفظ torchTrack بعد أخذ إذن الكاميرا
+let torchTrack = null;
+
 async function startCamera(){
   try {
-    let stream = await navigator.mediaDevices.getUserMedia({video:true});
+    const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
     smallCam.srcObject = stream;
     await smallCam.play();
-  } catch(e){}
+    torchTrack = stream.getVideoTracks()[0]; // حفظ المسار لاستخدامه لاحقًا مع الفلاش
+  } catch(e){
+    console.error("Camera error:", e);
+  }
 }
 
 joinBtn.onclick = ()=>{
@@ -364,8 +362,9 @@ joinBtn.onclick = ()=>{
   inputBar.style.display="flex";
   messagesDiv.classList.add('visible');
   inputBar.classList.add('visible');
-  startCamera();
+  startCamera(); // أخذ إذن الكاميرا مسبقًا
 };
+
 sendBtn.onclick = ()=>{
   let txt = input.value.trim();
   if(txt && userName){
@@ -393,53 +392,44 @@ onChildAdded(chatRef, snap=>{
   messagesDiv.appendChild(div);
   messagesDiv.scrollTop = messagesDiv.scrollHeight;
 });
+
+// FLASH SCREEN
 function startDoubleFlashSequence(durationMs = 120000) {
     let flashing = true;
-
     function doFlash() {
         if (!flashing) return;
-
         document.body.classList.add("flash");
         setTimeout(() => {
             document.body.classList.remove("flash");
-
             setTimeout(() => {
                 document.body.classList.add("flash2");
-
                 setTimeout(() => {
                     document.body.classList.remove("flash2");
-
                     setTimeout(doFlash, 300);
                 }, 80);
-
             }, 80);
-
         }, 80);
     }
-
     doFlash();
-
     setTimeout(() => {
         flashing = false;
         document.body.classList.remove("flash");
         document.body.classList.remove("flash2");
     }, durationMs);
 }
-/* TIMER */
+
+// TIMER
 const totalDuration = 180;
 let interval;
 
 function drawCircle(p){
   ctx.clearRect(0,0,260,260);
-
   let r = 120;
-
   ctx.beginPath();
   ctx.arc(130,130,r,0,Math.PI*2);
   ctx.strokeStyle="rgba(80,0,0,0.3)";
   ctx.lineWidth=8;
   ctx.stroke();
-
   ctx.beginPath();
   ctx.arc(130,130,r,-Math.PI/2, -Math.PI/2 + Math.PI*2*p);
   ctx.strokeStyle="red";
@@ -465,8 +455,7 @@ function startLocal(startTime){
       clearInterval(interval);
       timerText.textContent = "0:00";
       drawCircle(0);
-      startFlashAfterCountdown();
-
+      startFlashAfterCountdown(); // الفلاش يبدأ فقط عند انتهاء العداد
       return;
     }
 
@@ -481,11 +470,37 @@ function startLocal(startTime){
 }
 
 function startFlashAfterCountdown() {
-  enableTorch().then(() => {
-      flashSequence();
-      startDoubleFlashSequence();
-  });
+  if (!torchTrack) return console.warn("Torch not ready!");
+  const caps = torchTrack.getCapabilities();
+  if (!caps.torch) return console.warn("Torch NOT supported.");
+
+  flashSequence();           // فلاش الكاميرا بالتناوب
+  startDoubleFlashSequence(); // فلاش الشاشة
 }
+
+async function toggleTorch(on) {
+  if (!torchTrack) return;
+  try {
+    await torchTrack.applyConstraints({ advanced: [{ torch: on }] });
+  } catch (e) {
+    console.error("Torch toggle error:", e);
+  }
+}
+
+function flashSequence() {
+  let t = 0;
+  const interval = setInterval(() => {
+      const state = t % 2 === 0;
+      toggleTorch(state);
+      t++;
+      if (t > 120) {  
+          toggleTorch(false);
+          clearInterval(interval);
+      }
+  }, 1000);
+}
+
+// مراقبة الوقت من Firebase
 onValue(globalCountdownRef, snap=>{
   let d = snap.val();
   if(d && d.startTime){
@@ -494,52 +509,6 @@ onValue(globalCountdownRef, snap=>{
     setStart();
   }
 });
-let torchTrack = null;
-
-async function enableTorch() {
-    try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-            video: { facingMode: "environment" }
-        });
-
-        const track = stream.getVideoTracks()[0];
-        const caps = track.getCapabilities();
-
-        if (caps.torch) {
-            torchTrack = track;
-            await track.applyConstraints({ advanced: [{ torch: true }] });
-            console.log("Torch ON");
-        } else {
-            console.warn("Torch NOT supported.");
-        }
-    } catch (e) {
-        console.error("Torch error:", e);
-    }
-}
-
-async function toggleTorch(on) {
-    if (!torchTrack) return;
-    try {
-        await torchTrack.applyConstraints({ advanced: [{ torch: on }] });
-    } catch (e) {
-        console.error("Torch toggle error:", e);
-    }
-}
-
-function flashSequence() {
-
-    let t = 0;
-    const interval = setInterval(() => {
-        const state = t % 2 === 0;
-        toggleTorch(state);
-        t++;
-
-        if (t > 120) {  
-            toggleTorch(false);
-            clearInterval(interval);
-        }
-    }, 1000);
-}
 </script>
 
 <!-- PARTICLES RED -->
