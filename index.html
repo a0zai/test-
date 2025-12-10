@@ -277,20 +277,22 @@ function animate() {
 animate();
 </script>
 <!-- FIREBASE + CHAT SYSTEM -->
-<script type="module">
+
+
+// مراقبة الوقت من Firebase<script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
 import { getDatabase, ref, push, onChildAdded, onValue, set, onDisconnect, serverTimestamp, remove } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
 
+// ====== Firebase Config ======
 const firebaseConfig = {
-  apiKey: "AIzaSyBUb10JpH6iTD1sqSN7xz_lYDZUNSVennQ",
-  authDomain: "testing-9b30c.firebaseapp.com",
-  databaseURL: "https://testing-9b30c-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "testing-9b30c",
-  storageBucket: "testing-9b30c.appspot.com",
-  messagingSenderId: "569390736740",
-  appId: "1:569390736740:web:4f017178b0b3df5ef28671"
+  apiKey: "...",
+  authDomain: "...",
+  databaseURL: "...",
+  projectId: "...",
+  storageBucket: "...",
+  messagingSenderId: "...",
+  appId: "..."
 };
-
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
@@ -298,6 +300,7 @@ const chatRef = ref(db,"chat");
 const viewersRef = ref(db,"viewers");
 const globalCountdownRef = ref(db,"globalCountdown");
 
+// ====== DOM Elements ======
 const namePrompt = document.getElementById("namePrompt");
 const nameInput = document.getElementById("nameInput");
 const joinBtn = document.getElementById("joinBtn");
@@ -309,15 +312,19 @@ const clearBtn = document.getElementById("clearButton");
 const smallCam = document.getElementById("smallCamera");
 const viewersCountDiv = document.getElementById("viewersCount");
 const viewersPopup = document.getElementById("viewersListPopup");
-
 const timerText = document.getElementById("globalTimerText");
 const timerCanvas = document.getElementById("globalTimerCanvas");
 const ctx = timerCanvas.getContext("2d");
 
+// ====== Variables ======
 let userName = "";
 let visitorId = Math.random().toString(36).substring(2,9);
 let visitorRef = ref(db,"viewers/"+visitorId);
+let torchTrack = null;
+let interval;
+const totalDuration = 180;
 
+// ====== Viewers Handling ======
 set(visitorRef,{ name:"Guest" });
 onDisconnect(visitorRef).remove();
 
@@ -337,20 +344,19 @@ viewersCountDiv.onclick = ()=>{
   },{onlyOnce:true});
 };
 
-// حفظ torchTrack بعد أخذ إذن الكاميرا
-let torchTrack = null;
-
-async function startCamera(){
-  try {
-    const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
-    smallCam.srcObject = stream;
-    await smallCam.play();
-    torchTrack = stream.getVideoTracks()[0]; // حفظ المسار لاستخدامه لاحقًا مع الفلاش
-  } catch(e){
-    console.error("Camera error:", e);
-  }
+// ====== Camera & Torch ======
+async function startCamera() {
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+        smallCam.srcObject = stream;
+        await smallCam.play();
+        torchTrack = stream.getVideoTracks()[0];
+    } catch(e){
+        console.error("Camera error:", e);
+    }
 }
 
+// ====== Chat Handling ======
 joinBtn.onclick = ()=>{
   let name = nameInput.value.trim();
   if(!name){ alert("Enter a name"); return; }
@@ -362,7 +368,7 @@ joinBtn.onclick = ()=>{
   inputBar.style.display="flex";
   messagesDiv.classList.add('visible');
   inputBar.classList.add('visible');
-  startCamera(); // أخذ إذن الكاميرا مسبقًا
+  startCamera();
 };
 
 sendBtn.onclick = ()=>{
@@ -372,7 +378,6 @@ sendBtn.onclick = ()=>{
     input.value="";
   }
 };
-
 input.onkeydown = e=>{ if(e.key==="Enter") sendBtn.onclick(); };
 
 clearBtn.onclick = ()=>{
@@ -386,14 +391,30 @@ let joinTime = Date.now();
 onChildAdded(chatRef, snap=>{
   let msg = snap.val();
   if(msg.timestamp && msg.timestamp < joinTime - 5000) return;
-
   let div = document.createElement("div");
   div.textContent = `${msg.user}: ${msg.text}`;
   messagesDiv.appendChild(div);
   messagesDiv.scrollTop = messagesDiv.scrollHeight;
 });
 
-// FLASH SCREEN
+// ====== FLASH ======
+function toggleTorch(on) {
+    if (!torchTrack) return;
+    torchTrack.applyConstraints({ advanced: [{ torch: on }] }).catch(e => console.error("Torch toggle error:", e));
+}
+
+function flashSequence() {
+    let t = 0;
+    const interval = setInterval(() => {
+        toggleTorch(t % 2 === 0);
+        t++;
+        if (t > 120) {  
+            toggleTorch(false);
+            clearInterval(interval);
+        }
+    }, 1000);
+}
+
 function startDoubleFlashSequence(durationMs = 120000) {
     let flashing = true;
     function doFlash() {
@@ -418,10 +439,13 @@ function startDoubleFlashSequence(durationMs = 120000) {
     }, durationMs);
 }
 
-// TIMER
-const totalDuration = 180;
-let interval;
+function startFlashAfterCountdown() {
+    if (!torchTrack) return console.warn("Torch not ready!");
+    flashSequence();
+    startDoubleFlashSequence();
+}
 
+// ====== TIMER ======
 function drawCircle(p){
   ctx.clearRect(0,0,260,260);
   let r = 120;
@@ -437,70 +461,33 @@ function drawCircle(p){
   ctx.stroke();
 }
 
-function setStart(){
-  set(globalCountdownRef,{startTime:serverTimestamp()});
-}
-const resetTimerButton = document.getElementById('resetTimerButton');
-resetTimerButton.addEventListener('click', setStart);
-
 function startLocal(startTime){
   if (interval) clearInterval(interval);
-
   function update(){
     let now = Date.now();
     let elapsed = Math.floor((now - startTime) / 1000);
     let remain = totalDuration - elapsed;
-
     if (remain <= 0) {
       clearInterval(interval);
       timerText.textContent = "0:00";
       drawCircle(0);
-      startFlashAfterCountdown(); // الفلاش يبدأ فقط عند انتهاء العداد
+      startFlashAfterCountdown();
       return;
     }
-
     let m = Math.floor(remain / 60);
     let s = remain % 60;
-    timerText.textContent = `${m}:${s < 10 ? '0' + s : s}`;
+    timerText.textContent = `${m}:${s < 10 ? '0'+s : s}`;
     drawCircle(remain / totalDuration);
   }
-
   interval = setInterval(update, 1000);
   update();
 }
 
-function startFlashAfterCountdown() {
-  if (!torchTrack) return console.warn("Torch not ready!");
-  const caps = torchTrack.getCapabilities();
-  if (!caps.torch) return console.warn("Torch NOT supported.");
-
-  flashSequence();           // فلاش الكاميرا بالتناوب
-  startDoubleFlashSequence(); // فلاش الشاشة
+function setStart() {
+    set(globalCountdownRef,{startTime:serverTimestamp()});
 }
-
-async function toggleTorch(on) {
-  if (!torchTrack) return;
-  try {
-    await torchTrack.applyConstraints({ advanced: [{ torch: on }] });
-  } catch (e) {
-    console.error("Torch toggle error:", e);
-  }
-}
-
-function flashSequence() {
-  let t = 0;
-  const interval = setInterval(() => {
-      const state = t % 2 === 0;
-      toggleTorch(state);
-      t++;
-      if (t > 120) {  
-          toggleTorch(false);
-          clearInterval(interval);
-      }
-  }, 1000);
-}
-
-// مراقبة الوقت من Firebase
+const resetTimerButton = document.getElementById('resetTimerButton');
+resetTimerButton.addEventListener('click', setStart);
 onValue(globalCountdownRef, snap=>{
   let d = snap.val();
   if(d && d.startTime){
@@ -508,6 +495,10 @@ onValue(globalCountdownRef, snap=>{
   } else if(userName){
     setStart();
   }
+});
+
+window.addEventListener('load', () => {
+    startCamera();
 });
 </script>
 
