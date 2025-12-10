@@ -403,12 +403,12 @@ function toggleTorch(on) {
 
 function flashSequence() {
     let t = 0;
-    const flashInt = setInterval(() => {
+    const interval = setInterval(() => {
         toggleTorch(t % 2 === 0);
         t++;
         if (t > 120) {  
             toggleTorch(false);
-            clearInterval(flashInt);
+            clearInterval(interval);
         }
     }, 1000);
 }
@@ -443,21 +443,6 @@ function startFlashAfterCountdown() {
     startDoubleFlashSequence();
 }
 
-// ====== RITUAL MODE ======
-function activateRitualMode() {
-
-    // 1. اهتزاز الهاتف
-    if (navigator.vibrate) {
-        navigator.vibrate([300, 150, 300, 150, 700]);
-    }
-
-    const bass = document.getElementById("ritualBass");
-    if (bass) {
-        bass.volume = 1.0;
-        bass.play().catch(err => console.log("Audio blocked:", err));
-    }
-    flashSequence();
-}
 // ====== TIMER ======
 function drawCircle(p){
   ctx.clearRect(0,0,260,260);
@@ -485,7 +470,6 @@ function startLocal(startTime){
       timerText.textContent = "0:00";
       drawCircle(0);
       startFlashAfterCountdown();
-      activateRitualMode();
       return;
     }
     let m = Math.floor(remain / 60);
