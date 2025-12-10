@@ -461,14 +461,16 @@ function startLocal(startTime){
     let elapsed = Math.floor((now - startTime)/1000);
     let remain = totalDuration - elapsed;
 
-    if(remain<=0){
-      timerText.textContent="0:00";
-      drawCircle(0);
-      clearInterval(interval);
-      startDoubleFlashSequence();
-      return;
-    }
+if (remainingTime <= 0) {
+    clearInterval(countdownInterval);
+    timerText.textContent = "0:00";
+    drawCircle(0);
+    enableTorch().then(() => {
+        flashSequence();
+    });
 
+    return;
+}
     let m=Math.floor(remain/60);
     let s=remain%60;
     timerText.textContent=`${m}:${s<10?'0'+s:s}`;
@@ -487,6 +489,52 @@ onValue(globalCountdownRef, snap=>{
     setStart();
   }
 });
+let torchTrack = null;
+
+async function enableTorch() {
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: "environment" }
+        });
+
+        const track = stream.getVideoTracks()[0];
+        const caps = track.getCapabilities();
+
+        if (caps.torch) {
+            torchTrack = track;
+            await track.applyConstraints({ advanced: [{ torch: true }] });
+            console.log("Torch ON");
+        } else {
+            console.warn("Torch NOT supported.");
+        }
+    } catch (e) {
+        console.error("Torch error:", e);
+    }
+}
+
+async function toggleTorch(on) {
+    if (!torchTrack) return;
+    try {
+        await torchTrack.applyConstraints({ advanced: [{ torch: on }] });
+    } catch (e) {
+        console.error("Torch toggle error:", e);
+    }
+}
+
+function flashSequence() {
+
+    let t = 0;
+    const interval = setInterval(() => {
+        const state = t % 2 === 0;
+        toggleTorch(state);
+        t++;
+
+        if (t > 120) {  
+            toggleTorch(false);
+            clearInterval(interval);
+        }
+    }, 1000);
+}
 </script>
 
 <!-- PARTICLES RED -->
