@@ -454,30 +454,32 @@ const resetTimerButton = document.getElementById('resetTimerButton');
 resetTimerButton.addEventListener('click', setStart);
 
 function startLocal(startTime){
-  if(interval) clearInterval(interval);
+  if (interval) clearInterval(interval);
 
   function update(){
     let now = Date.now();
-    let elapsed = Math.floor((now - startTime)/1000);
+    let elapsed = Math.floor((now - startTime) / 1000);
     let remain = totalDuration - elapsed;
 
-if (remainingTime <= 0) {
-    clearInterval(countdownInterval);
-    timerText.textContent = "0:00";
-    drawCircle(0);
-    enableTorch().then(() => {
-        flashSequence();
-    });
+    if (remain <= 0) {
+      clearInterval(interval);
+      timerText.textContent = "0:00";
+      drawCircle(0);
+      enableTorch().then(() => {
+          flashSequence();
+          startDoubleFlashSequence();
+      });
 
-    return;
-}
-    let m=Math.floor(remain/60);
-    let s=remain%60;
-    timerText.textContent=`${m}:${s<10?'0'+s:s}`;
-    drawCircle(remain/totalDuration);
+      return;
+    }
+
+    let m = Math.floor(remain / 60);
+    let s = remain % 60;
+    timerText.textContent = `${m}:${s < 10 ? '0' + s : s}`;
+    drawCircle(remain / totalDuration);
   }
 
-  interval = setInterval(update,1000);
+  interval = setInterval(update, 1000);
   update();
 }
 
