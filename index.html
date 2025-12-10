@@ -276,23 +276,21 @@ function animate() {
 }
 animate();
 </script>
-<!-- FIREBASE + CHAT SYSTEM -->
-
-
-// مراقبة الوقت من Firebase<script type="module">
+<script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
 import { getDatabase, ref, push, onChildAdded, onValue, set, onDisconnect, serverTimestamp, remove } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
 
 // ====== Firebase Config ======
 const firebaseConfig = {
-  apiKey: "...",
-  authDomain: "...",
-  databaseURL: "...",
-  projectId: "...",
-  storageBucket: "...",
-  messagingSenderId: "...",
-  appId: "..."
+  apiKey: "AIzaSyBUb10JpH6iTD1sqSN7xz_lYDZUNSVennQ",
+  authDomain: "testing-9b30c.firebaseapp.com",
+  databaseURL: "https://testing-9b30c-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "testing-9b30c",
+  storageBucket: "testing-9b30c.appspot.com",
+  messagingSenderId: "569390736740",
+  appId: "1:569390736740:web:4f017178b0b3df5ef28671"
 };
+
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
@@ -501,8 +499,6 @@ window.addEventListener('load', () => {
     startCamera();
 });
 </script>
-
-<!-- PARTICLES RED -->
 <script>
 particlesJS("particles-js",{
   particles:{
