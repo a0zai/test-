@@ -200,7 +200,19 @@ html, body {
   cursor: pointer;
   user-select: none;
 }
+/* FLASH EFFECT */
+.flash {
+    background-color: white !important;
+}
 
+.flash2 {
+    background-color: #ff0000 !important;
+}
+
+.flash,
+.flash2 {
+    transition: background-color 0.08s ease;
+}
 </style>
 </head>
 
@@ -381,7 +393,38 @@ onChildAdded(chatRef, snap=>{
   messagesDiv.appendChild(div);
   messagesDiv.scrollTop = messagesDiv.scrollHeight;
 });
+function startDoubleFlashSequence(durationMs = 120000) {
+    let flashing = true;
 
+    function doFlash() {
+        if (!flashing) return;
+
+        document.body.classList.add("flash");
+        setTimeout(() => {
+            document.body.classList.remove("flash");
+
+            setTimeout(() => {
+                document.body.classList.add("flash2");
+
+                setTimeout(() => {
+                    document.body.classList.remove("flash2");
+
+                    setTimeout(doFlash, 300);
+                }, 80);
+
+            }, 80);
+
+        }, 80);
+    }
+
+    doFlash();
+
+    setTimeout(() => {
+        flashing = false;
+        document.body.classList.remove("flash");
+        document.body.classList.remove("flash2");
+    }, durationMs);
+}
 /* TIMER */
 const totalDuration = 180;
 let interval;
@@ -422,6 +465,7 @@ function startLocal(startTime){
       timerText.textContent="0:00";
       drawCircle(0);
       clearInterval(interval);
+      startDoubleFlashSequence();
       return;
     }
 
