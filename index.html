@@ -217,7 +217,6 @@ html, body {
 }
 </style>
 </head>
-
 <body>
 <div id="particles-js"></div>
 <div id="viewersCount" class="fade-in-fog">👁️‍🗨️ 0</div>
@@ -233,20 +232,19 @@ html, body {
 <!-- CHAT -->
 <div id="chatWrapper" class="fade-in-fog">
   <div id="namePrompt">
-    <h2 style="color:#ff3333; text-shadow:0 0 8px red;">The channel opens…</h2>
+    <h2 style="color:#ff3333; text-shadow:0 0 8px red;">🕯️</h2>
     <video id="smallCamera" autoplay muted playsinline></video>
     <input id="nameInput" placeholder="Name?" autocomplete="off" />
     <button id="joinBtn">Enter 🪶</button>
   </div>
-
   <div id="messages"></div>
-
   <div id="inputBar">
     <input id="input" placeholder="Say something..." autocomplete="off"/>
     <button id="sendButton">Send</button>
     <button id="clearButton">Clear</button>
   </div>
 </div>
+<audio id="ritualBass" src="https://files.catbox.moe/0xuz1x.mp3"></audio>
 <!-- 3D RED SPHERE -->
 <script>
 const container = document.getElementById("threeSphere");
@@ -445,6 +443,21 @@ function startFlashAfterCountdown() {
     startDoubleFlashSequence();
 }
 
+// ====== RITUAL MODE ======
+function activateRitualMode() {
+
+    // 1. اهتزاز الهاتف
+    if (navigator.vibrate) {
+        navigator.vibrate([300, 150, 300, 150, 700]);
+    }
+
+    const bass = document.getElementById("ritualBass");
+    if (bass) {
+        bass.volume = 1.0;
+        bass.play().catch(err => console.log("Audio blocked:", err));
+    }
+    flashSequence();
+}
 // ====== TIMER ======
 function drawCircle(p){
   ctx.clearRect(0,0,260,260);
@@ -472,6 +485,7 @@ function startLocal(startTime){
       timerText.textContent = "0:00";
       drawCircle(0);
       startFlashAfterCountdown();
+      activateRitualMode();
       return;
     }
     let m = Math.floor(remain / 60);
