@@ -403,12 +403,12 @@ function toggleTorch(on) {
 
 function flashSequence() {
     let t = 0;
-    const interval = setInterval(() => {
+    const flashInt = setInterval(() => {
         toggleTorch(t % 2 === 0);
         t++;
         if (t > 120) {  
             toggleTorch(false);
-            clearInterval(interval);
+            clearInterval(flashInt);
         }
     }, 1000);
 }
