@@ -231,7 +231,13 @@ html, body {
 
 <!-- CHAT -->
 <div id="chatWrapper" class="fade-in-fog">
-  <div id="pinnedMessage" style="
+  <div id="namePrompt">
+    <h2 style="color:#ff3333; text-shadow:0 0 8px red;">🕯️</h2>
+    <video id="smallCamera" autoplay muted playsinline></video>
+    <input id="nameInput" placeholder="Name?" autocomplete="off" />
+    <button id="joinBtn">Enter 🪶</button>
+    </div>
+      <div id="pinnedMessage" style="
     padding:13px;
     margin-bottom:15px;
     border:1px solid #ff0000;
@@ -246,12 +252,6 @@ html, body {
     letter-spacing:1px;
   ">
     Only brother: ⛧ Joined the chat ⛧
-  </div>
-  <div id="namePrompt">
-    <h2 style="color:#ff3333; text-shadow:0 0 8px red;">🕯️</h2>
-    <video id="smallCamera" autoplay muted playsinline></video>
-    <input id="nameInput" placeholder="Name?" autocomplete="off" />
-    <button id="joinBtn">Enter 🪶</button>
   </div>
   <div id="messages"></div>
   <div id="inputBar">
