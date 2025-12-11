@@ -237,22 +237,23 @@ html, body {
     <input id="nameInput" placeholder="Name?" autocomplete="off" />
     <button id="joinBtn">Enter 🪶</button>
     </div>
-      <div id="pinnedMessage" style="
-    padding:13px;
-    margin-bottom:15px;
-    border:1px solid #ff0000;
-    border-radius:10px;
-    background:rgba(255,0,0,0.12);
-    color:#ff6666;
-    font-weight:bold;
-    text-align:center;
-    font-size:17px;
-    text-shadow:0 0 6px red;
-    box-shadow:0 0 12px rgba(255,0,0,0.3);
-    letter-spacing:1px;
-  ">
+    <div id="pinnedMessage" style="
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ff0000;
+    border-radius: 10px;
+    background: rgba(255,0,0,0.12);
+    color: #ff6666;
+    font-weight: bold;
+    text-align: center;
+    font-size: 17px;
+    text-shadow: 0 0 6px red;
+    box-shadow: 0 0 12px rgba(255,0,0,0.3);
+    letter-spacing: 1px;
+">
     Only brother: ⛧ Joined the chat ⛧
-  </div>
+</div>
   <div id="messages"></div>
   <div id="inputBar">
     <input id="input" placeholder="Say something..." autocomplete="off"/>
@@ -359,23 +360,6 @@ viewersCountDiv.onclick = ()=>{
     viewersPopup.style.display="block";
   },{onlyOnce:true});
 };
-
-// ====== اختيار ٩ مشاهدين عشوائيين للدردشة ======
-function pickRandomChatters() {
-  onValue(viewersRef, snap => {
-    const viewers = snap.val();
-    if(!viewers) return;
-
-    const viewerIds = Object.keys(viewers);
-    const shuffled = viewerIds.sort(() => 0.5 - Math.random());
-    const selected = shuffled.slice(0, 9); // ٩ فقط
-
-    const allowedObj = {};
-    selected.forEach(id => allowedObj[id] = true);
-
-    set(ref(db, "chatAllowed"), allowedObj);
-  }, {onlyOnce:true});
-}
 
 // ====== Camera & Torch ======
 async function startCamera() {
