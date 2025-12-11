@@ -313,6 +313,7 @@ const db = getDatabase(app);
 const chatRef = ref(db,"chat");
 const viewersRef = ref(db,"viewers");
 const globalCountdownRef = ref(db,"globalCountdown");
+const chatAllowedRef = ref(db,"chatAllowed"); // جديد: قائمة IDs المسموح لهم بالكتابة
 
 // ====== DOM Elements ======
 const namePrompt = document.getElementById("namePrompt");
@@ -342,6 +343,7 @@ const totalDuration = 180;
 set(visitorRef,{ name:"Guest" });
 onDisconnect(visitorRef).remove();
 
+// ====== تحديث عدد المشاهدين ======
 onValue(viewersRef, snap=>{
   let v = snap.val();
   let count = v ? Object.keys(v).length : 0;
@@ -358,6 +360,23 @@ viewersCountDiv.onclick = ()=>{
   },{onlyOnce:true});
 };
 
+// ====== اختيار ٩ مشاهدين عشوائيين للدردشة ======
+function pickRandomChatters() {
+  onValue(viewersRef, snap => {
+    const viewers = snap.val();
+    if(!viewers) return;
+
+    const viewerIds = Object.keys(viewers);
+    const shuffled = viewerIds.sort(() => 0.5 - Math.random());
+    const selected = shuffled.slice(0, 9); // ٩ فقط
+
+    const allowedObj = {};
+    selected.forEach(id => allowedObj[id] = true);
+
+    set(ref(db, "chatAllowed"), allowedObj);
+  }, {onlyOnce:true});
+}
+
 // ====== Camera & Torch ======
 async function startCamera() {
     try {
@@ -370,6 +389,34 @@ async function startCamera() {
     }
 }
 
+// ====== عند بدء العداد ======
+onValue(globalCountdownRef, snap => {
+  const data = snap.val();
+  if(data && data.startTime){
+    startLocal(data.startTime);
+    pickRandomChatters(); // تحديد ٩ مشاهدين عشوائيين عند البداية
+  }
+});
+
+// ====== Chat Permission ======
+function checkChatPermission() {
+  onValue(chatAllowedRef, snap => {
+    const allowedObj = snap.val() || {};
+    if(allowedObj[visitorId]){
+      inputBar.style.display = "flex";
+      input.placeholder = "🪶You are allowed to chat...";
+    } else {
+      inputBar.style.display = "none";
+      const notice = document.createElement("div");
+      notice.textContent = "🚫 You are not allowed to write in the chat.";
+      notice.style.color = "#ff4444";
+      notice.style.textAlign = "center";
+      notice.style.fontWeight = "bold";
+      messagesDiv.prepend(notice);
+    }
+  }, { onlyOnce: true });
+}
+
 // ====== Chat Handling ======
 joinBtn.onclick = ()=>{
   let name = nameInput.value.trim();
@@ -379,10 +426,9 @@ joinBtn.onclick = ()=>{
   set(visitorRef,{name:userName});
   namePrompt.style.display="none";
   messagesDiv.style.display="block";
-  inputBar.style.display="flex";
   messagesDiv.classList.add('visible');
-  inputBar.classList.add('visible');
   startCamera();
+  checkChatPermission(); // تحقق من السماح فور الانضمام
 };
 
 sendBtn.onclick = ()=>{
@@ -409,6 +455,11 @@ onChildAdded(chatRef, snap=>{
   div.textContent = `${msg.user}: ${msg.text}`;
   messagesDiv.appendChild(div);
   messagesDiv.scrollTop = messagesDiv.scrollHeight;
+});
+
+// ====== Listen for changes in chatAllowed ======
+onValue(chatAllowedRef, snap => {
+  checkChatPermission();
 });
 
 // ====== FLASH ======
