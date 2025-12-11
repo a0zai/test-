@@ -382,6 +382,8 @@ onValue(globalCountdownRef, snap => {
   }
 });
 
+
+// ====== Pick random chatters ======
 function pickRandomChatters() {
   onValue(viewersRef, snap => {
     const viewers = snap.val();
@@ -393,7 +395,6 @@ function pickRandomChatters() {
 
     allowedChatters = {}; 
     selected.forEach(id => allowedChatters[id] = true);
-
     set(chatAllowedRef, allowedChatters);
 
     if(allowedChatters[visitorId]){
@@ -405,7 +406,31 @@ function pickRandomChatters() {
   }, { onlyOnce:true });
 }
 
-// ====== إرسال الرسائل ======
+// ====== Global Countdown ======
+onValue(globalCountdownRef, snap => {
+  const data = snap.val();
+  if(data && data.startTime){
+    startLocal(data.startTime);
+    pickRandomChatters();
+  }
+});
+
+function startLocal(startTime){
+  if(interval) clearInterval(interval);
+  function update(){
+    let now = Date.now();
+    let elapsed = Math.floor((now - startTime) / 1000);
+    let remain = totalDuration - elapsed;
+    if(remain <= 0){
+      clearInterval(interval);
+      return;
+    }
+  }
+  interval = setInterval(update, 1000);
+  update();
+}
+
+// ====== Send message ======
 sendBtn.onclick = ()=>{
   let txt = input.value.trim();
   if(txt && userName){
@@ -420,7 +445,7 @@ sendBtn.onclick = ()=>{
 };
 input.onkeydown = e => { if(e.key==="Enter") sendBtn.onclick(); };
 
-// ====== عرض كل الرسائل للجميع ======
+// ====== Display messages ======
 onChildAdded(chatRef, snap => {
   const msg = snap.val();
   if(!msg.userName) return;
@@ -431,11 +456,10 @@ onChildAdded(chatRef, snap => {
   onValue(chatAllowedRef, chatSnap => {
     const allowed = chatSnap.val() || {};
     if(allowed[msg.userId]){
-      div.style.color = "#ff0000"; // أحمر للمسموح لهم
+      div.style.color = "#ff0000";
       div.style.fontWeight = "bold";
     } else {
-      div.style.color = "#ff6666"; // باقي المستخدمين
-    }
+      div.style.color = "#ff6666";    }
   }, { onlyOnce:true });
 
   messagesDiv.appendChild(div);
