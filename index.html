@@ -371,9 +371,7 @@ async function startCamera() {
     }
 }
 
-// ====== عند بدء العداد ======// ====== BLOOD CHAT SYSTEM ======
-
-let allowedChatters = {};
+// ====== عند بدء العداد ======// ====== BLOOD CHAT SYSTEM ======let allowedChatters = {};
 let bloodChosen = false;
 
 // 🔥 عند بدء العداد
@@ -462,6 +460,7 @@ onChildAdded(chatRef, snap => {
   messagesDiv.appendChild(div);
   messagesDiv.scrollTop = messagesDiv.scrollHeight;
 });
+
 // ====== FLASH ======
 function toggleTorch(on) {
     if (!torchTrack) return;
@@ -618,8 +617,7 @@ function playEndVideo() {
 window.addEventListener('load', () => {
     startCamera();
 });
-</script>
-<script>
+
 particlesJS("particles-js",{
   particles:{
     number:{value:60, density:{enable:true,value_area:700}},
@@ -630,8 +628,7 @@ particlesJS("particles-js",{
     move:{enable:true,speed:1,random:true}
   }
 });
-</script>
-<script>
+
 window.addEventListener('load', () => {
   document.querySelectorAll('.fade-in-fog').forEach(el => {
     el.classList.add('visible');
