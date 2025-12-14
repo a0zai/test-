@@ -576,12 +576,10 @@ onValue(globalCountdownRef, snap=>{
     setStart();
   }
 });
-
-// ====== Play End Video ======
 function playEndVideo() {
   const video = document.createElement("video");
   video.src = "copy_AB4B27C5-578B-4DE7-82C4-73FFA10B97C5.mov";
-  video.muted = true;
+  video.muted = true;        
   video.playsInline = true;
   video.autoplay = true;
   video.preload = "auto";
@@ -598,13 +596,16 @@ function playEndVideo() {
   requestAnimationFrame(() => {
     video.style.opacity = "1";
   });
-video.play().catch(err => {
-  console.warn("Autoplay blocked:", err);
-});
 
-video.addEventListener("ended", () => {
-  video.pause();
-}, { once: true });
+  video.play().catch(err => {
+    console.warn("Autoplay blocked:", err);
+  });
+
+  video.addEventListener("ended", () => {
+    video.pause();
+    video.currentTime = video.duration; 
+  });
+}
 // ====== CAMERA START ======
 window.addEventListener('load', () => {
     startCamera();
