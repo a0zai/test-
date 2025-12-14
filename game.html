@@ -18,6 +18,8 @@ html, body {
   justify-content:center;
   align-items:center;
   text-align:center;
+  opacity: 1;
+  transition: opacity 12s ease-in-out;
 }
 
 #particles-js {
@@ -37,22 +39,16 @@ html, body {
     text-shadow: 0 0 8px rgba(255,255,255,0.7);
 }
 
-
-/* Typewriter output */
 .line {
     margin-bottom:0.7em;
     opacity:0;
-    filter: blur(10px);
     transform: translateY(20px);
-    transition: opacity 5s ease, filter 5s ease, transform 5s ease;
+    transition: opacity 5s ease, transform 5s ease;
 }
 .line.visible {
     opacity:1;
-    filter: blur(0);
     transform: translateY(0);
 }
-
-/* Strong glitch */
 .glitch {
     font-weight:bold;
     letter-spacing:1px;
@@ -88,40 +84,22 @@ html, body {
   pointer-events: none;
   opacity: 0;
   z-index: 999;
-  transition: opacity 5s ease;
-}
-
-#myVideo {
-  display: none;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 1000; 
+  transition: opacity 6s ease;
 }
 </style>
 </head>
-
 <body>
 <div id="particles-js"></div>
 <div id="output"></div>
-
-<video id="myVideo" width="640" height="360" muted>
-    <source src="🌀🎶.mp3.MP4" type="video/mp4">
-</video>
-
 <div id="fade-black"></div>
 
 <script>
-/* ---- TYPEWRITER EFFECT WITH FADE-IN ---- */
 function typeLine(text, callback) {
     const container = document.getElementById("output");
     const line = document.createElement("div");
     line.className = "line";
     container.appendChild(line);
-
     setTimeout(() => line.classList.add('visible'), 50);
-
     let i = 0;
     function type() {
         if (i < text.length) {
@@ -136,7 +114,6 @@ function typeLine(text, callback) {
     type();
 }
 
-/* ---- RANDOM GLITCH FX ---- */
 function glitchFx() {
     const out = document.getElementById("output");
     const g = document.createElement("div");
@@ -145,16 +122,14 @@ function glitchFx() {
     out.appendChild(g);
     setTimeout(() => g.remove(), 500);
 }
-
-/* ---- MASTER SEQUENCE ---- */
 function runSequence(lines, index = 0) {
     if (index >= lines.length) {
         const fade = document.getElementById("fade-black");
         fade.style.opacity = 1;
-
-        requestAnimationFrame(() => {
+        document.body.style.opacity = 0; 
+        setTimeout(() => {
             window.location.href = "index.html";
-        });
+        }, 60000);
         return;
     }
 
@@ -170,7 +145,6 @@ function runSequence(lines, index = 0) {
     });
 }
 
-/* ---- FETCH USER DATA + START ---- */
 fetch("https://api.ipify.org?format=json")
   .then(r => r.json())
   .then(data => {
@@ -210,20 +184,8 @@ fetch("https://api.ipify.org?format=json")
           "Closing connection..."
       ]);
   });
-
-window.addEventListener('load', () => {
-    setTimeout(() => {
-        const video = document.getElementById('myVideo');
-        video.style.display = 'block';
-        video.style.opacity = 0;
-        video.style.transition = 'opacity 2s ease'; 
-        requestAnimationFrame(() => video.style.opacity = 1);
-        video.play(); 
-    }, 19000);  
-});
 </script>
 
-<!-- CINEMATIC SCI-FI PARTICLES -->
 <script>
 particlesJS("particles-js",{
   particles:{
