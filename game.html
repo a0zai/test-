@@ -12,7 +12,6 @@ html, body {
   margin:0;
   padding:0;
   background:#000;
-  color:#00ff00;
   font-family:'Courier New', monospace;
   overflow:hidden;
   display:flex;
@@ -34,6 +33,10 @@ html, body {
     transform: translateY(0);
     white-space: pre-wrap;
     z-index:10;
+
+    /* ✨ Cinematic Glow */
+    color: #eaeaea;
+    text-shadow: 0 0 8px rgba(255,255,255,0.7);
 }
 
 /* Typewriter output */
@@ -54,8 +57,8 @@ html, body {
 .glitch {
     font-weight:bold;
     letter-spacing:1px;
-    color:#00ff00;
-    text-shadow:0 0 7px #00ff00, 0 0 12px #00ff00;
+    color:#eaeaea;
+    text-shadow:0 0 7px #eaeaea, 0 0 12px #eaeaea;
     animation: glitchAnim 0.12s steps(2, jump-end) infinite;
 }
 @keyframes glitchAnim {
@@ -64,7 +67,6 @@ html, body {
     100% { transform:translate(1px, -1px); }
 }
 
-/* Shake error lines */
 .shake {
     animation: shakeAnim 0.35s ease-in-out;
 }
@@ -76,12 +78,26 @@ html, body {
     80% { transform:translateX(3px); }
     100% { transform:translateX(0); }
 }
+
+#fade-black {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 999;
+  transition: opacity 0.8s ease;
+}
 </style>
 </head>
 
 <body>
 <div id="particles-js"></div>
 <div id="output"></div>
+<div id="fade-black"></div>
 
 <script>
 /* ---- TYPEWRITER EFFECT WITH FADE-IN ---- */
@@ -91,7 +107,6 @@ function typeLine(text, callback) {
     line.className = "line";
     container.appendChild(line);
 
-    // تفعيل fade-in تدريجي بعد إضافته
     setTimeout(() => line.classList.add('visible'), 50);
 
     let i = 0;
@@ -121,19 +136,23 @@ function glitchFx() {
 /* ---- MASTER SEQUENCE ---- */
 function runSequence(lines, index = 0) {
     if (index >= lines.length) {
-        const output = document.getElementById("output");
-        output.style.opacity = 0;
-        output.style.transform = "translateY(-20px)";
-        setTimeout(() => { window.location.href = "index.html"; }, 3500);
+        const fade = document.getElementById("fade-black");
+        fade.style.opacity = 1;
+
+        requestAnimationFrame(() => {
+            window.location.href = "index.html";
+        });
         return;
     }
 
     typeLine(lines[index], () => {
         if (Math.random() < 0.22) glitchFx();
+
         if (lines[index].includes("FAILED") || lines[index].includes("Unknown")) {
             const last = document.querySelector(".line:last-child");
             last.classList.add("shake");
         }
+
         runSequence(lines, index + 1);
     });
 }
@@ -180,25 +199,21 @@ fetch("https://api.ipify.org?format=json")
   });
 </script>
 
-<!-- PARTICLES -->
+<!-- CINEMATIC SCI-FI PARTICLES -->
 <script>
 particlesJS("particles-js",{
   particles:{
-    number:{value:80,density:{enable:true,value_area:900}},
-    color:{value:"#00ff00"},
-    shape:{type:"circle"},
-    opacity:{value:0.45,random:true},
-    size:{value:3,random:true},
-    line_linked:{enable:true,distance:150,color:"#00ff00",opacity:0.25,width:1},
-    move:{enable:true,speed:1.1,random:true,out_mode:"out"}
+    number:{ value:200, density:{ enable:true, value_area:1800 } },
+    color:{ value:"#ffffff" },
+    shape:{ type:"circle" },
+    opacity:{ value:0.7, random:true, anim:{ enable:true, speed:0.5, opacity_min:0.2, sync:false } },
+    size:{ value:1.5, random:true, anim:{ enable:true, speed:2, size_min:0.3, sync:false } },
+    line_linked:{ enable:false },
+    move:{ enable:true, speed:0.5, direction:"none", random:true, straight:false, out_mode:"out" }
   },
   interactivity:{
     detect_on:"canvas",
-    events:{onhover:{enable:true,mode:"grab"},onclick:{enable:true,mode:"push"}},
-    modes:{
-      grab:{distance:200,line_linked:{opacity:0.5}},
-      bubble:{distance:200,size:6,duration:2,opacity:0.8}
-    }
+    events:{ onhover:{ enable:false }, onclick:{ enable:false } }
   },
   retina_detect:true
 });
