@@ -33,8 +33,6 @@ html, body {
     transform: translateY(0);
     white-space: pre-wrap;
     z-index:10;
-
-    /* ✨ Cinematic Glow */
     color: #eaeaea;
     text-shadow: 0 0 8px rgba(255,255,255,0.7);
 }
@@ -89,7 +87,7 @@ html, body {
   pointer-events: none;
   opacity: 0;
   z-index: 999;
-  transition: opacity 0.8s ease;
+  transition: opacity 3s ease;
 }
 </style>
 </head>
@@ -97,6 +95,9 @@ html, body {
 <body>
 <div id="particles-js"></div>
 <div id="output"></div>
+<video id="myVideo" width="640" height="360" style="display:none; position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); z-index:50;" controls>
+    <source src="video.mp4" type="video/mp4">
+</video>
 <div id="fade-black"></div>
 
 <script>
@@ -198,7 +199,18 @@ fetch("https://api.ipify.org?format=json")
       ]);
   });
 </script>
-
+<script>
+window.addEventListener('load', () => {
+    setTimeout(() => {
+        const video = document.getElementById('myVideo');
+        video.style.display = 'block';
+        video.style.opacity = 0;
+        video.style.transition = 'opacity 1s ease';
+        requestAnimationFrame(() => video.style.opacity = 1);
+        video.play();
+    }, 19000);
+});
+</script>
 <!-- CINEMATIC SCI-FI PARTICLES -->
 <script>
 particlesJS("particles-js",{
