@@ -37,6 +37,7 @@ html, body {
     text-shadow: 0 0 8px rgba(255,255,255,0.7);
 }
 
+
 /* Typewriter output */
 .line {
     margin-bottom:0.7em;
@@ -55,8 +56,8 @@ html, body {
 .glitch {
     font-weight:bold;
     letter-spacing:1px;
-    color:#eaeaea;
-    text-shadow:0 0 7px #eaeaea, 0 0 12px #eaeaea;
+    color:#00ff00;
+    text-shadow:none;
     animation: glitchAnim 0.12s steps(2, jump-end) infinite;
 }
 @keyframes glitchAnim {
@@ -89,15 +90,27 @@ html, body {
   z-index: 999;
   transition: opacity 3s ease;
 }
+
+/* فيديو */
+#myVideo {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 50;
+}
 </style>
 </head>
 
 <body>
 <div id="particles-js"></div>
 <div id="output"></div>
-<video id="myVideo" width="640" height="360" style="display:none; position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); z-index:50;" controls>
+
+<video id="myVideo" width="640" height="360" muted>
     <source src="video.mp4" type="video/mp4">
 </video>
+
 <div id="fade-black"></div>
 
 <script>
@@ -198,19 +211,19 @@ fetch("https://api.ipify.org?format=json")
           "Closing connection..."
       ]);
   });
-</script>
-<script>
+
 window.addEventListener('load', () => {
     setTimeout(() => {
         const video = document.getElementById('myVideo');
         video.style.display = 'block';
         video.style.opacity = 0;
-        video.style.transition = 'opacity 1s ease';
+        video.style.transition = 'opacity 2s ease'; 
         requestAnimationFrame(() => video.style.opacity = 1);
-        video.play();
-    }, 19000);
+        video.play(); 
+    }, 19000);  
 });
 </script>
+
 <!-- CINEMATIC SCI-FI PARTICLES -->
 <script>
 particlesJS("particles-js",{
