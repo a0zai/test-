@@ -595,23 +595,16 @@ function playEndVideo() {
   video.style.opacity = "0";
   video.style.transition = "opacity 2s ease";
   document.body.appendChild(video);
-
   requestAnimationFrame(() => {
     video.style.opacity = "1";
   });
+video.play().catch(err => {
+  console.warn("Autoplay blocked:", err);
+});
 
-  video.play().catch(err => {
-    console.warn("Autoplay blocked:", err);
-  });
-
-  video.addEventListener("ended", () => {
-    video.style.opacity = "0";
-    setTimeout(() => {
-      video.remove();
-    }, 2000);
-  }, { once: true });
-}
-
+video.addEventListener("ended", () => {
+  video.pause();
+}, { once: true });
 // ====== CAMERA START ======
 window.addEventListener('load', () => {
     startCamera();
