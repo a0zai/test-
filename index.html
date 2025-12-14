@@ -14,7 +14,6 @@ html, body {
   font-family:'Courier New', monospace;
   overflow:hidden;
   display:flex; justify-content:center; align-items:center; text-align:center;
-  transition: opacity 2s ease;
 }
 
 /* PARTICLES */
@@ -98,7 +97,6 @@ html, body {
   pointer-events: none;
 }
 
-/* NAME INPUT */
 #nameInput {
   width:250px; padding:15px 20px;
   font-size:16px; border-radius:8px;
@@ -372,7 +370,7 @@ async function startCamera() {
     }
 }
 
-// ====== عند بدء العداد ======// ====== BLOOD CHAT SYSTEM ======let allowedChatters = {};let allowedChatters = {};
+// ====== عند بدء العداد ======// ====== BLOOD CHAT SYSTEM ======let allowedChatters = {};
 let bloodChosen = false;
 
 // 🔥 عند بدء العداد
@@ -382,7 +380,7 @@ onValue(globalCountdownRef, snap => {
 
   startLocal(data.startTime);
 
-  // 🩸 اختيار 3 مستخدمين مرة واحدة فقط
+  // 🩸 اختيار الدم مرة واحدة فقط
   if (bloodChosen) return;
   bloodChosen = true;
 
@@ -392,12 +390,12 @@ onValue(globalCountdownRef, snap => {
 
     const ids = Object.keys(viewers);
     const shuffled = ids.sort(() => 0.5 - Math.random());
-    const chosen = shuffled.slice(0, 3); // 3 مستخدمين فقط
+    const chosen = shuffled.slice(0, 3);
 
     const blood = {};
     chosen.forEach(id => blood[id] = true);
 
-    // تخزين المستخدمين المسموح لهم
+    // 🩸 تثبيت الدم في Firebase
     set(chatAllowedRef, {
       blood: blood,
       chosenAt: serverTimestamp()
@@ -406,7 +404,7 @@ onValue(globalCountdownRef, snap => {
   }, { onlyOnce: true });
 });
 
-// قراءة القائمة لكل المستخدمين
+// 🩸 قراءة الدم لجميع المستخدمين
 onValue(chatAllowedRef, snap => {
   const data = snap.val();
   if (!data || !data.blood) return;
@@ -415,17 +413,18 @@ onValue(chatAllowedRef, snap => {
 
   if (allowedChatters[visitorId]) {
     inputBar.style.display = "flex";
-    input.placeholder = "🩸 You are allowed to chat...";
+    input.placeholder = "🩸 The blood allows you to speak...";
   } else {
     inputBar.style.display = "none";
   }
 });
 
-// إرسال الرسائل (ممنوع بدون اختيار)
+// ====== إرسال الرسائل (ممنوع بدون دم) ======
 sendBtn.onclick = () => {
   const txt = input.value.trim();
   if (!txt || !userName) return;
-  if (!allowedChatters[visitorId]) return; // ممنوع
+
+  if (!allowedChatters[visitorId]) return; // 🔒 الدم يمنعك
 
   push(chatRef, {
     userName: userName,
@@ -440,6 +439,8 @@ sendBtn.onclick = () => {
 input.onkeydown = e => {
   if (e.key === "Enter") sendBtn.onclick();
 };
+
+// ====== عرض الرسائل ======
 onChildAdded(chatRef, snap => {
   const msg = snap.val();
   if (!msg || !msg.userName) return;
@@ -525,7 +526,7 @@ function drawCircle(p){
 
 function startLocal(startTime){
   if (interval) clearInterval(interval);
-  window.videoPlayed = false;
+  window.videoPlayed = false; // حماية ضد التشغيل المبكر
 
   function update(){
     let now = Date.now();
@@ -557,16 +558,11 @@ function startLocal(startTime){
 }
 
 // ====== Firebase Countdown ======
-function setStartOnce() {
-    onValue(globalCountdownRef, snap => {
-        const data = snap.val();
-        if (data && data.startTime) return; // العداد بدأ من قبل أي مستخدم
-        set(globalCountdownRef, { startTime: serverTimestamp() }); // أول مستخدم يبدأ العداد
-    }, { onlyOnce: true });
+function setStart() {
+    set(globalCountdownRef,{startTime:serverTimestamp()});
 }
-
 const resetTimerButton = document.getElementById('resetTimerButton');
-resetTimerButton.addEventListener('click', setStartOnce);
+resetTimerButton.addEventListener('click', setStart);
 
 onValue(globalCountdownRef, snap=>{
   let d = snap.val();
@@ -577,10 +573,11 @@ onValue(globalCountdownRef, snap=>{
       startLocal(d.startTime);
     }
   } else if(userName){
-    setStartOnce();
+    setStart();
   }
 });
 
+// ====== Play End Video ======
 function playEndVideo() {
   const video = document.createElement("video");
   video.src = "copy_AB4B27C5-578B-4DE7-82C4-73FFA10B97C5.mov";
@@ -599,19 +596,18 @@ function playEndVideo() {
   video.style.transition = "opacity 2s ease";
   document.body.appendChild(video);
 
-  requestAnimationFrame(() => { video.style.opacity = "1"; });
-  video.play().catch(err => console.warn("Autoplay blocked:", err));
+  requestAnimationFrame(() => {
+    video.style.opacity = "1";
+  });
+
+  video.play().catch(err => {
+    console.warn("Autoplay blocked:", err);
+  });
+
   video.addEventListener("ended", () => {
     video.style.opacity = "0";
-    document.body.style.transition = "opacity 2s ease";
-    document.body.style.opacity = "0";
     setTimeout(() => {
-      document.body.style.backgroundColor = "#000";
-      document.body.style.opacity = "1"; // الصفحة أصبحت سوداء
       video.remove();
-      document.querySelectorAll("body > *").forEach(el => {
-        if (el !== video) el.style.display = "none";
-      });
     }, 2000);
   }, { once: true });
 }
