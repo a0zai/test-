@@ -524,10 +524,9 @@ function drawCircle(p){
   ctx.stroke();
 }
 
-let videoPlayed = false; // هنا مرة واحدة فقط
-
 function startLocal(startTime){
   if (interval) clearInterval(interval);
+  window.videoPlayed = false; // حماية ضد التشغيل المبكر
 
   function update(){
     let now = Date.now();
@@ -544,12 +543,12 @@ function startLocal(startTime){
       timerText.textContent = "0:00";
       drawCircle(0);
 
-      if(!videoPlayed){
+      if(!window.videoPlayed){
         startFlashAfterCountdown();
         setTimeout(() => {
           playEndVideo();
         }, 1200);
-        videoPlayed = true;
+        window.videoPlayed = true;
       }
     }
   }
@@ -557,6 +556,7 @@ function startLocal(startTime){
   interval = setInterval(update, 1000);
   update();
 }
+
 // ====== Firebase Countdown ======
 function setStart() {
     set(globalCountdownRef,{startTime:serverTimestamp()});
