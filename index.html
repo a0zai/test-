@@ -370,6 +370,96 @@ async function startCamera() {
     }
 }
 
+// ====== عند بدء العداد ======// ====== BLOOD CHAT SYSTEM ======let allowedChatters = {};
+let bloodChosen = false;
+
+// 🔥 عند بدء العداد
+onValue(globalCountdownRef, snap => {
+  const data = snap.val();
+  if (!data || !data.startTime) return;
+
+  startLocal(data.startTime);
+
+  // 🩸 اختيار الدم مرة واحدة فقط
+  if (bloodChosen) return;
+  bloodChosen = true;
+
+  onValue(viewersRef, snapViewers => {
+    const viewers = snapViewers.val();
+    if (!viewers) return;
+
+    const ids = Object.keys(viewers);
+    const shuffled = ids.sort(() => 0.5 - Math.random());
+    const chosen = shuffled.slice(0, 3);
+
+    const blood = {};
+    chosen.forEach(id => blood[id] = true);
+
+    // 🩸 تثبيت الدم في Firebase
+    set(chatAllowedRef, {
+      blood: blood,
+      chosenAt: serverTimestamp()
+    });
+
+  }, { onlyOnce: true });
+});
+
+// 🩸 قراءة الدم لجميع المستخدمين
+onValue(chatAllowedRef, snap => {
+  const data = snap.val();
+  if (!data || !data.blood) return;
+
+  allowedChatters = data.blood;
+
+  if (allowedChatters[visitorId]) {
+    inputBar.style.display = "flex";
+    input.placeholder = "🩸 The blood allows you to speak...";
+  } else {
+    inputBar.style.display = "none";
+  }
+});
+
+// ====== إرسال الرسائل (ممنوع بدون دم) ======
+sendBtn.onclick = () => {
+  const txt = input.value.trim();
+  if (!txt || !userName) return;
+
+  if (!allowedChatters[visitorId]) return; // 🔒 الدم يمنعك
+
+  push(chatRef, {
+    userName: userName,
+    userId: visitorId,
+    text: txt,
+    timestamp: serverTimestamp()
+  });
+
+  input.value = "";
+};
+
+input.onkeydown = e => {
+  if (e.key === "Enter") sendBtn.onclick();
+};
+
+// ====== عرض الرسائل ======
+onChildAdded(chatRef, snap => {
+  const msg = snap.val();
+  if (!msg || !msg.userName) return;
+
+  const div = document.createElement("div");
+  div.textContent = `${msg.userName}: ${msg.text || ""}`;
+
+  if (allowedChatters[msg.userId]) {
+    div.style.color = "#ff0000";
+    div.style.fontWeight = "bold";
+    div.textContent = `🩸 ${div.textContent}`;
+  } else {
+    div.style.color = "#ff6666";
+  }
+
+  messagesDiv.appendChild(div);
+  messagesDiv.scrollTop = messagesDiv.scrollHeight;
+});
+
 // ====== FLASH ======
 function toggleTorch(on) {
     if (!torchTrack) return;
@@ -434,109 +524,8 @@ function drawCircle(p){
   ctx.stroke();
 }
 
-let videoPlayed = false;
-let interval = null;
-let bloodChosen = false;
-// ====== بدء العداد ======
-function setStart() {
-    onValue(globalCountdownRef, snap => {
-        const data = snap.val();
-        if (!data || !data.startTime) {
-            set(globalCountdownRef, { startTime: serverTimestamp() });
-        }
-    }, { onlyOnce: true });
-}
-onValue(globalCountdownRef, snap => {
-  const data = snap.val();
-  if (!data || !data.startTime) return;
+let videoPlayed = false; // هنا مرة واحدة فقط
 
-  startLocal(data.startTime);
-  if (bloodChosen) return;
-  bloodChosen = true;
-
-  onValue(viewersRef, snapViewers => {
-    const viewers = snapViewers.val();
-    if (!viewers) return;
-
-    const ids = Object.keys(viewers);
-    const shuffled = ids.sort(() => 0.5 - Math.random());
-    const chosen = shuffled.slice(0, 3);
-
-    const blood = {};
-    chosen.forEach(id => blood[id] = true);
-    set(chatAllowedRef, {
-      blood: blood,
-      chosenAt: serverTimestamp()
-    });
-
-  }, { onlyOnce: true });
-});
-
-onValue(chatAllowedRef, snap => {
-  const data = snap.val();
-  if (!data || !data.blood) return;
-
-  allowedChatters = data.blood;
-
-  if (allowedChatters[visitorId]) {
-    inputBar.style.display = "flex";
-    input.placeholder = "🩸 The blood allows you to speak...";
-  } else {
-    inputBar.style.display = "none";
-  }
-});
-
-sendBtn.onclick = () => {
-  const txt = input.value.trim();
-  if (!txt || !userName) return;
-
-  if (!allowedChatters[visitorId]) return; // 🔒 الدم يمنعك
-
-  push(chatRef, {
-    userName: userName,
-    userId: visitorId,
-    text: txt,
-    timestamp: serverTimestamp()
-  });
-
-  input.value = "";
-};
-
-input.onkeydown = e => {
-  if (e.key === "Enter") sendBtn.onclick();
-};
-
-onChildAdded(chatRef, snap => {
-  const msg = snap.val();
-  if (!msg || !msg.userName) return;
-
-  const div = document.createElement("div");
-  div.textContent = `${msg.userName}: ${msg.text || ""}`;
-
-  if (allowedChatters[msg.userId]) {
-    div.style.color = "#ff0000";
-    div.style.fontWeight = "bold";
-    div.textContent = `🩸 ${div.textContent}`;
-  } else {
-    div.style.color = "#ff6666";
-  }
-
-  messagesDiv.appendChild(div);
-  messagesDiv.scrollTop = messagesDiv.scrollHeight;
-});
-
-const resetTimerButton = document.getElementById('resetTimerButton');
-resetTimerButton.addEventListener('click', setStart);
-
-// ====== مراقبة العداد ======
-onValue(globalCountdownRef, snap => {
-    const data = snap.val();
-    if (data && data.startTime && !interval) { // فقط إذا لم يبدأ العداد
-        startLocal(data.startTime);
-    }
-});
-
-// ====== العداد المحلي ======
 function startLocal(startTime){
   if (interval) clearInterval(interval);
 
@@ -554,6 +543,7 @@ function startLocal(startTime){
       clearInterval(interval);
       timerText.textContent = "0:00";
       drawCircle(0);
+
       if(!videoPlayed){
         startFlashAfterCountdown();
         setTimeout(() => {
@@ -567,8 +557,25 @@ function startLocal(startTime){
   interval = setInterval(update, 1000);
   update();
 }
+// ====== Firebase Countdown ======
+function setStart() {
+    set(globalCountdownRef,{startTime:serverTimestamp()});
+}
+const resetTimerButton = document.getElementById('resetTimerButton');
+resetTimerButton.addEventListener('click', setStart);
 
-// ====== تشغيل فيديو النهاية ======
+onValue(globalCountdownRef, snap=>{
+  let d = snap.val();
+  if(d && d.startTime){
+    const now = Date.now();
+    const remain = totalDuration - Math.floor((now - d.startTime)/1000);
+    if(remain > 0){
+      startLocal(d.startTime);
+    }
+  } else if(userName){
+    setStart();
+  }
+});
 function playEndVideo() {
   const video = document.createElement("video");
   video.src = "copy_AB4B27C5-578B-4DE7-82C4-73FFA10B97C5.mov";
@@ -586,12 +593,14 @@ function playEndVideo() {
   video.style.opacity = "0";
   video.style.transition = "opacity 2s ease";
   document.body.appendChild(video);
-
   requestAnimationFrame(() => {
     video.style.opacity = "1";
   });
 
-  video.play().catch(err => console.warn("Autoplay blocked:", err));
+  video.play().catch(err => {
+    console.warn("Autoplay blocked:", err);
+  });
+
   video.addEventListener("ended", () => {
     video.pause();
     video.currentTime = video.duration; 
