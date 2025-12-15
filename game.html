@@ -3,6 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="application-name" content="A0Z">
+<meta name="author" content="system">
+<meta name="generator" content="custom-static">
+<meta name="classification" content="web-interface">
+<meta name="subject" content="real-time interaction">
 <title>A∞Z</title>
 <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 <style>
@@ -45,7 +50,6 @@ html, body {
     transform: translateY(0);
 }
 
-/* Strong glitch */
 .glitch {
     font-weight:bold;
     letter-spacing:1px;
@@ -129,7 +133,6 @@ function runSequence(lines, index=0) {
         const fade = document.getElementById("fade-black");
         fade.style.opacity = 1;
 
-        // الانتقال بعد انتهاء التلاشي (3 ثواني)
         fade.addEventListener("transitionend", () => {
             window.location.href = "index.html";
         }, { once: true });
