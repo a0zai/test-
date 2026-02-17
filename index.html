@@ -2,299 +2,87 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>A∞Z | Layer Two — The Red Terminal</title>
+<title>Scary Chat</title>
 <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-
 <style>
 html, body {
   height: 100%; margin:0; padding:0;
   background-color:#000;
-  color:#ff3333;
+  color:gold;
   font-family:'Courier New', monospace;
   overflow:hidden;
   display:flex; justify-content:center; align-items:center; text-align:center;
 }
-
-/* PARTICLES */
-#particles-js {
-  position:fixed; top:0; left:0;
-  width:100%; height:100%;
-  z-index:0; pointer-events:none;
-}
-
-/* VIEWERS COUNTER */
+#particles-js {position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;}
 #viewersCount {
-  position:fixed; top:15px; left:50%;
-  transform:translateX(-50%);
-  font-size:24px; font-weight:bold;
-  color:#ff3333; z-index:10000;
-  user-select:none;
-  background: rgba(0,0,0,0.5);
-  padding:6px 12px; border-radius:12px;
-  box-shadow:0 0 8px #ff0000;
-  cursor:pointer;
+  position:fixed; top:15px; left:50%; transform:translateX(-50%);
+  font-size:24px; font-weight:bold; color:gold; z-index:10000;
+  user-select:none; background: rgba(0,0,0,0.5); padding:6px 12px;
+  border-radius:12px; box-shadow:0 0 8px gold; cursor:pointer;
 }
-.fade-in-fog {
-  opacity: 0;
-  filter: blur(10px); 
-  transform: translateY(20px); 
-  transition: opacity 3s ease, filter 6s ease, transform 9s ease;
-}
-
-.fade-in-fog.visible {
-  opacity: 1;
-  filter: blur(0);
-  transform: translateY(0);
-}
-/* VIEWERS LIST */
 #viewersListPopup {
-  position:fixed; top:50px; right:20px;
-  max-height:200px; width:200px;
-  overflow-y:auto;
-  background: rgba(0,0,0,0.85);
-  color:#ff5555;
-  border:1px solid #ff3333;
-  border-radius:8px;
-  padding:10px;
-  font-size:14px;
-  display:none; z-index:10001;
+  position:fixed; top:50px; right:20px; max-height:200px; width:200px;
+  overflow-y:auto; background: rgba(0,0,0,0.8); color:gold;
+  border:1px solid gold; border-radius:8px; padding:10px;
+  font-size:14px; display:none; z-index:10001; user-select:none;
 }
-
-/* SPHERE */
-#threeSphere {
-  position: fixed;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  width: 260px; height: 260px;
-  z-index: 9999; pointer-events: none;
-}
-
-/* CHAT + UI */
 #chatWrapper {
   width:96%; max-width:700px; max-height:66vh;
-  background: rgba(0,0,0,0.55);
-  backdrop-filter: blur(8px);
-  border-radius:12px;
-  padding:20px;
-  position: fixed;
-  bottom:20px;
-  left:50%; transform:translateX(-50%);
-  z-index:10;
-  display:flex; flex-direction:column;
-  color:#ff3333;
+  background: rgba(0,0,0,0.6); backdrop-filter: blur(8px);
+  border-radius:12px; padding:20px; position: fixed; bottom:20px; left:50%; transform:translateX(-50%);
+  z-index:10; display:flex; flex-direction:column;
 }
+#nameInput { width:250px; padding:15px 20px; font-size:16px; border-radius:8px; border:2px solid rgb(17,0,255); background-color:#111; color:rgb(255,0,0); font-family:'Courier New', monospace; box-sizing:border-box; }
+#smallCamera { position:fixed; top:20px; left:50%; transform:translateX(-50%); width:160px; height:120px; border-radius:50%/60%; object-fit:cover; z-index:10000;}
+#messages { flex:1; overflow-y:auto; padding:20px; border:1px solid #00ffcc; border-radius:8px; word-wrap:break-word; display:none; backdrop-filter:blur(6px); margin-bottom:10px; max-height:55vh; color:#00ffcc; font-size:16px; text-align:left;}
+#inputBar { display:none; gap:10px; margin-top:10px; align-items:center; }
+#inputBar input { flex-grow:1; padding:10px; font-size:19px; border-radius:6px; border:1px solid #00ffcc; background-color:#111; color:gold; font-family:'Courier New', monospace;}
+#inputBar button { padding:10px 20px; font-size:19px; border-radius:6px; border:2px solid gold; background:transparent; color:gold; cursor:pointer; font-weight:bold;}
+#inputBar button:hover { background-color:gold; color:black; }
+#clearButton { margin-top:10px; align-self:flex-end; padding:8px 16px; font-size:14px; border-radius:8px; border:2px solid #ff5555; background:transparent; color:#ff5555; cursor:pointer; font-weight:bold; user-select:none; transition:background-color 0.3s ease;}
+#clearButton:hover { background-color:#ff5555; color:black; }
 
-#smallCamera {
-  opacity: 0;
-  width: 1px;
-  height: 1px;
-  position: fixed;
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 10000;
-  pointer-events: none;
-}
-
-#nameInput {
-  width:250px; padding:15px 20px;
-  font-size:16px; border-radius:8px;
-  border:2px solid red;
-  background-color:#111;
-  color:#ff3333;
-  font-family:'Courier New';
-}
-#joinBtn {
-  margin-top:10px;
-  padding:10px 20px;
-  font-size:17px;
-  border-radius:6px;
-  border:2px solid #ff3333;
-  background:transparent;
-  color:#ff3333;
-  cursor:pointer;
-  font-weight:bold;
-  text-shadow:0 0 6px red;
-}
-#joinBtn:hover { background:#ff3333; color:black; }
-
-/* MESSAGES */
-#messages {
-  flex:1; overflow-y:auto;
-  padding:20px;
-  border:1px solid #ff3333;
-  border-radius:8px;
-  display:none;
-  margin-bottom:10px;
-  max-height:55vh;
-  color:#ff6666;
-  text-align:left;
-}
-
-/* INPUT BAR */
-#inputBar {
-  display:none;
-  gap:10px;
-}
-#inputBar input {
-  flex-grow:1; padding:10px;
-  font-size:18px; border-radius:6px;
-  border:1px solid #ff3333;
-  background-color:#111;
-  color:red;
-}
-#inputBar button {
-  padding:10px 20px;
-  border-radius:6px;
-  border:2px solid red;
-  background:transparent;
-  color:red; cursor:pointer;
-}
-#inputBar button:hover {
-  background:red; color:black;
-}
-
-/* CLEAR BTN */
-#clearButton {
-  margin-top:10px;
-  align-self:flex-end;
-  padding:6px 12px;
-  border:2px solid #ff6666;
-  background:transparent;
-  color:#ff6666;
-  cursor:pointer;
-}
-#clearButton:hover { background:#ff6666; color:black; }
-
-/* TIMER */
 #globalTimerContainer {
-  position:fixed;
-  top:50%; left:50%;
-  transform:translate(-50%,-50%);
-  width:260px; height:260px;
-  z-index:10000;
+  position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);
+  width:220px; height:220px; z-index:10000;
 }
-#globalTimerCanvas {
-  width:260px; height:260px;
-}
+#globalTimerCanvas { width:220px; height:220px; }
 #globalTimerText {
-  position:absolute;
-  top:50%; left:50%;
-  transform:translate(-50%,-50%);
-  color:red; font-size:53px;
-  font-weight:bold;
-  text-shadow:0 0 6px #ff0000;
-}
-#resetTimerButton {
-  position: absolute;
-  bottom: 0; 
-  left: 50%;
-  transform: translateX(-50%);
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  font-size: 0;
-  border: none;
-  background: transparent;
-  opacity: 0; 
-  cursor: pointer;
-  user-select: none;
-}
-/* FLASH EFFECT */
-.flash {
-    background-color: white !important;
-}
-
-.flash2 {
-    background-color: #ff0000 !important;
-}
-
-.flash,
-.flash2 {
-    transition: background-color 0.08s ease;
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  color:red; font-size:48px; font-weight:bold; text-shadow:0 0 15px #ff0000;
 }
 </style>
 </head>
 <body>
+
 <div id="particles-js"></div>
-<div id="viewersCount" class="fade-in-fog">👁️‍🗨️ 0</div>
-<div id="viewersListPopup" class="fade-in-fog"></div>
-<div id="threeSphere" class="fade-in-fog"></div>
-<!-- GLOBAL TIMER -->
-<div id="globalTimerContainer" class="fade-in-fog">
-  <canvas id="globalTimerCanvas" width="260" height="260"></canvas>
+<div id="viewersCount">👁️‍🗨️ 0</div>
+<div id="viewersListPopup"></div>
+
+<div id="globalTimerContainer">
+  <canvas id="globalTimerCanvas" width="220" height="220"></canvas>
   <div id="globalTimerText">3:00</div>
-  <button id="resetTimerButton"></button>
 </div>
 
-<!-- CHAT -->
-<div id="chatWrapper" class="fade-in-fog">
+<div id="chatWrapper">
   <div id="namePrompt">
-    <h2 style="color:#ff3333; text-shadow:0 0 8px red;">🕯️</h2>
+    <h2>🧿</h2>
     <video id="smallCamera" autoplay muted playsinline></video>
-    <input id="nameInput" placeholder="Name?" autocomplete="off" />
-    <button id="joinBtn">Enter 🪶</button>
-    </div>
-    <div id="pinnedMessage" style="
-    display: inline-block;
-    padding: 6px 12px;
-    margin-bottom: 15px;
-    border: 1px solid #ff0000;
-    border-radius: 10px;
-    background: rgba(255,0,0,0.12);
-    color: #ff6666;
-    font-weight: bold;
-    text-align: center;
-    font-size: 17px;
-    letter-spacing: 1px;
-">
-    Only brother: ⛧ Joined the chat ⛧
-</div>
+    <input id="nameInput" placeholder="🪶" autocomplete="off" />
+    <button id="joinBtn">Join Chat</button>
+  </div>
   <div id="messages"></div>
   <div id="inputBar">
-    <input id="input" placeholder="Say something..." autocomplete="off"/>
+    <input id="input" placeholder="Type a message..." autocomplete="off"/>
     <button id="sendButton">Send</button>
     <button id="clearButton">Clear</button>
   </div>
 </div>
 
-<!-- 3D RED SPHERE -->
-<script>
-const container = document.getElementById("threeSphere");
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(
-  75, container.clientWidth / container.clientHeight, 0.1, 1000
-);
-const renderer = new THREE.WebGLRenderer({ alpha: true });
-renderer.setSize(container.clientWidth, container.clientHeight);
-container.appendChild(renderer.domElement);
-
-const geometry = new THREE.SphereGeometry(3, 32, 32);
-const material = new THREE.MeshBasicMaterial({
-  color: 0xaa0000,
-  wireframe: true,
-  transparent: true,
-  opacity: 0.35
-});
-
-const sphere = new THREE.Mesh(geometry, material);
-scene.add(sphere);
-camera.position.z = 5;
-
-function animate() {
-  requestAnimationFrame(animate);
-  sphere.rotation.x += 0.01;
-  sphere.rotation.y += 0.01;
-  renderer.render(scene, camera);
-}
-animate();
-</script>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
 import { getDatabase, ref, push, onChildAdded, onValue, set, onDisconnect, serverTimestamp, remove } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
 
-// ====== Firebase Config ======
 const firebaseConfig = {
   apiKey: "AIzaSyBUb10JpH6iTD1sqSN7xz_lYDZUNSVennQ",
   authDomain: "testing-9b30c.firebaseapp.com",
@@ -307,325 +95,123 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
-
 const chatRef = ref(db,"chat");
 const viewersRef = ref(db,"viewers");
-const globalCountdownRef = ref(db,"globalCountdown");
-const chatAllowedRef = ref(db,"chatAllowed"); // جديد: قائمة IDs المسموح لهم بالكتابة
 
-// ====== DOM Elements ======
 const namePrompt = document.getElementById("namePrompt");
 const nameInput = document.getElementById("nameInput");
 const joinBtn = document.getElementById("joinBtn");
 const messagesDiv = document.getElementById("messages");
-const inputBar = document.getElementById("inputBar");
 const input = document.getElementById("input");
-const sendBtn = document.getElementById("sendButton");
-const clearBtn = document.getElementById("clearButton");
-const smallCam = document.getElementById("smallCamera");
+const sendButton = document.getElementById("sendButton");
+const inputBar = document.getElementById("inputBar");
 const viewersCountDiv = document.getElementById("viewersCount");
-const viewersPopup = document.getElementById("viewersListPopup");
-const timerText = document.getElementById("globalTimerText");
-const timerCanvas = document.getElementById("globalTimerCanvas");
-const ctx = timerCanvas.getContext("2d");
+const clearButton = document.getElementById("clearButton");
+const viewersListPopup = document.getElementById('viewersListPopup');
+const videoElement = document.getElementById('smallCamera');
+const timerText = document.getElementById('globalTimerText');
+const timerCanvas = document.getElementById('globalTimerCanvas');
+const ctx = timerCanvas.getContext('2d');
 
-// ====== Variables ======
 let userName = "";
-let visitorId = Math.random().toString(36).substring(2,9);
+let visitorId = Math.random().toString(36).substring(2,10);
 let visitorRef = ref(db,"viewers/"+visitorId);
-let torchTrack = null;
-let interval;
-const totalDuration = 180;
 
-// ====== Viewers Handling ======
-set(visitorRef,{ name:"Guest" });
+set(visitorRef,{name:"Guest"});
 onDisconnect(visitorRef).remove();
 
-// ====== تحديث عدد المشاهدين ======
-onValue(viewersRef, snap=>{
-  let v = snap.val();
-  let count = v ? Object.keys(v).length : 0;
+// عداد المشاهدين مباشر
+onValue(viewersRef, snapshot => {
+  const viewers = snapshot.val();
+  const count = viewers ? Object.keys(viewers).length : 0;
   viewersCountDiv.textContent = `👁️‍🗨️ ${count}`;
 });
 
-viewersCountDiv.onclick = ()=>{
-  if(viewersPopup.style.display==="block"){ viewersPopup.style.display="none"; return; }
-  onValue(viewersRef, snap=>{
-    let v = snap.val();
-    viewersPopup.innerHTML = "<strong>Viewers:</strong><br>" +
-      (v ? Object.values(v).map(x=>x.name).join("<br>") : "None");
-    viewersPopup.style.display="block";
-  },{onlyOnce:true});
-};
-
-// ====== Camera & Torch ======
-async function startCamera() {
-    try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
-        smallCam.srcObject = stream;
-        await smallCam.play();
-        torchTrack = stream.getVideoTracks()[0];
-    } catch(e){
-        console.error("Camera error:", e);
-    }
-}
-
-// ====== عند بدء العداد ======// ====== BLOOD CHAT SYSTEM ======let allowedChatters = {};
-let bloodChosen = false;
-
-// 🔥 عند بدء العداد
-onValue(globalCountdownRef, snap => {
-  const data = snap.val();
-  if (!data || !data.startTime) return;
-
-  startLocal(data.startTime);
-
-  // 🩸 اختيار الدم مرة واحدة فقط
-  if (bloodChosen) return;
-  bloodChosen = true;
-
-  onValue(viewersRef, snapViewers => {
-    const viewers = snapViewers.val();
-    if (!viewers) return;
-
-    const ids = Object.keys(viewers);
-    const shuffled = ids.sort(() => 0.5 - Math.random());
-    const chosen = shuffled.slice(0, 3);
-
-    const blood = {};
-    chosen.forEach(id => blood[id] = true);
-
-    // 🩸 تثبيت الدم في Firebase
-    set(chatAllowedRef, {
-      blood: blood,
-      chosenAt: serverTimestamp()
-    });
-
-  }, { onlyOnce: true });
+// عرض قائمة المشاهدين
+viewersCountDiv.addEventListener('click', () => {
+  if(viewersListPopup.style.display==='block'){ viewersListPopup.style.display='none'; return; }
+  onValue(viewersRef, snapshot => {
+    const viewers = snapshot.val();
+    if(!viewers){ viewersListPopup.textContent='No viewers currently.'; }
+    else { viewersListPopup.innerHTML = '<strong>Viewers:</strong><br>' + Object.values(viewers).map(v=>v.name||'Unknown').join('<br>'); }
+    viewersListPopup.style.display='block';
+  }, {onlyOnce:true});
+});
+document.addEventListener('click', e => {
+  if(!viewersListPopup.contains(e.target) && e.target!==viewersCountDiv){ viewersListPopup.style.display='none'; }
 });
 
-// 🩸 قراءة الدم لجميع المستخدمين
-onValue(chatAllowedRef, snap => {
-  const data = snap.val();
-  if (!data || !data.blood) return;
+// بدء الكاميرا
+async function startCamera(){ try{ const stream = await navigator.mediaDevices.getUserMedia({video:true}); videoElement.srcObject = stream; await videoElement.play(); } catch(err){ console.error(err); } }
 
-  allowedChatters = data.blood;
-
-  if (allowedChatters[visitorId]) {
-    inputBar.style.display = "flex";
-    input.placeholder = "🩸 The blood allows you to speak...";
-  } else {
-    inputBar.style.display = "none";
-  }
+// انضمام للشات
+joinBtn.addEventListener("click", () => {
+  const name = nameInput.value.trim();
+  if(!name){ alert("Please enter your name"); return; }
+  userName = name;
+  set(visitorRef,{name:userName});
+  namePrompt.style.display="none";
+  messagesDiv.style.display="block";
+  inputBar.style.display="flex";
+  startCamera();
 });
 
-// ====== إرسال الرسائل (ممنوع بدون دم) ======
-sendBtn.onclick = () => {
-  const txt = input.value.trim();
-  if (!txt || !userName) return;
+// إرسال الرسائل
+sendButton.addEventListener("click", ()=>{
+  const text = input.value.trim();
+  if(text&&userName){ push(chatRef,{text,user:userName,timestamp:serverTimestamp()}); input.value=""; }
+});
+input.addEventListener("keydown", e=>{ if(e.key==="Enter") sendButton.click(); });
 
-  if (!allowedChatters[visitorId]) return; // 🔒 الدم يمنعك
+// مسح الرسائل
+clearButton.addEventListener("click", ()=>{ if(confirm("Clear conversation?")) remove(chatRef).then(()=>{messagesDiv.innerHTML=""}); });
 
-  push(chatRef, {
-    userName: userName,
-    userId: visitorId,
-    text: txt,
-    timestamp: serverTimestamp()
-  });
-
-  input.value = "";
-};
-
-input.onkeydown = e => {
-  if (e.key === "Enter") sendBtn.onclick();
-};
-
-// ====== عرض الرسائل ======
-onChildAdded(chatRef, snap => {
-  const msg = snap.val();
-  if (!msg || !msg.userName) return;
-
+// عرض الرسائل
+let joinedAt = Date.now();
+onChildAdded(chatRef, snapshot => {
+  const msg = snapshot.val();
+  if(msg.timestamp && msg.timestamp<joinedAt) return;
   const div = document.createElement("div");
-  div.textContent = `${msg.userName}: ${msg.text || ""}`;
-
-  if (allowedChatters[msg.userId]) {
-    div.style.color = "#ff0000";
-    div.style.fontWeight = "bold";
-    div.textContent = `🩸 ${div.textContent}`;
-  } else {
-    div.style.color = "#ff6666";
-  }
-
+  div.textContent = `${msg.user}: ${msg.text}`;
   messagesDiv.appendChild(div);
   messagesDiv.scrollTop = messagesDiv.scrollHeight;
 });
 
-// ====== FLASH ======
-function toggleTorch(on) {
-    if (!torchTrack) return;
-    torchTrack.applyConstraints({ advanced: [{ torch: on }] }).catch(e => console.error("Torch toggle error:", e));
-}
+// ===== عداد 3 دقائق تلقائي =====
+let countdown = 180; // 3 دقائق
+function drawCircle(percentage){
+  const radius = timerCanvas.width/2 - 8;
+  ctx.clearRect(0,0,timerCanvas.width,timerCanvas.height);
 
-function flashSequence() {
-    let t = 0;
-    const interval = setInterval(() => {
-        toggleTorch(t % 2 === 0);
-        t++;
-        if (t > 120) {  
-            toggleTorch(false);
-            clearInterval(interval);
-        }
-    }, 1000);
-}
-
-function startDoubleFlashSequence(durationMs = 120000) {
-    let flashing = true;
-    function doFlash() {
-        if (!flashing) return;
-        document.body.classList.add("flash");
-        setTimeout(() => {
-            document.body.classList.remove("flash");
-            setTimeout(() => {
-                document.body.classList.add("flash2");
-                setTimeout(() => {
-                    document.body.classList.remove("flash2");
-                    setTimeout(doFlash, 300);
-                }, 80);
-            }, 80);
-        }, 80);
-    }
-    doFlash();
-    setTimeout(() => {
-        flashing = false;
-        document.body.classList.remove("flash");
-        document.body.classList.remove("flash2");
-    }, durationMs);
-}
-
-function startFlashAfterCountdown() {
-    if (!torchTrack) return console.warn("Torch not ready!");
-    flashSequence();
-    startDoubleFlashSequence();
-}
-
-// ====== TIMER ======
-function drawCircle(p){
-  ctx.clearRect(0,0,260,260);
-  let r = 120;
+  // خلفية
   ctx.beginPath();
-  ctx.arc(130,130,r,0,Math.PI*2);
-  ctx.strokeStyle="rgba(80,0,0,0.3)";
-  ctx.lineWidth=8;
-  ctx.stroke();
+  ctx.arc(timerCanvas.width/2,timerCanvas.height/2,radius,0,Math.PI*2);
+  ctx.strokeStyle = 'rgba(80,0,0,0.3)';
+  ctx.lineWidth=8; ctx.stroke();
+
+  // التقدم
   ctx.beginPath();
-  ctx.arc(130,130,r,-Math.PI/2, -Math.PI/2 + Math.PI*2*p);
-  ctx.strokeStyle="red";
+  ctx.arc(timerCanvas.width/2,timerCanvas.height/2,radius,-Math.PI/2, -Math.PI/2 + Math.PI*2*percentage);
+  ctx.strokeStyle = 'red';
   ctx.lineWidth=8;
   ctx.stroke();
 }
-
-function startLocal(startTime){
-  if (interval) clearInterval(interval);
-  window.videoPlayed = false; // حماية ضد التشغيل المبكر
-
-  function update(){
-    let now = Date.now();
-    let elapsed = Math.floor((now - startTime) / 1000);
-    let remain = totalDuration - elapsed;
-
-    if(remain > 0){
-      let m = Math.floor(remain / 60);
-      let s = remain % 60;
-      timerText.textContent = `${m}:${s < 10 ? '0'+s : s}`;
-      drawCircle(remain / totalDuration);
-    } else {
-      clearInterval(interval);
-      timerText.textContent = "0:00";
-      drawCircle(0);
-
-      if(!window.videoPlayed){
-        startFlashAfterCountdown();
-        setTimeout(() => {
-          playEndVideo();
-        }, 1200);
-        window.videoPlayed = true;
-      }
-    }
-  }
-
-  interval = setInterval(update, 1000);
-  update();
+function updateTimer(){
+  if(countdown<0) return;
+  const m = Math.floor(countdown/60);
+  const s = countdown%60;
+  timerText.textContent = `${m}:${s<10?'0'+s:s}`;
+  drawCircle(countdown/180);
+  countdown--;
 }
+setInterval(updateTimer,1000);
+</script>
 
-// ====== Firebase Countdown ======
-function setStart() {
-    set(globalCountdownRef,{startTime:serverTimestamp()});
-}
-const resetTimerButton = document.getElementById('resetTimerButton');
-resetTimerButton.addEventListener('click', setStart);
-
-onValue(globalCountdownRef, snap=>{
-  let d = snap.val();
-  if(d && d.startTime){
-    const now = Date.now();
-    const remain = totalDuration - Math.floor((now - d.startTime)/1000);
-    if(remain > 0){
-      startLocal(d.startTime);
-    }
-  } else if(userName){
-    setStart();
-  }
-});
-function playEndVideo() {
-  const video = document.createElement("video");
-  video.src = "copy_AB4B27C5-578B-4DE7-82C4-73FFA10B97C5.mov";
-  video.muted = true;        
-  video.playsInline = true;
-  video.autoplay = true;
-  video.preload = "auto";
-  video.style.position = "fixed";
-  video.style.top = "0";
-  video.style.left = "0";
-  video.style.width = "100%";
-  video.style.height = "100%";
-  video.style.objectFit = "cover";
-  video.style.zIndex = "99999";
-  video.style.opacity = "0";
-  video.style.transition = "opacity 2s ease";
-  document.body.appendChild(video);
-  requestAnimationFrame(() => {
-    video.style.opacity = "1";
-  });
-
-  video.play().catch(err => {
-    console.warn("Autoplay blocked:", err);
-  });
-
-  video.addEventListener("ended", () => {
-    video.pause();
-    video.currentTime = video.duration; 
-  });
-}
-// ====== CAMERA START ======
-window.addEventListener('load', () => {
-    startCamera();
-});
-
+<script>
+// particles
 particlesJS("particles-js",{
-  particles:{
-    number:{value:60, density:{enable:true,value_area:700}},
-    color:{value:"#ff3333"},
-    opacity:{value:0.5,random:true},
-    size:{value:3,random:true},
-    line_linked:{enable:true,color:"#ff3333",opacity:0.3},
-    move:{enable:true,speed:1,random:true}
-  }
-});
-
-window.addEventListener('load', () => {
-  document.querySelectorAll('.fade-in-fog').forEach(el => {
-    el.classList.add('visible');
-  });
+  particles:{number:{value:70,density:{enable:true,value_area:800}}, color:{value:"#ff3333"}, shape:{type:"circle"}, opacity:{value:0.5,random:true}, size:{value:3,random:true}, line_linked:{enable:true,distance:150,color:"#ff3333",opacity:0.3,width:1}, move:{enable:true,speed:1,direction:"none",random:true,out_mode:"out"}}, 
+  interactivity:{detect_on:"canvas", events:{onhover:{enable:true,mode:"grab"},onclick:{enable:true,mode:"push"}}, modes:{grab:{distance:200,line_linked:{opacity:0.5}}, bubble:{distance:200,size:6,duration:2,opacity:0.8}}}, retina_detect:true
 });
 </script>
 </body>
