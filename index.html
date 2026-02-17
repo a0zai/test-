@@ -1,11 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="nl">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="UTF-8">
+<meta property="og:type" content="website">
+<meta property="og:title" content="A0ZAI">
+<meta property="og:locale" content="nl_NL">
+<meta name="robots" content="index, follow">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="The instinct of Sensation. Made on N.">
+<meta property="og:description" content="The instinct of Sensation. Made on N.">
+<meta property="og:url" content="https://a0z.nl/">
+<meta property="og:image" content="https://avatars.githubusercontent.com/u/201962374?v=4&size=800">
+<meta name="theme-color" content="#bfc7ce">   
+<title>A0ZAI</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.fog.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-<title>A∞Z | Transmission</title>
-
 <style>
 html, body {
   height: 100%;
@@ -27,209 +37,259 @@ html, body {
     z-index:0;
     pointer-events:none;
 }
-
-#output { 
-    opacity:1;
-    transform: translateY(0);
-    white-space: pre-wrap;
-    z-index:10;
-    color: #eaeaea;
-    text-shadow: 0 0 8px rgba(255,255,255,0.7);
+#vanta-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    opacity: 0.35;
+    filter: saturate(140%) contrast(115%);
+    pointer-events: none;
+}
+.main-content {
+    position: relative;
+    z-index: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 
-/* Typewriter output */
-.line {
-    margin-bottom:0.7em;
-    opacity:0;
-    filter: blur(10px);
-    transform: translateY(20px);
-    transition: opacity 5s ease, filter 5s ease, transform 5s ease;
+.title {
+    margin-bottom: 30px;
+    font-size: 36px;
+    letter-spacing: 12px;
+    color: #fff;
+    font-weight: 300;
+    text-shadow: 0 0 10px rgba(178,242,187,0.7),
+                 0 0 20px rgba(178,242,187,0.4);
+    transition: 3s ease;
 }
-.line.visible {
-    opacity:1;
-    filter: blur(0);
-    transform: translateY(0);
+.scene {
+    perspective: 1448px;
 }
-
-/* Strong glitch */
-.glitch {
-    font-weight:bold;
-    letter-spacing:1px;
-    color:#00ff00;
-    text-shadow:none;
-    animation: glitchAnim 0.12s steps(2, jump-end) infinite;
+.clock-container {
+    transform-style: preserve-3d;
+    transform: translateZ(20px);
+    transition: transform 0.15s ease-out;
+    will-change: transform;
+    position: relative;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    border: 2px solid rgba(200, 170, 90, 0.38);
+    box-shadow: none;
 }
-@keyframes glitchAnim {
-    0% { transform:translate(1px, -1px); }
-    50% { transform:translate(-2px, 2px); }
-    100% { transform:translate(1px, -1px); }
+.glass-cover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+    box-shadow: inset 0 20px 60px rgba(255,255,255,0.15), 
+                0 0 40px rgba(255,255,255,0.1);
+    backdrop-filter: blur(4px); 
+    pointer-events: none;
+    transform: translateZ(30px);
 }
-
-.shake {
-    animation: shakeAnim 0.35s ease-in-out;
+.clock-container::after {
+    content: '81 18';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+    letter-spacing: 3px;
+    color: #000;
+    text-shadow: 0 0 7px #00ff88;
 }
-@keyframes shakeAnim {
-    0% { transform:translateX(0); }
-    20% { transform:translateX(-4px); }
-    40% { transform:translateX(4px); }
-    60% { transform:translateX(-3px); }
-    80% { transform:translateX(3px); }
-    100% { transform:translateX(0); }
+.brand-name {
+    position: absolute;
+    top: 63%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--sense-green);
+    font-size: 9px;
+    letter-spacing: 7px;
+    opacity: 0.6;
+    text-transform: uppercase;
 }
-
-#fade-black {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: #000;
-  pointer-events: none;
-  opacity: 0;
-  z-index: 999;
-  transition: opacity 3s ease;
+.center-dot {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 3px;
+    height: 4px;
+    background: var(--sense-green);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    animation: pulse 2.027s ease-in-out infinite;
+    box-shadow: 0 0 14px rgba(50,100,60,0.7);
+    z-index: 10;
 }
-
-/* فيديو */
-#myVideo {
-  display: none;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 50;
+@keyframes pulse {
+    0%,100% { transform: translate(-50%, -50%) scale(1); opacity: 0.9; }
+    50% { transform: translate(-50%, -50%) scale(1.7); opacity: 0.4; }
+}
+.number {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    font-size: 22px;
+    font-weight: bold;
+    padding: 20px;
+    box-sizing: border-box;
+    color: #cccccc;
+}
+.n1  { transform: rotate(0deg); }    .n1 div  { transform: rotate(0deg); }
+.n2  { transform: rotate(30deg); }   .n2 div  { transform: rotate(-30deg); }
+.n3  { transform: rotate(60deg); }   .n3 div  { transform: rotate(-60deg); }
+.n4  { transform: rotate(90deg); }   .n4 div  { transform: rotate(-90deg); }
+.n5  { transform: rotate(120deg); }  .n5 div  { transform: rotate(-120deg); }
+.n6  { transform: rotate(150deg); }  .n6 div  { transform: rotate(-150deg); }
+.n7  { transform: rotate(180deg); }  .n7 div  { transform: rotate(-180deg); }
+.n8  { transform: rotate(210deg); }  .n8 div  { transform: rotate(-210deg); }
+.n9  { transform: rotate(240deg); }  .n9 div  { transform: rotate(-240deg); }
+.n10 { transform: rotate(270deg); }  .n10 div { transform: rotate(-270deg); }
+.n11 { transform: rotate(300deg); }  .n11 div { transform: rotate(-300deg); }
+.n12 { transform: rotate(330deg); }  .n12 div { transform: rotate(-330deg); }
+.hand {
+    position: absolute;
+    bottom: 50%;
+    left: 50%;
+    transform-origin: bottom;
+    border-radius: 10px;
+    transform: translateZ(20px);
+}
+.n1 {
+    position: absolute;
+    bottom: 100%; 
+    left: 50%;
+    transform: translateX(-50%) rotate(0deg); 
+    font-size: 22px;
+    color: #f1f5f9;
+    white-space: nowrap;
+    transition: opacity 0.3s ease;
+}
+.hour {
+    width: 4px;
+    height: 60px;
+    background: rgba(241,245,249,0.25);
+    box-shadow: 0 0 10px rgba(241,245,249,0.3); 
+}
+.minute {
+    width: 3.5px;
+    height: 69px;
+    background: var(--sense-red);
+    box-shadow: 0 0 11px var(--sense-red); 
+}
+.second {
+    width: 2.5px;
+    height: 72px;
+    background: var(--sense-blue);
+    box-shadow: 0 0 12px var(--sense-blue);
+}
+.tagline {
+    margin-top: 33px;      
+    color: #ffffff;            
+    opacity: 0.85;         
+    font-size: 14px;        
+    letter-spacing: 2px;   
+    text-align: center;    
+    width: 100%;        
+}
+@media (max-width:600px){
+    .clock-container { width:260px; height:260px; }
+    .title { font-size:24px; letter-spacing:8px; }
+    .number { font-size:16px; }
+}
+body {
+    opacity: 0;
+    transition: opacity 3s ease-in;
+}
+body.loaded {
+    opacity: 1;
 }
 </style>
 </head>
-
 <body>
-<div id="particles-js"></div>
-<div id="output"></div>
-
-<video id="myVideo" width="640" height="360" muted>
-    <source src="video.mp4" type="video/mp4">
-</video>
-
-<div id="fade-black"></div>
-
+<div id="vanta-bg"></div> 
+<div id="particles-stars"></div>
+<div class="main-content">
+    <div class="scene">
+    <div class="clock-container">
+        <div class="glass-cover"></div>
+        <div class="brand-name">SEENƧƎƎ</div>
+        <div class="center-dot"></div>
+        <div class="number n2"><div>12</div></div>
+        <div class="number n3"><div>11</div></div>
+        <div class="number n4"><div>10</div></div>
+        <div class="number n5"><div>9</div></div>
+        <div class="number n6"><div>8</div></div>
+        <div class="number n7"><div>Ƶ</div></div>
+        <div class="number n8"><div>6</div></div>
+        <div class="number n9"><div>5</div></div>
+        <div class="number n10"><div>4</div></div>
+        <div class="number n11"><div>3(</div></div>
+        <div class="number n12"><div>🦋</div></div>
+        <div class="hand hour" id="hour">
+        <div class="n1">()</div>
+        </div>
+        <div class="hand minute" id="minute"></div>
+        <div class="hand second" id="second"></div>
+    </div>
+    <div class="tagline">The instinct of Sensation</div>
+</div>
 <script>
-/* ---- TYPEWRITER EFFECT WITH FADE-IN ---- */
-function typeLine(text, callback) {
-    const container = document.getElementById("output");
-    const line = document.createElement("div");
-    line.className = "line";
-    container.appendChild(line);
-
-    setTimeout(() => line.classList.add('visible'), 50);
-
-    let i = 0;
-    function type() {
-        if (i < text.length) {
-            line.textContent += text[i];
-            i++;
-            const jitter = Math.random() * 80;
-            setTimeout(type, 113 + jitter);
-        } else {
-            if (callback) setTimeout(callback, 200);
-        }
-    }
-    type();
+const hour = document.getElementById('hour');
+const n1 = hour.querySelector('.n1'); 
+function updateClock() {
+    const now = new Date();
+    const ms = now.getMilliseconds();
+    const s = now.getSeconds() + ms / 1000;
+    const m = now.getMinutes() + s / 60;
+    const h = (now.getHours() % 12) + m / 60;
+    hour.style.transform = `translateX(-50%) rotate(${-h*30 + 30}deg)`;
+    n1.style.transform = `translateX(-50%) rotate(${h*30 - 30}deg)`;
+    second.style.transform = `translateX(-50%) rotate(${-s*6 + 0}deg)`;
+    minute.style.transform = `translateX(-50%) rotate(${-m*6 + 0}deg)`;
+let displayHour = Math.floor(h);
+if (displayHour === 0) displayHour = 12;
+n1.innerText = displayHour;
+if (displayHour === 1) {
+    n1.style.fontWeight = '600';
+    n1.style.letterSpacing = '2px';
+    n1.style.fontSize = '20px';
+} else {
+    n1.style.fontWeight = 'bold';
+    n1.style.letterSpacing = 'normal';
 }
-
-/* ---- RANDOM GLITCH FX ---- */
-function glitchFx() {
-    const out = document.getElementById("output");
-    const g = document.createElement("div");
-    g.className = "line glitch";
-    g.textContent = "!! SIGNAL DISTORTION DETECTED !!";
-    out.appendChild(g);
-    setTimeout(() => g.remove(), 500);
+n1.style.opacity = (displayHour >= 10 || displayHour <= 4) ? 1 : 0;    requestAnimationFrame(updateClock);
 }
-
-/* ---- MASTER SEQUENCE ---- */
-function runSequence(lines, index = 0) {
-    if (index >= lines.length) {
-        const fade = document.getElementById("fade-black");
-        fade.style.opacity = 1;
-
-        requestAnimationFrame(() => {
-            window.location.href = "index.html";
-        });
-        return;
-    }
-
-    typeLine(lines[index], () => {
-        if (Math.random() < 0.22) glitchFx();
-
-        if (lines[index].includes("FAILED") || lines[index].includes("Unknown")) {
-            const last = document.querySelector(".line:last-child");
-            last.classList.add("shake");
-        }
-
-        runSequence(lines, index + 1);
-    });
-}
-
-/* ---- FETCH USER DATA + START ---- */
-fetch("https://api.ipify.org?format=json")
-  .then(r => r.json())
-  .then(data => {
-      const lines = [
-          "It started on a night that shouldn’t have carried any echoes…",
-          "No timestamp. No origin. No sender signature.",
-          "A message that had been trying to arrive for 12 years,",
-          "",
-          "Tonight…",
-          "",
-          ">>> Decrypting frozen message...",
-          "Sender: Only Brother",
-          "To: Mamy",
-          "",
-          "“Mamy…",
-          "Why didn’t you answer my calls…?”",
-          "",
-          "Opa hasn’t woken up.",
-          "Before he slept he said:",
-          "   ‘Your Dady will be late.’",
-          "",
-          "Message Age: 12 years",
-          "Delivery Status: FAILED",
-          "Reason: No recipient detected.",
-          "-----",
-          "Connection unstable...",
-          "Why? Continue? Let's see~>N...."
-      ];
-      runSequence(lines);
-  })
-  .catch(() => {
-      runSequence([
-          "[ A∞Z / FAILURE ]",
-          "Metadata retrieval failed...",
-          "But something recognized you anyway.",
-          "",
-          "Closing connection..."
-      ]);
-  });
-
-window.addEventListener('load', () => {
-    setTimeout(() => {
-        const video = document.getElementById('myVideo');
-        video.style.display = 'block';
-        video.style.opacity = 0;
-        video.style.transition = 'opacity 2s ease'; 
-        requestAnimationFrame(() => video.style.opacity = 1);
-        video.play(); 
-    }, 19000);  
-});
+updateClock();
 </script>
-
-<!-- CINEMATIC SCI-FI PARTICLES -->
 <script>
+VANTA.FOG({
+    el: "#vanta-bg",
+    mouseControls: true,
+    touchControls: true,
+    gyroControls: false,
+    minHeight: 200.0,
+    minWidth: 200.0,
+    highlightColor: 0x90e0ef,
+    midtoneColor: 0xb2f2bb,
+    lowlightColor: 0x0b132b,
+    baseColor: 0x000000,
+    blurFactor: 0.14,
+    speed: 0.4,
+    zoom: 0.9
+});
 particlesJS("particles-js",{
   particles:{
     number:{ value:200, density:{ enable:true, value_area:1800 } },
-    color:{ value:"#ffffff" },
+    color:{ value:"#eaeaea" },
     shape:{ type:"circle" },
     opacity:{ value:0.7, random:true, anim:{ enable:true, speed:0.5, opacity_min:0.2, sync:false } },
     size:{ value:1.5, random:true, anim:{ enable:true, speed:2, size_min:0.3, sync:false } },
@@ -243,6 +303,59 @@ particlesJS("particles-js",{
   retina_detect:true
 });
 </script>
+<script>
+window.addEventListener('load', () => {
+    document.body.classList.add('loaded');
+});
+</script>
+<script>
+const clock = document.querySelector('.clock-container');
+const scene = document.querySelector('.scene');
+let currentX = 0;
+let currentY = 0;
+let targetX = 0;
+let targetY = 0;
+scene.addEventListener('mousemove', (e) => {
+    const rect = scene.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    targetY = (x - centerX) / centerX * 5; 
+    targetX = -(y - centerY) / centerY * 6; 
+});
+scene.addEventListener('mouseleave', () => {
+    targetX = 0;
+    targetY = 0;
+});
+function animate3D() {
+    currentX += (targetX - currentX) * 0.07;
+    currentY += (targetY - currentY) * 0.08;
 
+    clock.style.transform = `
+        rotateX(${currentX}deg)
+        rotateY(${currentY}deg)
+    `;
+clock.style.filter = `
+    drop-shadow(${currentY}px ${currentX*2}px 60px rgba(0,0,0,0.6))
+`;
+    requestAnimationFrame(animate3D);
+}
+animate3D();
+let touchX = 0;
+let touchY = 0;
+scene.addEventListener('touchstart', e => {
+    const t = e.touches[0];
+    touchX = t.clientX;
+    touchY = t.clientY;
+});
+scene.addEventListener('touchmove', e => {
+    const t = e.touches[0];
+    const dx = t.clientX - touchX;
+    const dy = t.clientY - touchY;
+    targetY = dx * 0.11;
+    targetX = -dy * 0.10;
+});
+</script>
 </body>
 </html>
