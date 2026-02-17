@@ -33,7 +33,31 @@ html, body {
   align-items:center;
   text-align:center;
 }
+#intro {
+  position: fixed;
+  inset: 0;
+  background: black;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 1.5s ease, visibility 1.5s ease;
+}
 
+#intro.hide {
+  opacity: 0;
+  visibility: hidden;
+}
+
+#intro-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+#intro.hide #intro-video {
+  transform: scale(1.05);
+  transition: transform 1.5s ease;
+}
 #particles-js {
     position:fixed;
     top:0; left:0;
@@ -212,6 +236,11 @@ body.loaded {
 </style>
 </head>
 <body>
+<div id="intro">
+  <video id="intro-video" autoplay muted playsinline preload="auto">
+    <source src="copy_AB4B27C5-578B-4DE7-82C4-73FFA10B97C5.mov" type="video/mp4">
+  </video>
+</div>
 <div id="particles-js"></div>
 <div class="main-content">
     <div class="scene">
@@ -318,6 +347,20 @@ scene.addEventListener('touchmove', e => {
     const dy = t.clientY - touchY;
     targetY = dx * 0.11;
     targetX = -dy * 0.10;
+});
+document.addEventListener("DOMContentLoaded", () => {
+  const intro = document.getElementById("intro");
+  const video = document.getElementById("intro-video");
+  if (!intro || !video) return;
+  video.muted = true;
+  video.play().catch(() => {});
+  video.addEventListener("ended", () => {
+    intro.classList.add("hide");
+  });
+
+  setTimeout(() => {
+    intro.classList.add("hide");
+  }, 4000);
 });
 </script>
 <script>
