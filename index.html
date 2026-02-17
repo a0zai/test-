@@ -271,39 +271,6 @@ n1.style.opacity = (displayHour >= 10 || displayHour <= 4) ? 1 : 0;    requestAn
 updateClock();
 </script>
 <script>
-VANTA.FOG({
-    el: "#vanta-bg",
-    mouseControls: true,
-    touchControls: true,
-    gyroControls: false,
-    minHeight: 200.0,
-    minWidth: 200.0,
-    highlightColor: 0x90e0ef,
-    midtoneColor: 0xb2f2bb,
-    lowlightColor: 0x0b132b,
-    baseColor: 0x000000,
-    blurFactor: 0.14,
-    speed: 0.4,
-    zoom: 0.9
-});
-particlesJS("particles-js",{
-  particles:{
-    number:{ value:200, density:{ enable:true, value_area:1800 } },
-    color:{ value:"#eaeaea" },
-    shape:{ type:"circle" },
-    opacity:{ value:0.7, random:true, anim:{ enable:true, speed:0.5, opacity_min:0.2, sync:false } },
-    size:{ value:1.5, random:true, anim:{ enable:true, speed:2, size_min:0.3, sync:false } },
-    line_linked:{ enable:false },
-    move:{ enable:true, speed:0.5, direction:"none", random:true, straight:false, out_mode:"out" }
-  },
-  interactivity:{
-    detect_on:"canvas",
-    events:{ onhover:{ enable:false }, onclick:{ enable:false } }
-  },
-  retina_detect:true
-});
-</script>
-<script>
 window.addEventListener('load', () => {
     document.body.classList.add('loaded');
 });
@@ -355,6 +322,39 @@ scene.addEventListener('touchmove', e => {
     const dy = t.clientY - touchY;
     targetY = dx * 0.11;
     targetX = -dy * 0.10;
+});
+</script>
+<script>
+VANTA.FOG({
+    el: "#vanta-bg",
+    mouseControls: true,
+    touchControls: true,
+    gyroControls: false,
+    minHeight: 200.0,
+    minWidth: 200.0,
+    highlightColor: 0x90e0ef,
+    midtoneColor: 0xb2f2bb,
+    lowlightColor: 0x0b132b,
+    baseColor: 0x000000,
+    blurFactor: 0.14,
+    speed: 0.4,
+    zoom: 0.9
+});
+particlesJS("particles-js",{
+  particles:{
+    number:{ value:200, density:{ enable:true, value_area:1800 } },
+    color:{ value:"#eaeaea" },
+    shape:{ type:"circle" },
+    opacity:{ value:0.7, random:true, anim:{ enable:true, speed:0.5, opacity_min:0.2, sync:false } },
+    size:{ value:1.5, random:true, anim:{ enable:true, speed:2, size_min:0.3, sync:false } },
+    line_linked:{ enable:false },
+    move:{ enable:true, speed:0.5, direction:"none", random:true, straight:false, out_mode:"out" }
+  },
+  interactivity:{
+    detect_on:"canvas",
+    events:{ onhover:{ enable:false }, onclick:{ enable:false } }
+  },
+  retina_detect:true
 });
 </script>
 </body>
