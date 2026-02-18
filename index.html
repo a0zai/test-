@@ -218,10 +218,11 @@ html, body {
     margin-top: 33px;      
     color: #ffffff;            
     opacity: 0.85;         
-    font-size: 14px;        
+    font-size: 14px; 
+    font-family: 'Montserrat', sans-serif;
     letter-spacing: 2px;   
     text-align: center;    
-    width: 100%;        
+    width: 300%;        
 }
 @media (max-width:600px){
     .clock-container { width:260px; height:260px; }
@@ -396,13 +397,15 @@ scene.addEventListener('mouseleave', () => {
     targetY = 0;
 });
 function animate3D() {
-    currentX += (targetX - currentX) * 0.07;
-    currentY += (targetY - currentY) * 0.08;
+    currentX += (targetX - currentX) * 0.17;
+    currentY += (targetY - currentY) * 0.18;
 
     clock.style.transform = `
         rotateX(${currentX}deg)
         rotateY(${currentY}deg)
     `;
+    const glass = document.querySelector('.glass-cover');
+glass.style.background = `linear-gradient(${135 + currentY * 2}deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 50%, rgba(255,255,255,0.05) 100%)`;
 clock.style.filter = `
     drop-shadow(${currentY}px ${currentX*2}px 60px rgba(0,0,0,0.6))
 `;
@@ -420,8 +423,8 @@ scene.addEventListener('touchmove', e => {
     const t = e.touches[0];
     const dx = t.clientX - touchX;
     const dy = t.clientY - touchY;
-    targetY = dx * 0.11;
-    targetX = -dy * 0.10;
+    targetY = dx * 0.45;
+    targetX = -dy * 0.45;
 });
 </script>
 </body>
