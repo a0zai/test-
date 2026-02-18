@@ -318,7 +318,7 @@ body.loaded {
     </div>
     <div class="tagline">Son when you see SEENSEE, you see the sun</div>
     </div>
-    <div id="flash-overlay"></div>
+    <audio id="sense-sound" src="Seensee.mp3" preload="auto"></audio>
 <div class="horizon-line">
     <div id="drag-point" class="pulse-point"></div>
 </div>
@@ -382,7 +382,7 @@ numbersToHide.forEach((n, i, arr) => {
 }
 updateClock();
 const dragPoint = document.getElementById('drag-point');
-const flash = document.getElementById('flash-overlay');
+const audio = document.getElementById('sense-sound');
 let isDragging = false;
 let startY = 0;
 
@@ -403,8 +403,6 @@ function drag(y) {
     let diffY = startY - y;
     if (diffY >= 0 && diffY <= 320) {
         dragPoint.style.bottom = diffY + 'px';
-        let progress = diffY / 320;
-        dragPoint.style.boxShadow = `0 0 ${20 + progress*40}px #fff, 0 0 ${40 + progress*80}px var(--sense-green)`;
     }
 }
 
@@ -417,13 +415,17 @@ function endDrag() {
     let finalPos = parseInt(dragPoint.style.bottom);
 
     if (finalPos > 280) {
-        flash.style.opacity = '1';
+        audio.currentTime = 0;
+        audio.play().catch(error => {
+            console.log("Error playing audio:", error);
+        });
+
+        dragPoint.style.boxShadow = `0 0 100px var(--sense-green)`;
+        
         setTimeout(() => {
-            flash.style.transition = 'opacity 1.5s ease-out';
-            flash.style.opacity = '0';
-            dragPoint.style.transition = 'bottom 0.5s ease';
+            dragPoint.style.transition = 'bottom 0.8s ease';
             dragPoint.style.bottom = '0';
-        }, 200);
+        }, 300);
     } else {
         dragPoint.style.transition = 'bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
         dragPoint.style.bottom = '0';
