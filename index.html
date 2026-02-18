@@ -381,6 +381,26 @@ numbersToHide.forEach((n, i, arr) => {
    requestAnimationFrame(updateClock);
 }
 updateClock();
+let audioUnlocked = false;
+
+function unlockAudioOnce() {
+    if (audioUnlocked) return;
+
+    const audio = document.getElementById('sense-sound');
+    audio.muted = true;
+
+    audio.play().then(() => {
+        audio.pause();
+        audio.currentTime = 0;
+        audio.muted = false;
+        audioUnlocked = true;
+    }).catch(()=>{});
+}
+
+document.addEventListener('touchstart', unlockAudioOnce, { once: true });
+document.addEventListener('click', unlockAudioOnce, { once: true });
+</script>
+<script>
 const dragPoint = document.getElementById('drag-point');
 const audio = document.getElementById('sense-sound');
 let isDragging = false;
