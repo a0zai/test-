@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <title>A0ZAI</title>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;700&family=Orbitron:wght@400;700&family=Rajdhani:wght@500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.fog.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
@@ -17,7 +16,6 @@ html, body {
     height: 100%;
     margin: 0;
     background: #000;
-    min-height: 100vh;
     font-family: 'Courier New', monospace;
     overflow: hidden;
     display: flex;
@@ -69,12 +67,14 @@ html, body {
 }
 
 .main-content {
-    opacity: 0;
-    transition: opacity 1.5s ease;
+    position: relative;
+    z-index: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
-.main-content.visible {
-    opacity: 1;
-}
+
+
 .title {
     margin-bottom: 30px;
     font-size: 36px;
@@ -160,10 +160,9 @@ html, body {
     text-align: center;
     font-size: 22px;
     font-weight: bold;
-    font-family: 'Orbitron', sans-serif;
     padding: 20px;
     box-sizing: border-box;
-    color: #eaeaea;
+    color: #cccccc;
 }
 .n1  { transform: rotate(0deg); }    .n1 div  { transform: rotate(0deg); }
 .n2  { transform: rotate(30deg); }   .n2 div  { transform: rotate(-30deg); }
@@ -217,8 +216,7 @@ html, body {
     margin-top: 33px;      
     color: #ffffff;            
     opacity: 0.85;         
-    font-size: 14px; 
-    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;        
     letter-spacing: 2px;   
     text-align: center;    
     width: 100%;        
@@ -274,21 +272,17 @@ body.loaded {
 document.addEventListener("DOMContentLoaded", () => {
   const intro = document.getElementById("intro");
   const video = document.getElementById("intro-video");
-  const mainContent = document.querySelector('.main-content');
-
-  if (!intro || !video || !mainContent) return;
+  if (!intro || !video) return;
 
   video.play().catch(() => {});
 
-  function showContent() {
-    intro.classList.add('hide'); // إخفاء الفيديو
-    mainContent.classList.add('visible'); // تفعيل Fade-in للمحتوى
-    setTimeout(() => intro.style.display = 'none', 1500);
+  function hideIntro() {
+    if (!intro.classList.contains('hide')) {
+      intro.classList.add('hide');
+      document.body.classList.add('loaded');
+      setTimeout(() => intro.style.display = 'none', 1500);
+    }
   }
-
-  video.addEventListener("ended", showContent);
-  setTimeout(showContent, 9300); // كاحتياطي لو الفيديو أطول من 9.3 ثانية
-});
 
   video.addEventListener("ended", hideIntro);
   setTimeout(hideIntro, 9300);
@@ -317,7 +311,7 @@ let displayHour = Math.floor(h);
 if (displayHour === 0) displayHour = 12;
 n1.innerText = displayHour;
 if (displayHour === 1) {
-    n1.style.fontWeight = '600';
+    n1.style.fontWeight = '400';
     n1.style.letterSpacing = '2px';
     n1.style.fontSize = '18px';
 } else {
@@ -407,8 +401,6 @@ function animate3D() {
         rotateX(${currentX}deg)
         rotateY(${currentY}deg)
     `;
-    const glass = document.querySelector('.glass-cover');
-glass.style.background = `linear-gradient(${135 + currentY * 2}deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 50%, rgba(255,255,255,0.05) 100%)`;
 clock.style.filter = `
     drop-shadow(${currentY}px ${currentX*2}px 60px rgba(0,0,0,0.6))
 `;
