@@ -236,9 +236,9 @@ body.loaded {
 </style>
 </head>
 <body>
+  <div id="intro">
   <video id="intro-video" autoplay muted playsinline preload="auto">
     <source src="copy_AB4B27C5-578B-4DE7-82C4-73FFA10B97C5.mov" type="video/mp4">
-    <div id="intro">
   </video>   
 <div id="vanta-bg"></div> 
 <div id="particles-stars"></div>
@@ -272,14 +272,21 @@ document.addEventListener("DOMContentLoaded", () => {
   const intro = document.getElementById("intro");
   const video = document.getElementById("intro-video");
   if (!intro || !video) return;
+
   video.muted = true;
   video.play().catch(() => {});
-  video.addEventListener("ended", () => {
-    intro.classList.add("hide");
-  });
-  setTimeout(() => {
-    intro.classList.add("hide");
-  }, 10000);
+  function hideIntro() {
+    if (!intro.classList.contains('hide')) {
+      intro.classList.add("hide");
+      document.body.classList.add('loaded');
+      setTimeout(() => {
+        intro.style.display = "none";
+      }, 1500);
+    }
+  }
+  video.addEventListener("ended", hideIntro);
+
+  setTimeout(hideIntro, 9000);
 });
 const hour = document.getElementById('hour');
 const n1 = hour.querySelector('.n1');
