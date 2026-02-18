@@ -24,33 +24,6 @@ html, body {
     align-items: center;
     flex-direction: column;
 }
-#intro {
-  position: fixed;
-  inset: 0;
-  background: black;
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: opacity 1.5s ease, visibility 1.5s ease;
-}
-
-#intro.hide {
-  opacity: 0;
-  visibility: hidden;
-}
-
-#intro-video {
-  position: fixed;
-  z-index: 10000;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-#intro.hide #intro-video {
-  transform: scale(1.05);
-  transition: transform 1.5s ease;
-}
 
 #vanta-bg {
     position: fixed;
@@ -265,11 +238,17 @@ body.loaded {
 </style>
 </head>
 <body>
-  <div id="intro">
-  <video id="intro-video" autoplay muted playsinline preload="auto">
+<video id="intro-video" autoplay muted playsinline preload="auto" style="
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+">
     <source src="copy_AB4B27C5-578B-4DE7-82C4-73FFA10B97C5.mov" type="video/mp4">
-  </video> 
-</div>
+</video>
 <div id="vanta-bg"></div> 
 <div id="particles-stars"></div>
 <div class="main-content">
@@ -298,22 +277,11 @@ body.loaded {
     <div class="tagline">The instinct of Sensation</div>
 </div>
 <script>
-document.addEventListener("DOMContentLoaded", () => {
-  const intro = document.getElementById("intro");
-  const video = document.getElementById("intro-video");
-  if (!intro || !video) return;
+const video = document.getElementById("intro-video");
+const mainContent = document.querySelector(".main-content");
 
-  video.play().catch(() => {});
-  function hideIntro() {
-    if (!intro.classList.contains('hide')) {
-      intro.classList.add('hide');
-      document.body.classList.add('loaded');
-      document.querySelector('.main-content').classList.add('visible');
-      setTimeout(() => intro.style.display = 'none', 500);
-    }
-  }
-  video.addEventListener("ended", hideIntro);
-  setTimeout(hideIntro, 9300);
+video.addEventListener("ended", () => {
+    mainContent.classList.add("visible");
 });
 const hour = document.getElementById('hour');
 const n1 = hour.querySelector('.n1');
