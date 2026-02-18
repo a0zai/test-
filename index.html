@@ -290,12 +290,12 @@ document.addEventListener("DOMContentLoaded", () => {
 const hour = document.getElementById('hour');
 const n1 = hour.querySelector('.n1');
 const numbersToHide = [
-    {id:'n2', angle:30},
-    {id:'n3', angle:60},
-    {id:'n4', angle:90},
-    {id:'n10', angle:270},
-    {id:'n11', angle:300},
-    {id:'n12', angle:330}
+{id:'n2', angle:0},    // 12
+    {id:'n3', angle:30},   // 11
+    {id:'n4', angle:60},   // 10
+    {id:'n10', angle:240}, // 4
+    {id:'n11', angle:270}, // 3
+    {id:'n12', angle:300}  // 2
 ];
 function updateClock() {
     const now = new Date();
