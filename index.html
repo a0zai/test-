@@ -236,9 +236,19 @@ body.loaded {
     opacity: 1;
 }
 
+#flash-overlay {
+    position: fixed;
+    inset: 0;
+    background: #fff;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 9999;
+    transition: opacity 0.1s ease-in;
+}
+
 .horizon-line {
     width: 6px;
-    height: 309px; 
+    height: 350px; 
     background: linear-gradient(180deg, var(--sense-green) 0%, transparent 100%);
     box-shadow: 0 0 30px var(--sense-green);
     margin: 40px auto;
@@ -247,31 +257,19 @@ body.loaded {
     position: relative;
 }
 
-.horizon-line::before {
-    content: '';
+.pulse-point {
     position: absolute;
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 14px;
-    height: 14px;
+    width: 20px;
+    height: 20px;
     background: #fff; 
     border-radius: 50%;
     box-shadow: 0 0 20px #fff, 0 0 40px var(--sense-green);
-    animation: move-and-pulse 4s ease-in-out infinite;
-}
-
-@keyframes move-and-pulse {
-    0%, 100% { 
-        bottom: 0; 
-        opacity: 0.8; 
-        transform: translateX(-50%) scale(1);
-    }
-    50% { 
-        bottom: 17px; 
-        opacity: 1; 
-        transform: translateX(-50%) scale(1.2);
-    }
+    cursor: grab;
+    z-index: 100;
+    touch-action: none;
 }
 </style>
 </head>
@@ -316,7 +314,9 @@ body.loaded {
     </div>
     <div class="tagline">Son when you see SEENSEE, you see the sun</div>
     </div>
-    <div class="horizon-line"></div>
+    <div id="flash-overlay"></div>
+<div class="horizon-line">
+    <div id="drag-point" class="pulse-point"></div>
 </div>
 <script>
 const video = document.getElementById("intro-video");
@@ -333,6 +333,7 @@ video.addEventListener("timeupdate", () => {
         }, 100);
     }
 });
+
 const hour = document.getElementById('hour');
 const n1 = hour.querySelector('.n1');
 const numbersToHide = [
@@ -376,6 +377,54 @@ numbersToHide.forEach((n, i, arr) => {
    requestAnimationFrame(updateClock);
 }
 updateClock();
+const dragPoint = document.getElementById('drag-point');
+const flash = document.getElementById('flash-overlay');
+let isDragging = false;
+let startY = 0;
+
+dragPoint.addEventListener('mousedown', (e) => startDrag(e.clientY));
+dragPoint.addEventListener('touchstart', (e) => startDrag(e.touches[0].clientY));
+
+function startDrag(y) {
+    isDragging = true;
+    startY = y;
+    dragPoint.style.transition = 'none';
+}
+
+window.addEventListener('mousemove', (e) => drag(e.clientY));
+window.addEventListener('touchmove', (e) => drag(e.touches[0].clientY));
+
+function drag(y) {
+    if (!isDragging) return;
+    let diffY = startY - y;
+    if (diffY >= 0 && diffY <= 320) {
+        dragPoint.style.bottom = diffY + 'px';
+        let progress = diffY / 320;
+        dragPoint.style.boxShadow = `0 0 ${20 + progress*40}px #fff, 0 0 ${40 + progress*80}px var(--sense-green)`;
+    }
+}
+
+window.addEventListener('mouseup', endDrag);
+window.addEventListener('touchend', endDrag);
+
+function endDrag() {
+    if (!isDragging) return;
+    isDragging = false;
+    let finalPos = parseInt(dragPoint.style.bottom);
+
+    if (finalPos > 280) {
+        flash.style.opacity = '1';
+        setTimeout(() => {
+            flash.style.transition = 'opacity 1.5s ease-out';
+            flash.style.opacity = '0';
+            dragPoint.style.transition = 'bottom 0.5s ease';
+            dragPoint.style.bottom = '0';
+        }, 200);
+    } else {
+        dragPoint.style.transition = 'bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+        dragPoint.style.bottom = '0';
+    }
+}
 </script>
 <script>
 VANTA.FOG({
