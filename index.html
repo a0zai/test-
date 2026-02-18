@@ -235,6 +235,18 @@ body {
 body.loaded {
     opacity: 1;
 }
+.horizon-line {
+    width: 70%; 
+    height: 1px;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        var(--sense-green) 50%, 
+        transparent 100%);
+    box-shadow: 0 0 15px var(--sense-green);
+    margin-top: 50px;
+    opacity: 0.6;
+}
+
 </style>
 </head>
 <body>
@@ -277,6 +289,8 @@ body.loaded {
         <div class="hand second" id="second"></div>
     </div>
     <div class="tagline">Son, when you see SEENSEE, you see the sun</div>
+    </div>
+    <div class="horizon-line"></div>
 </div>
 <script>
 const video = document.getElementById("intro-video");
