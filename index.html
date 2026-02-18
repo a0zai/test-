@@ -236,12 +236,41 @@ body.loaded {
     opacity: 1;
 }
 .horizon-line {
-    width: 9px;
+    width: 6px;
     height: 300px;
-    background: linear-gradient(180deg, var(--sense-green) 0%, transparent 100%);
-    box-shadow: 0 0 20px var(--sense-green);
-    margin: 30px auto;
-    opacity: 0.6;
+    background: linear-gradient(180deg, 
+        var(--sense-green) 0%, 
+        color-mix(in srgb, var(--sense-green), transparent 50%) 40%,
+        transparent 100%);
+    box-shadow: 0 0 30px var(--sense-green);
+    margin: 40px auto;
+    opacity: 0.8;
+    border-radius: 100px;
+    position: relative;
+    animation: light-pulse 4s ease-in-out infinite;
+}
+.horizon-line::before {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 15px;
+    height: 15px;
+    background: #fff; 
+    border-radius: 50%;
+    box-shadow: 0 0 20px #fff, 0 0 40px var(--sense-green);
+}
+
+@keyframes light-pulse {
+    0%, 100% { 
+        opacity: 0.5; 
+        box-shadow: 0 0 20px var(--sense-green); 
+    }
+    50% { 
+        opacity: 0.9; 
+        box-shadow: 0 0 50px var(--sense-green), 0 0 100px rgba(178, 242, 187, 0.2); 
+    }
 }
 </style>
 </head>
