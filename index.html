@@ -48,7 +48,7 @@ html, body {
     align-items: center;
     opacity: 0; 
     visibility: hidden;
-    transition: opacity 2.5s ease-out, transform 2.5s ease-out;
+    transition: opacity 5s ease-out, transform 5s ease-out;
     transform: translateY(10px); 
 }
 
@@ -281,9 +281,9 @@ body.loaded {
 <script>
 const video = document.getElementById("intro-video");
 const mainContent = document.querySelector(".main-content");
-video.playbackRate = 0.2
+video.playbackRate = 0.7
 video.addEventListener("timeupdate", () => {
-    if (video.currentTime >= 10) {
+    if (video.currentTime >= 9) {
         video.pause();
         video.style.transition = "opacity 1.5s ease";
         video.style.opacity = 0;
