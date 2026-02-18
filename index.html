@@ -14,6 +14,7 @@
 <meta name="theme-color" content="#bfc7ce">   
 <title>A0ZAI</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.fog.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 <style>
 :root {
@@ -22,16 +23,15 @@
     --sense-red: #9b5050;
 }
 html, body {
-  height: 100%;
-  margin:0;
-  padding:0;
-  background:#000;
-  font-family:'Courier New', monospace;
-  overflow:hidden;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  text-align:center;
+    height: 100%;
+    margin: 0;
+    background: #000;
+    font-family: 'Courier New', monospace;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
 #intro {
   position: fixed;
@@ -58,12 +58,20 @@ html, body {
   transform: scale(1.05);
   transition: transform 1.5s ease;
 }
-#particles-js {
-    position:fixed;
-    top:0; left:0;
-    width:100%; height:100%;
-    z-index:0;
-    pointer-events:none;
+
+#vanta-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    opacity: 0.35;
+    filter: saturate(140%) contrast(115%);
+    pointer-events: none;
+}
+#particles-stars {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
 }
 
 .main-content {
@@ -236,12 +244,12 @@ body.loaded {
 </style>
 </head>
 <body>
-<div id="intro">
+ <div id="intro">
   <video id="intro-video" autoplay muted playsinline preload="auto">
     <source src="copy_AB4B27C5-578B-4DE7-82C4-73FFA10B97C5.mov" type="video/mp4">
-  </video>
-</div>
-<div id="particles-js"></div>
+  </video>   
+<div id="vanta-bg"></div> 
+<div id="particles-stars"></div>
 <div class="main-content">
     <div class="scene">
     <div class="clock-container">
@@ -269,7 +277,15 @@ body.loaded {
 </div>
 <script>
 const hour = document.getElementById('hour');
-const n1 = hour.querySelector('.n1'); 
+const n1 = hour.querySelector('.n1');
+const numbersToHide = [
+    {id:'n2', angle:30},
+    {id:'n3', angle:60},
+    {id:'n4', angle:90},
+    {id:'n10', angle:270},
+    {id:'n11', angle:300},
+    {id:'n12', angle:330}
+];
 function updateClock() {
     const now = new Date();
     const ms = now.getMilliseconds();
@@ -284,16 +300,73 @@ let displayHour = Math.floor(h);
 if (displayHour === 0) displayHour = 12;
 n1.innerText = displayHour;
 if (displayHour === 1) {
-    n1.style.fontWeight = '600';
+    n1.style.fontWeight = '300';
     n1.style.letterSpacing = '2px';
-    n1.style.fontSize = '20px';
+    n1.style.fontSize = '18px';
 } else {
     n1.style.fontWeight = 'bold';
     n1.style.letterSpacing = 'normal';
 }
-n1.style.opacity = (displayHour >= 10 || displayHour <= 4) ? 1 : 0;    requestAnimationFrame(updateClock);
+n1.style.opacity = (displayHour >= 10 || displayHour <= 4) ? 1 : 0;
+numbersToHide.forEach(n => {
+    const elem = document.querySelector(`.${n.id}`);
+    let angleHand = h * 30;
+    let diff = Math.abs((angleHand - n.angle + 360) % 360);
+    if(diff < 15 || diff > 345) elem.style.opacity = 0;
+    else elem.style.opacity = 1;
+});
+   requestAnimationFrame(updateClock);
 }
 updateClock();
+document.addEventListener("DOMContentLoaded", () => {
+  const intro = document.getElementById("intro");
+  const video = document.getElementById("intro-video");
+  if (!intro || !video) return;
+  video.muted = true;
+  video.play().catch(() => {});
+  video.addEventListener("ended", () => {
+    intro.classList.add("hide");
+  });
+  setTimeout(() => {
+    intro.classList.add("hide");
+  }, 9000);
+});
+</script>
+<script>
+VANTA.FOG({
+    el: "#vanta-bg",
+    mouseControls: true,
+    touchControls: true,
+    gyroControls: false,
+    minHeight: 200.0,
+    minWidth: 200.0,
+    highlightColor: 0x90e0ef,
+    midtoneColor: 0xb2f2bb,
+    lowlightColor: 0x0b132b,
+    baseColor: 0x000000,
+    blurFactor: 0.11,
+    speed: 0.4,
+    zoom: 0.9
+});
+particlesJS("particles-stars", {
+    particles: {
+        number: { value: 72, density: { enable: true, value_area: 800 } },
+        color: { value: "#ffffff" },
+        opacity: { 
+            value: 0.6, 
+            random: true,
+            anim: { enable: true, speed: 1.2, opacity_min: 0.2, sync: false }
+        },
+        size: { 
+            value: 1.5, 
+            random: true,
+            anim: { enable: true, speed: 1, size_min: 0.5, sync: false }
+        },
+        move: { enable: true, speed: 0.2, direction: "left", random: true },
+        line_linked: { enable: false }
+    },
+    retina_detect: true
+});
 </script>
 <script>
 window.addEventListener('load', () => {
@@ -347,38 +420,6 @@ scene.addEventListener('touchmove', e => {
     const dy = t.clientY - touchY;
     targetY = dx * 0.11;
     targetX = -dy * 0.10;
-});
-document.addEventListener("DOMContentLoaded", () => {
-  const intro = document.getElementById("intro");
-  const video = document.getElementById("intro-video");
-  if (!intro || !video) return;
-  video.muted = true;
-  video.play().catch(() => {});
-  video.addEventListener("ended", () => {
-    intro.classList.add("hide");
-  });
-
-  setTimeout(() => {
-    intro.classList.add("hide");
-  }, 4000);
-});
-</script>
-<script>
-particlesJS("particles-js",{
-  particles:{
-    number:{ value:200, density:{ enable:true, value_area:1800 } },
-    color:{ value:"#eaeaea" },
-    shape:{ type:"circle" },
-    opacity:{ value:0.7, random:true, anim:{ enable:true, speed:0.5, opacity_min:0.2, sync:false } },
-    size:{ value:1.5, random:true, anim:{ enable:true, speed:2, size_min:0.3, sync:false } },
-    line_linked:{ enable:false },
-    move:{ enable:true, speed:0.5, direction:"none", random:true, straight:false, out_mode:"out" }
-  },
-  interactivity:{
-    detect_on:"canvas",
-    events:{ onhover:{ enable:false }, onclick:{ enable:false } }
-  },
-  retina_detect:true
 });
 </script>
 </body>
