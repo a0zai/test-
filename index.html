@@ -319,10 +319,12 @@ if (displayHour === 1) {
     n1.style.letterSpacing = 'normal';
 }
 n1.style.opacity = (displayHour >= 10 || displayHour <= 4) ? 1 : 0;
-numbersToHide.forEach(n => {
+numbersToHide.forEach((n, i, arr) => {
     const elem = document.querySelector(`.${n.id}`);
+    const prevIndex = (i === 0) ? arr.length - 1 : i - 1;
+    const prev = arr[prevIndex];
     let angleHand = h * 30;
-    let diff = Math.abs((angleHand - n.angle + 360) % 360);
+    let diff = Math.abs((angleHand - prev.angle + 360) % 360);
     if(diff < 15 || diff > 345) elem.style.opacity = 0;
     else elem.style.opacity = 1;
 });
@@ -342,7 +344,7 @@ VANTA.FOG({
     midtoneColor: 0xb2f2bb,
     lowlightColor: 0x0b132b,
     baseColor: 0x000000,
-    blurFactor: 0.12,
+    blurFactor: 0.14,
     speed: 0.4,
     zoom: 0.9
 });
