@@ -381,34 +381,30 @@ numbersToHide.forEach((n, i, arr) => {
    requestAnimationFrame(updateClock);
 }
 updateClock();
+const dragPoint = document.getElementById('drag-point');
+const audio = document.getElementById('sense-sound');
+
+let isDragging = false;
+let startY = 0;
 let audioUnlocked = false;
 
 function unlockAudioOnce() {
     if (audioUnlocked) return;
-
-    const audio = document.getElementById('sense-sound');
     audio.muted = true;
-
     audio.play().then(() => {
         audio.pause();
         audio.currentTime = 0;
         audio.muted = false;
         audioUnlocked = true;
-    }).catch(()=>{});
+        console.log("Audio unlocked ✅");
+    }).catch(err => {
+        console.log("Unlock failed ❌", err);
+    });
 }
-
-document.addEventListener('touchstart', unlockAudioOnce, { once: true });
-document.addEventListener('click', unlockAudioOnce, { once: true });
-</script>
-<script>
-const dragPoint = document.getElementById('drag-point');
-const audio = document.getElementById('sense-sound');
-let isDragging = false;
-let startY = 0;
-
+dragPoint.addEventListener('touchstart', unlockAudioOnce, { once: true });
+dragPoint.addEventListener('mousedown', unlockAudioOnce, { once: true });
 dragPoint.addEventListener('mousedown', (e) => startDrag(e.clientY));
 dragPoint.addEventListener('touchstart', (e) => startDrag(e.touches[0].clientY));
-
 function startDrag(y) {
     isDragging = true;
     startY = y;
@@ -432,16 +428,15 @@ window.addEventListener('touchend', endDrag);
 function endDrag() {
     if (!isDragging) return;
     isDragging = false;
-    let finalPos = parseInt(dragPoint.style.bottom);
+
+    let finalPos = parseInt(dragPoint.style.bottom) || 0;
 
     if (finalPos > 280) {
         audio.currentTime = 0;
-        audio.play().catch(error => {
-            console.log("Error playing audio:", error);
-        });
+        audio.play().catch(err => console.log("Play error ❌", err));
 
         dragPoint.style.boxShadow = `0 0 100px var(--sense-green)`;
-        
+
         setTimeout(() => {
             dragPoint.style.transition = 'bottom 0.8s ease';
             dragPoint.style.bottom = '0';
