@@ -281,21 +281,23 @@ body.loaded {
 <script>
 const video = document.getElementById("intro-video");
 const mainContent = document.querySelector(".main-content");
-
-setTimeout(() => {
-    video.style.transition = "opacity 1.5s ease";
-    video.style.opacity = 0;
-    setTimeout(() => {
-        video.style.display = "none";
-        mainContent.classList.add("visible");
-    }, 1500);
-}, 9000);
+video.addEventListener("timeupdate", () => {
+    if (video.currentTime >= 9) {
+        video.pause();
+        video.style.transition = "opacity 1.5s ease";
+        video.style.opacity = 0;
+        setTimeout(() => {
+            video.style.display = "none";
+            mainContent.classList.add("visible");
+        }, 1500);
+    }
+});
 const hour = document.getElementById('hour');
 const n1 = hour.querySelector('.n1');
 const numbersToHide = [
-  {id:'n2', angle:330},   // 12
-  {id:'n3', angle:300},   // 11
-  {id:'n4', angle:270},   // 10
+  {id:'n2', angle:330}, // 12
+  {id:'n3', angle:300}, // 11
+  {id:'n4', angle:270},// 10
   {id:'n10', angle:90}, // 4
   {id:'n11', angle:60}, // 3
   {id:'n12', angle:30}  // 2
