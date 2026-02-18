@@ -246,6 +246,8 @@ body.loaded {
     height: 100%;
     object-fit: cover;
     z-index: 0;
+    opacity: 0.3;
+    filter: brightness(50%);
 ">
     <source src="copy_AB4B27C5-578B-4DE7-82C4-73FFA10B97C5.mov" type="video/mp4">
 </video>
@@ -279,9 +281,19 @@ body.loaded {
 <script>
 const video = document.getElementById("intro-video");
 const mainContent = document.querySelector(".main-content");
-
 video.addEventListener("ended", () => {
     mainContent.classList.add("visible");
+});
+const video = document.getElementById("intro-video");
+const mainContent = document.querySelector(".main-content");
+
+video.addEventListener("ended", () => {
+    video.style.transition = "opacity 1.5s ease";
+    video.style.opacity = 0;
+    setTimeout(() => {
+        video.style.display = "none";
+        mainContent.classList.add("visible"); // ظهور الساعة
+    }, 9300);
 });
 const hour = document.getElementById('hour');
 const n1 = hour.querySelector('.n1');
