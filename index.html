@@ -235,41 +235,42 @@ body {
 body.loaded {
     opacity: 1;
 }
+
 .horizon-line {
     width: 6px;
-    height: 300px;
-    background: linear-gradient(180deg, 
-        var(--sense-green) 0%, 
-        color-mix(in srgb, var(--sense-green), transparent 50%) 40%,
-        transparent 100%);
+    height: 309px; 
+    background: linear-gradient(180deg, var(--sense-green) 0%, transparent 100%);
     box-shadow: 0 0 30px var(--sense-green);
     margin: 40px auto;
     opacity: 0.8;
     border-radius: 100px;
     position: relative;
-    animation: light-pulse 4s ease-in-out infinite;
 }
+
 .horizon-line::before {
     content: '';
     position: absolute;
-    top: -5px;
+    bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 15px;
-    height: 15px;
+    width: 14px;
+    height: 14px;
     background: #fff; 
     border-radius: 50%;
     box-shadow: 0 0 20px #fff, 0 0 40px var(--sense-green);
+    animation: move-and-pulse 4s ease-in-out infinite;
 }
 
-@keyframes light-pulse {
+@keyframes move-and-pulse {
     0%, 100% { 
-        opacity: 0.5; 
-        box-shadow: 0 0 20px var(--sense-green); 
+        bottom: 0; 
+        opacity: 0.8; 
+        transform: translateX(-50%) scale(1);
     }
     50% { 
-        opacity: 0.9; 
-        box-shadow: 0 0 50px var(--sense-green), 0 0 100px rgba(178, 242, 187, 0.2); 
+        bottom: 17px; 
+        opacity: 1; 
+        transform: translateX(-50%) scale(1.2);
     }
 }
 </style>
@@ -313,7 +314,7 @@ body.loaded {
         <div class="hand minute" id="minute"></div>
         <div class="hand second" id="second"></div>
     </div>
-    <div class="tagline">Son, when you see SEENSEE, you see the sun</div>
+    <div class="tagline">Son when you see SEENSEE, you see the sun</div>
     </div>
     <div class="horizon-line"></div>
 </div>
