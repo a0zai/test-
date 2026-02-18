@@ -266,15 +266,28 @@ body.loaded {
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 20px;
-    height: 20px;
-    background: #fff; 
-    border-radius: 50%;
-    box-shadow: 0 0 20px #fff, 0 0 40px var(--sense-green);
+    width: 40px;  
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
     cursor: grab;
-    z-index: 100;
+    z-index: 10000;
     touch-action: none;
+    user-select: none;
+    filter: drop-shadow(0 0 10px var(--sense-green));
+    transition: transform 0.2s ease;
 }
+
+.pulse-point::after {
+    content: '🦋';
+}
+
+.pulse-point:active {
+    transform: translateX(-50%) scale(1.3); /* تكبر لما تمسكها */
+}
+
 </style>
 </head>
 <body>
@@ -319,8 +332,8 @@ body.loaded {
     <div class="tagline">Son when you see SEENSEE, you see the sun</div>
     </div>
     <audio id="sense-sound" src="seensee.mp3" preload="auto"></audio>
-<div class="horizon-line">
-    <div id="drag-point" class="pulse-point"></div>
+<div class="horizon-line" style="z-index: 9999;">
+ <div id="drag-point" class="pulse-point"></div>
 </div>
 <script>
 const video = document.getElementById("intro-video");
@@ -401,6 +414,9 @@ function unlockAudioOnce() {
         console.log("Unlock failed ❌", err);
     });
 }
+
+document.querySelector('.brand-name').style.animation = "pulse 0.5s infinite";
+dragPoint.style.filter = "drop-shadow(0 0 50px #fff) brightness(200%)";
 dragPoint.addEventListener('touchstart', unlockAudioOnce, { once: true });
 dragPoint.addEventListener('mousedown', unlockAudioOnce, { once: true });
 dragPoint.addEventListener('mousedown', (e) => startDrag(e.clientY));
