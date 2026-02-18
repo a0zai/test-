@@ -285,17 +285,17 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   video.addEventListener("ended", hideIntro);
-  setTimeout(hideIntro, 9000);
+  setTimeout(hideIntro, 9300);
 });
 const hour = document.getElementById('hour');
 const n1 = hour.querySelector('.n1');
 const numbersToHide = [
-  {id:'n2', angle:30},   // 12
-  {id:'n3', angle:60},   // 11
-  {id:'n4', angle:90},   // 10
-  {id:'n10', angle:270}, // 4
-  {id:'n11', angle:300}, // 3
-  {id:'n12', angle:330}  // 2
+  {id:'n2', angle:330},   // 12
+  {id:'n3', angle:300},   // 11
+  {id:'n4', angle:270},   // 10
+  {id:'n10', angle:90}, // 4
+  {id:'n11', angle:60}, // 3
+  {id:'n12', angle:30}  // 2
 ];
 function updateClock() {
     const now = new Date();
@@ -311,7 +311,7 @@ let displayHour = Math.floor(h);
 if (displayHour === 0) displayHour = 12;
 n1.innerText = displayHour;
 if (displayHour === 1) {
-    n1.style.fontWeight = '300';
+    n1.style.fontWeight = '400';
     n1.style.letterSpacing = '2px';
     n1.style.fontSize = '18px';
 } else {
