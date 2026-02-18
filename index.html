@@ -281,6 +281,7 @@ body.loaded {
 <script>
 const video = document.getElementById("intro-video");
 const mainContent = document.querySelector(".main-content");
+video.playbackRate = 0.5
 video.addEventListener("timeupdate", () => {
     if (video.currentTime >= 10) {
         video.pause();
@@ -349,7 +350,7 @@ VANTA.FOG({
     midtoneColor: 0x0b330b,
     lowlightColor: 0x0b132b,
     baseColor: 0x001100,
-    blurFactor: 0.1,
+    blurFactor: 0.09,
     speed: 0.2,
     zoom: 0.8
 });
