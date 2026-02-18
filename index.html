@@ -69,14 +69,12 @@ html, body {
 }
 
 .main-content {
-    position: relative;
-    z-index: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    opacity: 0;
+    transition: opacity 1.5s ease;
 }
-
-
+.main-content.visible {
+    opacity: 1;
+}
 .title {
     margin-bottom: 30px;
     font-size: 36px;
@@ -165,7 +163,7 @@ html, body {
     font-family: 'Orbitron', sans-serif;
     padding: 20px;
     box-sizing: border-box;
-    color: #cccccc;
+    color: #eaeaea;
 }
 .n1  { transform: rotate(0deg); }    .n1 div  { transform: rotate(0deg); }
 .n2  { transform: rotate(30deg); }   .n2 div  { transform: rotate(-30deg); }
@@ -276,17 +274,21 @@ body.loaded {
 document.addEventListener("DOMContentLoaded", () => {
   const intro = document.getElementById("intro");
   const video = document.getElementById("intro-video");
-  if (!intro || !video) return;
+  const mainContent = document.querySelector('.main-content');
+
+  if (!intro || !video || !mainContent) return;
 
   video.play().catch(() => {});
 
-  function hideIntro() {
-    if (!intro.classList.contains('hide')) {
-      intro.classList.add('hide');
-      document.body.classList.add('loaded');
-      setTimeout(() => intro.style.display = 'none', 1500);
-    }
+  function showContent() {
+    intro.classList.add('hide'); // إخفاء الفيديو
+    mainContent.classList.add('visible'); // تفعيل Fade-in للمحتوى
+    setTimeout(() => intro.style.display = 'none', 1500);
   }
+
+  video.addEventListener("ended", showContent);
+  setTimeout(showContent, 9300); // كاحتياطي لو الفيديو أطول من 9.3 ثانية
+});
 
   video.addEventListener("ended", hideIntro);
   setTimeout(hideIntro, 9300);
@@ -348,18 +350,18 @@ VANTA.FOG({
     midtoneColor: 0xb2f2bb,
     lowlightColor: 0x0b132b,
     baseColor: 0x000000,
-    blurFactor: 0.14,
+    blurFactor: 0.10,
     speed: 0.4,
     zoom: 0.9
 });
 particlesJS("particles-stars", {
     particles: {
-        number: { value: 48, density: { enable: true, value_area: 800 } },
+        number: { value: 24, density: { enable: true, value_area: 800 } },
         color: { value: "#ffffff" },
         opacity: { 
             value: 0.6, 
             random: true,
-            anim: { enable: true, speed: 1.2, opacity_min: 0.2, sync: false }
+            anim: { enable: true, speed: 1.4, opacity_min: 0.2, sync: false }
         },
         size: { 
             value: 1.5, 
