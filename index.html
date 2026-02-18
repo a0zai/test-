@@ -247,7 +247,7 @@ body.loaded {
     object-fit: cover;
     z-index: 0;
     opacity: 0.3;
-    filter: brightness(90%);
+    filter: brightness(80%);
 ">
     <source src="copy_AB4B27C5-578B-4DE7-82C4-73FFA10B97C5.mov" type="video/mp4">
 </video>
@@ -289,7 +289,7 @@ video.addEventListener("timeupdate", () => {
         setTimeout(() => {
             video.style.display = "none";
             mainContent.classList.add("visible");
-        }, 500);
+        }, 100);
     }
 });
 const hour = document.getElementById('hour');
