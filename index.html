@@ -95,7 +95,7 @@ html, body {
     transition: 3s ease;
 }
 .scene {
-    perspective: 999px;
+    perspective: 1448px;
 }
 .clock-container {
     transform-style: preserve-3d;
@@ -119,7 +119,7 @@ html, body {
     background: color-mix(in srgb, var(--sense-green), transparent 92%);
     box-shadow: 
         inset 0 20px 60px color-mix(in srgb, var(--sense-green), transparent 85%), 
-        0 0 40px color-mix(in srgb, var(--sense-green), transparent 90%);
+        0 0 30px color-mix(in srgb, var(--sense-green), transparent 90%);
     backdrop-filter: blur(4px); 
     pointer-events: none;
     transform: translateZ(30px);
@@ -353,7 +353,7 @@ VANTA.FOG({
     midtoneColor: 0xb2f2bb,
     lowlightColor: 0x0b132b,
     baseColor: 0x000000,
-    blurFactor: 0.10,
+    blurFactor: 0.17,
     speed: 0.4,
     zoom: 0.9
 });
@@ -367,9 +367,9 @@ particlesJS("particles-stars", {
             anim: { enable: true, speed: 1.4, opacity_min: 0.2, sync: false }
         },
         size: { 
-            value: 1.5, 
+            value: 3, 
             random: true,
-            anim: { enable: true, speed: 1, size_min: 0.5, sync: false }
+            anim: { enable: true, speed: 1, size_min: 0.1, sync: false }
         },
         move: { enable: true, speed: 0.2, direction: "left", random: true },
         line_linked: { enable: false }
