@@ -281,20 +281,15 @@ body.loaded {
 <script>
 const video = document.getElementById("intro-video");
 const mainContent = document.querySelector(".main-content");
-video.addEventListener("ended", () => {
-    mainContent.classList.add("visible");
-});
-const video = document.getElementById("intro-video");
-const mainContent = document.querySelector(".main-content");
 
-video.addEventListener("ended", () => {
+setTimeout(() => {
     video.style.transition = "opacity 1.5s ease";
     video.style.opacity = 0;
     setTimeout(() => {
         video.style.display = "none";
-        mainContent.classList.add("visible"); // ظهور الساعة
-    }, 9300);
-});
+        mainContent.classList.add("visible");
+    }, 1500);
+}, 9000);
 const hour = document.getElementById('hour');
 const n1 = hour.querySelector('.n1');
 const numbersToHide = [
