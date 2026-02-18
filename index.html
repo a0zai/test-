@@ -95,7 +95,7 @@ html, body {
     transition: 3s ease;
 }
 .scene {
-    perspective: 1448px;
+    perspective: 999px;
 }
 .clock-container {
     transform-style: preserve-3d;
@@ -116,9 +116,11 @@ html, body {
     width: 100%;
     height: 100%;
     border-radius: 50%;
-    background: rgba(255,255,255,0.08);
-    box-shadow: inset 0 20px 60px rgba(255,255,255,0.15), 
-                0 0 40px rgba(255,255,255,0.1);
+    .glass-cover {
+    background: color-mix(in srgb, var(--sense-green), transparent 92%);
+    box-shadow: 
+        inset 0 20px 60px color-mix(in srgb, var(--sense-green), transparent 85%), 
+        0 0 40px color-mix(in srgb, var(--sense-green), transparent 90%);
     backdrop-filter: blur(4px); 
     pointer-events: none;
     transform: translateZ(30px);
@@ -289,8 +291,7 @@ document.addEventListener("DOMContentLoaded", () => {
       intro.classList.add('hide');
       document.body.classList.add('loaded');
       document.querySelector('.main-content').classList.add('visible');
-      
-      setTimeout(() => intro.style.display = 'none', 1500);
+      setTimeout(() => intro.style.display = 'none', 500);
     }
   }
   video.addEventListener("ended", hideIntro);
