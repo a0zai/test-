@@ -237,14 +237,18 @@ body.loaded {
 }
 
 #flash-overlay {
-    position: fixed;
-    inset: 0;
+    position: fixed; 
+    top: 0;
+    left: 0;
+    width: 100vw; 
+    height: 100vh; 
     background: #fff;
     opacity: 0;
     pointer-events: none;
-    z-index: 9999;
+    z-index: 99999; 
     transition: opacity 0.1s ease-in;
 }
+
 
 .horizon-line {
     width: 6px;
