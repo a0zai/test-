@@ -290,12 +290,12 @@ document.addEventListener("DOMContentLoaded", () => {
 const hour = document.getElementById('hour');
 const n1 = hour.querySelector('.n1');
 const numbersToHide = [
-{id:'n2', angle:0},    // 12
-    {id:'n3', angle:30},   // 11
-    {id:'n4', angle:60},   // 10
-    {id:'n10', angle:240}, // 4
-    {id:'n11', angle:270}, // 3
-    {id:'n12', angle:300}  // 2
+  {id:'n2', angle:30},   // 12
+  {id:'n3', angle:60},   // 11
+  {id:'n4', angle:90},   // 10
+  {id:'n10', angle:270}, // 4
+  {id:'n11', angle:300}, // 3
+  {id:'n12', angle:330}  // 2
 ];
 function updateClock() {
     const now = new Date();
@@ -342,13 +342,13 @@ VANTA.FOG({
     midtoneColor: 0xb2f2bb,
     lowlightColor: 0x0b132b,
     baseColor: 0x000000,
-    blurFactor: 0.11,
+    blurFactor: 0.12,
     speed: 0.4,
     zoom: 0.9
 });
 particlesJS("particles-stars", {
     particles: {
-        number: { value: 72, density: { enable: true, value_area: 800 } },
+        number: { value: 48, density: { enable: true, value_area: 800 } },
         color: { value: "#ffffff" },
         opacity: { 
             value: 0.6, 
