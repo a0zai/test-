@@ -2,8 +2,7 @@
 <html lang="ar">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RAFAT Butterfly Matrix</title>
+    <title>Butterfly Matrix RAFAT</title>
     <style>
         body { margin: 0; background: #000; overflow: hidden; }
         canvas { display: block; }
@@ -14,66 +13,77 @@
     <script>
         const canvas = document.getElementById('matrix-canvas');
         const ctx = canvas.getContext('2d');
-        const maskCanvas = document.createElement('canvas');
-        const maskCtx = maskCanvas.getContext('2d');
 
-        let fontSize = 16;
-        let columns, rainDrops;
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
 
-        function init() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            maskCanvas.width = canvas.width;
-            maskCanvas.height = canvas.height;
-            columns = Math.floor(canvas.width / fontSize);
-            rainDrops = Array(columns).fill(0).map(() => Math.random() * -100);
-            
-            maskCtx.fillStyle = "black";
-            maskCtx.fillRect(0, 0, maskCanvas.width, maskCanvas.height);
-            maskCtx.fillStyle = "white";
-            const size = Math.min(canvas.width, canvas.height) * 0.7;
-            maskCtx.font = `${size}px serif`;
-            maskCtx.textAlign = "center";
-            maskCtx.textBaseline = "middle";
-            maskCtx.fillText("🦋", maskCanvas.width / 2, maskCanvas.height / 2);
+        const alphabet = "Aアァカサタナハマヤャラワ012369Z🦋";
+        const fontSize = 16;
+        const columns = Math.floor(canvas.width / fontSize);
+        const rainDrops = Array(columns).fill(0).map(() => Math.random() * -100);
+
+        function drawButterfly(t) {
+            ctx.save();
+            ctx.translate(canvas.width / 2, canvas.height / 2);
+            ctx.beginPath();
+            for (let i = 0; i < Math.PI * 2; i += 0.01) {
+                // معادلة الفراشة القطبية الدقيقة
+                let r = Math.exp(Math.sin(i)) - 2 * Math.cos(4 * i) + Math.pow(Math.sin((2 * i - Math.PI) / 24), 5);
+                let s = Math.min(canvas.width, canvas.height) / 8;
+                let x = Math.sin(i) * r * s;
+                let y = -Math.cos(i) * r * s;
+                ctx.lineTo(x, y);
+            }
+            ctx.restore();
         }
 
-        const alphabet = "Aアァカサタナハマヤャラワ012369Z";
-
         function draw() {
-            ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
+            ctx.fillStyle = "rgba(0, 0, 0, 0.15)";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // تحديد منطقة الفراشة
+            const butterflyArea = new Path2D();
+            const s = Math.min(canvas.width, canvas.height) / 8;
+            butterflyArea.moveTo(canvas.width / 2, canvas.height / 2);
+            for (let i = 0; i < Math.PI * 2; i += 0.05) {
+                let r = Math.exp(Math.sin(i)) - 2 * Math.cos(4 * i) + Math.pow(Math.sin((2 * i - Math.PI) / 24), 5);
+                let x = canvas.width / 2 + Math.sin(i) * r * s;
+                let y = canvas.height / 2 - Math.cos(i) * r * s;
+                butterflyArea.lineTo(x, y);
+            }
 
             for (let i = 0; i < rainDrops.length; i++) {
                 const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
                 const x = i * fontSize;
-                const y = Math.floor(rainDrops[i]) * fontSize;
+                const y = rainDrops[i] * fontSize;
 
-                if (y >= 0 && y < canvas.height) {
-                    const maskData = maskCtx.getImageData(x, y, 1, 1).data;
-                    if (maskData[0] > 128) {
-                        ctx.fillStyle = '#00ff66';
-                        ctx.shadowBlur = 15;
-                        ctx.shadowColor = '#00ff66';
-                        ctx.font = "bold " + fontSize + "px monospace";
-                    } else {
-                        ctx.fillStyle = 'rgba(0, 255, 102, 0.05)';
-                        ctx.shadowBlur = 0;
-                        ctx.font = fontSize + "px monospace";
-                    }
-                    ctx.fillText(text, x, y);
+                // التحقق إذا كان الحرف داخل مسار الفراشة
+                if (ctx.isPointInPath(butterflyArea, x, y)) {
+                    ctx.fillStyle = '#00ff66';
+                    ctx.shadowBlur = 15;
+                    ctx.shadowColor = '#00ff66';
+                    ctx.font = "bold " + (fontSize + 2) + "px monospace";
+                } else {
+                    ctx.fillStyle = 'rgba(0, 255, 102, 0.05)';
+                    ctx.shadowBlur = 0;
+                    ctx.font = fontSize + "px monospace";
                 }
+
+                ctx.fillText(text, x, y);
 
                 if (y > canvas.height && Math.random() > 0.975) {
                     rainDrops[i] = 0;
                 }
-                rainDrops[i] += 0.3;
+                rainDrops[i] += 0.5;
             }
             requestAnimationFrame(draw);
         }
 
-        window.addEventListener('resize', init);
-        init();
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
         draw();
     </script>
 </body>
