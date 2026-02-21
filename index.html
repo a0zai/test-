@@ -325,10 +325,9 @@ body.loaded {
     left: 0;
     width: 100vw;
     height: 100vh;
-    z-index: 2147483647;
+    z-index: 9999999;
     display: none;
     background: #000;
-    pointer-events: none;
 }
 </style>
 </head>
@@ -597,31 +596,44 @@ function startMatrix() {
     canvas.height = window.innerHeight;
 
     const alphabet = "Aアァカサタナハマヤャラワガザダバパイィキシチニヒミ01236963210リヰギジヂビピウゥクスツヌフムユュルグズブヅプZ";
-    const fontSize = window.innerWidth < 600 ? 22 : 16;
+    const fontSize = window.innerWidth < 600 ? 20 : 16;
     const columns = Math.floor(canvas.width / fontSize);
-    const rainDrops = Array.from({ length: columns }).fill(1);
+    const rainDrops = Array.from({ length: columns }).fill(0);
 
-    function draw() {
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.08)';
+    let lastTime = 0;
+    const fps = 22; 
+
+    function draw(timestamp) {
+        if (timestamp - lastTime < 1000 / fps) {
+            matrixRAF = requestAnimationFrame(draw);
+            return;
+        }
+        lastTime = timestamp;
+
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.1)'; 
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        ctx.fillStyle = '#00ff66';
+        ctx.fillStyle = '#4a9bbf'; 
         ctx.font = fontSize + 'px monospace';
 
         for (let i = 0; i < rainDrops.length; i++) {
             const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
             ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
 
-            if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.98) {
+            if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.985) {
                 rainDrops[i] = 0;
             }
             rainDrops[i]++;
         }
-
         matrixRAF = requestAnimationFrame(draw);
     }
 
-    draw();
+    window.addEventListener('resize', () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    });
+
+    matrixRAF = requestAnimationFrame(draw);
 }
 </script>
 <script>
