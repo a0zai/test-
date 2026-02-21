@@ -544,7 +544,6 @@ function startDrag(y) {
 
 window.addEventListener('mousemove', (e) => drag(e.clientY));
 window.addEventListener('touchmove', (e) => drag(e.touches[0].clientY));
-
 function drag(y) {
     if (!isDragging) return;
     let diffY = startY - y;
@@ -596,10 +595,16 @@ function startMatrix() {
     const alphabet = "Aアァカサタナハマヤャラワガザダバパイィキシチニヒミ01236963210Z";
     const fontSize = window.innerWidth < 600 ? 20 : 16;
     const columns = Math.floor(canvas.width / fontSize);
-    const rainDrops = Array.from({ length: columns }).fill(0);
+    
+    const rainDrops = [];
+    const velocities = [];
+    for (let x = 0; x < columns; x++) {
+        rainDrops[x] = -Math.random() * 20;
+        velocities[x] = 0.5 + Math.random() * 0.5; 
+    }
 
     let lastTime = 0;
-    const fps = 22; 
+    const fps = 30; 
 
     function draw(timestamp) {
         if (timestamp - lastTime < 1000 / fps) {
@@ -609,12 +614,14 @@ function startMatrix() {
         lastTime = timestamp;
 
         ctx.globalCompositeOperation = 'destination-out';
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.15)';
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
         ctx.globalCompositeOperation = 'source-over';
         ctx.fillStyle = '#00ff66'; 
         ctx.font = fontSize + 'px monospace';
+        ctx.shadowBlur = 8;
+        ctx.shadowColor = '#00ff66';
 
         for (let i = 0; i < rainDrops.length; i++) {
             const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
@@ -622,8 +629,11 @@ function startMatrix() {
 
             if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.98) {
                 rainDrops[i] = 0;
+                velocities[i] = 0.5 + Math.random() * 0.5;
             }
-            rainDrops[i]++;
+            
+            rainDrops[i] += velocities[i];
+            velocities[i] += 0.02; 
         }
         matrixRAFAT = requestAnimationFrame(draw);
     }
