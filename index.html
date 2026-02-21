@@ -567,6 +567,15 @@ function drag(y) {
 
 window.addEventListener('mouseup', endDrag);
 window.addEventListener('touchend', endDrag);
+function startDrag(y) {
+    isDragging = true;
+    startY = y;
+    dragPoint.style.transition = 'none';
+}
+
+window.addEventListener('mousemove', (e) => drag(e.clientY));
+window.addEventListener('touchmove', (e) => drag(e.touches[0].clientY));
+
 function endDrag() {
     if (!isDragging) return;
     isDragging = false;
@@ -578,8 +587,10 @@ function endDrag() {
         document.querySelector('.horizon-line').style.transition = 'opacity 1s';
         document.querySelector('.horizon-line').style.opacity = '0';
         document.querySelector('.horizon-line').style.pointerEvents = 'none';
-        document.getElementById('vanta-bg').style.transition = 'opacity 2s';
-        document.getElementById('vanta-bg').style.opacity = '0.15';
+        
+        const vantaElem = document.getElementById('vanta-bg');
+        vantaElem.style.transition = 'opacity 2s';
+        vantaElem.style.opacity = '0.4'; 
 
         startMatrix();
         startSubTerminal();
@@ -595,10 +606,8 @@ let matrixRAFAT = null;
 function startMatrix() {
     if (matrixRunning) return; 
     matrixRunning = true;
-
     const canvas = document.getElementById('matrix-canvas');
     const ctx = canvas.getContext('2d');
-
     canvas.style.display = 'block';
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
@@ -606,7 +615,6 @@ function startMatrix() {
     const alphabet = "Aアァカサタナハマヤャラワガザダバパイィキシチニヒミ01236963210Z";
     const fontSize = window.innerWidth < 600 ? 20 : 16;
     const columns = Math.floor(canvas.width / fontSize);
-    
     const rainDrops = [];
     const velocities = [];
     for (let x = 0; x < columns; x++) {
@@ -623,15 +631,14 @@ function startMatrix() {
             return;
         }
         lastTime = timestamp;
-
         ctx.globalCompositeOperation = 'destination-out';
         ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-
         ctx.globalCompositeOperation = 'source-over';
         
         const centerX = canvas.width / 2;
         const centerY = canvas.height / 2;
+        const currentGlobalColor = getComputedStyle(document.documentElement).getPropertyValue('--mood-color').trim();
 
         for (let i = 0; i < rainDrops.length; i++) {
             const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
@@ -642,54 +649,46 @@ function startMatrix() {
             const isButterfly = Math.pow(dx*dx + dy*dy - 1, 3) - dx*dx*dy*dy*dy < 0;
 
             if (isButterfly) {
-                ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--mood-color');
+                ctx.fillStyle = currentGlobalColor;
                 ctx.shadowBlur = 15;
-                ctx.shadowColor = '#00ff66';
+                ctx.shadowColor = currentGlobalColor;
             } else {
-                ctx.fillStyle = 'rgba(0, 255, 102, 0.08)';
+                ctx.fillStyle = currentGlobalColor + '33';
                 ctx.shadowBlur = 0;
             }
-
             ctx.font = fontSize + 'px monospace';
             ctx.fillText(text, x, y);
-
             if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.98) {
                 rainDrops[i] = -2;
                 velocities[i] = 0.5 + Math.random() * 0.5;
             }
-            
             rainDrops[i] += velocities[i];
             velocities[i] += 0.015; 
         }
         matrixRAFAT = requestAnimationFrame(draw);
     }
-
-    window.addEventListener('resize', () => {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-    });
-
     matrixRAFAT = requestAnimationFrame(draw);
 }
+
 function startSubTerminal() {
     const subContainer = document.getElementById("sub-terminal");
     const subLines = [
-             "   010101             010101   ",
-             " 0101010101         0101010101 ",
-             "0101010101010     0101010101010",
-             "01010101010101   01010101010101",
-             " 01010101010101 01010101010101 ",
-             "  01010101010101010101010101   ",
-             "    010101010 )X( 010101010    ",
-             "  01010101010  1  0101010101   ",
-             " 01010101010   0   0101010101  ",
-             "0101010101     1     101010101 ",
-             " 010101        0        10101  ",
-             "  01           1           10  ",
-             "               0               ",
-             "               |               ",
-             "               •               "
-    ];
+                   "   010101      0      010101   ",
+                   " 0101010101    1    0101010101 ",
+                   "0101010101010  2  0101010101010",
+                   "01010101010101 3 01010101010101",
+                   " 01010101010101601010101010101 ",
+                   "  01010101010109010101010101   ",
+                   "    010101010 )X( 010101010    ",
+                   "  01010101010  9  0101010101   ",
+                   " 01010101010   6   0101010101  ",
+                   "0101010101     3     101010101 ",
+                   " 010101        2        10101  ",
+                   "  01           1           10  ",
+                   "               0               ",
+                   "               |               ",
+                   "               •               "
+                 ];
 
     let lineIndex = 0;
     let charIndex = 0;
@@ -702,37 +701,28 @@ function startSubTerminal() {
     ];
 
     subContainer.innerHTML = ''; 
-    subContainer.style.perspective = "1000px";
-    subContainer.style.display = "flex";
-    subContainer.style.flexDirection = "column";
-    subContainer.style.alignItems = "center";
-    subContainer.style.marginTop = "30px";
-
     const style = document.createElement('style');
     style.textContent = `
         :root { --mood-color: #00ff66; }
-        .sub-line { opacity: 0; transition: opacity 1.5s ease-in; color: var(--mood-color) !important; text-shadow: 0 0 12px var(--mood-color) !important; }
+        .sub-line { opacity: 0; transition: opacity 1s ease-in; color: var(--mood-color) !important; text-shadow: 0 0 12px var(--mood-color) !important; }
         .sub-line.show { opacity: 1; }
         @keyframes flap { 0%, 100% { transform: rotateY(0deg); } 50% { transform: rotateY(20deg); } }
-        @keyframes butterflyGlow { 0%, 100% { filter: brightness(1) drop-shadow(0 0 12px var(--mood-color)); } 50% { filter: brightness(1.5) drop-shadow(0 0 25px var(--mood-color)); } }
-        .pulse-active { animation: butterflyGlow 2s ease-in-out infinite, flap 0.8s ease-in-out infinite; }
+        .pulse-active { animation: flap 0.8s ease-in-out infinite; }
         #mood-btn {
             margin: 25px auto; padding: 12px 25px;
             background: rgba(0,0,0,0.5); border: 1px solid var(--mood-color);
             color: var(--mood-color); font-family: 'Orbitron', sans-serif;
             font-size: 11px; letter-spacing: 3px; cursor: pointer;
             opacity: 0; transition: all 0.6s ease; text-transform: uppercase;
-            box-shadow: 0 0 10px rgba(0,0,0,0.5);
         }
         #mood-btn.visible { opacity: 1; }
-        #mood-btn:hover { background: var(--mood-color); color: #000; box-shadow: 0 0 20px var(--mood-color); }
     `;
     document.head.appendChild(style);
 
     function createLine() {
         const lineElem = document.createElement("div");
         lineElem.className = "sub-line";
-        lineElem.style.cssText = "font-family:'Courier New',monospace; white-space:pre; font-size:16px; line-height:1.2; text-align:center; font-weight:bold; min-height:1.2em;";
+        lineElem.style.cssText = "font-family:'Courier New',monospace; white-space:pre; font-size:16px; line-height:1.2; text-align:center; font-weight:bold;";
         subContainer.appendChild(lineElem);
         setTimeout(() => lineElem.classList.add('show'), 50);
         return lineElem;
@@ -746,12 +736,12 @@ function startSubTerminal() {
             if (charIndex < currentLineText.length) {
                 currentLineElem.textContent += currentLineText[charIndex];
                 charIndex++;
-                setTimeout(typeEffect, 120); 
+                setTimeout(typeEffect, 80); 
             } else {
                 lineIndex++; charIndex = 0;
                 if (lineIndex < subLines.length) {
                     currentLineElem = createLine();
-                    setTimeout(typeEffect, 309); 
+                    setTimeout(typeEffect, 150); 
                 } else {
                     subContainer.querySelectorAll('.sub-line').forEach(l => l.classList.add('pulse-active'));
                     showMoodButton();
@@ -772,7 +762,7 @@ function startSubTerminal() {
             currentMood = (currentMood + 1) % moods.length;
             const mood = moods[currentMood];
             document.documentElement.style.setProperty('--mood-color', mood.color);
-                        if (window.vantaEffect) {
+            if (window.vantaEffect) {
                 window.vantaEffect.setOptions({
                     highlightColor: mood.highlight,
                     midtoneColor: mood.highlight,
@@ -780,22 +770,17 @@ function startSubTerminal() {
                     baseColor: mood.base
                 });
             }
-
             const particlesElem = document.getElementById('particles-stars');
             if (particlesElem) {
-                particlesElem.style.filter = `drop-shadow(0 0 8px ${mood.color}) hue-rotate(${currentMood * 45}deg)`;
-                particlesElem.style.transition = "filter 2s ease";
+                particlesElem.style.transition = "filter 1.5s ease";
+                particlesElem.style.filter = `sepia(1) saturate(15) hue-rotate(${currentMood * 90}deg) brightness(1.2)`;
             }
-
-            document.body.style.transition = "background-color 2s ease";
             btn.textContent = `SYSTEM: ${mood.name}`;
         };
     }
-
     typeEffect();
 }
-</script>
-<script>
+
 window.vantaEffect = VANTA.FOG({
     el: "#vanta-bg",
     mouseControls: true,
@@ -816,23 +801,14 @@ particlesJS("particles-stars", {
     particles: {
         number: { value: 24, density: { enable: true, value_area: 800 } },
         color: { value: "#ffffff" },
-        opacity: { 
-            value: 0.6, 
-            random: true,
-            anim: { enable: true, speed: 1.4, opacity_min: 0.2, sync: false }
-        },
-        size: { 
-            value: 3, 
-            random: true,
-            anim: { enable: true, speed: 1, size_min: 0.1, sync: false }
-        },
-        move: { enable: true, speed: 0.2, direction: "left", random: true },
+        opacity: { value: 0.6, random: true },
+        size: { value: 3, random: true },
+        move: { enable: true, speed: 0.2, direction: "left" },
         line_linked: { enable: false }
     },
     retina_detect: true
 });
-</script>
-<script>
+
 window.addEventListener('load', () => {
     document.body.classList.add('loaded');
 });
