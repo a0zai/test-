@@ -39,7 +39,60 @@ html, body {
     z-index: 0;
     pointer-events: none;
 }
+#output { 
+    opacity:1;
+    transform: translateY(0);
+    white-space: pre-wrap;
+    z-index:10;
+    color: #eaeaea;
+    text-shadow: 0 0 8px rgba(255,255,255,0.7);
+}
+.line {
+    margin-bottom:0.7em;
+    opacity:0;
+    transform: translateY(20px);
+    transition: opacity 2s ease, transform 2s ease;
+}
+.line.visible {
+    opacity:1;
+    transform: translateY(0);
+}
 
+.glitch {
+    font-weight:bold;
+    letter-spacing:1px;
+    color:#00ff00;
+    text-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00;
+    animation: glitchAnim 0.12s steps(2, jump-end) infinite;
+}
+@keyframes glitchAnim {
+    0% { transform:translate(1px,-1px); }
+    50% { transform:translate(-2px,2px); }
+    100% { transform:translate(1px,-1px); }
+}
+
+.shake {
+    animation: shakeAnim 0.35s ease-in-out;
+}
+@keyframes shakeAnim {
+    0% { transform:translateX(0); }
+    20% { transform:translateX(-4px); }
+    40% { transform:translateX(4px); }
+    60% { transform:translateX(-3px); }
+    80% { transform:translateX(3px); }
+    100% { transform:translateX(0); }
+}
+
+#fade-black {
+    position: fixed;
+    top:0; left:0;
+    width:100%; height:100%;
+    background:#000;
+    pointer-events:none;
+    opacity:0;
+    z-index:999;
+    transition: opacity 3s ease;
+}
 .main-content {
     position: relative;
     z-index: 10;
@@ -55,6 +108,7 @@ html, body {
 .main-content.visible {
     opacity: 1;
     visibility: visible;
+    display: flex;
     transform: translateY(0);
 }
 
@@ -164,7 +218,8 @@ html, body {
     font-weight: bold;
     padding: 20px;
     box-sizing: border-box;
-    color: #cccccc;
+    color: #8e6d13;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.8), 0 0 5px rgba(142, 109, 19, 0.3);
 }
 .n1  { transform: rotate(0deg); }    .n1 div  { transform: rotate(0deg); }
 .n2  { transform: rotate(30deg); }   .n2 div  { transform: rotate(-30deg); }
@@ -199,21 +254,22 @@ html, body {
 .hour {
     width: 4px;
     height: 90px;
-    background: rgba(241,245,249,0.25);
-    box-shadow: 0 0 10px rgba(241,245,249,0.3); 
+    background: #c5a059;
+    box-shadow: 0 0 12px rgba(197, 160, 89, 0.5); 
 }
 .minute {
     width: 3.5px;
     height: 99px;
-    background: var(--sense-red);
-    box-shadow: 0 0 11px var(--sense-red); 
+    background: #8e6d13;
+    box-shadow: 0 0 11px rgba(142, 109, 19, 0.4); 
 }
 .second {
     width: 2.5px;
     height: 114px;
-    background: var(--sense-blue);
-    box-shadow: 0 0 12px var(--sense-blue);
+    background: #d4af37;
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
 }
+
 .tagline {
     margin-top: 33px;      
     color: #ffffff;            
@@ -293,6 +349,8 @@ body.loaded {
 <body>
 <div id="vanta-bg"></div> 
 <div id="particles-stars"></div>
+<div id="output"></div>
+<div id="fade-black"></div>
 <div class="main-content">
     <div class="scene">
     <div class="clock-container">
@@ -323,15 +381,112 @@ body.loaded {
  <div id="drag-point" class="pulse-point"></div>
 </div>
 <script>
+function typeLine(text, callback) {
+    const container = document.getElementById("output");
+    const line = document.createElement("div");
+    line.className = "line";
+    container.appendChild(line);
 
+    setTimeout(() => line.classList.add('visible'), 50);
+
+    let i = 0;
+    function type() {
+        if(i < text.length){
+            line.textContent += text[i];
+            i++;
+            const jitter = Math.random() * 80;
+            setTimeout(type, 100 + jitter);
+        } else {
+            if(callback) setTimeout(callback, 200);
+        }
+    }
+    type();
+}
+
+function glitchFx() {
+    const out = document.getElementById("output");
+    const g = document.createElement("div");
+    g.className = "line glitch";
+    g.textContent = "!! SIGNAL DISTORTION DETECTED !!";
+    out.appendChild(g);
+    setTimeout(() => g.remove(), 500);
+}
+
+function runSequence(lines, index = 0) {
+    if (index >= lines.length) {
+        const terminalOutput = document.getElementById("output");
+        const mainContent = document.querySelector(".main-content");
+        
+        terminalOutput.style.transition = "opacity 2s ease";
+        terminalOutput.style.opacity = "0";
+
+        setTimeout(() => {
+            terminalOutput.style.display = "none";
+            mainContent.classList.add("visible");
+            console.log("Interface Synchronized.");
+        }, 2000);
+
+        return;
+    }
+
+    typeLine(lines[index], () => {
+        if (Math.random() < 0.22) glitchFx();
+        if (lines[index].includes("FAILED") || lines[index].includes("Unknown")) {
+            const last = document.querySelector(".line:last-child");
+            last.classList.add("shake");
+        }
+        runSequence(lines, index + 1);
+    });
+}
+
+fetch("https://api.ipify.org?format=json")
+  .then(r => r.json())
+  .then(data => {
+      const lines = [
+        "It started on a night that shouldn’t have carried any echoes…",
+        "A message that had been trying to arrive for 12 years,",
+        "",
+        "Tonight…",
+        "",
+        ">>> Decrypting frozen message...",
+        "Sender: Only Brother",
+        "To: Mamy",
+        "",
+        "“Mamy…",
+        "Why didn’t you answer my calls…?”",
+        "",
+        "Opa hasn’t woken up.",
+        "Before he slept he said:",
+        "   ‘Son, My old watch is now yours.’",
+        "",
+        "Message Age: 12 years",
+        "Delivery Status: FAILED",
+        "Reason: No recipient detected.",
+        "-----",
+        "Connection unstable...",
+        "Why? Continue? Let's see~>N...."
+      ];
+      runSequence(lines);
+  })
+  .catch(() => {
+      runSequence([
+          "[ A∞Z / FAILURE ]",
+          "Metadata retrieval failed...",
+          "But something recognized you anyway.",
+          "",
+          "Closing connection..."
+      ]);
+  });
+</script>
+<script>
 const hour = document.getElementById('hour');
 const n1 = hour.querySelector('.n1');
 const numbersToHide = [
-  {id:'n2', angle:330}, 
-  {id:'n3', angle:300}, 
+  {id:'n2', angle:330}, // 12
+  {id:'n3', angle:300}, // 11
   {id:'n10', angle:90}, // 4
-  {id:'n11', angle:60}, 
-  {id:'n12', angle:30}  
+  {id:'n11', angle:60}, // 3
+  {id:'n12', angle:30}  // 2
 ];
 function updateClock() {
     const now = new Date();
