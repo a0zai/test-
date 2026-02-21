@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RAFAT Matrix Butterfly</title>
+    <title>RAFAT Butterfly Matrix</title>
     <style>
         body { margin: 0; background: #000; overflow: hidden; }
         canvas { display: block; }
@@ -14,23 +14,31 @@
     <script>
         const canvas = document.getElementById('matrix-canvas');
         const ctx = canvas.getContext('2d');
+        const maskCanvas = document.createElement('canvas');
+        const maskCtx = maskCanvas.getContext('2d');
 
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+        let fontSize = 16;
+        let columns, rainDrops;
 
-        const alphabet = "Aアァカサタナハマヤャラワ012369Z🦋";
-        const fontSize = 16;
-        const columns = Math.floor(canvas.width / fontSize);
-        const rainDrops = Array(columns).fill(0).map(() => Math.random() * -100);
+        function init() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            maskCanvas.width = canvas.width;
+            maskCanvas.height = canvas.height;
+            columns = Math.floor(canvas.width / fontSize);
+            rainDrops = Array(columns).fill(0).map(() => Math.random() * -100);
+            
+            maskCtx.fillStyle = "black";
+            maskCtx.fillRect(0, 0, maskCanvas.width, maskCanvas.height);
+            maskCtx.fillStyle = "white";
+            const size = Math.min(canvas.width, canvas.height) * 0.7;
+            maskCtx.font = `${size}px serif`;
+            maskCtx.textAlign = "center";
+            maskCtx.textBaseline = "middle";
+            maskCtx.fillText("🦋", maskCanvas.width / 2, maskCanvas.height / 2);
+        }
 
-        const butterflyPath = new Path2D();
-        const cx = canvas.width / 2;
-        const cy = canvas.height / 2;
-        const s = Math.min(canvas.width, canvas.height) * 0.8;
-
-        butterflyPath.moveTo(cx, cy + s * 0.1);
-        butterflyPath.bezierCurveTo(cx - s * 0.5, cy - s * 0.5, cx - s * 0.5, cy + s * 0.5, cx, cy + s * 0.2);
-        butterflyPath.bezierCurveTo(cx + s * 0.5, cy + s * 0.5, cx + s * 0.5, cy - s * 0.5, cx, cy + s * 0.1);
+        const alphabet = "Aアァカサタナハマヤャラワ012369Z";
 
         function draw() {
             ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
@@ -39,33 +47,33 @@
             for (let i = 0; i < rainDrops.length; i++) {
                 const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
                 const x = i * fontSize;
-                const y = rainDrops[i] * fontSize;
+                const y = Math.floor(rainDrops[i]) * fontSize;
 
-                if (ctx.isPointInPath(butterflyPath, x, y)) {
-                    ctx.fillStyle = '#00ff66';
-                    ctx.shadowBlur = 15;
-                    ctx.shadowColor = '#00ff66';
-                    ctx.font = "bold " + fontSize + "px monospace";
-                } else {
-                    ctx.fillStyle = 'rgba(0, 255, 102, 0.05)';
-                    ctx.shadowBlur = 0;
-                    ctx.font = fontSize + "px monospace";
+                if (y >= 0 && y < canvas.height) {
+                    const maskData = maskCtx.getImageData(x, y, 1, 1).data;
+                    if (maskData[0] > 128) {
+                        ctx.fillStyle = '#00ff66';
+                        ctx.shadowBlur = 15;
+                        ctx.shadowColor = '#00ff66';
+                        ctx.font = "bold " + fontSize + "px monospace";
+                    } else {
+                        ctx.fillStyle = 'rgba(0, 255, 102, 0.05)';
+                        ctx.shadowBlur = 0;
+                        ctx.font = fontSize + "px monospace";
+                    }
+                    ctx.fillText(text, x, y);
                 }
 
-                ctx.fillText(text, x, y);
-
-                if (y > canvas.height) {
+                if (y > canvas.height && Math.random() > 0.975) {
                     rainDrops[i] = 0;
                 }
-                rainDrops[i] += 0.5;
+                rainDrops[i] += 0.3;
             }
             requestAnimationFrame(draw);
         }
 
-        window.addEventListener('resize', () => {
-            location.reload(); 
-        });
-
+        window.addEventListener('resize', init);
+        init();
         draw();
     </script>
 </body>
