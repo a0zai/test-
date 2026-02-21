@@ -3,38 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MatrixRAFAT</title>
+    <title>RAFAT Matrix Butterfly</title>
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: #000;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        canvas {
-            display: block;
-        }
-        .brand {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            color: #00ff66;
-            font-family: monospace;
-            font-size: 12px;
-            letter-spacing: 2px;
-            opacity: 0.5;
-        }
+        body { margin: 0; background: #000; overflow: hidden; }
+        canvas { display: block; }
     </style>
 </head>
 <body>
-
     <canvas id="matrix-canvas"></canvas>
-    <div class="brand">MATRIX ENGINE BY RAFAT</div>
-
     <script>
         const canvas = document.getElementById('matrix-canvas');
         const ctx = canvas.getContext('2d');
@@ -42,64 +18,55 @@
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
 
-        const alphabet = "Aアァカサタナハマヤャラワガザダバパイィキシチニヒミ01236963210Z🦋";
+        const alphabet = "Aアァカサタナハマヤャラワ012369Z🦋";
         const fontSize = 16;
         const columns = Math.floor(canvas.width / fontSize);
-        
-        const rainDrops = [];
-        const velocities = [];
+        const rainDrops = Array(columns).fill(0).map(() => Math.random() * -100);
 
-        for (let x = 0; x < columns; x++) {
-            rainDrops[x] = Math.random() * -100;
-            velocities[x] = 1 + Math.random() * 2;
-        }
+        const butterflyPath = new Path2D();
+        const cx = canvas.width / 2;
+        const cy = canvas.height / 2;
+        const s = Math.min(canvas.width, canvas.height) * 0.8;
+
+        butterflyPath.moveTo(cx, cy + s * 0.1);
+        butterflyPath.bezierCurveTo(cx - s * 0.5, cy - s * 0.5, cx - s * 0.5, cy + s * 0.5, cx, cy + s * 0.2);
+        butterflyPath.bezierCurveTo(cx + s * 0.5, cy + s * 0.5, cx + s * 0.5, cy - s * 0.5, cx, cy + s * 0.1);
 
         function draw() {
             ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            const centerX = canvas.width / 2;
-            const centerY = canvas.height / 2;
 
             for (let i = 0; i < rainDrops.length; i++) {
                 const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
                 const x = i * fontSize;
                 const y = rainDrops[i] * fontSize;
 
-                const scale = Math.min(canvas.width, canvas.height) / 4;
-                const dx = (x - centerX) / (scale * 0.6);
-                const dy = (y - centerY) / (scale * 0.8);
-                
-                const isButterfly = Math.pow(dx*dx + dy*dy - 1, 3) - dx*dx*dy*dy*dy < 0;
-
-                if (isButterfly) {
+                if (ctx.isPointInPath(butterflyPath, x, y)) {
                     ctx.fillStyle = '#00ff66';
                     ctx.shadowBlur = 15;
                     ctx.shadowColor = '#00ff66';
                     ctx.font = "bold " + fontSize + "px monospace";
                 } else {
-                    ctx.fillStyle = 'rgba(0, 255, 102, 0.08)';
+                    ctx.fillStyle = 'rgba(0, 255, 102, 0.05)';
                     ctx.shadowBlur = 0;
                     ctx.font = fontSize + "px monospace";
                 }
 
                 ctx.fillText(text, x, y);
 
-                if (y > canvas.height && Math.random() > 0.975) {
+                if (y > canvas.height) {
                     rainDrops[i] = 0;
-                    velocities[i] = 1 + Math.random() * 2;
                 }
-                
-                rainDrops[i] += velocities[i] * 0.3;
+                rainDrops[i] += 0.5;
             }
+            requestAnimationFrame(draw);
         }
 
         window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+            location.reload(); 
         });
 
-        setInterval(draw, 30);
+        draw();
     </script>
 </body>
 </html>
