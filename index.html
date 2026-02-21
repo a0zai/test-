@@ -689,7 +689,9 @@ function startSubTerminal() {
     ];
 
     let lineIndex = 0;
+    let charIndex = 0;
 
+    subContainer.innerHTML = ''; 
     subContainer.style.display = "flex";
     subContainer.style.flexDirection = "column";
     subContainer.style.alignItems = "center";
@@ -708,43 +710,45 @@ function startSubTerminal() {
     `;
     document.head.appendChild(style);
 
-    function typeSubLine(text) {
+    function createLine() {
         const lineElem = document.createElement("div");
-        lineElem.className = "sub-line";
-        
         lineElem.style.fontFamily = "'Courier New', monospace";
         lineElem.style.whiteSpace = "pre";
         lineElem.style.fontSize = "16px"; 
         lineElem.style.lineHeight = "1.2";
         lineElem.style.color = "#00ff66"; 
         lineElem.style.textShadow = "0 0 12px rgba(0, 255, 102, 0.9)";
-        lineElem.style.width = "100%";
         lineElem.style.textAlign = "center";
         lineElem.style.fontWeight = "bold";
-        lineElem.style.transition = "all 0.5s ease";
-        
+        lineElem.style.minHeight = "1.2em";
         subContainer.appendChild(lineElem);
-        
-        let charIndex = 0;
-        function typeChar() {
-            if (charIndex < text.length) {
-                lineElem.textContent += text[charIndex];
+        return lineElem;
+    }
+
+    let currentLineElem = createLine();
+
+    function typeEffect() {
+        if (lineIndex < subLines.length) {
+            const currentLineText = subLines[lineIndex];
+            
+            if (charIndex < currentLineText.length) {
+                currentLineElem.textContent += currentLineText[charIndex];
                 charIndex++;
-                setTimeout(typeChar, 80); 
+                setTimeout(typeEffect, 30); 
             } else {
-                lineElem.classList.add('visible');
                 lineIndex++;
+                charIndex = 0;
                 if (lineIndex < subLines.length) {
-                    setTimeout(() => typeSubLine(subLines[lineIndex]), 500);
+                    currentLineElem = createLine();
+                    setTimeout(typeEffect, 40); 
                 } else {
                     subContainer.classList.add('pulse-active');
                 }
             }
         }
-        typeChar();
     }
 
-    if(subLines.length > 0) typeSubLine(subLines[0]);
+    typeEffect();
 }
 </script>
 <script>
