@@ -673,10 +673,20 @@ function startMatrix() {
 function startSubTerminal() {
     const subContainer = document.getElementById("sub-terminal");
     const subLines = [
-        "R.A.F.A.T PROTOCOL ACTIVATED",
-        "BUTTERFLY CORE: STABLE",
-        "SCANNING 12 YEARS OF ECHOES...",
-        "STATUS: YOU SEE THE SUN"
+        "   010101             010101   ",
+        " 0101010101         0101010101 ",
+        "0101010101010     0101010101010",
+        "01010101010101   01010101010101",
+        " 01010101010101 01010101010101 ",
+        "  01010101010101010101010101   ",
+        "    010101010  0  010101010    ",
+        "  01010101010  1  0101010101   ",
+        " 01010101010   0   0101010101  ",
+        "0101010101     1     101010101 ",
+        " 010101        0        10101  ",
+        "  01           1           10  ",
+        "               0               ",
+        "               |               "
     ];
 
     let lineIndex = 0;
@@ -684,7 +694,15 @@ function startSubTerminal() {
     function typeSubLine(text) {
         const lineElem = document.createElement("div");
         lineElem.className = "sub-line";
-        lineElem.style.marginBottom = "8px";
+        
+        lineElem.style.fontFamily = "'Courier New', monospace";
+        lineElem.style.whiteSpace = "pre";
+        lineElem.style.fontSize = "11px";
+        lineElem.style.lineHeight = "1.1";
+        lineElem.style.color = "#b2f2bb"; 
+        lineElem.style.textShadow = "0 0 8px rgba(178, 242, 187, 0.8)";
+        lineElem.style.textAlign = "center";
+        
         subContainer.appendChild(lineElem);
         
         let charIndex = 0;
@@ -692,12 +710,12 @@ function startSubTerminal() {
             if (charIndex < text.length) {
                 lineElem.textContent += text[charIndex];
                 charIndex++;
-                setTimeout(typeChar, 40);
+                setTimeout(typeChar, 10); 
             } else {
                 lineElem.classList.add('visible');
                 lineIndex++;
                 if (lineIndex < subLines.length) {
-                    setTimeout(() => typeSubLine(subLines[lineIndex]), 1200);
+                    setTimeout(() => typeSubLine(subLines[lineIndex]), 70);
                 }
             }
         }
