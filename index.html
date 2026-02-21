@@ -382,7 +382,7 @@ function typeLine(text, callback) {
             line.textContent += text[i];
             i++;
             const jitter = Math.random() * 80;
-            setTimeout(type, 100 + jitter);
+            setTimeout(type, 114 + jitter);
         } else {
             if(callback) setTimeout(callback, 200);
         }
@@ -555,6 +555,32 @@ function drag(y) {
 
 window.addEventListener('mouseup', endDrag);
 window.addEventListener('touchend', endDrag);
+
+function endDrag() {
+    if (!isDragging) return;
+    isDragging = false;
+    let finalPos = parseInt(dragPoint.style.bottom) || 0;
+
+    if (finalPos > 280) {
+        audio.currentTime = 0;
+        audio.play().catch(err => console.log(err));
+
+        document.querySelector('.main-content').style.opacity = '0';
+        document.querySelector('.horizon-line').style.opacity = '0';
+        document.getElementById('vanta-bg').style.opacity = '0';
+        document.getElementById('particles-stars').style.opacity = '0';
+        
+        setTimeout(() => {
+            document.querySelector('.main-content').style.display = 'none';
+            document.querySelector('.horizon-line').style.display = 'none';
+            startMatrix();
+        }, 1000);
+
+    } else {
+        dragPoint.style.transition = 'bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+        dragPoint.style.bottom = '0';
+    }
+}
 
 let matrixRunning = false;
 let matrixRAF = null;
