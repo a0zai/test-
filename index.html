@@ -331,7 +331,6 @@ body.loaded {
     pointer-events: none;
 }
 .sub-line {
-    .sub-line {
     text-align: center;
     width: 100%;
     display: block;
@@ -675,27 +674,26 @@ function startMatrix() {
 function startSubTerminal() {
     const subContainer = document.getElementById("sub-terminal");
     const subLines = [
-        "   010101             010101   ",
-        " 0101010101         0101010101 ",
-        "0101010101010     0101010101010",
-        "01010101010101   01010101010101",
-        " 01010101010101 01010101010101 ",
-        "  01010101010101010101010101   ",
-        "    010101010 )X( 010101010    ",
-        "  01010101010  1  0101010101   ",
-        " 01010101010   0   0101010101  ",
-        "0101010101     1     101010101 ",
-        " 010101        0        10101  ",
-        "  01           1           10  ",
-        "               0               ",
-        "               |               ",
-        "               •               "
+             "   010101             010101   ",
+             " 0101010101         0101010101 ",
+             "0101010101010     0101010101010",
+             "01010101010101   01010101010101",
+             " 01010101010101 01010101010101 ",
+             "  01010101010101010101010101   ",
+             "    010101010 )X( 010101010    ",
+             "  01010101010  1  0101010101   ",
+             " 01010101010   0   0101010101  ",
+             "0101010101     1     101010101 ",
+             " 010101        0        10101  ",
+             "  01           1           10  ",
+             "               0               ",
+             "               |               ",
+             "               •               "
     ];
 
     let lineIndex = 0;
     let charIndex = 0;
     let currentMood = 0;
-
     const moods = [
         { name: "SENSE", color: "#00ff66", highlight: 0x33ff33, base: 0x001100 },
         { name: "CYBER", color: "#00e5ff", highlight: 0x00e5ff, base: 0x000b1a },
@@ -774,18 +772,22 @@ function startSubTerminal() {
             currentMood = (currentMood + 1) % moods.length;
             const mood = moods[currentMood];
             document.documentElement.style.setProperty('--mood-color', mood.color);
-            
-            if (window.vantaEffect) {
+                        if (window.vantaEffect) {
                 window.vantaEffect.setOptions({
                     highlightColor: mood.highlight,
-                    midColor: mood.highlight,
+                    midtoneColor: mood.highlight,
                     lowlightColor: mood.base,
                     baseColor: mood.base
                 });
             }
 
+            const particlesElem = document.getElementById('particles-stars');
+            if (particlesElem) {
+                particlesElem.style.filter = `drop-shadow(0 0 8px ${mood.color}) hue-rotate(${currentMood * 45}deg)`;
+                particlesElem.style.transition = "filter 2s ease";
+            }
+
             document.body.style.transition = "background-color 2s ease";
-            
             btn.textContent = `SYSTEM: ${mood.name}`;
         };
     }
@@ -809,6 +811,7 @@ window.vantaEffect = VANTA.FOG({
     speed: 0.2,
     zoom: 0.8
 });
+
 particlesJS("particles-stars", {
     particles: {
         number: { value: 24, density: { enable: true, value_area: 800 } },
