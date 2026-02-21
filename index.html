@@ -330,12 +330,7 @@ body.loaded {
     display: none;
     pointer-events: none;
 }
-.shake { animation: shakeAnim 0.1s ease-in-out infinite; }
-@keyframes shakeAnim {
-    0% { transform: translate(1px, 1px) rotate(0deg) translateZ(20px); }
-    50% { transform: translate(-2px, -1px) rotate(0.5deg) translateZ(20px); }
-    100% { transform: translate(1px, 1px) rotate(0deg) translateZ(20px); }
-}
+
 </style>
 </head>
 <body>
@@ -560,7 +555,6 @@ function drag(y) {
 
 window.addEventListener('mouseup', endDrag);
 window.addEventListener('touchend', endDrag);
-
 function endDrag() {
     if (!isDragging) return;
     isDragging = false;
@@ -593,7 +587,6 @@ function startMatrix() {
 
     const canvas = document.getElementById('matrix-canvas');
     const ctx = canvas.getContext('2d');
-    const clockElem = document.querySelector('.clock-container');
 
     canvas.style.display = 'block';
     canvas.width = window.innerWidth;
@@ -626,7 +619,6 @@ function startMatrix() {
 
         ctx.globalCompositeOperation = 'source-over';
         
-        const clockRect = clockElem.getBoundingClientRect();
         const centerX = canvas.width / 2;
         const centerY = canvas.height / 2;
 
@@ -641,22 +633,15 @@ function startMatrix() {
 
             if (isButterfly) {
                 ctx.fillStyle = '#00ff66';
-                ctx.shadowBlur = 12;
+                ctx.shadowBlur = 15;
                 ctx.shadowColor = '#00ff66';
             } else {
-                ctx.fillStyle = 'rgba(0, 255, 102, 0.1)';
+                ctx.fillStyle = 'rgba(0, 255, 102, 0.08)';
                 ctx.shadowBlur = 0;
             }
 
             ctx.font = fontSize + 'px monospace';
             ctx.fillText(text, x, y);
-
-            if (y > clockRect.top && y < clockRect.bottom && x > clockRect.left && x < clockRect.right) {
-                if (Math.random() > 0.9) {
-                    clockElem.classList.add('shake');
-                    setTimeout(() => clockElem.classList.remove('shake'), 50);
-                }
-            }
 
             if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.98) {
                 rainDrops[i] = -2;
