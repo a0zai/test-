@@ -669,7 +669,6 @@ function startMatrix() {
 
     matrixRAFAT = requestAnimationFrame(draw);
 }
-
 function startSubTerminal() {
     const subContainer = document.getElementById("sub-terminal");
     const subLines = [
@@ -691,17 +690,38 @@ function startSubTerminal() {
 
     let lineIndex = 0;
 
+    subContainer.style.display = "flex";
+    subContainer.style.flexDirection = "column";
+    subContainer.style.alignItems = "center";
+    subContainer.style.paddingLeft = "35px"; 
+    subContainer.style.marginTop = "30px";
+
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes butterflyGlow {
+            0%, 100% { filter: brightness(1) drop-shadow(0 0 12px rgba(0,255,102,0.9)); }
+            50% { filter: brightness(1.5) drop-shadow(0 0 25px rgba(0,255,102,1)); }
+        }
+        .pulse-active {
+            animation: butterflyGlow 2s ease-in-out infinite;
+        }
+    `;
+    document.head.appendChild(style);
+
     function typeSubLine(text) {
         const lineElem = document.createElement("div");
         lineElem.className = "sub-line";
         
         lineElem.style.fontFamily = "'Courier New', monospace";
         lineElem.style.whiteSpace = "pre";
-        lineElem.style.fontSize = "11px";
-        lineElem.style.lineHeight = "1.1";
-        lineElem.style.color = "#b2f2bb"; 
-        lineElem.style.textShadow = "0 0 8px rgba(178, 242, 187, 0.8)";
+        lineElem.style.fontSize = "16px"; 
+        lineElem.style.lineHeight = "1.2";
+        lineElem.style.color = "#00ff66"; 
+        lineElem.style.textShadow = "0 0 12px rgba(0, 255, 102, 0.9)";
+        lineElem.style.width = "100%";
         lineElem.style.textAlign = "center";
+        lineElem.style.fontWeight = "bold";
+        lineElem.style.transition = "all 0.5s ease";
         
         subContainer.appendChild(lineElem);
         
@@ -710,12 +730,14 @@ function startSubTerminal() {
             if (charIndex < text.length) {
                 lineElem.textContent += text[charIndex];
                 charIndex++;
-                setTimeout(typeChar, 10); 
+                setTimeout(typeChar, 80); 
             } else {
                 lineElem.classList.add('visible');
                 lineIndex++;
                 if (lineIndex < subLines.length) {
-                    setTimeout(() => typeSubLine(subLines[lineIndex]), 70);
+                    setTimeout(() => typeSubLine(subLines[lineIndex]), 500);
+                } else {
+                    subContainer.classList.add('pulse-active');
                 }
             }
         }
