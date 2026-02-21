@@ -330,7 +330,15 @@ body.loaded {
     display: none;
     pointer-events: none;
 }
-
+.sub-line {
+    opacity: 0;
+    transform: translateY(5px);
+    transition: all 0.5s ease;
+}
+.sub-line.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
 </style>
 </head>
 <body>
@@ -362,6 +370,7 @@ body.loaded {
         <div class="hand second" id="second"></div>
     </div>
     <div class="tagline">Son when you see SEENSEE, you see the sun</div>
+<div id="sub-terminal" style="margin-top: 20px; font-size: 14px; color: var(--sense-green); text-shadow: 0 0 5px var(--sense-green); opacity: 0.8; min-height: 50px; text-align: center; max-width: 80%; line-height: 1.4;"></div>
     </div>
     <audio id="sense-sound" src="seensee.mp3" preload="auto"></audio>
 <div class="horizon-line" style="z-index: 9999;">
@@ -563,7 +572,6 @@ function endDrag() {
     if (finalPos > 280) {
         audio.currentTime = 0;
         audio.play().catch(err => console.log(err));
-
         document.querySelector('.horizon-line').style.transition = 'opacity 1s';
         document.querySelector('.horizon-line').style.opacity = '0';
         document.querySelector('.horizon-line').style.pointerEvents = 'none';
@@ -571,6 +579,7 @@ function endDrag() {
         document.getElementById('vanta-bg').style.opacity = '0.15';
 
         startMatrix();
+        startSubTerminal();
     } else {
         dragPoint.style.transition = 'bottom 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
         dragPoint.style.bottom = '0';
@@ -659,6 +668,43 @@ function startMatrix() {
     });
 
     matrixRAFAT = requestAnimationFrame(draw);
+}
+
+function startSubTerminal() {
+    const subContainer = document.getElementById("sub-terminal");
+    const subLines = [
+        "R.A.F.A.T PROTOCOL ACTIVATED",
+        "BUTTERFLY CORE: STABLE",
+        "SCANNING 12 YEARS OF ECHOES...",
+        "STATUS: YOU SEE THE SUN"
+    ];
+
+    let lineIndex = 0;
+
+    function typeSubLine(text) {
+        const lineElem = document.createElement("div");
+        lineElem.className = "sub-line";
+        lineElem.style.marginBottom = "8px";
+        subContainer.appendChild(lineElem);
+        
+        let charIndex = 0;
+        function typeChar() {
+            if (charIndex < text.length) {
+                lineElem.textContent += text[charIndex];
+                charIndex++;
+                setTimeout(typeChar, 40);
+            } else {
+                lineElem.classList.add('visible');
+                lineIndex++;
+                if (lineIndex < subLines.length) {
+                    setTimeout(() => typeSubLine(subLines[lineIndex]), 1200);
+                }
+            }
+        }
+        typeChar();
+    }
+
+    if(subLines.length > 0) typeSubLine(subLines[0]);
 }
 </script>
 <script>
