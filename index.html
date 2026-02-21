@@ -2,10 +2,11 @@
 <html lang="ar">
 <head>
     <meta charset="UTF-8">
-    <title>RAFAT Butterfly Matrix Engine</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAFAT Ghost Butterfly Engine</title>
     <style>
-        body { margin: 0; background: #000; overflow: hidden; }
-        canvas { display: block; }
+        body { margin: 0; background: #000; overflow: hidden; cursor: crosshair; }
+        canvas { display: block; filter: contrast(120%) brightness(110%); }
     </style>
 </head>
 <body>
@@ -13,80 +14,73 @@
     <script>
         const canvas = document.getElementById('matrix-canvas');
         const ctx = canvas.getContext('2d');
-        const maskCanvas = document.createElement('canvas');
-        const maskCtx = maskCanvas.getContext('2d');
 
-        let fontSize = 16;
-        let columns, rainDrops;
+        let width, height, columns;
+        const fontSize = 16;
+        let drops = [];
+        let speeds = [];
 
         function init() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            maskCanvas.width = canvas.width;
-            maskCanvas.height = canvas.height;
-            columns = Math.floor(canvas.width / fontSize);
-            rainDrops = Array(columns).fill(0).map(() => Math.random() * -100);
-            
-            maskCtx.fillStyle = "black";
-            maskCtx.fillRect(0, 0, maskCanvas.width, maskCanvas.height);
-            
-            const size = Math.min(canvas.width, canvas.height) * 0.8;
-            maskCtx.save();
-            maskCtx.translate(maskCanvas.width/2, maskCanvas.height/2);
-            maskCtx.fillStyle = "white";
-            
-            maskCtx.beginPath();
-            for (let i = 0; i < Math.PI * 2; i += 0.01) {
-                let r = (Math.exp(Math.sin(i)) - 2 * Math.cos(4 * i) + Math.pow(Math.sin((2 * i - Math.PI) / 24), 5)) * (size/10);
-                let x = r * Math.sin(i);
-                let y = -r * Math.cos(i);
-                maskCtx.lineTo(x, y);
-            }
-            maskCtx.fill();
-            maskCtx.restore();
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            columns = Math.floor(width / fontSize);
+            drops = Array(columns).fill(1).map(() => Math.random() * -100);
+            speeds = Array(columns).fill(1).map(() => 0.5 + Math.random() * 0.5);
         }
 
-        const alphabet = "Aアァカサタナハマヤャラワ012369Z";
+        const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789アァカサタナハマヤャラワガザダバパイィキシチニヒミ";
 
-        function draw() {
-            ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        function getButterflyScale(t) {
+            return (Math.exp(Math.sin(t)) - 2 * Math.cos(4 * t) + Math.pow(Math.sin((2 * t - Math.PI) / 24), 5));
+        }
 
-            const maskData = maskCtx.getImageData(0, 0, maskCanvas.width, maskCanvas.height).data;
+        function draw(time) {
+            ctx.fillStyle = "rgba(0, 0, 0, 0.15)";
+            ctx.fillRect(0, 0, width, height);
 
-            for (let i = 0; i < rainDrops.length; i++) {
-                const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+            const t = time * 0.001;
+            const cx = width / 2;
+            const cy = height / 2;
+            const bScale = Math.min(width, height) / 10;
+
+            for (let i = 0; i < drops.length; i++) {
                 const x = i * fontSize;
-                const y = Math.floor(rainDrops[i] * fontSize);
+                const y = drops[i] * fontSize;
+                const char = alphabet[Math.floor(Math.random() * alphabet.length)];
 
-                if (y >= 0 && y < canvas.height) {
-                    const pixelIndex = (y * canvas.width + x) * 4;
-                    const isInside = maskData[pixelIndex] > 128;
+                const dx = (x - cx) / bScale;
+                const dy = (y - cy) / bScale;
+                
+                const angle = Math.atan2(dx, -dy);
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                const limit = getButterflyScale(angle + Math.sin(t) * 0.2);
 
-                    if (isInside) {
-                        ctx.fillStyle = '#00ff66';
-                        ctx.shadowBlur = 12;
-                        ctx.shadowColor = '#00ff66';
-                        ctx.font = "bold " + fontSize + "px monospace";
-                    } else {
-                        ctx.fillStyle = 'rgba(0, 255, 102, 0.03)';
-                        ctx.shadowBlur = 0;
-                        ctx.font = fontSize + "px monospace";
-                    }
-                    ctx.fillText(text, x, y);
+                if (dist < limit) {
+                    ctx.fillStyle = "#fff";
+                    ctx.shadowBlur = 20;
+                    ctx.shadowColor = "#00ffcc";
+                    ctx.font = `bold ${fontSize + 4}px monospace`;
+                    drops[i] += speeds[i] * 2.5;
+                } else {
+                    ctx.fillStyle = "rgba(0, 255, 150, 0.15)";
+                    ctx.shadowBlur = 0;
+                    ctx.font = `${fontSize}px monospace`;
+                    drops[i] += speeds[i];
                 }
 
-                if (y > canvas.height && Math.random() > 0.975) {
-                    rainDrops[i] = 0;
+                ctx.fillText(char, x, y);
+
+                if (drops[i] * fontSize > height) {
+                    drops[i] = 0;
+                    speeds[i] = 0.5 + Math.random() * 0.5;
                 }
-                rainDrops[i] += 0.4;
             }
             requestAnimationFrame(draw);
         }
 
         window.addEventListener('resize', init);
         init();
-        draw();
+        requestAnimationFrame(draw);
     </script>
 </body>
 </html>
