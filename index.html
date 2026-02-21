@@ -734,13 +734,13 @@ function startSubTerminal() {
             if (charIndex < currentLineText.length) {
                 currentLineElem.textContent += currentLineText[charIndex];
                 charIndex++;
-                setTimeout(typeEffect, 30); 
+                setTimeout(typeEffect, 100); 
             } else {
                 lineIndex++;
                 charIndex = 0;
                 if (lineIndex < subLines.length) {
                     currentLineElem = createLine();
-                    setTimeout(typeEffect, 40); 
+                    setTimeout(typeEffect, 300); 
                 } else {
                     subContainer.classList.add('pulse-active');
                 }
