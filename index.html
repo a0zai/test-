@@ -331,9 +331,13 @@ body.loaded {
     pointer-events: none;
 }
 .sub-line {
+    .sub-line {
+    text-align: center;
+    width: 100%;
+    display: block;
     opacity: 0;
     transform: translateY(5px);
-    transition: all 0.5s ease;
+    transition: all 0.3s ease;
 }
 .sub-line.visible {
     opacity: 1;
@@ -744,12 +748,12 @@ function startSubTerminal() {
             if (charIndex < currentLineText.length) {
                 currentLineElem.textContent += currentLineText[charIndex];
                 charIndex++;
-                setTimeout(typeEffect, 60); 
+                setTimeout(typeEffect, 120); 
             } else {
                 lineIndex++; charIndex = 0;
                 if (lineIndex < subLines.length) {
                     currentLineElem = createLine();
-                    setTimeout(typeEffect, 150); 
+                    setTimeout(typeEffect, 309); 
                 } else {
                     subContainer.querySelectorAll('.sub-line').forEach(l => l.classList.add('pulse-active'));
                     showMoodButton();
@@ -790,7 +794,7 @@ function startSubTerminal() {
 }
 </script>
 <script>
-window.vantaEffect = VANTA.FOG({ ... });
+window.vantaEffect = VANTA.FOG({
     el: "#vanta-bg",
     mouseControls: true,
     touchControls: true,
