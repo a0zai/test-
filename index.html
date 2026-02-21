@@ -1,86 +1,755 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="nl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RAFAT Ghost Butterfly Engine</title>
-    <style>
-        body { margin: 0; background: #000; overflow: hidden; cursor: crosshair; }
-        canvas { display: block; filter: contrast(120%) brightness(110%); }
-    </style>
+<meta charset="UTF-8">
+<title>A0ZAI</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;700&family=Orbitron:wght@400;700&family=Rajdhani:wght@500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.fog.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+<style>
+:root {
+    --sense-green: #b2f2bb;
+    --sense-blue: #4a9bbf;
+    --sense-red: #9b5050;
+}
+html, body {
+    height: 100%;
+    margin: 0;
+    background: #000;
+    font-family: 'Courier New', monospace;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#vanta-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    opacity: 0.35;
+    filter: saturate(140%) contrast(115%);
+    pointer-events: none;
+}
+#particles-stars {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+}
+#output { 
+    opacity:1;
+    transform: translateY(0);
+    white-space: pre-wrap;
+    z-index:10;
+    font-size: 27px;
+    line-height: 1.5;
+    color: #eaeaea;
+    text-shadow: 0 0 8px rgba(255,255,255,0.7);
+}
+.line {
+    margin-bottom:0.7em;
+    opacity:0;
+    transform: translateY(20px);
+    transition: opacity 2s ease, transform 2s ease;
+}
+.line.visible {
+    opacity:1;
+    transform: translateY(0);
+}
+
+
+.shake {
+    animation: shakeAnim 0.35s ease-in-out;
+}
+@keyframes shakeAnim {
+    0% { transform:translateX(0); }
+    20% { transform:translateX(-4px); }
+    40% { transform:translateX(4px); }
+    60% { transform:translateX(-3px); }
+    80% { transform:translateX(3px); }
+    100% { transform:translateX(0); }
+}
+
+#fade-black {
+    position: fixed;
+    top:0; left:0;
+    width:100%; height:100%;
+    background:#000;
+    pointer-events:none;
+    opacity:0;
+    z-index:999;
+    transition: opacity 3s ease;
+}
+.main-content {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    opacity: 0; 
+    visibility: hidden;
+    transition: opacity 7s ease-out, transform 7s ease-out;
+    transform: translateY(10px); 
+}
+
+.main-content.visible {
+    opacity: 1;
+    visibility: visible;
+    display: flex;
+    transform: translateY(0);
+}
+
+.title {
+    margin-bottom: 30px;
+    font-size: 36px;
+    letter-spacing: 12px;
+    color: #fff;
+    font-weight: 300;
+    text-shadow: 0 0 10px rgba(178,242,187,0.7),
+                 0 0 20px rgba(178,242,187,0.4);
+    transition: 3s ease;
+}
+.scene {
+    perspective: 1448px;
+}
+.clock-container {
+    transform-style: preserve-3d;
+    transform: translateZ(20px);
+    transition:
+       transform 0.15s ease-out,
+       opacity 2s ease-out,
+       filter 2s ease-out;
+    will-change: transform;
+    position: relative;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    border: 1px solid rgba(178, 242, 187, 0.12);
+    box-shadow:
+      0 0 8px rgba(178, 242, 187, 0.06),
+      0 0 16px rgba(178, 242, 187, 0.03);
+    opacity: 0;
+    filter: blur(1px);
+}
+
+.main-content.visible .clock-container {
+    opacity: 1;
+    filter: blur(0);
+}
+
+.clock-container * {
+    opacity: 0;
+    transition: opacity 1.8s ease-out 0.4s;
+}
+
+.main-content.visible .clock-container * {
+    opacity: 1;
+}
+.glass-cover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: none; 
+    pointer-events: none;
+    transform: translateZ(30px);
+}
+.clock-container::after {
+    content: 'SEE ƧƎƎ';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+    letter-spacing: 3px;
+    color: #000;
+    text-shadow: 0 0 7px #00ff88;
+}
+.brand-name {
+    position: absolute;
+    top: 63%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--sense-green);
+    font-size: 9px;
+    letter-spacing: 7px;
+    opacity: 0.6;
+    text-transform: uppercase;
+}
+.center-dot {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 3px;
+    height: 4px;
+    background: var(--sense-green);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    animation: pulse 2.027s ease-in-out infinite;
+    box-shadow: 0 0 14px rgba(50,100,60,0.7);
+    z-index: 10;
+}
+@keyframes pulse {
+    0%,100% { transform: translate(-50%, -50%) scale(1); opacity: 0.9; }
+    50% { transform: translate(-50%, -50%) scale(1.7); opacity: 0.4; }
+}
+.number {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    font-size: 22px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bold;
+    padding: 20px;
+    box-sizing: border-box;
+    color: #eaeaea;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.8), 0 0 5px rgba(142, 109, 19, 0.3);
+}
+.n1  { transform: rotate(0deg); }    .n1 div  { transform: rotate(0deg); }
+.n2  { transform: rotate(30deg); }   .n2 div  { transform: rotate(-30deg); }
+.n3  { transform: rotate(60deg); }   .n3 div  { transform: rotate(-60deg); }
+.n4  { transform: rotate(90deg); }   .n4 div  { transform: rotate(-90deg); }
+.n5  { transform: rotate(120deg); }  .n5 div  { transform: rotate(-120deg); }
+.n6  { transform: rotate(150deg); }  .n6 div  { transform: rotate(-150deg); }
+.n7  { transform: rotate(180deg); }  .n7 div  { transform: rotate(-180deg); }
+.n8  { transform: rotate(210deg); }  .n8 div  { transform: rotate(-210deg); }
+.n9  { transform: rotate(240deg); }  .n9 div  { transform: rotate(-240deg); }
+.n10 { transform: rotate(270deg); }  .n10 div { transform: rotate(-270deg); }
+.n11 { transform: rotate(300deg); }  .n11 div { transform: rotate(-300deg); }
+.n12 { transform: rotate(330deg); }  .n12 div { transform: rotate(-330deg); }
+.hand {
+    position: absolute;
+    bottom: 50%;
+    left: 50%;
+    transform-origin: bottom;
+    border-radius: 10px;
+    transform: translateZ(20px);
+}
+.n1 {
+    position: absolute;
+    bottom: 100%; 
+    left: 50%;
+    transform: translateX(-50%) rotate(0deg); 
+    font-size: 22px;
+    color: #f1f5f9;
+    white-space: nowrap;
+    transition: opacity 0.3s ease;
+}
+.hour {
+    width: 4px;
+    height: 90px;
+    background: #a5a5a5;
+    box-shadow: 0 0 12px rgba(212, 175, 55, 0.5); 
+}
+.minute {
+    width: 3.5px;
+    height: 103px;
+    background: #4a9bbf;
+    box-shadow: 0 0 11px rgba(74, 155, 191, 0.6); 
+}
+.second {
+    width: 2.5px;
+    height: 117px;
+    background: #cd7f32;
+    box-shadow: 0 0 15px rgba(205, 127, 50, 0.6);
+}
+
+.tagline {
+    margin-top: 33px;      
+    color: #ffffff;            
+    opacity: 0.85;         
+    font-size: 14px;        
+    letter-spacing: 2px;   
+    text-align: center;    
+    width: 100%;        
+}
+@media (max-width:600px){
+    .clock-container { width:260px; height:260px; }
+    .title { font-size:24px; letter-spacing:8px; }
+    .number { font-size:16px; }
+}
+body {
+    opacity: 0;
+    transition: opacity 3s ease-in;
+}
+body.loaded {
+    opacity: 1;
+}
+
+.horizon-line {
+    width: 6px;
+    height: 300px; 
+    background: linear-gradient(180deg, var(--sense-green) 0%, transparent 100%);
+    box-shadow: 0 0 30px var(--sense-green);
+    margin: 40px auto;
+    opacity: 0.8;
+    border-radius: 100px;
+    position: relative;
+}
+
+.pulse-point {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;  
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
+    cursor: grab;
+    z-index: 10000;
+    touch-action: none;
+    user-select: none;
+    filter: drop-shadow(0 0 10px var(--sense-green));
+    transition: transform 0.2s ease;
+}
+
+.pulse-point::after {
+    content: '🦋';
+}
+
+.pulse-point:active {
+    transform: translateX(-50%) scale(1.3); 
+}
+
+#matrix-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 9999999;
+    display: none;
+    pointer-events: none;
+}
+
+</style>
 </head>
 <body>
+<div id="vanta-bg"></div> 
+<div id="particles-stars"></div>
+<div id="output"></div>
+<div id="fade-black"></div>
+<div class="main-content">
+    <div class="scene">
+    <div class="clock-container">
+        <div class="glass-cover"></div>
+        <div class="brand-name">🦋</div>
+        <div class="center-dot"></div>
+        <div class="number n2"><div>12</div></div>
+        <div class="number n3"><div>11</div></div>
+        <div class="number n4"><div>10</div></div>
+        <div class="number n5"><div>9</div></div>
+        <div class="number n6"><div>8</div></div>
+        <div class="number n7"><div>Ƶ</div></div>
+        <div class="number n8"><div>6</div></div>
+        <div class="number n9"><div>5</div></div>
+        <div class="number n10"><div>4</div></div>
+        <div class="number n11"><div>3</div></div>
+        <div class="number n12"><div>2</div></div>
+        <div class="hand hour" id="hour">
+        <div class="n1">()</div>
+        </div>
+        <div class="hand minute" id="minute"></div>
+        <div class="hand second" id="second"></div>
+    </div>
+    <div class="tagline">Son when you see SEENSEE, you see the sun</div>
+    </div>
+    <audio id="sense-sound" src="seensee.mp3" preload="auto"></audio>
+<div class="horizon-line" style="z-index: 9999;">
+ <div id="drag-point" class="pulse-point"></div>
+</div>
     <canvas id="matrix-canvas"></canvas>
-    <script>
-        const canvas = document.getElementById('matrix-canvas');
-        const ctx = canvas.getContext('2d');
+<script>
+function typeLine(text, callback) {
+    const container = document.getElementById("output");
+    const line = document.createElement("div");
+    line.className = "line";
+    container.appendChild(line);
 
-        let width, height, columns;
-        const fontSize = 16;
-        let drops = [];
-        let speeds = [];
+    setTimeout(() => line.classList.add('visible'), 50);
 
-        function init() {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
-            columns = Math.floor(width / fontSize);
-            drops = Array(columns).fill(1).map(() => Math.random() * -100);
-            speeds = Array(columns).fill(1).map(() => 0.5 + Math.random() * 0.5);
+    let i = 0;
+    function type() {
+        if(i < text.length){
+            line.textContent += text[i];
+            i++;
+            const jitter = Math.random() * 80;
+            setTimeout(type, 114 + jitter);
+        } else {
+            if(callback) setTimeout(callback, 200);
         }
+    }
+    type();
+}
 
-        const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789アァカサタナハマヤャラワガザダバパイィキシチニヒミ";
+function glitchFx() {
+    const out = document.getElementById("output");
+    const g = document.createElement("div");
+    g.className = "line glitch";
+    g.textContent = "!! SIGNAL DISTORTION DETECTED !!";
+    out.appendChild(g);
+    setTimeout(() => g.remove(), 500);
+}
 
-        function getButterflyScale(t) {
-            return (Math.exp(Math.sin(t)) - 2 * Math.cos(4 * t) + Math.pow(Math.sin((2 * t - Math.PI) / 24), 5));
+function runSequence(lines, index = 0) {
+    if (index >= lines.length) {
+        const terminalOutput = document.getElementById("output");
+        const mainContent = document.querySelector(".main-content");
+        
+        terminalOutput.style.transition = "opacity 2s ease";
+        terminalOutput.style.opacity = "0";
+
+        setTimeout(() => {
+            terminalOutput.style.display = "none";
+            mainContent.classList.add("visible");
+            console.log("Interface Synchronized.");
+        }, 2000);
+
+        return;
+    }
+
+    typeLine(lines[index], () => {
+        if (Math.random() < 0.22) glitchFx();
+        if (lines[index].includes("FAILED") || lines[index].includes("Unknown")) {
+            const last = document.querySelector(".line:last-child");
+            last.classList.add("shake");
         }
+        runSequence(lines, index + 1);
+    });
+}
 
-        function draw(time) {
-            ctx.fillStyle = "rgba(0, 0, 0, 0.15)";
-            ctx.fillRect(0, 0, width, height);
+fetch("https://api.ipify.org?format=json")
+  .then(r => r.json())
+  .then(data => {
+      const lines = [
+        "It started on a night that shouldn’t have carried any echoes…",
+        "A message that had been trying to arrive for 12 years,",
+        "",
+        "Tonight…",
+        "",
+        ">>> Decrypting frozen message.3301.",
+        "Sender: Only Brother",
+        "To: Mamy",
+        "",
+        "“Mamy…",
+        "Why didn’t you answer my calls…?”",
+        "",
+        "Opa hasn’t woken up.",
+        "Before he slept he said:",
+        "   ‘Son, My old watch is now yours.’",
+        "",
+        "Message Age: 12 years",
+        "Delivery Status: FAILED",
+        "Reason: No recipient detected.",
+        "-----",
+        "Connection unstable...",
+        "Why? Continue? Let's see~>N...."
+      ];
+      runSequence(lines);
+  })
+  .catch(() => {
+      runSequence([
+          "[ A∞Z / FAILURE ]",
+          "Metadata retrieval failed...",
+          "But something recognized you anyway.",
+          "",
+          "Closing connection..."
+      ]);
+  });
+</script>
+<script>
+const hour = document.getElementById('hour');
+const n1 = hour.querySelector('.n1');
+const numbersToHide = [
+  {id:'n2', angle:330}, // 12
+  {id:'n3', angle:300}, // 11
+  {id:'n10', angle:90}, // 4
+  {id:'n11', angle:60}, // 3
+  {id:'n12', angle:30}  // 2
+];
+function updateClock() {
+    const now = new Date();
+    const ms = now.getMilliseconds();
+    const s = now.getSeconds() + ms / 1000;
+    const m = now.getMinutes() + s / 60;
+    const h = (now.getHours() % 12) + m / 60;
+    hour.style.transform = `translateX(-50%) rotate(${-h*30 + 30}deg)`;
+    n1.style.transform = `translateX(-50%) rotate(${h*30 - 30}deg)`;
+    second.style.transform = `translateX(-50%) rotate(${-s*6 + 0}deg)`;
+    minute.style.transform = `translateX(-50%) rotate(${-m*6 + 0}deg)`;
+let displayHour = Math.floor(h);
+if (displayHour === 0) displayHour = 12;
+n1.innerText = displayHour;
+if (displayHour === 1) {
+    n1.style.fontWeight = '400';
+    n1.style.letterSpacing = '2px';
+    n1.style.fontSize = '18px';
+} else {
+    n1.style.fontWeight = 'bold';
+    n1.style.letterSpacing = 'normal';
+}
+n1.style.opacity = (displayHour >= 10 || displayHour <= 4) ? 1 : 0;
+numbersToHide.forEach((n, i, arr) => {
+    const elem = document.querySelector(`.${n.id}`);
+    const prevIndex = (i === 0) ? arr.length - 1 : i - 1;
+    const prev = arr[prevIndex];
+    let angleHand = h * 30;
+    let diff = Math.abs((angleHand - prev.angle + 360) % 360);
+    if(diff < 15 || diff > 345) elem.style.opacity = 0;
+    else elem.style.opacity = 1;
+});
+   requestAnimationFrame(updateClock);
+}
+updateClock();
+const dragPoint = document.getElementById('drag-point');
+const audio = document.getElementById('sense-sound');
 
-            const t = time * 0.001;
-            const cx = width / 2;
-            const cy = height / 2;
-            const bScale = Math.min(width, height) / 10;
+let isDragging = false;
+let startY = 0;
+let audioUnlocked = false;
 
-            for (let i = 0; i < drops.length; i++) {
-                const x = i * fontSize;
-                const y = drops[i] * fontSize;
-                const char = alphabet[Math.floor(Math.random() * alphabet.length)];
+function unlockAudioOnce() {
+    if (audioUnlocked) return;
+    audio.muted = true;
+    audio.play().then(() => {
+        audio.pause();
+        audio.currentTime = 0;
+        audio.muted = false;
+        audioUnlocked = true;
+        console.log("Audio unlocked ✅");
+    }).catch(err => {
+        console.log("Unlock failed ❌", err);
+    });
+}
 
-                const dx = (x - cx) / bScale;
-                const dy = (y - cy) / bScale;
-                
-                const angle = Math.atan2(dx, -dy);
-                const dist = Math.sqrt(dx * dx + dy * dy);
-                const limit = getButterflyScale(angle + Math.sin(t) * 0.2);
+document.querySelector('.brand-name').style.animation = "pulse 2s infinite";
+dragPoint.style.filter = "drop-shadow(0 0 50px #fff) brightness(200%)";
+dragPoint.addEventListener('touchstart', unlockAudioOnce, { once: true });
+dragPoint.addEventListener('mousedown', unlockAudioOnce, { once: true });
+dragPoint.addEventListener('mousedown', (e) => startDrag(e.clientY));
+dragPoint.addEventListener('touchstart', (e) => startDrag(e.touches[0].clientY));
+function startDrag(y) {
+    isDragging = true;
+    startY = y;
+    dragPoint.style.transition = 'none';
+}
 
-                if (dist < limit) {
-                    ctx.fillStyle = "#fff";
-                    ctx.shadowBlur = 20;
-                    ctx.shadowColor = "#00ffcc";
-                    ctx.font = `bold ${fontSize + 4}px monospace`;
-                    drops[i] += speeds[i] * 2.5;
-                } else {
-                    ctx.fillStyle = "rgba(0, 255, 150, 0.15)";
-                    ctx.shadowBlur = 0;
-                    ctx.font = `${fontSize}px monospace`;
-                    drops[i] += speeds[i];
-                }
+window.addEventListener('mousemove', (e) => drag(e.clientY));
+window.addEventListener('touchmove', (e) => drag(e.touches[0].clientY));
+function drag(y) {
+    if (!isDragging) return;
+    let diffY = startY - y;
+    if (diffY >= 0 && diffY <= 320) {
+        dragPoint.style.bottom = diffY + 'px';
+    }
+}
 
-                ctx.fillText(char, x, y);
+window.addEventListener('mouseup', endDrag);
+window.addEventListener('touchend', endDrag);
+function endDrag() {
+    if (!isDragging) return;
+    isDragging = false;
+    let finalPos = parseInt(dragPoint.style.bottom) || 0;
 
-                if (drops[i] * fontSize > height) {
-                    drops[i] = 0;
-                    speeds[i] = 0.5 + Math.random() * 0.5;
-                }
+    if (finalPos > 280) {
+        audio.currentTime = 0;
+        audio.play().catch(err => console.log(err));
+
+        document.querySelector('.horizon-line').style.transition = 'opacity 1s';
+        document.querySelector('.horizon-line').style.opacity = '0';
+        document.querySelector('.horizon-line').style.pointerEvents = 'none';
+        document.getElementById('vanta-bg').style.transition = 'opacity 2s';
+        document.getElementById('vanta-bg').style.opacity = '0.15';
+
+        startMatrix();
+    } else {
+        dragPoint.style.transition = 'bottom 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+        dragPoint.style.bottom = '0';
+    }
+}
+
+let matrixRunning = false;
+let matrixRAFAT = null;
+
+function startMatrix() {
+    if (matrixRunning) return; 
+    matrixRunning = true;
+
+    const canvas = document.getElementById('matrix-canvas');
+    const ctx = canvas.getContext('2d');
+
+    canvas.style.display = 'block';
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const alphabet = "Aアァカサタナハマヤャラワガザダバパイィキシチニヒミ01236963210Z";
+    const fontSize = window.innerWidth < 600 ? 20 : 16;
+    const columns = Math.floor(canvas.width / fontSize);
+    
+    const rainDrops = [];
+    const velocities = [];
+    for (let x = 0; x < columns; x++) {
+        rainDrops[x] = -Math.random() * 50;
+        velocities[x] = 0.5 + Math.random() * 0.5; 
+    }
+
+    let lastTime = 0;
+    const fps = 30; 
+
+    function draw(timestamp) {
+        if (timestamp - lastTime < 1000 / fps) {
+            matrixRAFAT = requestAnimationFrame(draw);
+            return;
+        }
+        lastTime = timestamp;
+
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.globalCompositeOperation = 'source-over';
+        
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+
+        for (let i = 0; i < rainDrops.length; i++) {
+            const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+            const x = i * fontSize;
+            const y = rainDrops[i] * fontSize;
+
+            const dx = (x - centerX) / (canvas.width * 0.15);
+            const dy = (y - centerY) / (canvas.height * 0.25);
+            const isButterfly = Math.pow(dx*dx + dy*dy - 1, 3) - dx*dx*dy*dy*dy < 0;
+
+            if (isButterfly) {
+                ctx.fillStyle = '#00ff66';
+                ctx.shadowBlur = 15;
+                ctx.shadowColor = '#00ff66';
+            } else {
+                ctx.fillStyle = 'rgba(0, 255, 102, 0.08)';
+                ctx.shadowBlur = 0;
             }
-            requestAnimationFrame(draw);
-        }
 
-        window.addEventListener('resize', init);
-        init();
-        requestAnimationFrame(draw);
-    </script>
+            ctx.font = fontSize + 'px monospace';
+            ctx.fillText(text, x, y);
+
+            if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.98) {
+                rainDrops[i] = -2;
+                velocities[i] = 0.5 + Math.random() * 0.5;
+            }
+            
+            rainDrops[i] += velocities[i];
+            velocities[i] += 0.015; 
+        }
+        matrixRAFAT = requestAnimationFrame(draw);
+    }
+
+    window.addEventListener('resize', () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    });
+
+    matrixRAFAT = requestAnimationFrame(draw);
+}
+</script>
+<script>
+VANTA.FOG({
+    el: "#vanta-bg",
+    mouseControls: true,
+    touchControls: true,
+    gyroControls: false,
+    minHeight: 200.0,
+    minWidth: 200.0,
+    highlightColor: 0x33ff33,
+    midtoneColor: 0x0b330b,
+    lowlightColor: 0x0b132b,
+    baseColor: 0x001100,
+    blurFactor: 0.11,
+    speed: 0.2,
+    zoom: 0.8
+});
+particlesJS("particles-stars", {
+    particles: {
+        number: { value: 24, density: { enable: true, value_area: 800 } },
+        color: { value: "#ffffff" },
+        opacity: { 
+            value: 0.6, 
+            random: true,
+            anim: { enable: true, speed: 1.4, opacity_min: 0.2, sync: false }
+        },
+        size: { 
+            value: 3, 
+            random: true,
+            anim: { enable: true, speed: 1, size_min: 0.1, sync: false }
+        },
+        move: { enable: true, speed: 0.2, direction: "left", random: true },
+        line_linked: { enable: false }
+    },
+    retina_detect: true
+});
+</script>
+<script>
+window.addEventListener('load', () => {
+    document.body.classList.add('loaded');
+});
+</script>
+<script>
+const clock = document.querySelector('.clock-container');
+const scene = document.querySelector('.scene');
+let currentX = 0;
+let currentY = 0;
+let targetX = 0;
+let targetY = 0;
+scene.addEventListener('mousemove', (e) => {
+    const rect = scene.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    targetY = (x - centerX) / centerX * 5; 
+    targetX = -(y - centerY) / centerY * 6; 
+});
+scene.addEventListener('mouseleave', () => {
+    targetX = 0;
+    targetY = 0;
+});
+function animate3D() {
+    currentX += (targetX - currentX) * 0.17;
+    currentY += (targetY - currentY) * 0.18;
+
+    clock.style.transform = `
+        rotateX(${currentX}deg)
+        rotateY(${currentY}deg)
+    `;
+clock.style.filter = `
+    drop-shadow(${currentY}px ${currentX*2}px 60px rgba(0,0,0,0.6))
+`;
+    requestAnimationFrame(animate3D);
+}
+animate3D();
+let touchX = 0;
+let touchY = 0;
+scene.addEventListener('touchstart', e => {
+    const t = e.touches[0];
+    touchX = t.clientX;
+    touchY = t.clientY;
+});
+scene.addEventListener('touchmove', e => {
+    const t = e.touches[0];
+    const dx = t.clientX - touchX;
+    const dy = t.clientY - touchY;
+    targetY = dx * 0.45;
+    targetX = -dy * 0.45;
+});
+</script>
 </body>
 </html>
