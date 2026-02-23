@@ -18,8 +18,6 @@
 +                      0               
 +                      |               
 +                      •               
-<p align="center">
-     <img src="https://github.com/a0zai.png" width="200" style="border-radius: 50%; box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.3);">
 
 With sovereign reflection,
 # <div align="center"> 🟢 000 — A0Z — 000 🟢 </div>
