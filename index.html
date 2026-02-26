@@ -12,6 +12,7 @@
     --sense-green: #b2f2bb;
     --sense-blue: #4a9bbf;
     --sense-red: #9b5050;
+    --mood-color: #b2f2bb;
 }
 html, body {
     height: 100%;
@@ -39,38 +40,34 @@ html, body {
     z-index: 0;
     pointer-events: none;
 }
-#output { 
-    opacity:1;
-    transform: translateY(0);
-    white-space: pre-wrap;
-    z-index:10;
-    font-size: 27px;
-    line-height: 1.5;
-    color: #eaeaea;
-    text-shadow: 0 0 8px rgba(255,255,255,0.7);
-}
-.line {
-    margin-bottom:0.7em;
-    opacity:0;
-    transform: translateY(20px);
-    transition: opacity 2s ease, transform 2s ease;
-}
-.line.visible {
-    opacity:1;
-    transform: translateY(0);
-}
 
-
-.shake {
-    animation: shakeAnim 0.35s ease-in-out;
+/* تصميم بوابة الصفر الجديدة */
+#portal-trigger {
+    position: fixed;
+    z-index: 1000;
+    cursor: pointer;
+    transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
 }
-@keyframes shakeAnim {
-    0% { transform:translateX(0); }
-    20% { transform:translateX(-4px); }
-    40% { transform:translateX(4px); }
-    60% { transform:translateX(-3px); }
-    80% { transform:translateX(3px); }
-    100% { transform:translateX(0); }
+.zero-btn {
+    font-size: 120px;
+    font-family: 'Orbitron', sans-serif;
+    color: var(--sense-green);
+    text-shadow: 0 0 25px var(--sense-green);
+    background: none;
+    border: none;
+    cursor: pointer;
+    opacity: 0.8;
+    transition: 0.5s ease;
+}
+.zero-btn:hover {
+    opacity: 1;
+    transform: scale(1.1);
+    text-shadow: 0 0 50px var(--sense-green), 0 0 80px var(--sense-green);
+}
+.portal-hidden {
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(0.2) rotate(360deg);
 }
 
 #fade-black {
@@ -86,79 +83,33 @@ html, body {
 .main-content {
     position: relative;
     z-index: 10;
-    display: flex;
+    display: none; 
     flex-direction: column;
     align-items: center;
     opacity: 0; 
-    visibility: hidden;
-    transition: opacity 7s ease-out, transform 7s ease-out;
-    transform: translateY(10px); 
+    transition: opacity 3s ease-out, transform 3s ease-out;
 }
 
 .main-content.visible {
-    opacity: 1;
-    visibility: visible;
     display: flex;
-    transform: translateY(0);
+    opacity: 1;
 }
 
-.title {
-    margin-bottom: 30px;
-    font-size: 36px;
-    letter-spacing: 12px;
-    color: #fff;
-    font-weight: 300;
-    text-shadow: 0 0 10px rgba(178,242,187,0.7),
-                 0 0 20px rgba(178,242,187,0.4);
-    transition: 3s ease;
-}
 .scene {
     perspective: 1448px;
 }
 .clock-container {
     transform-style: preserve-3d;
     transform: translateZ(20px);
-    transition:
-       transform 0.15s ease-out,
-       opacity 2s ease-out,
-       filter 2s ease-out;
-    will-change: transform;
+    transition: transform 0.15s ease-out;
     position: relative;
     width: 400px;
     height: 400px;
     border-radius: 50%;
     border: 1px solid rgba(178, 242, 187, 0.12);
-    box-shadow:
-      0 0 8px rgba(178, 242, 187, 0.06),
-      0 0 16px rgba(178, 242, 187, 0.03);
-    opacity: 0;
-    filter: blur(1px);
+    box-shadow: 0 0 8px rgba(178, 242, 187, 0.06);
 }
 
-.main-content.visible .clock-container {
-    opacity: 1;
-    filter: blur(0);
-}
-
-.clock-container * {
-    opacity: 0;
-    transition: opacity 1.8s ease-out 0.4s;
-}
-
-.main-content.visible .clock-container * {
-    opacity: 1;
-}
-.glass-cover {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    background: none; 
-    pointer-events: none;
-    transform: translateZ(30px);
-}
 .clock-container::after {
     content: 'SEE ƧƎƎ';
     position: absolute;
@@ -170,6 +121,7 @@ html, body {
     color: #000;
     text-shadow: 0 0 7px #00ff88;
 }
+
 .brand-name {
     position: absolute;
     top: 63%;
@@ -181,6 +133,7 @@ html, body {
     opacity: 0.6;
     text-transform: uppercase;
 }
+
 .center-dot {
     position: absolute;
     top: 50%;
@@ -191,13 +144,14 @@ html, body {
     border-radius: 50%;
     transform: translate(-50%, -50%);
     animation: pulse 2.027s ease-in-out infinite;
-    box-shadow: 0 0 14px rgba(50,100,60,0.7);
     z-index: 10;
 }
+
 @keyframes pulse {
     0%,100% { transform: translate(-50%, -50%) scale(1); opacity: 0.9; }
     50% { transform: translate(-50%, -50%) scale(1.7); opacity: 0.4; }
 }
+
 .number {
     position: absolute;
     width: 100%;
@@ -209,9 +163,9 @@ html, body {
     padding: 20px;
     box-sizing: border-box;
     color: #eaeaea;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.8), 0 0 5px rgba(142, 109, 19, 0.3);
 }
-.n1  { transform: rotate(0deg); }    .n1 div  { transform: rotate(0deg); }
+
+.n1  { transform: rotate(0deg); }
 .n2  { transform: rotate(30deg); }   .n2 div  { transform: rotate(-30deg); }
 .n3  { transform: rotate(60deg); }   .n3 div  { transform: rotate(-60deg); }
 .n4  { transform: rotate(90deg); }   .n4 div  { transform: rotate(-90deg); }
@@ -223,14 +177,15 @@ html, body {
 .n10 { transform: rotate(270deg); }  .n10 div { transform: rotate(-270deg); }
 .n11 { transform: rotate(300deg); }  .n11 div { transform: rotate(-300deg); }
 .n12 { transform: rotate(330deg); }  .n12 div { transform: rotate(-330deg); }
+
 .hand {
     position: absolute;
     bottom: 50%;
     left: 50%;
     transform-origin: bottom;
     border-radius: 10px;
-    transform: translateZ(20px);
 }
+
 .n1 {
     position: absolute;
     bottom: 100%; 
@@ -238,27 +193,11 @@ html, body {
     transform: translateX(-50%) rotate(0deg); 
     font-size: 22px;
     color: #f1f5f9;
-    white-space: nowrap;
-    transition: opacity 0.3s ease;
 }
-.hour {
-    width: 4px;
-    height: 90px;
-    background: #a5a5a5;
-    box-shadow: 0 0 12px rgba(212, 175, 55, 0.5); 
-}
-.minute {
-    width: 3.5px;
-    height: 103px;
-    background: #4a9bbf;
-    box-shadow: 0 0 11px rgba(74, 155, 191, 0.6); 
-}
-.second {
-    width: 2.5px;
-    height: 117px;
-    background: #cd7f32;
-    box-shadow: 0 0 15px rgba(205, 127, 50, 0.6);
-}
+
+.hour { width: 4px; height: 90px; background: #a5a5a5; }
+.minute { width: 3.5px; height: 103px; background: #4a9bbf; }
+.second { width: 2.5px; height: 117px; background: #cd7f32; }
 
 .tagline {
     margin-top: 33px;      
@@ -267,19 +206,6 @@ html, body {
     font-size: 14px;        
     letter-spacing: 2px;   
     text-align: center;    
-    width: 100%;        
-}
-@media (max-width:600px){
-    .clock-container { width:260px; height:260px; }
-    .title { font-size:24px; letter-spacing:8px; }
-    .number { font-size:16px; }
-}
-body {
-    opacity: 0;
-    transition: opacity 3s ease-in;
-}
-body.loaded {
-    opacity: 1;
 }
 
 .horizon-line {
@@ -291,6 +217,7 @@ body.loaded {
     opacity: 0.8;
     border-radius: 100px;
     position: relative;
+    display: none; 
 }
 
 .pulse-point {
@@ -298,569 +225,227 @@ body.loaded {
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 40px;  
-    height: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 30px;
-    cursor: grab;
-    z-index: 10000;
-    touch-action: none;
-    user-select: none;
-    filter: drop-shadow(0 0 10px var(--sense-green));
-    transition: transform 0.2s ease;
+    width: 40px; height: 40px;
+    display: flex; justify-content: center; align-items: center;
+    font-size: 30px; cursor: grab; z-index: 10000;
 }
-
-.pulse-point::after {
-    content: '🦋';
-}
-
-.pulse-point:active {
-    transform: translateX(-50%) scale(1.3); 
-}
+.pulse-point::after { content: '🦋'; }
 
 #matrix-canvas {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
     z-index: 9999999;
     display: none;
     pointer-events: none;
-    object-fit: cover;
 }
-.sub-line {
-    text-align: center;
-    width: 100%;
-    display: block;
-    opacity: 0;
-    transform: translateY(5px);
-    transition: all 0.3s ease;
+
+/* ستايل المود والماتريكس بعد التفعيل */
+.sub-line { opacity: 0; transition: opacity 1s ease-in; color: var(--mood-color) !important; text-shadow: 0 0 12px var(--mood-color) !important; font-family:'Courier New',monospace; white-space:pre; font-size:16px; line-height:1.2; text-align:center; font-weight:bold; }
+.sub-line.show { opacity: 1; }
+@keyframes flap { 0%, 100% { transform: rotateY(0deg); } 50% { transform: rotateY(20deg); } }
+.pulse-active { animation: flap 0.8s ease-in-out infinite; }
+#mood-btn {
+    margin: 25px auto; padding: 12px 25px;
+    background: rgba(0,0,0,0.5); border: 1px solid var(--mood-color);
+    color: var(--mood-color); font-family: 'Orbitron', sans-serif;
+    font-size: 11px; letter-spacing: 3px; cursor: pointer;
+    opacity: 0; transition: all 0.6s ease; text-transform: uppercase;
 }
-.sub-line.visible {
-    opacity: 1;
-    transform: translateY(0);
+#mood-btn.visible { opacity: 1; }
+
+@media (max-width:600px){
+    .clock-container { width:260px; height:260px; }
+    .zero-btn { font-size: 80px; }
 }
 </style>
 </head>
 <body>
+
 <div id="vanta-bg"></div> 
 <div id="particles-stars"></div>
-<div id="output"></div>
+
+<div id="portal-trigger">
+    <button class="zero-btn">0</button>
+</div>
+
 <div id="fade-black"></div>
+
 <div class="main-content">
     <div class="scene">
-    <div class="clock-container">
-        <div class="glass-cover"></div>
-        <div class="brand-name">🦋</div>
-        <div class="center-dot"></div>
-        <div class="number n2"><div>12</div></div>
-        <div class="number n3"><div>11</div></div>
-        <div class="number n4"><div>10</div></div>
-        <div class="number n5"><div>9</div></div>
-        <div class="number n6"><div>8</div></div>
-        <div class="number n7"><div>Ƶ</div></div>
-        <div class="number n8"><div>6</div></div>
-        <div class="number n9"><div>5</div></div>
-        <div class="number n10"><div>4</div></div>
-        <div class="number n11"><div>3</div></div>
-        <div class="number n12"><div>2</div></div>
-        <div class="hand hour" id="hour">
-        <div class="n1">()</div>
+        <div class="clock-container">
+            <div class="brand-name">🦋</div>
+            <div class="center-dot"></div>
+            <div class="number n2"><div>12</div></div>
+            <div class="number n3"><div>11</div></div>
+            <div class="number n4"><div>10</div></div>
+            <div class="number n5"><div>9</div></div>
+            <div class="number n6"><div>8</div></div>
+            <div class="number n7"><div>Ƶ</div></div>
+            <div class="number n8"><div>6</div></div>
+            <div class="number n9"><div>5</div></div>
+            <div class="number n10"><div>4</div></div>
+            <div class="number n11"><div>3</div></div>
+            <div class="number n12"><div>2</div></div>
+            <div class="hand hour" id="hour">
+                <div class="n1">()</div>
+            </div>
+            <div class="hand minute" id="minute"></div>
+            <div class="hand second" id="second"></div>
         </div>
-        <div class="hand minute" id="minute"></div>
-        <div class="hand second" id="second"></div>
+        <div class="tagline">Son when you see SEENSEE, you see the sun</div>
+        <div id="sub-terminal" style="margin-top: 20px; font-size: 14px; color: var(--sense-green); min-height: 50px; text-align: center; line-height: 1.4;"></div>
     </div>
-    <div class="tagline">Son when you see SEENSEE, you see the sun</div>
-<div id="sub-terminal" style="margin-top: 20px; font-size: 14px; color: var(--sense-green); text-shadow: 0 0 5px var(--sense-green); opacity: 0.8; min-height: 50px; text-align: center; max-width: 80%; line-height: 1.4;"></div>
+    <div class="horizon-line" style="z-index: 9999;">
+        <div id="drag-point" class="pulse-point"></div>
     </div>
-    <audio id="sense-sound" src="seensee.mp3" preload="auto"></audio>
-<div class="horizon-line" style="z-index: 9999;">
- <div id="drag-point" class="pulse-point"></div>
 </div>
-    <canvas id="matrix-canvas"></canvas>
+<audio id="sense-sound" src="seensee.mp3" preload="auto"></audio>
+<canvas id="matrix-canvas"></canvas>
+
 <script>
-function typeLine(text, callback) {
-    const container = document.getElementById("output");
-    const line = document.createElement("div");
-    line.className = "line";
-    container.appendChild(line);
+const portal = document.getElementById('portal-trigger');
+const content = document.querySelector('.main-content');
+const horizon = document.querySelector('.horizon-line');
 
-    setTimeout(() => line.classList.add('visible'), 50);
-
-    let i = 0;
-    function type() {
-        if(i < text.length){
-            line.textContent += text[i];
-            i++;
-            const jitter = Math.random() * 80;
-            setTimeout(type, 114 + jitter);
-        } else {
-            if(callback) setTimeout(callback, 200);
-        }
-    }
-    type();
-}
-
-function glitchFx() {
-    const out = document.getElementById("output");
-    const g = document.createElement("div");
-    g.className = "line glitch";
-    g.textContent = "!! SIGNAL DISTORTION DETECTED !!";
-    out.appendChild(g);
-    setTimeout(() => g.remove(), 500);
-}
-
-function runSequence(lines, index = 0) {
-    if (index >= lines.length) {
-        const terminalOutput = document.getElementById("output");
-        const mainContent = document.querySelector(".main-content");
-        
-        terminalOutput.style.transition = "opacity 2s ease";
-        terminalOutput.style.opacity = "0";
-
+portal.addEventListener('click', () => {
+    portal.classList.add('portal-hidden');
+    setTimeout(() => {
+        portal.style.display = 'none';
+        content.style.display = 'flex';
         setTimeout(() => {
-            terminalOutput.style.display = "none";
-            mainContent.classList.add("visible");
-            console.log("Interface Synchronized.");
-        }, 2000);
+            content.classList.add('visible');
+            horizon.style.display = 'block';
+        }, 100);
+    }, 1000);
+});
 
-        return;
-    }
+// منطق الساعة الأصلي (بدون أي تغيير في الحركة)
+const hourHand = document.getElementById('hour');
+const n1 = hourHand.querySelector('.n1');
+const secondHand = document.getElementById('second');
+const minuteHand = document.getElementById('minute');
 
-    typeLine(lines[index], () => {
-        if (Math.random() < 0.22) glitchFx();
-        if (lines[index].includes("FAILED") || lines[index].includes("Unknown")) {
-            const last = document.querySelector(".line:last-child");
-            last.classList.add("shake");
-        }
-        runSequence(lines, index + 1);
-    });
-}
-
-fetch("https://api.ipify.org?format=json")
-  .then(r => r.json())
-  .then(data => {
-      const lines = [
-        "It started on a night that shouldn’t have carried any echoes…",
-        "A message that had been trying to arrive for 12 years,",
-        "",
-        "Tonight…",
-        "",
-        ">>> Decrypting frozen message.3301.",
-        "Sender: Only Brother",
-        "To: Mamy",
-        "",
-        "“Mamy…",
-        "Why didn’t you answer my calls…?”",
-        "",
-        "Opa hasn’t woken up.",
-        "Before he slept he said:",
-        "   ‘Son, My old watch is now yours.’",
-        "",
-        "Message Age: 12 years",
-        "Delivery Status: FAILED",
-        "Reason: No recipient detected.",
-        "-----",
-        "Connection unstable...",
-        "Why? Continue? Let's see~>N...."
-      ];
-      runSequence(lines);
-  })
-  .catch(() => {
-      runSequence([
-          "[ A∞Z / FAILURE ]",
-          "Metadata retrieval failed...",
-          "But something recognized you anyway.",
-          "",
-          "Closing connection..."
-      ]);
-  });
-</script>
-<script>
-const hour = document.getElementById('hour');
-const n1 = hour.querySelector('.n1');
 const numbersToHide = [
-  {id:'n2', angle:330}, // 12
-  {id:'n3', angle:300}, // 11
-  {id:'n10', angle:90}, // 4
-  {id:'n11', angle:60}, // 3
-  {id:'n12', angle:30}  // 2
+    {id:'n2', angle:330}, {id:'n3', angle:300}, 
+    {id:'n10', angle:90}, {id:'n11', angle:60}, {id:'n12', angle:30}
 ];
+
 function updateClock() {
     const now = new Date();
     const ms = now.getMilliseconds();
     const s = now.getSeconds() + ms / 1000;
     const m = now.getMinutes() + s / 60;
     const h = (now.getHours() % 12) + m / 60;
-    hour.style.transform = `translateX(-50%) rotate(${-h*30 + 30}deg)`;
+    
+    hourHand.style.transform = `translateX(-50%) rotate(${-h*30 + 30}deg)`;
     n1.style.transform = `translateX(-50%) rotate(${h*30 - 30}deg)`;
-    second.style.transform = `translateX(-50%) rotate(${-s*6 + 0}deg)`;
-    minute.style.transform = `translateX(-50%) rotate(${-m*6 + 0}deg)`;
-let displayHour = Math.floor(h);
-if (displayHour === 0) displayHour = 12;
-n1.innerText = displayHour;
-if (displayHour === 1) {
-    n1.style.fontWeight = '400';
-    n1.style.letterSpacing = '2px';
-    n1.style.fontSize = '18px';
-} else {
-    n1.style.fontWeight = 'bold';
-    n1.style.letterSpacing = 'normal';
-}
-n1.style.opacity = (displayHour >= 10 || displayHour <= 4) ? 1 : 0;
-numbersToHide.forEach((n, i, arr) => {
-    const elem = document.querySelector(`.${n.id}`);
-    const prevIndex = (i === 0) ? arr.length - 1 : i - 1;
-    const prev = arr[prevIndex];
-    let angleHand = h * 30;
-    let diff = Math.abs((angleHand - prev.angle + 360) % 360);
-    if(diff < 15 || diff > 345) elem.style.opacity = 0;
-    else elem.style.opacity = 1;
-});
-   requestAnimationFrame(updateClock);
+    secondHand.style.transform = `translateX(-50%) rotate(${-s*6 + 0}deg)`;
+    minuteHand.style.transform = `translateX(-50%) rotate(${-m*6 + 0}deg)`;
+
+    let displayHour = Math.floor(h);
+    if (displayHour === 0) displayHour = 12;
+    n1.innerText = displayHour;
+    n1.style.opacity = (displayHour >= 10 || displayHour <= 4) ? 1 : 0;
+
+    numbersToHide.forEach((n) => {
+        const elem = document.querySelector(`.${n.id}`);
+        let angleHand = h * 30;
+        let diff = Math.abs((angleHand - n.angle + 360) % 360);
+        elem.style.opacity = (diff < 15 || diff > 345) ? 0 : 1;
+    });
+    requestAnimationFrame(updateClock);
 }
 updateClock();
+
 const dragPoint = document.getElementById('drag-point');
 const audio = document.getElementById('sense-sound');
-
 let isDragging = false;
 let startY = 0;
-let audioUnlocked = false;
 
-function unlockAudioOnce() {
-    if (audioUnlocked) return;
-    audio.muted = true;
-    audio.play().then(() => {
-        audio.pause();
-        audio.currentTime = 0;
-        audio.muted = false;
-        audioUnlocked = true;
-        console.log("Audio unlocked ✅");
-    }).catch(err => {
-        console.log("Unlock failed ❌", err);
-    });
-}
+dragPoint.addEventListener('mousedown', (e) => isDragging = true);
+dragPoint.addEventListener('touchstart', (e) => isDragging = true);
 
-document.querySelector('.brand-name').style.animation = "pulse 2s infinite";
-dragPoint.style.filter = "drop-shadow(0 0 50px #fff) brightness(200%)";
-dragPoint.addEventListener('touchstart', unlockAudioOnce, { once: true });
-dragPoint.addEventListener('mousedown', unlockAudioOnce, { once: true });
-dragPoint.addEventListener('mousedown', (e) => startDrag(e.clientY));
-dragPoint.addEventListener('touchstart', (e) => startDrag(e.touches[0].clientY));
-function startDrag(y) {
-    isDragging = true;
-    startY = y;
-    dragPoint.style.transition = 'none';
-}
-
-window.addEventListener('mousemove', (e) => drag(e.clientY));
-window.addEventListener('touchmove', (e) => drag(e.touches[0].clientY));
-function drag(y) {
+window.addEventListener('mousemove', (e) => {
     if (!isDragging) return;
-    let diffY = startY - y;
-    if (diffY >= 0 && diffY <= 320) {
-        dragPoint.style.bottom = diffY + 'px';
-    }
-}
+    let y = window.innerHeight - e.clientY - 50; 
+    if (y >= 0 && y <= 300) dragPoint.style.bottom = y + 'px';
+});
 
-window.addEventListener('mouseup', endDrag);
-window.addEventListener('touchend', endDrag);
-function startDrag(y) {
-    isDragging = true;
-    startY = y;
-    dragPoint.style.transition = 'none';
-}
-
-window.addEventListener('mousemove', (e) => drag(e.clientY));
-window.addEventListener('touchmove', (e) => drag(e.touches[0].clientY));
-
-function endDrag() {
+window.addEventListener('mouseup', () => {
     if (!isDragging) return;
     isDragging = false;
-    let finalPos = parseInt(dragPoint.style.bottom) || 0;
-
-    if (finalPos > 280) {
-        audio.currentTime = 0;
-        audio.play().catch(err => console.log(err));
-        document.querySelector('.horizon-line').style.transition = 'opacity 1s';
-        document.querySelector('.horizon-line').style.opacity = '0';
-        document.querySelector('.horizon-line').style.pointerEvents = 'none';
-        
-        const vantaElem = document.getElementById('vanta-bg');
-        vantaElem.style.transition = 'opacity 2s';
-        vantaElem.style.opacity = '0.4'; 
-
+    let pos = parseInt(dragPoint.style.bottom);
+    if (pos > 250) {
+        audio.play();
+        horizon.style.opacity = '0';
         startMatrix();
         startSubTerminal();
     } else {
-        dragPoint.style.transition = 'bottom 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
         dragPoint.style.bottom = '0';
     }
-}
-
-let matrixRunning = false;
-let matrixRAFAT = null;
+});
 
 function startMatrix() {
-    if (matrixRunning) return; 
-    matrixRunning = true;
     const canvas = document.getElementById('matrix-canvas');
     const ctx = canvas.getContext('2d');
     canvas.style.display = 'block';
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
+    const alphabet = "A0Z1010101";
+    const fontSize = 16;
+    const columns = canvas.width / fontSize;
+    const rainDrops = Array(Math.floor(columns)).fill(1);
 
-    const alphabet = "Aアァカサタナハマヤャラワガザダバパイィキシチニヒミ01236963210Z";
-    const fontSize = window.innerWidth < 600 ? 20 : 16;
-    const columns = Math.floor(canvas.width / fontSize);
-    const rainDrops = [];
-    const velocities = [];
-    for (let x = 0; x < columns; x++) {
-        rainDrops[x] = -Math.random() * 50;
-        velocities[x] = 0.5 + Math.random() * 0.5; 
-    }
-
-    let lastTime = 0;
-    const fps = 30; 
-
-    function draw(timestamp) {
-        if (timestamp - lastTime < 1000 / fps) {
-            matrixRAFAT = requestAnimationFrame(draw);
-            return;
-        }
-        lastTime = timestamp;
-        ctx.globalCompositeOperation = 'destination-out';
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+    function draw() {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.globalCompositeOperation = 'source-over';
-        
-        const centerX = canvas.width / 2;
-        const centerY = canvas.height / 2;
-        const currentGlobalColor = getComputedStyle(document.documentElement).getPropertyValue('--mood-color').trim();
-
-        for (let i = 0; i < rainDrops.length; i++) {
+        ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--mood-color');
+        ctx.font = fontSize + 'px monospace';
+        for(let i = 0; i < rainDrops.length; i++) {
             const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
-            const x = i * fontSize;
-            const y = rainDrops[i] * fontSize;
-            const dx = (x - centerX) / (canvas.width * 0.15);
-            const dy = (y - centerY) / (canvas.height * 0.25);
-            const isButterfly = Math.pow(dx*dx + dy*dy - 1, 3) - dx*dx*dy*dy*dy < 0;
-
-            if (isButterfly) {
-                ctx.fillStyle = currentGlobalColor;
-                ctx.shadowBlur = 15;
-                ctx.shadowColor = currentGlobalColor;
-            } else {
-                ctx.fillStyle = currentGlobalColor + '33';
-                ctx.shadowBlur = 0;
-            }
-            ctx.font = fontSize + 'px monospace';
-            ctx.fillText(text, x, y);
-            if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.98) {
-                rainDrops[i] = -2;
-                velocities[i] = 0.5 + Math.random() * 0.5;
-            }
-            rainDrops[i] += velocities[i];
-            velocities[i] += 0.015; 
+            ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+            if(rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) rainDrops[i] = 0;
+            rainDrops[i]++;
         }
-        matrixRAFAT = requestAnimationFrame(draw);
     }
-    matrixRAFAT = requestAnimationFrame(draw);
+    setInterval(draw, 30);
 }
 
 function startSubTerminal() {
     const subContainer = document.getElementById("sub-terminal");
-    const subLines = [
-                   "   010101      0      010101   ",
-                   " 0101010101    1    0101010101 ",
-                   "0101010101010  2  0101010101010",
-                   "01010101010101 3 01010101010101",
-                   " 01010101010101601010101010101 ",
-                   "  01010101010109010101010101   ",
-                   "    010101010 )X( 010101010    ",
-                   "  01010101010  9  0101010101   ",
-                   " 01010101010   6   0101010101  ",
-                   "0101010101     3     101010101 ",
-                   " 010101        2        10101  ",
-                   "  01           1           10  ",
-                   "               0               ",
-                   "               |               ",
-                   "               •               "
-                 ];
-
-    let lineIndex = 0;
-    let charIndex = 0;
-    let currentMood = 0;
-    const moods = [
-        { name: "SENSE", color: "#00ff66", highlight: 0x33ff33, base: 0x001100 },
-        { name: "CYBER", color: "#00e5ff", highlight: 0x00e5ff, base: 0x000b1a },
-        { name: "VOICE", color: "#ff0055", highlight: 0xff0055, base: 0x1a0005 },
-        { name: "GOLD", color: "#ffd700", highlight: 0xffd700, base: 0x1a1500 }
-    ];
-
-    subContainer.innerHTML = ''; 
-    const style = document.createElement('style');
-    style.textContent = `
-        :root { --mood-color: #00ff66; }
-        .sub-line { opacity: 0; transition: opacity 1s ease-in; color: var(--mood-color) !important; text-shadow: 0 0 12px var(--mood-color) !important; }
-        .sub-line.show { opacity: 1; }
-        @keyframes flap { 0%, 100% { transform: rotateY(0deg); } 50% { transform: rotateY(20deg); } }
-        .pulse-active { animation: flap 0.8s ease-in-out infinite; }
-        #mood-btn {
-            margin: 25px auto; padding: 12px 25px;
-            background: rgba(0,0,0,0.5); border: 1px solid var(--mood-color);
-            color: var(--mood-color); font-family: 'Orbitron', sans-serif;
-            font-size: 11px; letter-spacing: 3px; cursor: pointer;
-            opacity: 0; transition: all 0.6s ease; text-transform: uppercase;
-        }
-        #mood-btn.visible { opacity: 1; }
-    `;
-    document.head.appendChild(style);
-
-    function createLine() {
-        const lineElem = document.createElement("div");
-        lineElem.className = "sub-line";
-        lineElem.style.cssText = "font-family:'Courier New',monospace; white-space:pre; font-size:16px; line-height:1.2; text-align:center; font-weight:bold;";
-        subContainer.appendChild(lineElem);
-        setTimeout(() => lineElem.classList.add('show'), 50);
-        return lineElem;
-    }
-
-    let currentLineElem = createLine();
-
-    function typeEffect() {
-        if (lineIndex < subLines.length) {
-            const currentLineText = subLines[lineIndex];
-            if (charIndex < currentLineText.length) {
-                currentLineElem.textContent += currentLineText[charIndex];
-                charIndex++;
-                setTimeout(typeEffect, 80); 
-            } else {
-                lineIndex++; charIndex = 0;
-                if (lineIndex < subLines.length) {
-                    currentLineElem = createLine();
-                    setTimeout(typeEffect, 150); 
-                } else {
-                    subContainer.querySelectorAll('.sub-line').forEach(l => l.classList.add('pulse-active'));
-                    showMoodButton();
-                }
-            }
-        }
-    }
-
-    function showMoodButton() {
-        if(document.getElementById('mood-btn')) return;
-        const btn = document.createElement('button');
-        btn.id = 'mood-btn';
-        btn.textContent = 'INITIATE MOOD SWAP';
-        subContainer.appendChild(btn);
-        setTimeout(() => btn.classList.add('visible'), 500);
-
-        btn.onclick = () => {
-            currentMood = (currentMood + 1) % moods.length;
-            const mood = moods[currentMood];
-            document.documentElement.style.setProperty('--mood-color', mood.color);
-            if (window.vantaEffect) {
-                window.vantaEffect.setOptions({
-                    highlightColor: mood.highlight,
-                    midtoneColor: mood.highlight,
-                    lowlightColor: mood.base,
-                    baseColor: mood.base
-                });
-            }
-            const particlesElem = document.getElementById('particles-stars');
-            if (particlesElem) {
-                particlesElem.style.transition = "filter 1.5s ease";
-                particlesElem.style.filter = `sepia(1) saturate(15) hue-rotate(${currentMood * 90}deg) brightness(1.2)`;
-            }
-            btn.textContent = `SYSTEM: ${mood.name}`;
-        };
-    }
-    typeEffect();
+    const subLines = ["   A0Z SYSTEM ACTIVE   ", "   01010101010101   ", "   INITIATING NL MODE   "];
+    subLines.forEach((line, i) => {
+        setTimeout(() => {
+            const l = document.createElement('div');
+            l.className = 'sub-line show';
+            l.textContent = line;
+            subContainer.appendChild(l);
+        }, i * 1000);
+    });
 }
 
 window.vantaEffect = VANTA.FOG({
     el: "#vanta-bg",
-    mouseControls: true,
-    touchControls: true,
-    gyroControls: false,
-    minHeight: 200.0,
-    minWidth: 200.0,
-    highlightColor: 0x33ff33,
-    midtoneColor: 0x0b330b,
-    lowlightColor: 0x0b132b,
-    baseColor: 0x001100,
-    blurFactor: 0.11,
-    speed: 0.2,
-    zoom: 0.8
+    mouseControls: true, minHeight: 200.0, minWidth: 200.0,
+    highlightColor: 0x33ff33, midtoneColor: 0x0b330b, lowlightColor: 0x0b132b, baseColor: 0x001100
 });
 
 particlesJS("particles-stars", {
     particles: {
-        number: { value: 24, density: { enable: true, value_area: 800 } },
+        number: { value: 30 },
         color: { value: "#ffffff" },
-        opacity: { value: 0.6, random: true },
-        size: { value: 3, random: true },
-        move: { enable: true, speed: 0.2, direction: "left" },
-        line_linked: { enable: false }
-    },
-    retina_detect: true
+        opacity: { value: 0.5 },
+        size: { value: 2 },
+        move: { enable: true, speed: 0.5 }
+    }
 });
 
-window.addEventListener('load', () => {
-    document.body.classList.add('loaded');
-});
-</script>
-<script>
 const clock = document.querySelector('.clock-container');
-const scene = document.querySelector('.scene');
-let currentX = 0;
-let currentY = 0;
-let targetX = 0;
-let targetY = 0;
-scene.addEventListener('mousemove', (e) => {
-    const rect = scene.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-    targetY = (x - centerX) / centerX * 5; 
-    targetX = -(y - centerY) / centerY * 6; 
-});
-scene.addEventListener('mouseleave', () => {
-    targetX = 0;
-    targetY = 0;
-});
-function animate3D() {
-    currentX += (targetX - currentX) * 0.17;
-    currentY += (targetY - currentY) * 0.18;
-
-    clock.style.transform = `
-        rotateX(${currentX}deg)
-        rotateY(${currentY}deg)
-    `;
-clock.style.filter = `
-    drop-shadow(${currentY}px ${currentX*2}px 60px rgba(0,0,0,0.6))
-`;
-    requestAnimationFrame(animate3D);
-}
-animate3D();
-let touchX = 0;
-let touchY = 0;
-scene.addEventListener('touchstart', e => {
-    const t = e.touches[0];
-    touchX = t.clientX;
-    touchY = t.clientY;
-});
-scene.addEventListener('touchmove', e => {
-    const t = e.touches[0];
-    const dx = t.clientX - touchX;
-    const dy = t.clientY - touchY;
-    targetY = dx * 0.45;
-    targetX = -dy * 0.45;
+window.addEventListener('mousemove', (e) => {
+    let x = (window.innerWidth / 2 - e.clientX) / 20;
+    let y = (window.innerHeight / 2 - e.clientY) / 20;
+    clock.style.transform = `rotateY(${-x}deg) rotateX(${y}deg)`;
 });
 </script>
 </body>
