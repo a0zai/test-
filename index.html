@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>A0Z</title>
-    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.fog.min.js"></script>
+  <title>A0Z | Vortex</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.fog.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <style>
     html, body {
@@ -12,22 +12,25 @@
       margin: 0;
       padding: 0;
       background-color: #000;
-      font-family: 'Courier New', monospace;
       overflow: hidden;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
     }
     #vanta-bg {
       position: fixed;
       inset: 0;
       z-index: 1;
+      filter: brightness(0.7) contrast(1.2);
     }
-    #particles-js, #particles-stars {
+    #particles-stars {
       position: fixed;
       inset: 0;
       z-index: 2;
+      pointer-events: none;
+    }
+    #particles-js {
+      position: fixed;
+      inset: 0;
+      z-index: 3;
+      pointer-events: none;
     }
     #overlayImage {
       position: fixed;
@@ -35,18 +38,25 @@
       left: 50%;
       transform: translate(-50%, -50%);
       z-index: 10;
-      max-width: 180px;
+      max-width: 160px;
       pointer-events: none;
+      user-select: none;
+      filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.2));
+      animation: pulseBreath 8s ease-in-out infinite;
+    }
+    @keyframes pulseBreath {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
+      50% { transform: translate(-50%, -50%) scale(1.05); opacity: 1; }
     }
     #pageOverlay {
       position: fixed;
       top: 0;
-      left: 0;
-      width: 100%;
+      left: 0;      width: 100%;
       height: 100%;
       z-index: 9999;
+      background: #000;
       opacity: 1;
-      transition: opacity 3s ease;
+      transition: opacity 4s cubic-bezier(0.4, 0, 0.2, 1);
       pointer-events: none;
     }
     #pageOverlay.fade-out {
@@ -55,68 +65,72 @@
   </style>
 </head>
 <body>
+
   <div id="vanta-bg"></div>
-  <div id="pageOverlay"></div>
-  <div id="particles-js"></div>
   <div id="particles-stars"></div>
+  <div id="particles-js"></div>
+  <div id="pageOverlay"></div>
   <img src="IMG_9055.jpeg" alt="A0Z" id="overlayImage" />
 
 <script>
-  VANTA.FOG({
-    el: "#vanta-bg",
-    mouseControls: true,
-    touchControls: true,
-    gyroControls: false,
-    minHeight: 200.0,
-    minWidth: 200.0,
-    highlightColor: 0x90e0ef,
-    midtoneColor: 0xb2f2bb,
-    lowlightColor: 0x0b132b,
-    baseColor: 0x000000,
-    blurFactor: 0.11,
-    speed: 0.4,
-    zoom: 0.9
-  });
-});
+  document.addEventListener('DOMContentLoaded', () => {
+    VANTA.FOG({
+      el: "#vanta-bg",
+      mouseControls: true,
+      touchControls: true,
+      highlightColor: 0x000000,
+      midtoneColor: 0x0a192f,
+      lowlightColor: 0x001f3f,
+      baseColor: 0x000000,
+      blurFactor: 0.9,
+      speed: 1.0,
+      zoom: 1.5
+    });
 
-  particlesJS("particles-js", {
-    particles: {
-      number: { value: 24, density: { enable: true, value_area: 800 } },
-      color: { value: "#90e0ef" },
-      shape: { type: "circle" },
-      opacity: { value: 0.5, random: true },
-      size: { value: 3, random: true },
-      line_linked: {
-        enable: true,
-        distance: 150,
-        color: "#b2f2bb",
-        opacity: 0.3,
-        width: 1
+    particlesJS("particles-js", {
+      particles: {
+        number: { value: 30, density: { enable: true, value_area: 800 } },
+        color: { value: "#4fc3f7" },
+        shape: { type: "circle" },
+        opacity: { value: 0.2 },
+        size: { value: 2 },
+        line_linked: {
+          enable: true,
+          distance: 150,
+          color: "#4fc3f7",
+          opacity: 0.2,
+          width: 1
+        },
+        move: { enable: true, speed: 2, random: true }
       },
-      move: { enable: true, speed: 1, direction: "none", random: true }
-    },
-    interactivity: {
-      detect_on: "canvas",
-      events: { onhover: { enable: true, mode: "grab" } }
-    },
-    retina_detect: true
-  });
+      interactivity: {
+        detect_on: "window",
+        events: { onhover: { enable: true, mode: "bubble" } },
+        modes: { bubble: { distance: 200, size: 4, opacity: 0.6 } }
+      },
+      retina_detect: true
+    });
 
-  particlesJS("particles-stars", {
-    particles: {
-      number: { value: 48 },
-      color: { value: "#eaeaea" },
-      opacity: { value: 0.8, random: true },
-      size: { value: 3, random: true },
-      move: { enable: true, speed: 0.2, direction: "left" },
-      line_linked: { enable: false }
-    }
+    particlesJS("particles-stars", {
+      particles: {
+        number: { value: 150 },
+        color: { value: "#ffffff" },
+        size: { value: 1, random: true },
+        move: { 
+          enable: true, 
+          speed: 4, 
+          direction: "none", 
+          out_mode: "out" 
+        },
+        opacity: { anim: { enable: true, speed: 1, opacity_min: 0.1 } }
+      }
+    });
   });
 
   window.addEventListener('load', () => {
     setTimeout(() => {
       document.getElementById('pageOverlay').classList.add('fade-out');
-    }, 500);
+    }, 800);
   });
 </script>
 </body>
