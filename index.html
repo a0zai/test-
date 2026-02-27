@@ -32,36 +32,7 @@
       z-index: 3;
       pointer-events: none;
     }
-    #overlayImage {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 10;
-      max-width: 160px;
-      pointer-events: none;
-      user-select: none;
-      filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.2));
-      animation: pulseBreath 8s ease-in-out infinite;
-    }
-    @keyframes pulseBreath {
-      0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
-      50% { transform: translate(-50%, -50%) scale(1.05); opacity: 1; }
-    }
-    #pageOverlay {
-      position: fixed;
-      top: 0;
-      left: 0;      width: 100%;
-      height: 100%;
-      z-index: 9999;
-      background: #000;
-      opacity: 1;
-      transition: opacity 4s cubic-bezier(0.4, 0, 0.2, 1);
-      pointer-events: none;
-    }
-    #pageOverlay.fade-out {
-      opacity: 0;
-    }
+
   </style>
 </head>
 <body>
@@ -69,8 +40,6 @@
   <div id="vanta-bg"></div>
   <div id="particles-stars"></div>
   <div id="particles-js"></div>
-  <div id="pageOverlay"></div>
-  <img src="IMG_0111.jpeg" alt="A0Z" id="overlayImage" />
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
@@ -82,22 +51,22 @@
       midtoneColor: 0x0a192f,
       lowlightColor: 0x001f3f,
       baseColor: 0x000000,
-      blurFactor: 0.12,
+      blurFactor: 0.8,
       speed: 1.0,
       zoom: 1.5
     });
 
     particlesJS("particles-js", {
       particles: {
-        number: { value: 30, density: { enable: true, value_area: 800 } },
-        color: { value: "#eaeaea" },
+        number: { value: 24, density: { enable: true, value_area: 800 } },
+        color: { value: "#4fc3f7" },
         shape: { type: "circle" },
         opacity: { value: 0.2 },
         size: { value: 2 },
         line_linked: {
           enable: true,
           distance: 150,
-          color: "#ffffff",
+          color: "#4fc3f7",
           opacity: 0.2,
           width: 1
         },
@@ -113,8 +82,8 @@
 
     particlesJS("particles-stars", {
       particles: {
-        number: { value: 150 },
-        color: { value: "#4fc3f7" },
+        number: { value: 63 },
+        color: { value: "#eaeaea" },
         size: { value: 1, random: true },
         move: { 
           enable: true, 
