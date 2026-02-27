@@ -1,240 +1,285 @@
 <!DOCTYPE html>
-<html lang="nl">
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>A0Z</title>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;700&family=Orbitron:wght@700&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.fog.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-<style>
-:root { --sense-green: #b2f2bb; }
-body, html { height: 100%; margin: 0; background: #000; overflow: hidden; display: flex; justify-content: center; align-items: center; font-family: 'Courier New', monospace; }
-
-#entry-screen {
-    position: fixed; inset: 0; background: #000; z-index: 9999;
-    display: flex; justify-content: center; align-items: center;
-    transition: opacity 2s ease, visibility 2s;
+  <meta charset="UTF-8" />
+  <title>Support & Contact with Dynamic Text</title>
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      background-color: #000;
+      color: gold;
+      font-family: 'Courier New', monospace;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+    #pageOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(12px);  /* تأثير ضبابي */
+  background-color: rgba(0, 0, 0, 0.6);  /* لون شفاف داكن */
+  z-index: 9999;  /* فوق كل شيء */
+  opacity: 1;
+  transition: opacity 3s ease;
 }
-#entry-btn {
-    font-family: 'Orbitron', sans-serif; font-size: 4rem; color: #fff;
-    letter-spacing: 20px; cursor: pointer; background: none; border: none;
-    text-shadow: 0 0 20px rgba(178, 242, 187, 0.5);
-    transition: all 0.5s ease; outline: none; padding-left: 20px;
+#pageOverlay.fade-out {
+  opacity: 0;
+  pointer-events: none;
 }
-#entry-btn:hover { color: var(--sense-green); text-shadow: 0 0 40px var(--sense-green); transform: scale(1.05); }
-
-#vanta-bg { position: fixed; inset: 0; z-index: 0; opacity: 0; transition: opacity 4s ease; }
-#particles-stars { position: fixed; inset: 0; z-index: 1; }
-
-.main-content {
-    position: relative; z-index: 10; display: flex; flex-direction: column;
-    align-items: center; opacity: 0; filter: blur(10px);
-    transition: opacity 4s ease, filter 4s ease;
+#particles-js {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
 }
-
-.clock-container {
-    width: 380px; height: 380px; border-radius: 50%;
-    border: 1px solid rgba(178, 242, 187, 0.15); position: relative;
-    transform-style: preserve-3d;
+#overlayImage {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  max-width: 180px;
+  pointer-events: none;
+  background-color: transparent;
+  border: 2px solid rgba(255, 215, 0, 0.3);
+  border-radius: 12px;
 }
-.clock-container::after {
-    content: 'SEE ƧƎƎ'; position: absolute; top: 50%; left: 50%;
-    transform: translate(-50%, -50%); font-size: 22px; color: #fff;
-    text-shadow: 0 0 12px var(--sense-green);
-}
+    .container {
+      width: 90%;
+      max-width: 500px;
+      background: rgba(255, 215, 0, 0.08);
+      border: 2px solid gold;
+      border-radius: 12px;
+      padding: 40px 30px;
+      box-shadow: 0 0 30px gold;
+      flex-shrink: 0;
+    }
+    h1 {
+      color: gold;
+      text-shadow: 0 0 12px gold;
+      margin-bottom: 30px;
+      font-size: 36px;
+    }
+    .wallet-address {
+      font-size: 22px;
+      margin: 15px 0 30px 0;
+      word-wrap: break-word;
+      border-bottom: 1px solid gold;
+      padding-bottom: 12px;
+    }
+    a.button {
+      display: block;
+      margin: 15px auto;
+      padding: 14px 24px;
+      color: gold;
+      border: 2px solid gold;
+      border-radius: 10px;
+      text-decoration: none;
+      width: 80%;
+      max-width: 280px;
+      font-weight: bold;
+      font-size: 18px;
+      box-shadow: inset 0 0 8px gold;
+      transition: all 0.3s ease;
+    }
+    a.button:hover {
+      background-color: gold;
+      color: #000;
+      box-shadow: 0 0 20px gold;
+    }
+    .qr {
+      margin: 30px auto 0 auto;
+      border: 2px solid gold;
+      border-radius: 14px;
+      width: 180px;
+      height: 180px;
+      box-shadow: 0 0 15px gold;
+      display: block;
+    }
+    .contact-section {
+      margin-top: 50px;
+    }
+    .contact-links {
+      margin-top: 15px;
+    }
+    a.contact-button {
+      display: inline-block;
+      margin: 12px 18px;
+      padding: 12px 20px;
+      color: gold;
+      border: 2px solid gold;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 18px;
+      box-shadow: inset 0 0 8px gold;
+      transition: all 0.3s ease;
+    }
+    a.contact-button:hover {
+      background-color: gold;
+      color: #000;
+      box-shadow: 0 0 20px gold;
+    }
 
-.number { position: absolute; width: 100%; height: 100%; text-align: center; font-size: 22px; font-family: 'Montserrat'; font-weight: bold; color: #eaeaea; padding: 15px; box-sizing: border-box; transition: opacity 0.8s; }
-.n2 { transform: rotate(30deg); } .n2 div { transform: rotate(-30deg); }
-.n3 { transform: rotate(60deg); } .n3 div { transform: rotate(-60deg); }
-.n4 { transform: rotate(90deg); } .n4 div { transform: rotate(-90deg); }
-.n5 { transform: rotate(120deg); } .n5 div { transform: rotate(-120deg); }
-.n6 { transform: rotate(150deg); } .n6 div { transform: rotate(-150deg); }
-.n7 { transform: rotate(180deg); } .n7 div { transform: rotate(-180deg); }
-.n8 { transform: rotate(210deg); } .n8 div { transform: rotate(-210deg); }
-.n9 { transform: rotate(240deg); } .n9 div { transform: rotate(-240deg); }
-.n10 { transform: rotate(270deg); } .n10 div { transform: rotate(-270deg); }
-.n11 { transform: rotate(300deg); } .n11 div { transform: rotate(-300deg); }
-.n12 { transform: rotate(330deg); } .n12 div { transform: rotate(-330deg); }
-
-.hand { position: absolute; bottom: 50%; left: 50%; transform-origin: bottom; border-radius: 10px; }
-.hour { width: 4px; height: 85px; background: #a5a5a5; z-index: 3; }
-.minute { width: 3px; height: 105px; background: #4a9bbf; z-index: 2; }
-.second { width: 1.5px; height: 120px; background: #cd7f32; z-index: 1; }
-.n1 { position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); font-size: 22px; color: #fff; }
-
-.horizon-line { width: 2px; height: 180px; background: linear-gradient(180deg, var(--sense-green), transparent); margin-top: 30px; position: relative; }
-.pulse-point { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); font-size: 30px; cursor: grab; z-index: 100; touch-action: none; }
-
-#matrix-canvas { position: fixed; inset: 0; z-index: 5; display: none; pointer-events: none; opacity: 0.6; }
-#sub-terminal { margin-top: 20px; color: var(--sense-green); white-space: pre; text-align: center; font-size: 14px; }
-
-@media (max-width: 600px) { .clock-container { width: 280px; height: 280px; } #entry-btn { font-size: 2.5rem; letter-spacing: 10px; } }
-</style>
+    #dynamicTextContainer {
+      position: fixed;
+      bottom: 10px;
+      width: 100%;
+      text-align: center;
+      font-size: 33px;
+      color: #cc0000;
+      text-shadow: 0 0 20px #cc0000;
+      font-family: 'Courier New', monospace;
+      user-select: none;
+    }
+    #dynamicText {
+      display: inline-block;
+      border-right: 2px solid #ffd700;
+      padding-right: 5px;
+      white-space: nowrap;
+      animation: blinkCaret 1s step-end infinite;
+    }
+    @keyframes blinkCaret {
+      50% { border-color: transparent; }
+    }
+  </style>
 </head>
 <body>
-
-<div id="entry-screen">
-    <button id="entry-btn" onclick="enterSite()">A0Z</button>
-</div>
-
-<div id="vanta-bg"></div>
-<div id="particles-stars"></div>
-
-<div class="main-content" id="main-content">
-    <div class="clock-container" id="clock">
-        <div class="number n2"><div>12</div></div>
-        <div class="number n3"><div>11</div></div>
-        <div class="number n4"><div>10</div></div>
-        <div class="number n5"><div>9</div></div>
-        <div class="number n6"><div>8</div></div>
-        <div class="number n7"><div>Ƶ</div></div>
-        <div class="number n8"><div>6</div></div>
-        <div class="number n9"><div>5</div></div>
-        <div class="number n10"><div>4</div></div>
-        <div class="number n11"><div>3</div></div>
-        <div class="number n12"><div>2</div></div>
-        <div class="hand hour" id="hour_hand"><div class="n1" id="hour_num">1</div></div>
-        <div class="hand minute" id="minute_hand"></div>
-        <div class="hand second" id="second_hand"></div>
-    </div>
-    <div class="tagline" style="color:#fff; margin-top:25px; opacity:0.8; letter-spacing:1px; text-align:center;">Son when you see SEENSEE, you see the sun</div>
-    <div id="sub-terminal"></div>
-    <div class="horizon-line" id="h-line">
-        <div id="drag-point" class="pulse-point">🦋</div>
-    </div>
-</div>
-
-<canvas id="matrix-canvas"></canvas>
-<audio id="sense-sound" src="seensee.mp3" preload="auto"></audio>
-
+  <div id="pageOverlay"></div>
+   <div id="particles-js"></div>
+  <img src="IMG_9055.jpeg" alt="Overlay Image" id="overlayImage" />
+  <div class="container">
+  <div id="dynamicTextContainer">
+    <span id="dynamicText"></span>
+  </div>
+  <audio id="backgroundMusic" src="🌀🎶.mp3" loop></audio>
 <script>
-function enterSite() {
-    const entry = document.getElementById('entry-screen');
-    const main = document.getElementById('main-content');
-    const vanta = document.getElementById('vanta-bg');
-    
-    entry.style.opacity = '0';
-    setTimeout(() => {
-        entry.style.display = 'none';
-        vanta.style.opacity = '0.35';
-        main.style.opacity = '1';
-        main.style.filter = 'blur(0)';
-    }, 2000);
-}
 
-function updateClock() {
-    const now = new Date();
-    const ms = now.getMilliseconds();
-    const s = now.getSeconds() + ms/1000;
-    const m = now.getMinutes() + s/60;
-    const h = (now.getHours() % 12) + m/60;
+  const texts = [
+    "0"
+  ];
 
-    document.getElementById('hour_hand').style.transform = `translateX(-50%) rotate(${-h*30 + 30}deg)`;
-    document.getElementById('hour_num').style.transform = `translateX(-50%) rotate(${h*30 - 30}deg)`;
-    document.getElementById('minute_hand').style.transform = `translateX(-50%) rotate(${-m*6}deg)`;
-    document.getElementById('second_hand').style.transform = `translateX(-50%) rotate(${-s*6}deg)`;
+  let index = 0;
+  let charIndex = 0;
+  const typingSpeed = 50;
+  const erasingSpeed = 30;
+  const delayBetweenTexts = 3000;
 
-    let displayH = Math.floor(h) === 0 ? 12 : Math.floor(h);
-    document.getElementById('hour_num').innerText = displayH;
+  const dynamicTextElem = document.getElementById("dynamicText");
 
-    const numbers = [
-        {id:'n2', a:330}, {id:'n3', a:300}, {id:'n4', a:270}, {id:'n5', a:240},
-        {id:'n6', a:210}, {id:'n8', a:150}, {id:'n9', a:120}, {id:'n10', a:90},
-        {id:'n11', a:60}, {id:'n12', a:30}
-    ];
-    numbers.forEach(num => {
-        const el = document.querySelector('.' + num.id);
-        const diff = Math.abs((h*30) - num.a);
-        el.style.opacity = (diff < 15 || diff > 345) ? "0" : "1";
-    });
-    requestAnimationFrame(updateClock);
-}
-updateClock();
-
-const dragPoint = document.getElementById('drag-point');
-const audio = document.getElementById('sense-sound');
-let isDragging = false;
-let startY = 0;
-
-dragPoint.onmousedown = dragPoint.ontouchstart = (e) => {
-    isDragging = true;
-    startY = e.clientY || e.touches[0].clientY;
-};
-
-window.onmousemove = window.ontouchmove = (e) => {
-    if (!isDragging) return;
-    const y = e.clientY || e.touches[0].clientY;
-    const diff = startY - y;
-    if (diff >= 0 && diff <= 180) {
-        dragPoint.style.bottom = diff + 'px';
-        if (diff > 170) {
-            isDragging = false;
-            audio.play();
-            document.getElementById('h-line').style.display = 'none';
-            document.getElementById('matrix-canvas').style.display = 'block';
-            startMatrix();
-            startAscii();
-        }
+  function typeText() {
+    if (charIndex < texts[index].length) {
+      dynamicTextElem.textContent += texts[index].charAt(charIndex);
+      charIndex++;
+      setTimeout(typeText, typingSpeed);
+    } else {
+      setTimeout(eraseText, delayBetweenTexts);
     }
-};
+  }
 
-window.onmouseup = window.ontouchend = () => {
-    if (!isDragging) return;
-    isDragging = false;
-    dragPoint.style.bottom = '0';
-};
-
-function startMatrix() {
-    const canvas = document.getElementById('matrix-canvas');
-    const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-    const drops = Array(Math.floor(canvas.width/20)).fill(1);
-    function draw() {
-        ctx.fillStyle = "rgba(0,0,0,0.02)"; ctx.fillRect(0,0,canvas.width,canvas.height);
-        ctx.fillStyle = "#b2f2bb"; ctx.font = "18px monospace";
-        drops.forEach((y, i) => {
-            const text = "01Z"[Math.floor(Math.random()*3)];
-            ctx.fillText(text, i*20, y*20);
-            if(y*20 > canvas.height && Math.random() > 0.99) drops[i] = 0;
-            drops[i] += 0.5;
-        });
+  function eraseText() {
+    if (charIndex > 0) {
+      dynamicTextElem.textContent = texts[index].substring(0, charIndex -1);
+      charIndex--;
+      setTimeout(eraseText, erasingSpeed);
+    } else {
+      index++;
+      if (index >= texts.length) index = 0;
+      setTimeout(typeText, typingSpeed);
     }
-    setInterval(draw, 50);
-}
+  }
 
-function startAscii() {
-    const terminal = document.getElementById('sub-terminal');
-    const ascii = [
-        "   010101      0      010101   ",
-        " 0101010101    1    0101010101 ",
-        "0101010101010  2  0101010101010",
-        "    010101010 )X( 010101010    ",
-        "               •               "
-    ];
-    let i = 0;
-    const timer = setInterval(() => {
-        if (i < ascii.length) { terminal.innerHTML += ascii[i] + "\n"; i++; }
-        else clearInterval(timer);
-    }, 400);
-}
-
-let targetX = 0, targetY = 0, currX = 0, currY = 0;
-document.addEventListener('mousemove', (e) => {
-    targetX = (window.innerWidth/2 - e.pageX)/30;
-    targetY = (window.innerHeight/2 - e.pageY)/30;
+  // ابدأ بالكتابة مباشرة عند تحميل الصفحة
+  document.addEventListener("DOMContentLoaded", function() {
+    typeText();
+  });
+</script>
+<script>
+  particlesJS("particles-js", {
+    particles: {
+      number: { value: 70, density: { enable: true, value_area: 800 } },
+      color: { value: "#00ffcc" },
+      shape: {
+        type: "circle",
+        stroke: { width: 0, color: "#000000" },
+        polygon: { nb_sides: 5 },
+      },
+      opacity: {
+        value: 0.5,
+        random: true,
+        anim: { enable: true, speed: 1, opacity_min: 0.1, sync: false }
+      },
+      size: {
+        value: 3,
+        random: true,
+        anim: { enable: false }
+      },
+      line_linked: {
+        enable: true,
+        distance: 150,
+        color: "#00ffcc",
+        opacity: 0.3,
+        width: 1
+      },
+      move: {
+        enable: true,
+        speed: 1,
+        direction: "none",
+        random: true,
+        straight: false,
+        out_mode: "out",
+        bounce: false,
+        attract: { enable: false }
+      }
+    },
+    interactivity: {
+      detect_on: "canvas",
+      events: {
+        onhover: { enable: true, mode: "grab" },
+        onclick: { enable: true, mode: "push" },
+        resize: true
+      },
+      modes: {
+        grab: { distance: 200, line_linked: { opacity: 0.5 } },
+        bubble: { distance: 200, size: 6, duration: 2, opacity: 0.8 },
+        repulse: { distance: 100 },
+        push: { particles_nb: 4 },
+        remove: { particles_nb: 2 }
+      }
+    },
+    retina_detect: true
+  });
+</script>
+<script>
+  window.addEventListener('load', () => {
+    const overlay = document.getElementById('pageOverlay');
+    overlay.classList.add('fade-out');
+  });
+</script>
+<script>
+window.addEventListener('DOMContentLoaded', () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('playAudio') === '1') {
+    const audio = document.getElementById('backgroundMusic');
+    if (audio) {
+      audio.play().catch(err => {
+        console.log('Audio play failed:', err);
+      });
+    }
+  }
 });
-function smoothMove() {
-    currX += (targetX - currX) * 0.1;
-    currY += (targetY - currY) * 0.1;
-    document.getElementById('clock').style.transform = `rotateY(${currX}deg) rotateX(${currY}deg)`;
-    requestAnimationFrame(smoothMove);
-}
-smoothMove();
-
-window.vantaEffect = VANTA.FOG({ el: "#vanta-bg", highlightColor: 0xb2f2bb, midtoneColor: 0x112211, baseColor: 0x0, speed: 0.5 });
-particlesJS("particles-stars", { particles: { number: { value: 15 }, move: { speed: 0.2 }, color: { value: "#ffffff" } } });
 </script>
 </body>
 </html>
