@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Support & Contact with Dynamic Text</title>
+  <title>test</title>
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <style>
     html, body {
@@ -25,9 +25,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  backdrop-filter: blur(12px);  /* تأثير ضبابي */
-  background-color: rgba(0, 0, 0, 0.6);  /* لون شفاف داكن */
-  z-index: 9999;  /* فوق كل شيء */
+  z-index: 9999; 
   opacity: 1;
   transition: opacity 3s ease;
 }
@@ -56,160 +54,18 @@
   border: 2px solid rgba(255, 215, 0, 0.3);
   border-radius: 12px;
 }
-    .container {
-      width: 90%;
-      max-width: 500px;
-      background: rgba(255, 215, 0, 0.08);
-      border: 2px solid gold;
-      border-radius: 12px;
-      padding: 40px 30px;
-      box-shadow: 0 0 30px gold;
-      flex-shrink: 0;
-    }
-    h1 {
-      color: gold;
-      text-shadow: 0 0 12px gold;
-      margin-bottom: 30px;
-      font-size: 36px;
-    }
-    .wallet-address {
-      font-size: 22px;
-      margin: 15px 0 30px 0;
-      word-wrap: break-word;
-      border-bottom: 1px solid gold;
-      padding-bottom: 12px;
-    }
-    a.button {
-      display: block;
-      margin: 15px auto;
-      padding: 14px 24px;
-      color: gold;
-      border: 2px solid gold;
-      border-radius: 10px;
-      text-decoration: none;
-      width: 80%;
-      max-width: 280px;
-      font-weight: bold;
-      font-size: 18px;
-      box-shadow: inset 0 0 8px gold;
-      transition: all 0.3s ease;
-    }
-    a.button:hover {
-      background-color: gold;
-      color: #000;
-      box-shadow: 0 0 20px gold;
-    }
-    .qr {
-      margin: 30px auto 0 auto;
-      border: 2px solid gold;
-      border-radius: 14px;
-      width: 180px;
-      height: 180px;
-      box-shadow: 0 0 15px gold;
-      display: block;
-    }
-    .contact-section {
-      margin-top: 50px;
-    }
-    .contact-links {
-      margin-top: 15px;
-    }
-    a.contact-button {
-      display: inline-block;
-      margin: 12px 18px;
-      padding: 12px 20px;
-      color: gold;
-      border: 2px solid gold;
-      border-radius: 10px;
-      text-decoration: none;
-      font-weight: bold;
-      font-size: 18px;
-      box-shadow: inset 0 0 8px gold;
-      transition: all 0.3s ease;
-    }
-    a.contact-button:hover {
-      background-color: gold;
-      color: #000;
-      box-shadow: 0 0 20px gold;
-    }
-
-    #dynamicTextContainer {
-      position: fixed;
-      bottom: 10px;
-      width: 100%;
-      text-align: center;
-      font-size: 33px;
-      color: #cc0000;
-      text-shadow: 0 0 20px #cc0000;
-      font-family: 'Courier New', monospace;
-      user-select: none;
-    }
-    #dynamicText {
-      display: inline-block;
-      border-right: 2px solid #ffd700;
-      padding-right: 5px;
-      white-space: nowrap;
-      animation: blinkCaret 1s step-end infinite;
-    }
-    @keyframes blinkCaret {
-      50% { border-color: transparent; }
-    }
   </style>
 </head>
 <body>
   <div id="pageOverlay"></div>
    <div id="particles-js"></div>
   <img src="IMG_9055.jpeg" alt="Overlay Image" id="overlayImage" />
-  <div class="container">
-  <div id="dynamicTextContainer">
-    <span id="dynamicText"></span>
   </div>
-  <audio id="backgroundMusic" src="🌀🎶.mp3" loop></audio>
 <script>
 
-  const texts = [
-    "0"
-  ];
-
-  let index = 0;
-  let charIndex = 0;
-  const typingSpeed = 50;
-  const erasingSpeed = 30;
-  const delayBetweenTexts = 3000;
-
-  const dynamicTextElem = document.getElementById("dynamicText");
-
-  function typeText() {
-    if (charIndex < texts[index].length) {
-      dynamicTextElem.textContent += texts[index].charAt(charIndex);
-      charIndex++;
-      setTimeout(typeText, typingSpeed);
-    } else {
-      setTimeout(eraseText, delayBetweenTexts);
-    }
-  }
-
-  function eraseText() {
-    if (charIndex > 0) {
-      dynamicTextElem.textContent = texts[index].substring(0, charIndex -1);
-      charIndex--;
-      setTimeout(eraseText, erasingSpeed);
-    } else {
-      index++;
-      if (index >= texts.length) index = 0;
-      setTimeout(typeText, typingSpeed);
-    }
-  }
-
-  // ابدأ بالكتابة مباشرة عند تحميل الصفحة
-  document.addEventListener("DOMContentLoaded", function() {
-    typeText();
-  });
-</script>
-<script>
   particlesJS("particles-js", {
     particles: {
-      number: { value: 70, density: { enable: true, value_area: 800 } },
+      number: { value: 78, density: { enable: true, value_area: 800 } },
       color: { value: "#00ffcc" },
       shape: {
         type: "circle",
@@ -267,19 +123,6 @@
     const overlay = document.getElementById('pageOverlay');
     overlay.classList.add('fade-out');
   });
-</script>
-<script>
-window.addEventListener('DOMContentLoaded', () => {
-  const urlParams = new URLSearchParams(window.location.search);
-  if (urlParams.get('playAudio') === '1') {
-    const audio = document.getElementById('backgroundMusic');
-    if (audio) {
-      audio.play().catch(err => {
-        console.log('Audio play failed:', err);
-      });
-    }
-  }
-});
 </script>
 </body>
 </html>
