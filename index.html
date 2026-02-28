@@ -55,7 +55,17 @@ html, body {
     flex-direction: column;
     align-items: center;
 }
-
+.top-logo {
+    position: absolute;
+    top: -120px;
+    left: 50%;
+    transform: translateX(-50%) translateZ(60px);
+    max-width: 80px;
+    height: auto;
+    z-index: 100;
+    pointer-events: none;
+    filter: drop-shadow(0 0 15px rgba(255,255,255,0.3));
+}
 
 .title {
     margin-bottom: 30px;
@@ -221,7 +231,8 @@ body.loaded {
 <div id="vanta-bg"></div> 
 <div id="particles-stars"></div>
 <div class="main-content">
-    <div class="scene">
+  <img src="IMG_7286.png" alt="Logo" class="top-logo"> 
+  <div class="scene">
     <div class="clock-container">
         <div class="glass-cover"></div>
         <div class="brand-name">SEENƧƎƎ</div>
@@ -269,8 +280,7 @@ if (displayHour === 1) {
     n1.style.fontWeight = 'bold';
     n1.style.letterSpacing = 'normal';
 }
-n1.style.opacity = (displayHour >= 10 || displayHour <= 4) ? 1 : 0;    requestAnimationFrame(updateClock);
-}
+
 updateClock();
 </script>
 <script>
