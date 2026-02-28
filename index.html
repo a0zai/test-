@@ -27,8 +27,7 @@ html, body {
     position: fixed;
     inset: 0;
     z-index: 1;
-    opacity: 0.5;
-    filter: saturate(150%) contrast(110%);
+    filter: saturate(180%) contrast(120%) brightness(0.8);
     pointer-events: none;
 }
 #particles-stars {
@@ -51,39 +50,40 @@ body.loaded .main-content {
     opacity: 1;
 }
 .scene {
-    perspective: 1000px;
+    perspective: 1200px;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 .top-logo {
     position: absolute;
-    top: -100px;
+    top: -110px;
     left: 50%;
-    transform: translateX(-50%) translateZ(60px);
-    max-width: 80px;
+    transform: translateX(-50%) translateZ(80px);
+    max-width: 90px;
     height: auto;
     z-index: 100;
     pointer-events: none;
-    filter: drop-shadow(0 0 15px rgba(255,255,255,0.3));
+    filter: drop-shadow(0 0 20px rgba(0,212,255,0.4));
 }
 .clock-container {
     transform-style: preserve-3d;
     position: relative;
-    width: 380px;
-    height: 380px;
+    width: 400px;
+    height: 400px;
     border-radius: 50%;
-    border: 1px solid rgba(178, 242, 187, 0.2);
-    background: rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(178, 242, 187, 0.15);
+    background: rgba(0, 0, 0, 0.05);
 }
 .glass-cover {
     position: absolute;
     inset: 0;
     border-radius: 50%;
-    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.08), transparent);
-    backdrop-filter: blur(3px);
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.05), transparent 70%);
+    backdrop-filter: blur(5px);
     pointer-events: none;
-    transform: translateZ(40px);
+    transform: translateZ(50px);
+    border: 1px solid rgba(255,255,255,0.03);
 }
 .clock-container::after {
     content: '0';
@@ -91,47 +91,48 @@ body.loaded .main-content {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%) translateZ(10px);
-    font-size: 24px;
-    color: rgba(255, 255, 255, 0.1);
-    text-shadow: 0 0 8px var(--sense-green);
+    font-size: 26px;
+    color: rgba(255, 255, 255, 0.05);
+    text-shadow: 0 0 10px var(--sense-green);
+    letter-spacing: 5px;
 }
 .brand-name {
     position: absolute;
     top: 65%;
     left: 50%;
-    transform: translate(-50%, -50%) translateZ(15px);
+    transform: translate(-50%, -50%) translateZ(20px);
     color: var(--sense-green);
-    font-size: 9px;
-    letter-spacing: 7px;
-    opacity: 0.5;
+    font-size: 10px;
+    letter-spacing: 8px;
+    opacity: 0.4;
     text-transform: uppercase;
 }
 .center-dot {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 4px;
-    height: 4px;
+    width: 3px;
+    height: 3px;
     background: var(--sense-green);
     border-radius: 50%;
-    transform: translate(-50%, -50%) translateZ(50px);
-    animation: pulse 2.027s ease-in-out infinite;
-    box-shadow: 0 0 14px var(--sense-green);
+    transform: translate(-50%, -50%) translateZ(60px);
+    animation: pulse 2.5s ease-in-out infinite;
+    box-shadow: 0 0 15px var(--sense-green);
     z-index: 110;
 }
 @keyframes pulse {
-    0%,100% { transform: translate(-50%, -50%) scale(1); opacity: 0.9; }
-    50% { transform: translate(-50%, -50%) scale(1.7); opacity: 0.4; }
+    0%,100% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
+    50% { transform: translate(-50%, -50%) scale(2); opacity: 0.3; }
 }
 .number {
     position: absolute;
     width: 100%;
     height: 100%;
     text-align: center;
-    font-size: 18px;
-    padding: 15px;
+    font-size: 20px;
+    padding: 20px;
     box-sizing: border-box;
-    color: #cccccc;
+    color: rgba(204, 204, 204, 0.6);
     transform-style: preserve-3d;
 }
 .n2 { transform: rotate(30deg); } .n2 div { transform: rotate(-30deg); }
@@ -152,25 +153,25 @@ body.loaded .main-content {
     transform-origin: bottom;
     border-radius: 10px;
 }
-.hour { width: 4px; height: 65px; background: rgba(255,255,255,0.2); transform: translateX(-50%) translateZ(20px); }
-.minute { width: 3px; height: 85px; background: var(--sense-red); transform: translateX(-50%) translateZ(30px); }
-.second { width: 2px; height: 95px; background: var(--sense-blue); transform: translateX(-50%) translateZ(40px); }
+.hour { width: 4px; height: 60px; background: rgba(241,245,249,0.25); box-shadow: 0 0 10px rgba(241,245,249,0.2); }
+.minute { width: 3.5px; height: 69px; background: var(--sense-red); box-shadow: 0 0 12px var(--sense-red); }
+.second { width: 2.5px; height: 72px; background: var(--sense-blue); box-shadow: 0 0 15px var(--sense-blue); }
 .n1 {
     position: absolute;
     bottom: 100%; 
     left: 50%;
     transform: translateX(-50%); 
     font-size: 22px;
-    color: #fff;
+    color: #f1f5f9;
     font-weight: bold;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
 }
 .tagline {
-    margin-top: 40px;      
+    margin-top: 45px;      
     color: #ffffff;            
-    opacity: 0.7;         
+    opacity: 0.6;         
     font-size: 13px;        
-    letter-spacing: 3px;   
+    letter-spacing: 4px;   
     text-align: center;
     text-transform: uppercase;
 }
@@ -179,14 +180,8 @@ body.loaded .main-content {
     left: 15px;
     bottom: 15px;
     font-size: 10px;
-    letter-spacing: 2px;
     color: var(--sense-green);
-    opacity: 0.5;
-    z-index: 100;
-}
-@media (max-width:600px){
-    .clock-container { width:280px; height:280px; }
-    .tagline { font-size:10px; }
+    opacity: 0.3;
 }
 </style>
 </head>
@@ -211,71 +206,84 @@ body.loaded .main-content {
             <div class="number n10"><div>4</div></div>
             <div class="number n11"><div>3</div></div>
             <div class="number n12"><div>2</div></div>
-            <div class="hand hour" id="hour_hand">
-                <div class="n1" id="digital_h">0</div>
+            <div class="hand hour" id="hour">
+                <div class="n1">()</div>
             </div>
-            <div class="hand minute" id="minute_hand"></div>
-            <div class="hand second" id="second_hand"></div>
+            <div class="hand minute" id="minute"></div>
+            <div class="hand second" id="second"></div>
         </div>
-        <div class="tagline">0, The instinct of Sensation</div>
+        <div class="tagline">0, THE INSTINCT OF SENSATION</div>
     </div>
 </div>
 <div class="signature">0</div>
+
 <script>
-const hHand = document.getElementById('hour_hand');
-const mHand = document.getElementById('minute_hand');
-const sHand = document.getElementById('second_hand');
-const dH = document.getElementById('digital_h');
+const hourHand = document.getElementById('hour');
+const n1Text = hourHand.querySelector('.n1');
+const minHand = document.getElementById('minute');
+const secHand = document.getElementById('second');
+
 function updateClock() {
     const now = new Date();
     const ms = now.getMilliseconds();
     const s = now.getSeconds() + ms / 1000;
     const m = now.getMinutes() + s / 60;
     const h = (now.getHours() % 12) + m / 60;
-    hHand.style.transform = `translateX(-50%) rotate(${h*30}deg)`;
-    mHand.style.transform = `translateX(-50%) rotate(${m*6}deg)`;
-    sHand.style.transform = `translateX(-50%) rotate(${s*6}deg)`;
-    dH.style.transform = `translateX(-50%) rotate(${-h*30}deg)`;
-    let displayH = now.getHours() % 12;
-    dH.innerText = displayH === 0 ? 12 : displayH;
+    hourHand.style.transform = `translateX(-50%) rotate(${-h*30 + 30}deg)`;
+    n1Text.style.transform = `translateX(-50%) rotate(${h*30 - 30}deg)`;
+    secHand.style.transform = `translateX(-50%) rotate(${-s*6 + 0}deg)`;
+    minHand.style.transform = `translateX(-50%) rotate(${-m*6 + 0}deg)`;
+
+    let displayHour = Math.floor(h);
+    if (displayHour === 0) displayHour = 12;
+    n1Text.innerText = displayHour;
+
     requestAnimationFrame(updateClock);
 }
 updateClock();
+
 VANTA.FOG({
     el: "#vanta-bg",
     mouseControls: true,
     touchControls: true,
-    highlightColor: 0x90e0ef,
-    midtoneColor: 0x0a192f,
-    lowlightColor: 0x000000,
+    highlightColor: 0x00d4ff, 
+    midtoneColor: 0x081b33,
+    lowlightColor: 0x000000, 
     baseColor: 0x000000,
-    blurFactor: 0.7,
-    speed: 1.0,
-    zoom: 1.0
+    blurFactor: 0.6,
+    speed: 0.6,
+    zoom: 0.8
 });
+
 particlesJS("particles-stars", {
     particles: {
-        number: { value: 80 },
+        number: { value: 100, density: { enable: true, value_area: 800 } },
         color: { value: "#ffffff" },
-        opacity: { value: 0.5, random: true },
+        opacity: { 
+            value: 0.7, 
+            random: true,
+            anim: { enable: true, speed: 1, opacity_min: 0.1, sync: false }
+        },
         size: { value: 1.5, random: true },
-        move: { enable: true, speed: 0.3, direction: "none", random: true },
+        move: { enable: true, speed: 0.15, direction: "none", random: true, out_mode: "out" },
         line_linked: { enable: false }
     }
 });
+
 window.addEventListener('load', () => {
     setTimeout(() => document.body.classList.add('loaded'), 500);
 });
-const clockEl = document.getElementById('clock');
+
+const clockContainer = document.getElementById('clock');
 let tX = 0, tY = 0, cX = 0, cY = 0;
 window.addEventListener('mousemove', (e) => {
-    tY = (e.clientX - window.innerWidth / 2) / (window.innerWidth / 2) * 12;
-    tX = -(e.clientY - window.innerHeight / 2) / (window.innerHeight / 2) * 12;
+    tY = (e.clientX - window.innerWidth / 2) / (window.innerWidth / 2) * 10;
+    tX = -(e.clientY - window.innerHeight / 2) / (window.innerHeight / 2) * 10;
 });
 function animate3D() {
-    cX += (tX - cX) * 0.1;
-    cY += (tY - cY) * 0.1;
-    clockEl.style.transform = `rotateX(${cX}deg) rotateY(${cY}deg)`;
+    cX += (tX - cX) * 0.08;
+    cY += (tY - cY) * 0.08;
+    clockContainer.style.transform = `rotateX(${cX}deg) rotateY(${cY}deg)`;
     requestAnimationFrame(animate3D);
 }
 animate3D();
