@@ -107,7 +107,7 @@ html, body {
     transform: translateZ(30px);
 }
 .clock-container::after {
-    content: '81 18';
+    content: '0';
     position: absolute;
     top: 50%;
     left: 50%;
@@ -218,6 +218,20 @@ html, body {
     .title { font-size:24px; letter-spacing:8px; }
     .number { font-size:16px; }
 }
+.signature {
+    position: fixed;
+    bottom: 20px;
+    right: 20px; 
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    letter-spacing: 2px;
+    color: var(--sense-green);
+    opacity: 0.4;
+    z-index: 1000;
+    pointer-events: none; 
+    text-transform: uppercase;
+}
+
 body {
     opacity: 0;
     transition: opacity 3s ease-in;
@@ -235,7 +249,7 @@ body.loaded {
   <div class="scene">
     <div class="clock-container">
         <div class="glass-cover"></div>
-        <div class="brand-name">SEENƧƎƎ</div>
+        <div class="brand-name">A0Z</div>
         <div class="center-dot"></div>
         <div class="number n2"><div>12</div></div>
         <div class="number n3"><div>11</div></div>
@@ -249,13 +263,14 @@ body.loaded {
         <div class="number n11"><div>3</div></div>
         <div class="number n12"><div>2</div></div>
         <div class="hand hour" id="hour">
-        <div class="n1">()</div>
+        <div class="n1">1</div>
         </div>
         <div class="hand minute" id="minute"></div>
         <div class="hand second" id="second"></div>
     </div>
     <div class="tagline">The instinct of Sensation</div>
 </div>
+<div class="signature">0</div>
 <script>
 const hour = document.getElementById('hour');
 const n1 = hour.querySelector('.n1'); 
@@ -280,7 +295,7 @@ if (displayHour === 1) {
     n1.style.fontWeight = 'bold';
     n1.style.letterSpacing = 'normal';
 }
-
+requestAnimationFrame(updateClock);
 updateClock();
 </script>
 <script>
@@ -295,7 +310,7 @@ VANTA.FOG({
     midtoneColor: 0xb2f2bb,
     lowlightColor: 0x0b132b,
     baseColor: 0x000000,
-    blurFactor: 0.14,
+    blurFactor: 0.13,
     speed: 0.4,
     zoom: 0.9
 });
