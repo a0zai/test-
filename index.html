@@ -217,6 +217,7 @@ body.loaded {
     font-size: 14px;
     letter-spacing: 2px;
     color: var(--sense-green);
+    opacity: 1 !important;
     opacity: 0.4;
     z-index: 9999;
     pointer-events: none; 
@@ -228,7 +229,7 @@ body.loaded {
 <div id="vanta-bg"></div> 
 <div id="particles-stars"></div>
 <div class="main-content">
-  <img src="IMG_7286.png" alt="Logo" class="top-logo"> 
+  <img src="0.png" alt="Logo" class="top-logo"> 
   <div class="scene">
     <div class="clock-container">
         <div class="glass-cover"></div>
@@ -255,8 +256,8 @@ body.loaded {
 <div class="signature">0</div>
 <script>
 const hour = document.getElementById('hour');
-const minute = document.getElementById('minute'); // تم الإصلاح هنا
-const second = document.getElementById('second'); // تم الإصلاح هنا
+const minute = document.getElementById('minute'); 
+const second = document.getElementById('second');
 const n1 = hour.querySelector('.n1'); 
 function updateClock() {
     const now = new Date();
@@ -274,7 +275,7 @@ function updateClock() {
     if (displayHour === 1) {
         n1.style.fontWeight = '600';
         n1.style.letterSpacing = '2px';
-        n1.style.fontSize = '20px';
+        n1.style.fontSize = '18px';
     } else {
         n1.style.fontWeight = 'bold';
         n1.style.letterSpacing = 'normal';
