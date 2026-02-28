@@ -52,6 +52,7 @@ html, body {
 
 .main-content {
     position: relative;
+    z-index: 10;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -221,14 +222,14 @@ body.loaded {
     left: 12px;
     bottom: 10px;
     font-family: 'Courier New', monospace;
-    font-size: 10px;
+    font-size: 9px;
     letter-spacing: 2px;
-    color: rgba(255, 255, 255, 0.45);
-    opacity: 0.6;
-    z-index: 3;
+    color: rgba(178, 242, 187, 0.75);
+    opacity: 0.8;
+    z-index: 9999;  
     user-select: none;
     pointer-events: none;
-    mix-blend-mode: screen; 
+    text-shadow: 0 0 6px rgba(178, 242, 187, 0.35);
 }
 </style>
 </head>
@@ -260,8 +261,8 @@ body.loaded {
         <div class="hand second" id="second"></div>
     </div>
     <div class="tagline">0, The instinct of Sensation.</div>
-    <div class="signature">0</div>
 </div>
+    <div class="signature">0</div>
 <script>
 const hour = document.getElementById('hour');
 const n1 = hour.querySelector('.n1'); 
