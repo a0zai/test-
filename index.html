@@ -57,6 +57,7 @@ html, body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    transform: scale(1.1);
 }
 
 .title {
@@ -70,11 +71,11 @@ html, body {
     transition: 3s ease;
 }
 .scene {
-    perspective: 1448px;
+    perspective: 700px;
 }
 .clock-container {
     transform-style: preserve-3d;
-    transform: translateZ(20px);
+    transform: translateZ(80px);
     transition: transform 0.15s ease-out;
     will-change: transform;
     position: relative;
@@ -210,11 +211,11 @@ html, body {
     .title { font-size:24px; letter-spacing:8px; }
     .number { font-size:16px; }
 }
-body {
+.main-content {
     opacity: 0;
-    transition: opacity 3s ease-in;
+    transition: opacity 2.5s ease-in;
 }
-body.loaded {
+body.loaded .main-content {
     opacity: 1;
 }
 .signature {
