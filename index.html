@@ -58,7 +58,42 @@ header, main, section, footer {
     margin: 0;
     font-size: 20px;
 }
+#viewersCount {
+  position:fixed; top:15px; left:50%;
+  transform:translateX(-50%);
+  font-size:24px; font-weight:bold;
+  color:#ff3333; z-index:10000;
+  user-select:none;
+  background: rgba(0,0,0,0.5);
+  padding:6px 12px; border-radius:12px;
+  box-shadow:0 0 8px #ff0000;
+  cursor:pointer;
+}
+.fade-in-fog {
+  opacity: 0;
+  filter: blur(10px); 
+  transform: translateY(20px); 
+  transition: opacity 3s ease, filter 6s ease, transform 9s ease;
+}
 
+.fade-in-fog.visible {
+  opacity: 1;
+  filter: blur(0);
+  transform: translateY(0);
+}
+/* VIEWERS LIST */
+#viewersListPopup {
+  position:fixed; top:50px; right:20px;
+  max-height:200px; width:200px;
+  overflow-y:auto;
+  background: rgba(0,0,0,0.85);
+  color:#ff5555;
+  border:1px solid #ff3333;
+  border-radius:8px;
+  padding:10px;
+  font-size:14px;
+  display:none; z-index:10001;
+}
 .header-bottom {
     display: flex;
     justify-content: space-between;
@@ -116,46 +151,7 @@ nav a:last-child {
 }
 
 
-#terminalContainer {
-  height: 200px;
-  color: #0f0;
-  font-family: monospace;
-  padding: 15px;
-  border-radius: 10px;
-  overflow: hidden;
-  background: transparent !important;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-}
 
-#terminal {
-  flex: 1;
-  overflow-y: auto;
-  padding-bottom: 20px;
-}
-
-.cmd-line {
-  margin: 10px 0;
-  animation: fadeIn 0.3s ease-in-out;
-  white-space: pre;
-}
-
-.input-line {
-  position: absolute;
-  bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  padding: 10px;
-}
-
-.cmd-user {
-  color: #ff0044;
-  font-weight: bold;
-}
 footer {
   width: 100%;
   padding: 80px 20px;
@@ -224,6 +220,7 @@ body {
       <div class="subtitle">Origin</div>
     </div>
   </div>
+<div id="viewersCount" class="fade-in-fog">👁️‍🗨️ 0</div>
   <div class="header-bottom">
     <div class="left-controls">
       <div class="mode-toggle" id="modeToggle">🦋</div>
@@ -243,7 +240,8 @@ body {
   <section id="home" style="min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;">
     <h2>Welcome to A0ZAI</h2>
     <p>Future Test!!🔥</p>
-      <a href="https://github.com/a0zai" target="_blank" 
+    
+      <a href="https://a0z.nl" target="_blank" 
      style="
        color: #FF0000;
        font-size: 18px;
@@ -253,46 +251,60 @@ body {
      ⚪️
   </a>
   </section>
-  <!-- Over Ons Section -->
-  <section id="over-ons" style="min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;">
-    <h2>About Us</h2>
-    <p>🚀</p>
-  <div id="terminalContainer" style="width: 90%; max-width: 600px; background: #111; color: #0f0; font-family: monospace; padding: 15px; border-radius: 10px; margin-top: 30px; overflow-y: auto; height: 200px;">
-  <div id="terminal"></div>
-  <div class="input-line">
-      <div style="
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 150px;
-    height: 80px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: none;
-  "> 
-  <input type="text" id="commandInput" placeholder="🃏" autocomplete="off" style="
-      background: none;
-      border: none;
-      color: #00fff0;
-      outline: none;
-      font-size: 16px;
-      text-align: center;
-      width: 50%;
-    ">
-  </div>
-  </section>
 </main>
 <footer id="footer">
   &copy; A0ZAI
   <div class="footer-links">
     <a href="#home">Home</a>
-    <a href="#contact">Contact</a>
-    <a href="#over-ons">Over Ons</a>
   </div>
   <div id="threeContainer"></div>
 </footer>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+import { getDatabase, ref, push, onChildAdded, onValue, set, onDisconnect, serverTimestamp, remove } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+const firebaseConfig = {
+  apiKey: "AIzaSyBUb10JpH6iTD1sqSN7xz_lYDZUNSVennQ",
+  authDomain: "testing-9b30c.firebaseapp.com",
+  databaseURL: "https://testing-9b30c-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "testing-9b30c",
+  storageBucket: "testing-9b30c.appspot.com",
+  messagingSenderId: "569390736740",
+  appId: "1:569390736740:web:4f017178b0b3df5ef28671"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const viewersRef = ref(db,"viewers");
+const viewersCountDiv = document.getElementById("viewersCount");
+const viewersPopup = document.getElementById("viewersListPopup");
+let userName = "";
+let visitorId = Math.random().toString(36).substring(2,9);
+let visitorRef = ref(db,"viewers/"+visitorId);
+let torchTrack = null;
+let interval;
+const totalDuration = 180;
+
+// ====== Viewers Handling ======
+set(visitorRef,{ name:"Guest" });
+onDisconnect(visitorRef).remove();
+
+onValue(viewersRef, snap=>{
+  let v = snap.val();
+  let count = v ? Object.keys(v).length : 0;
+  viewersCountDiv.textContent = `👁️‍🗨️ ${count}`;
+});
+
+viewersCountDiv.onclick = ()=>{
+  if(viewersPopup.style.display==="block"){ viewersPopup.style.display="none"; return; }
+  onValue(viewersRef, snap=>{
+    let v = snap.val();
+    viewersPopup.innerHTML = "<strong>Viewers:</strong><br>" +
+      (v ? Object.values(v).map(x=>x.name).join("<br>") : "None");
+    viewersPopup.style.display="block";
+  },{onlyOnce:true});
+};
+
+</script>
 <script>
 const hamburger = document.getElementById('hamburger');
 const menu = document.getElementById('menu');
