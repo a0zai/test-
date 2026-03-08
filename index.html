@@ -1,3 +1,4 @@
+هيك؟
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,106 +11,264 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.46/Tone.js"></script>
 <style>
 html, body {
-    margin: 0; padding: 0;
+    margin: 0;
+    padding: 0;
     background: transparent !important;
-    color: white; font-family: 'Courier New', monospace;
-    min-height: 100vh; width: 100%; overflow-x: hidden;
+    color: white;
+    font-family: 'Courier New', monospace;
+    min-height: 100vh;
+    width: 100%;
+    overflow-x: hidden;
 }
+
 #vanta-bg, #particles-stars {
-    position: fixed; inset: 0;
-    width: 100vw; height: 100vh;
-    z-index: -1; pointer-events: none;
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    pointer-events: none;
 }
+
 header, main, section, footer {
     background: transparent !important;
-    position: relative; z-index: 1;
-    width: 100%; box-sizing: border-box;
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    box-sizing: border-box;
 }
-.logo-row { display: flex; align-items: center; gap: 12px; }
+
+.logo-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
 .logo {
-    width: 64px; height: 64px; border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background: linear-gradient(90deg,#002b20,#004d2f);
     box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+}
+
+.logo h1 {
+    margin: 0;
+    font-size: 14px;
 }
 #viewersCount {
   position:fixed; top:15px; left:50%;
   transform:translateX(-50%);
-  font-size:24px; font-weight:bold;
+  font-size:14px; font-weight:bold;
   color:#ff3333; z-index:10000;
-  user-select:none; background: rgba(0,0,0,0.5);
+  user-select:none;
+  background: rgba(0,0,0,0.5);
   padding:6px 12px; border-radius:12px;
-  box-shadow:0 0 8px #ff0000; cursor:pointer;
+  box-shadow:0 0 8px #ff0000;
+  cursor:pointer;
 }
-.fade-in-fog { opacity: 0; filter: blur(10px); transform: translateY(20px); transition: opacity 3s ease, filter 6s ease, transform 9s ease; }
-.fade-in-fog.visible { opacity: 1; filter: blur(0); transform: translateY(0); }
+.fade-in-fog {
+  opacity: 0;
+  filter: blur(10px); 
+  transform: translateY(20px); 
+  transition: opacity 3s ease, filter 6s ease, transform 9s ease;
+}
+
+.fade-in-fog.visible {
+  opacity: 1;
+  filter: blur(0);
+  transform: translateY(0);
+}
+/* VIEWERS LIST */
 #viewersListPopup {
-  position: fixed; top: 70px; left: 50%; transform: translateX(-50%);
-  max-height: 200px; width: 200px; overflow-y: auto;
-  background: rgba(0, 0, 0, 0.9); color: #0f0; 
-  border: 1px solid #0f0; border-radius: 8px;
-  padding: 10px; font-size: 14px; display: none; z-index: 10001;
+  position: fixed;
+  top: 70px; 
+  left: 50%;
+  transform: translateX(-50%);
+  max-height: 200px;
+  width: 200px;
+  overflow-y: auto;
+  background: rgba(0, 0, 0, 0.9);
+  color: #00ff00; 
+  border: 1px solid #00ff00;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 7px;
+  display: none; 
+  z-index: 10001;
+  box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
 }
-.header-bottom { display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 0 20px; }
-.hamburger { cursor: pointer; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; background: transparent !important; font-size: 28px; z-index: 1001; }
-nav { position: absolute; top: 60px; right: 20px; background-color: rgba(255, 255, 255, 0.95); border-radius: 8px; display: none; flex-direction: column; min-width: 160px; z-index: 1002; }
-nav.active { display: flex; }
-nav a { padding: 12px 20px; text-decoration: none; color: #111; font-weight: bold; border-bottom: 1px solid #eee; }
-footer { width: 100%; padding: 80px 20px; text-align: left; }
-#threeContainer { position: absolute; bottom: 10px; right: 10px; width: 100px; height: 100px; }
-@keyframes moveLink { 0% { transform: translateX(0); } 50% { transform: translateX(10px); } 100% { transform: translateX(0); } }
+
+.header-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+.hamburger {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    background: #000;
+    font-size: 28px;
+    user-select: none;
+    z-index: 1001;
+    transition: transform 0.2s;
+}
+
+.hamburger:active {
+    transform: scale(0.9);
+}
+
+nav {
+    position: absolute;
+    top: 60px;
+    right: 20px;
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 8px;
+    display: none;
+    flex-direction: column;
+    min-width: 160px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    z-index: 1002;
+}
+
+nav.active {
+    display: flex;
+}
+
+nav a {
+    padding: 12px 20px;
+    text-decoration: none;
+    color: #111;
+    font-weight: bold;
+    border-bottom: 1px solid #eee;
+}
+
+nav a:last-child {
+    border-bottom: none;
+}
+
+
+
+footer {
+  width: 100%;
+  padding: 80px 20px;
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+}
+
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  color: #1E90FF;
+  text-align: left;
+}
+
+.footer-links a {
+  color: #1E90FF;
+  text-decoration: none;
+  font-size: 14px;
+  transition: 0.3s;
+}
+
+.footer-links a:hover {
+  color: #00BFFF;
+}
+
+#threeContainer {
+  position: absolute;
+  bottom: 10px;
+  right: 10px; 
+  width: 100px;
+  height: 100px;
+  transform: translateX(-20px);
+}
+@keyframes moveLink {
+  0% { transform: translateX(0); }
+  50% { transform: translateX(10px); }
+  100% { transform: translateX(0); }
+}
+@keyframes fadeIn {
+      from { opacity: 0; transform: translateY(5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+@keyframes shake {
+  0% { transform: translate(0px, 0px); }
+  25% { transform: translate(2px, -2px); }
+  50% { transform: translate(-2px, 2px); }
+  75% { transform: translate(2px, 2px); }
+  100% { transform: translate(0px, 0px); }
+}
+body {
+  animation: none; 
+}
 </style>
 </head>
 <body>
-
 <div id="vanta-bg"></div>
 <div id="particles-stars"></div>
-
-<div id="viewersCount" class="fade-in-fog">👁️‍🗨️ 0</div>
-<div id="viewersListPopup"></div>
-
 <header>
-  <div class="logo-row" style="padding: 20px;">
+  <div class="logo-row">
     <div class="logo"><h1>A0Z</h1></div>
     <div>
       <div class="title">0</div>
       <div class="subtitle">Origin</div>
     </div>
   </div>
-
+<body>
+  <div id="viewersCount" class="fade-in-fog">0</div>
+  <div id="viewersListPopup"></div>
   <div class="header-bottom">
     <div class="left-controls">
       <div class="mode-toggle" id="modeToggle">🦋</div>
     </div>
     <div class="right-controls">
-      <div class="hamburger" id="hamburger">⚫️</div>
+<div class="hamburger" id="hamburger">⚫️</div>
     </div>
     <nav id="menu">
       <a href="#home">Home</a>
-      <a href="#contact">Contact</a>
-      <a href="#over-ons">Over Ons</a>
     </nav>
   </div>
 </header>
-
 <main>
+  <!-- Home Section -->
   <section id="home" style="min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;">
     <h2>Welcome to A0ZAI</h2>
     <p>Future Test!!🔥</p>
-    <a href="https://a0z.nl" target="_blank" style="color: #FF0000; font-size: 18px; animation: moveLink 2s linear infinite alternate;">⚪️</a>
+      <a href="https://a0z.nl" target="_blank" 
+     style="
+       color: #FF0000;
+       font-size: 18px;
+       margin-bottom: 15px;
+       animation: moveLink 2s linear infinite alternate;
+     ">
+     ⚪️
+  </a>
   </section>
 </main>
-
 <footer id="footer">
   &copy; A0ZAI
-  <div class="footer-links"><a href="#home" style="color:#1E90FF; text-decoration:none;">Home</a></div>
+  <div class="footer-links">
+    <a href="#home">Home</a>
+  </div>
   <div id="threeContainer"></div>
 </footer>
-
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-import { getDatabase, ref, onValue, set, onDisconnect } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
-
+import { getDatabase, ref, push, onChildAdded, onValue, set, onDisconnect, serverTimestamp, remove } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
 const firebaseConfig = {
   apiKey: "AIzaSyBUb10JpH6iTD1sqSN7xz_lYDZUNSVennQ",
   authDomain: "testing-9b30c.firebaseapp.com",
@@ -122,41 +281,81 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
+const viewersRef = ref(db,"viewers");
 const viewersCountDiv = document.getElementById("viewersCount");
 const viewersPopup = document.getElementById("viewersListPopup");
-
+let userName = "";
 let visitorId = Math.random().toString(36).substring(2,9);
-let visitorRef = ref(db, "viewers/" + visitorId);
+let visitorRef = ref(db,"viewers/"+visitorId);
+let torchTrack = null;
+let interval;
+const totalDuration = 180;
 
-set(visitorRef, { name: "Guest", timestamp: Date.now() });
+// ====== Viewers Handling ======
+set(visitorRef,{ name:"Guest" });
 onDisconnect(visitorRef).remove();
 
-onValue(ref(db, "viewers"), snap => {
+onValue(viewersRef, snap=>{
   let v = snap.val();
   let count = v ? Object.keys(v).length : 0;
   viewersCountDiv.textContent = `👁️‍🗨️ ${count}`;
 });
 
-viewersCountDiv.onclick = () => {
-  if(viewersPopup.style.display === "block") { viewersPopup.style.display = "none"; }
-  else {
-    onValue(ref(db, "viewers"), snap => {
-      let v = snap.val();
-      viewersPopup.innerHTML = "<strong>Viewers:</strong><br>" + (v ? Object.values(v).map(x=>x.name).join("<br>") : "None");
-      viewersPopup.style.display = "block";
-    }, {onlyOnce: true});
-  }
+viewersCountDiv.onclick = ()=>{
+  if(viewersPopup.style.display==="block"){ viewersPopup.style.display="none"; return; }
+  onValue(viewersRef, snap=>{
+    let v = snap.val();
+    viewersPopup.innerHTML = "<strong>Viewers:</strong><br>" +
+      (v ? Object.values(v).map(x=>x.name).join("<br>") : "None");
+    viewersPopup.style.display="block";
+  },{onlyOnce:true});
 };
+window.addEventListener('load', () => {
+  document.getElementById('viewersCount').classList.add('visible');
+});
 
-window.addEventListener('load', () => { viewersCountDiv.classList.add('visible'); });
 </script>
-
 <script>
-// Hamburger & Menu
 const hamburger = document.getElementById('hamburger');
 const menu = document.getElementById('menu');
-hamburger.addEventListener('click', () => { menu.classList.toggle('active'); });
+const footer = document.getElementById('footer');
+const navLinks = menu.querySelectorAll('a');
+const modeToggle = document.getElementById('modeToggle');
+let isDark = false;
+modeToggle.addEventListener('click', () => {
+  if (!isDark) {
+    document.body.style.filter = "invert(1)";
+    isDark = true;
+  } else {
+    document.body.style.filter = "none";
+    isDark = false;
+  }
+});
+hamburger.addEventListener('click', () => {
+  menu.classList.toggle('active');
+  if(menu.classList.contains('active')) {
+    footer.style.backgroundColor = '#ffffff';  // أبيض عند فتح القائمة
+    footer.style.color = '#000000';
+  } else {
+    footer.style.backgroundColor = 'rgba(128, 0, 128, 0.5)';  // بنفسجي شفاف قبل النقر
+    footer.style.color = '#ffffff';
+  }
+  footer.scrollIntoView({ behavior: 'smooth' });
+});
 
+navLinks.forEach(link => {
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    const targetId = link.getAttribute('href').substring(1);
+    const targetSection = document.getElementById(targetId);
+    if (targetSection) {
+      targetSection.scrollIntoView({ behavior: 'smooth' });
+    }
+    menu.classList.remove('active');
+  });
+});
+</script>
+<script>
 (function() {
   const container = document.getElementById('threeContainer');
   const scene = new THREE.Scene();
@@ -164,36 +363,66 @@ hamburger.addEventListener('click', () => { menu.classList.toggle('active'); });
   const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
   renderer.setSize(container.clientWidth, container.clientHeight);
   container.appendChild(renderer.domElement);
-  const geometry = new THREE.TorusKnotGeometry(5, 1.2, 150, 20);
+
+const geometry = new THREE.TorusKnotGeometry(5, 1.2, 150, 20);
   const material = new THREE.MeshStandardMaterial({ color: 0x00ffff, metalness: 0.8, roughness: 0.2 });
   const torusKnot = new THREE.Mesh(geometry, material);
   scene.add(torusKnot);
+
   const light = new THREE.PointLight(0xffffff, 2, 100);
-  light.position.set(10,10,10); scene.add(light);
-  camera.position.z = 20;
+  light.position.set(10,10,10);
+  scene.add(light);
+
+  camera.position.z = 20; 
+
   function animate() {
     requestAnimationFrame(animate);
-    torusKnot.rotation.x += 0.01; torusKnot.rotation.y += 0.005;
+    torusKnot.rotation.x += 0.01;
+    torusKnot.rotation.y += 0.005;
     renderer.render(scene, camera);
   }
   animate();
+  window.addEventListener('resize', () => {
+    camera.aspect = container.clientWidth / container.clientHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(container.clientWidth, container.clientHeight);
+  });
 })();
-
+</script>
+<script>
 VANTA.FOG({
     el: "#vanta-bg",
-    mouseControls: true, touchControls: true,
-    highlightColor: 0x00ff00, midtoneColor: 0x00ff00, lowlightColor: 0x00ff00,
-    baseColor: 0x000000, blurFactor: 0.09, speed: 0.3, zoom: 0.9
+    mouseControls: true,
+    touchControls: true,
+    gyroControls: false,
+    minHeight: 200.0,
+    minWidth: 200.0,
+    highlightColor: 0x00ff00,
+    midtoneColor: 0x00ff00,
+    lowlightColor: 0x00ff00,
+    baseColor: 0x000000,
+    blurFactor: 0.09,
+    speed: 0.3,
+    zoom: 0.9
 });
 particlesJS("particles-stars", {
     particles: {
-        number: { value: 78 },
+        number: { value: 78, density: { enable: true, value_area: 800 } },
         color: { value: "#ffffff" },
-        opacity: { value: 0.6, random: true },
-        size: { value: 1.5, random: true },
-        move: { enable: true, speed: 0.2 },
+        opacity: { 
+            value: 0.6, 
+            random: true,
+            anim: { enable: true, speed: 1.2, opacity_min: 0.2, sync: false }
+        },
+        size: { 
+            value: 1.5, 
+            random: true,
+            anim: { enable: true, speed: 1, size_min: 0.5, sync: false }
+        },
+        move: { enable: true, speed: 0.2, direction: "left", random: true },
         line_linked: { enable: false }
-    }
+    },
+    retina_detect: true
 });
 </script>
 </body>
