@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>0</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.fog.min.js"></script>
@@ -12,159 +12,118 @@
 html, body {
     margin: 0;
     padding: 0;
-    background: #000;
+    background-color: #000;
     color: white;
     font-family: 'Courier New', monospace;
-    min-height: 100%;
+    min-height: 100vh;
+    width: 100%;
+    overflow-x: hidden;
 }
 
-#vanta-bg {
+#vanta-bg, #particles-stars {
     position: fixed;
     inset: 0;
-    z-index: -1;
-    opacity: 0.35;
-    filter: saturate(140%) contrast(115%);
-    pointer-events: none;
-}
-#particles-stars {
-    position: fixed;
-    inset: 0;
+    width: 100vw;
+    height: 100vh;
     z-index: -1;
     pointer-events: none;
 }
-header {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  position: relative;
-  z-index: 1;
+
+header, main, section, footer {
+    background: transparent !important;
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .logo-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
 .logo {
-  width: 64px;
-  height: 64px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(90deg,#002b20,#004d2f);
-  box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+    width: 64px;
+    height: 64px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(90deg,#002b20,#004d2f);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.6);
 }
 
 .logo h1 {
-  margin: 0;
-  font-size: 20px;
-  color: var(--accent);
-}
-
-.title {
-  font-size: 20px;
-}
-
-.subtitle {
-  color: var(--muted);
-  font-size: 13px;
+    margin: 0;
+    font-size: 20px;
 }
 
 .header-bottom {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  padding: 0 20px;
-  position: relative;
-}
-
-.left-controls {
-  display: flex;
-  align-items: center;
-}
-
-.right-controls {
-  display: flex;
-  align-items: center;
-}
-
-.mode-toggle {
-  font-size: 28px;
-  cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 0 20px;
+    box-sizing: border-box;
 }
 
 .hamburger {
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  background-color: transparent;
-  position: relative;
-  transition: transform 0.3s ease;
-  font-size: 28px;
-  user-select: none;
-  z-index: 1001;
-}
-
-.hamburger::before,
-.hamburger::after {
-  content: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    background: transparent;
+    font-size: 28px;
+    user-select: none;
+    z-index: 1001;
+    transition: transform 0.2s;
 }
 
 .hamburger:active {
-  transform: scale(0.85);
+    transform: scale(0.9);
 }
-
-.hamburger::before { top: -10px; }
-.hamburger::after { top: 10px; }
 
 nav {
-  position: absolute;
-  top: 50px;
-  right: 20px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  background-color: #ffffff;
-  display: none;
-  flex-direction: column;
-  min-width: 150px;
-  box-shadow: 0 5px 10px rgba(0,0,0,0.1);
-  z-index: 2;
-}
-
-nav a {
-  padding: 10px 15px;
-  text-decoration: none;
-  color: #333;
-  transition: 0.2s;
-}
-
-nav a:hover {
-  background-color: #ddd;
+    position: absolute;
+    top: 60px;
+    right: 20px;
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 8px;
+    display: none;
+    flex-direction: column;
+    min-width: 160px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    z-index: 1002;
 }
 
 nav.active {
-  display: flex;
+    display: flex;
 }
 
-main { 
-  padding: 20px;
-  z-index: 1;
+nav a {
+    padding: 12px 20px;
+    text-decoration: none;
+    color: #111;
+    font-weight: bold;
+    border-bottom: 1px solid #eee;
 }
+
+nav a:last-child {
+    border-bottom: none;
+}
+
 
 #terminalContainer {
   height: 200px;
-  background: #111;
   color: #0f0;
   font-family: monospace;
   padding: 15px;
   border-radius: 10px;
   overflow: hidden;
+  background: transparent;
   display: flex;
   flex-direction: column;
   position: relative;
