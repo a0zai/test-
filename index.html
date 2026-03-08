@@ -9,7 +9,8 @@
 <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.46/Tone.js"></script>
 <style>
-height: 100%;
+html, body {
+    height: 100%;
     margin: 0;
     background: #000;
     font-family: 'Courier New', monospace;
@@ -99,20 +100,26 @@ header {
 
 .hamburger {
   cursor: pointer;
-  width: 30px;
-  height: 3px;
-  background-color: red;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background-color: transparent;
   position: relative;
-  transition: 0.3s;
+  transition: transform 0.3s ease;
+  font-size: 28px;
+  user-select: none;
+  z-index: 1001;
 }
+
 .hamburger::before,
 .hamburger::after {
-  content: '';
-  position: absolute;
-  width: 30px;
-  height: 3px;
-  background-color: red;
-  transition: 0.3s;
+  content: none;
+}
+
+.hamburger:active {
+  transform: scale(0.85);
 }
 
 .hamburger::before { top: -10px; }
@@ -265,7 +272,7 @@ body {
       <div class="mode-toggle" id="modeToggle">🦋</div>
     </div>
     <div class="right-controls">
-      <div class="hamburger" id="hamburger">⚫️</div>
+<div class="hamburger" id="hamburger">⚫️</div>
     </div>
     <nav id="menu">
       <a href="#home">Home</a>
@@ -373,7 +380,6 @@ navLinks.forEach(link => {
   });
 });
 </script>
-
 <script>
 (function() {
   const container = document.getElementById('threeContainer');
