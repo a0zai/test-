@@ -10,20 +10,18 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.46/Tone.js"></script>
 <style>
 html, body {
-    height: 100%;
     margin: 0;
+    padding: 0;
     background: #000;
+    color: white;
     font-family: 'Courier New', monospace;
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+    min-height: 100%;
 }
+
 #vanta-bg {
     position: fixed;
     inset: 0;
-    z-index: 0;
+    z-index: -1;
     opacity: 0.35;
     filter: saturate(140%) contrast(115%);
     pointer-events: none;
@@ -31,7 +29,7 @@ html, body {
 #particles-stars {
     position: fixed;
     inset: 0;
-    z-index: 0;
+    z-index: -1;
     pointer-events: none;
 }
 header {
@@ -264,7 +262,7 @@ body {
     <div class="logo"><h1>A0Z</h1></div>
     <div>
       <div class="title">0</div>
-      <div class="subtitle">0 | Origin</div>
+      <div class="subtitle">Origin</div>
     </div>
   </div>
   <div class="header-bottom">
