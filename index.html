@@ -378,7 +378,6 @@ body {
       <div class="subtitle">A0Z</div>
     </div>
   </div>
-<body>
   <div id="viewersCount" class="fade-in-fog">0</div>
   <div id="viewersListPopup"></div>
   <div class="header-bottom">
@@ -585,6 +584,10 @@ function updateClock() {
     requestAnimationFrame(updateClock);
 }
 updateClock();
+window.addEventListener('load', () => {
+    document.body.classList.add('loaded');
+});
+
 </script>
 <script>
 VANTA.FOG({
