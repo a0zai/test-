@@ -180,16 +180,16 @@ nav a {
 nav a:last-child {
     border-bottom: none;
 }
-
 .clock-container {
     transform-style: preserve-3d;
     transform: translateZ(20px);
     transition: transform 0.15s ease-out;
     will-change: transform;
     position: relative;
-    width: 100px;
-    height: 100px;
+    width: 78px;
+    height: 78px;
     border-radius: 50%;
+    border: 1px solid #ff0000;
 }
 .glass-cover {
     position: absolute;
@@ -271,19 +271,19 @@ nav a:last-child {
 }
 .hour {
     width: 3px;
-    height: 48px;
+    height: 24px;
     background: rgba(241,245,249,0.25);
     box-shadow: 0 0 10px rgba(241,245,249,0.3); 
 }
 .minute {
     width: 2px;
-    height: 59px;
+    height: 36px;
     background: var(--sense-red);
     box-shadow: 0 0 11px var(--sense-red); 
 }
 .second {
-    width: 2px;
-    height: 67px;
+    width: 1.5px;
+    height: 48px;
     background: var(--sense-blue);
     box-shadow: 0 0 12px var(--sense-blue);
 }
