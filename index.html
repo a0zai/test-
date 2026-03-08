@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>A0Z-mp~v0.1</title>
+<title>0</title>
 <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.fog.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.46/Tone.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
@@ -13,16 +13,19 @@ html, body {
   margin: 0;
   padding: 0;
   font-family: 'Courier New', monospace;
+  overflow-x: hidden;
   background: #000000;
   color: white;
 }
 #vanta-bg {
     position: fixed;
     inset: 0;
-    z-index: 0;
+    z-index: -1;
     opacity: 0.35;
+    width: 100vw%;
+    height: 100vh%;
     filter: saturate(140%) contrast(115%);
-    pointer-events: none;
+
 }
 #particles-js {
   position: fixed;
@@ -30,8 +33,13 @@ html, body {
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 0;
+  z-index: -1;
 }
+header, main, section {
+  width: 100% !important;
+  box-sizing: border-box;
+}
+
 header {
   display: flex;
   flex-direction: column;
@@ -248,20 +256,20 @@ body {
 }
 </style>
 </head>
-</body>
+<body>
 <div id="vanta-bg"></div>
 <div id="particles-js"></div>
 <header>
   <div class="logo-row">
     <div class="logo"><h1>A0Z</h1></div>
     <div>
-      <div class="title">A0Z-mp~v0.1</div>
+      <div class="title">0</div>
       <div class="subtitle">Self-Referential Symbolic System</div>
     </div>
   </div>
   <div class="header-bottom">
     <div class="left-controls">
-      <div class="mode-toggle" id="modeToggle">☂️</div>
+      <div class="mode-toggle" id="modeToggle">🦋</div>
     </div>
     <div class="right-controls">
       <div class="hamburger" id="hamburger"></div>
@@ -341,9 +349,7 @@ body {
     ">
   </div>
   </section>
-
 </main>
-
 <footer id="footer">
   &copy; A0ZAI
 
@@ -352,7 +358,6 @@ body {
     <a href="#contact">Contact</a>
     <a href="#over-ons">Over Ons</a>
   </div>
-
   <div id="threeContainer"></div>
 </footer>
 <script>
