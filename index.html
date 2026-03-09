@@ -64,48 +64,6 @@ header, main, section {
     margin: 0;
     font-size: 14px;
 }
-#viewersCount {
-  position:fixed; top:15px; left:50%;
-  transform:translateX(-50%);
-  font-size:14px; font-weight:bold;
-  color:#ff3333; z-index:10000;
-  user-select:none;
-  background: rgba(0,0,0,0.5);
-  padding:6px 12px; border-radius:12px;
-  box-shadow:0 0 8px #ff0000;
-  cursor:pointer;
-}
-.fade-in-fog {
-  opacity: 0;
-  filter: blur(10px); 
-  transform: translateY(20px); 
-  transition: opacity 3s ease, filter 6s ease, transform 9s ease;
-}
-
-.fade-in-fog.visible {
-  opacity: 1;
-  filter: blur(0);
-  transform: translateY(0);
-}
-/* VIEWERS LIST */
-#viewersListPopup {
-  position: fixed;
-  top: 70px; 
-  left: 50%;
-  transform: translateX(-50%);
-  max-height: 200px;
-  width: 200px;
-  overflow-y: auto;
-  background: rgba(0, 0, 0, 0.9);
-  color: #00ff00; 
-  border: 1px solid #00ff00;
-  border-radius: 8px;
-  padding: 10px;
-  font-size: 7px;
-  display: none; 
-  z-index: 10001;
-  box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
-}
 
 .header-bottom {
     display: flex;
@@ -179,6 +137,149 @@ nav a {
 
 nav a:last-child {
     border-bottom: none;
+}
+
+#viewersCount {
+  position:fixed; top:15px; left:50%;
+  transform:translateX(-50%);
+  font-size:14px; font-weight:bold;
+  color:#ff3333; z-index:10000;
+  user-select:none;
+  background: rgba(0,0,0,0.5);
+  padding:6px 12px; border-radius:12px;
+  box-shadow:0 0 8px #ff0000;
+  cursor:pointer;
+}
+.fade-in-fog {
+  opacity: 0;
+  filter: blur(10px); 
+  transform: translateY(20px); 
+  transition: opacity 3s ease, filter 6s ease, transform 9s ease;
+}
+
+.fade-in-fog.visible {
+  opacity: 1;
+  filter: blur(0);
+  transform: translateY(0);
+}
+/* VIEWERS LIST */
+#viewersListPopup {
+  position: fixed;
+  top: 70px; 
+  left: 50%;
+  transform: translateX(-50%);
+  max-height: 200px;
+  width: 200px;
+  overflow-y: auto;
+  background: rgba(0, 0, 0, 0.9);
+  color: #00ff00; 
+  border: 1px solid #00ff00;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 7px;
+  display: none; 
+  z-index: 10001;
+  box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+}
+
+#chatOrbit{
+     position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    z-index:50;
+}
+
+#chatMessages{
+ position:absolute;
+ width:260px;
+ height:260px;
+ top:-130px;
+ left:-130px;
+ pointer-events:none;
+}
+
+.chatBubble{
+    position:absolute;
+    backdrop-filter:blur(12px);
+    background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.25);
+    border-radius:50px;
+    padding:6px 10px;
+    font-size:10px;
+    color:white;
+    white-space:nowrap;
+    box-shadow:
+    0 0 10px rgba(255,255,255,0.2),
+    inset 0 0 12px rgba(255,255,255,0.1);
+    animation:orbitFloat 10s linear forwards;
+}
+
+@keyframes orbitFloat{
+
+0%{
+ transform:scale(0.6);
+ opacity:0;
+}
+
+10%{
+ opacity:1;
+}
+
+50%{
+ transform:scale(1);
+}
+
+100%{
+ transform:scale(0.8) translateY(-30px);
+ opacity:0;
+}
+}
+.chatName{
+     color:#00ffff;
+     cursor:pointer;
+     font-weight:bold;
+}
+
+.chatName:hover{
+    color:white;
+}
+
+.mention{
+     color:#ff3333;
+    font-weight:bold;
+}
+
+#chatInputBox{
+    position:absolute;
+    top:160px;
+    left:50%;
+    transform:translateX(-50%);
+    display:flex;
+    gap:4px;
+}
+
+#chatInputBox input{
+     background:rgba(255,255,255,0.1);
+    border:1px solid rgba(255,255,255,0.3);
+    color:white;
+    padding:4px;
+    font-size:10px;
+    border-radius:6px;
+}
+
+#chatInput{
+ width:100px;
+}
+
+#chatInputBox button{
+     background:rgba(0,255,0,0.2);
+     border:none;
+     color:white;
+     font-size:10px;
+     padding:4px 8px;
+     border-radius:6px;
+     cursor:pointer;
 }
 .clock-container {
     transform-style: preserve-3d;
@@ -375,8 +476,6 @@ body {
       <div class="subtitle">A0Z</div>
     </div>
   </div>
-  <div id="viewersCount" class="fade-in-fog">0</div>
-  <div id="viewersListPopup"></div>
   <div class="header-bottom">
     <div class="left-controls">
       <div class="mode-toggle" id="modeToggle">🦋</div>
@@ -390,7 +489,18 @@ body {
   </div>
 </header>
 <main>
+      <div id="viewersCount" class="fade-in-fog">0</div>
+  <div id="viewersListPopup"></div>
   <section id="home" style="min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+    <div id="chatOrbit">
+  <div id="chatMessages"></div>
+  <div id="chatInputBox">
+    <input id="nameInput" placeholder="name..." maxlength="20">
+    <button id="setNameBtn">OK</button>
+    <input id="chatInput" placeholder="message..." maxlength="99" disabled>
+    <button id="sendMsgBtn" disabled>Send</button>
+  </div>
+</div>
     <div class="scene">
     <div class="clock-container">
         <div class="glass-cover"></div>
@@ -456,30 +566,94 @@ let visitorRef = ref(db,"viewers/"+visitorId);
 let torchTrack = null;
 let interval;
 const totalDuration = 180;
+// ===== CHAT SYSTEM =====
 
-// ====== Viewers Handling ======
-set(visitorRef,{ name:"Guest" });
-onDisconnect(visitorRef).remove();
+const chatRef = ref(db,"chat");
 
-onValue(viewersRef, snap=>{
-  let v = snap.val();
-  let count = v ? Object.keys(v).length : 0;
-  viewersCountDiv.textContent = ` ${count}`;
-});
+const chatMessages = document.getElementById("chatMessages");
+const chatInput = document.getElementById("chatInput");
+const sendBtn = document.getElementById("sendMsgBtn");
 
-viewersCountDiv.onclick = ()=>{
-  if(viewersPopup.style.display==="block"){ viewersPopup.style.display="none"; return; }
-  onValue(viewersRef, snap=>{
-    let v = snap.val();
-    viewersPopup.innerHTML = "<strong>Viewers:</strong><br>" +
-      (v ? Object.values(v).map(x=>x.name).join("<br>") : "None");
-    viewersPopup.style.display="block";
-  },{onlyOnce:true});
+const nameInput = document.getElementById("nameInput");
+const setNameBtn = document.getElementById("setNameBtn");
+
+let userChatName="";
+
+setNameBtn.onclick=()=>{
+
+ const name=nameInput.value.trim();
+
+ if(name.length<2)return;
+
+ userChatName=name;
+
+ chatInput.disabled=false;
+ sendBtn.disabled=false;
+
+ nameInput.disabled=true;
+ setNameBtn.disabled=true;
+
+ set(visitorRef,{name:userChatName});
 };
-window.addEventListener('load', () => {
-  document.getElementById('viewersCount').classList.add('visible');
+
+sendBtn.onclick=sendMessage;
+
+chatInput.addEventListener("keypress",e=>{
+ if(e.key==="Enter")sendMessage();
 });
 
+function sendMessage(){
+
+ const text=chatInput.value.trim();
+
+ if(!text || text.length>99)return;
+
+ push(chatRef,{
+  name:userChatName,
+  msg:text,
+  time:Date.now()
+ });
+
+ chatInput.value="";
+}
+
+onChildAdded(chatRef,(snap)=>{
+
+ const data=snap.val();
+
+ const bubble=document.createElement("div");
+
+ bubble.className="chatBubble";
+
+ const nameSpan=document.createElement("span");
+ nameSpan.className="chatName";
+ nameSpan.textContent=data.name;
+
+ const msgSpan=document.createElement("span");
+
+ let msg=data.msg.replace(/@(\w+)/g,'<span class="mention">@$1</span>');
+
+ msgSpan.innerHTML=" : "+msg;
+
+ bubble.appendChild(nameSpan);
+ bubble.appendChild(msgSpan);
+
+ nameSpan.onclick=()=>{
+  chatInput.value="@"+data.name+" ";
+  chatInput.focus();
+ };
+
+ const angle=Math.random()*360;
+ const radius=70+Math.random()*40;
+
+ bubble.style.transform=
+ `rotate(${angle}deg) translateX(${radius}px) rotate(-${angle}deg)`;
+
+ chatMessages.appendChild(bubble);
+
+ setTimeout(()=>bubble.remove(),10000);
+
+});
 </script>
 <script>
 const hamburger = document.getElementById('hamburger');
@@ -554,6 +728,29 @@ const geometry = new THREE.TorusKnotGeometry(5, 1.2, 150, 20);
     renderer.setSize(container.clientWidth, container.clientHeight);
   });
 })();
+</script>
+<script>
+set(visitorRef,{ name:"Guest" });
+onDisconnect(visitorRef).remove();
+
+onValue(viewersRef, snap=>{
+  let v = snap.val();
+  let count = v ? Object.keys(v).length : 0;
+  viewersCountDiv.textContent = ` ${count}`;
+});
+
+viewersCountDiv.onclick = ()=>{
+  if(viewersPopup.style.display==="block"){ viewersPopup.style.display="none"; return; }
+  onValue(viewersRef, snap=>{
+    let v = snap.val();
+    viewersPopup.innerHTML = "<strong>Viewers:</strong><br>" +
+      (v ? Object.values(v).map(x=>x.name).join("<br>") : "None");
+    viewersPopup.style.display="block";
+  },{onlyOnce:true});
+};
+window.addEventListener('load', () => {
+  document.getElementById('viewersCount').classList.add('visible');
+});
 </script>
 <script>
 const hour = document.getElementById('hour');
