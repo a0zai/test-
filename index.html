@@ -496,7 +496,6 @@ body {
     <div id="chatWrapper" class="fade-in-fog">
   <div id="namePrompt">
     <h2 style="color:#ff3333; text-shadow:0 0 8px red;">🕯️</h2>
-    <video id="smallCamera" autoplay muted playsinline></video>
     <input id="nameInput" placeholder="Name?" autocomplete="off" />
     <button id="joinBtn">Enter 🪶</button>
   </div>
@@ -574,13 +573,8 @@ const inputBar = document.getElementById("inputBar");
 const input = document.getElementById("input");
 const sendBtn = document.getElementById("sendButton");
 const clearBtn = document.getElementById("clearButton");
-const smallCam = document.getElementById("smallCamera");
 const viewersCountDiv = document.getElementById("viewersCount");
 const viewersPopup = document.getElementById("viewersListPopup");
-const timerText = document.getElementById("globalTimerText");
-const timerCanvas = document.getElementById("globalTimerCanvas");
-const ctx = timerCanvas.getContext("2d");
-
 let userName = "";
 let visitorId = Math.random().toString(36).substring(2,9);
 let visitorRef = ref(db,"viewers/"+visitorId);
