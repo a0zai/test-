@@ -251,12 +251,13 @@ nav a:last-child {
 }
 
 #chatInputBox{
-    position:absolute;
-    top:160px;
-    left:50%;
-    transform:translateX(-50%);
-    display:flex;
-    gap:4px;
+ position:absolute;
+ top:-70px;
+ left:50%;
+ transform:translateX(-50%);
+ display:flex;
+ align-items:center;
+ gap:6px;
 }
 
 #chatInputBox input{
@@ -269,7 +270,10 @@ nav a:last-child {
 }
 
 #chatInput{
- width:100px;
+ width:180px;
+ height:28px;
+ font-size:12px;
+ padding:4px 8px;
 }
 
 #chatInputBox button{
@@ -569,7 +573,6 @@ const totalDuration = 180;
 // ===== CHAT SYSTEM =====
 
 const chatRef = ref(db,"chat");
-
 const chatMessages = document.getElementById("chatMessages");
 const chatInput = document.getElementById("chatInput");
 const sendBtn = document.getElementById("sendMsgBtn");
@@ -651,7 +654,7 @@ onChildAdded(chatRef,(snap)=>{
 
  chatMessages.appendChild(bubble);
 
- setTimeout(()=>bubble.remove(),10000);
+ setTimeout(()=>bubble.remove(),30000);
 
 });
 </script>
@@ -730,9 +733,10 @@ const geometry = new THREE.TorusKnotGeometry(5, 1.2, 150, 20);
 })();
 </script>
 <script>
+if(!userChatName){
 set(visitorRef,{ name:"Guest" });
+}
 onDisconnect(visitorRef).remove();
-
 onValue(viewersRef, snap=>{
   let v = snap.val();
   let count = v ? Object.keys(v).length : 0;
