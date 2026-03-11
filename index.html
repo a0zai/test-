@@ -1,239 +1,199 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>0 Shop</title>
-    <style>
-        :root {
-            --sense-red: #ff3333;
-            --sense-green: #00ff88;
-            --sense-blue: #33ccff;
-        }
 
-        body {
-            margin: 0;
-            overflow: hidden;
-            background: #050505;
-            color: white;
-            font-family: sans-serif;
-        }
+<meta charset="UTF-8">
+<title>0 Shop</title>
 
-        #ui {
-            position: fixed;
-            top: 20px;
-            width: 100%;
-            text-align: center;
-            letter-spacing: 2px;
-            opacity: 0.7;
-            z-index: 10;
-        }
+<style>
 
-        #clock-view {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(2);
-            display: none;
-            z-index: 100;
-        }
+body{
+margin:0;
+overflow:hidden;
+background:black;
+font-family:Arial;
+}
 
-        .scene {
-            perspective: 1000px;
-        }
+#ui{
+position:absolute;
+top:10px;
+left:10px;
+color:white;
+background:rgba(0,0,0,0.5);
+padding:10px;
+border-radius:8px;
+}
 
-        .clock-container {
-            transform-style: preserve-3d;
-            transition: transform 0.15s ease-out;
-            will-change: transform;
-            position: relative;
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            border: 1px solid var(--sense-red);
-            background: rgba(0,0,0,0.9);
-            box-shadow: 0 0 20px rgba(255,0,0,0.2);
-        }
+</style>
 
-        .glass-cover {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            pointer-events: none;
-            transform: translateZ(30px);
-            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.1) 0%, transparent 70%);
-        }
-
-        .clock-container::after {
-            content: 'A•Z';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 22px;
-            letter-spacing: 2px;
-            color: #fff;
-            text-shadow: 0 0 7px #ff0000;
-        }
-
-        .brand-name {
-            position: absolute;
-            top: 63%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: var(--sense-green);
-            font-size: 8px;
-            letter-spacing: 2px;
-            opacity: 0.6;
-            text-transform: uppercase;
-        }
-
-        .number {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            text-align: center;
-            font-size: 10px;
-            font-weight: bold;
-            padding: 4px;
-            box-sizing: border-box;
-            color: #cccccc;
-        }
-
-        .n1 { position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); font-size: 14px; color: #f1f5f9; }
-        .n2 { transform: rotate(30deg); }   .n2 div { transform: rotate(-30deg); }
-        .n3 { transform: rotate(60deg); }   .n3 div { transform: rotate(-60deg); }
-        .n4 { transform: rotate(90deg); }   .n4 div { transform: rotate(-90deg); }
-        .n5 { transform: rotate(120deg); }  .n5 div { transform: rotate(-120deg); }
-        .n6 { transform: rotate(150deg); }  .n6 div { transform: rotate(-150deg); }
-        .n7 { transform: rotate(180deg); }  .n7 div { transform: rotate(-180deg); }
-        .n8 { transform: rotate(210deg); }  .n8 div { transform: rotate(-210deg); }
-        .n9 { transform: rotate(240deg); }  .n9 div { transform: rotate(-240deg); }
-        .n10 { transform: rotate(270deg); } .n10 div { transform: rotate(-270deg); }
-        .n11 { transform: rotate(300deg); } .n11 div { transform: rotate(-300deg); }
-        .n12 { transform: rotate(330deg); } .n12 div { transform: rotate(-330deg); }
-
-        .hand {
-            position: absolute;
-            bottom: 50%;
-            left: 50%;
-            transform-origin: bottom;
-            border-radius: 10px;
-            transform: translateZ(20px) rotate(0deg);
-        }
-
-        .hour { width: 3px; height: 24px; background: rgba(241,245,249,0.5); box-shadow: 0 0 10px rgba(241,245,249,0.3); }
-        .minute { width: 2px; height: 36px; background: var(--sense-red); box-shadow: 0 0 11px var(--sense-red); }
-        .second { width: 1.5px; height: 48px; background: var(--sense-blue); box-shadow: 0 0 12px var(--sense-blue); }
-
-        canvas { display: block; }
-    </style>
 </head>
+
 <body>
 
-<div id="ui">(1) = ⬆️ </div>
-<div id="clock-view">
-    <div class="scene">
-        <div class="clock-container" id="main-clock">
-            <div class="glass-cover"></div>
-            <div class="brand-name">0</div>
-            <div class="number n2"><div>12</div></div>
-            <div class="number n3"><div>11</div></div>
-            <div class="number n4"><div>10</div></div>
-            <div class="number n5"><div>9</div></div>
-            <div class="number n6"><div>8</div></div>
-            <div class="number n7"><div>Ƶ</div></div>
-            <div class="number n8"><div>6</div></div>
-            <div class="number n9"><div>5</div></div>
-            <div class="number n10"><div>4</div></div>
-            <div class="number n11"><div>3</div></div>
-            <div class="number n12"><div>2</div></div> 
-            <div class="hand hour" id="h-hand"><div class="n1">∞</div></div>
-            <div class="hand minute" id="m-hand"></div>
-            <div class="hand second" id="s-hand"></div>
-        </div>
-    </div>
+<div id="ui">
+W A S D 
 </div>
-<canvas id="game"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
+
 <script>
-    const canvas = document.getElementById('game');
-    const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    const player = { x: canvas.width / 2, y: canvas.height - 100, size: 15, speed: 5 };
-    const shop0 = { x: canvas.width / 2 - 100, y: 150, w: 200, h: 120 };
-    function drawWorld() {
-        ctx.fillStyle = '#050505';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        let grad = ctx.createRadialGradient(player.x, player.y, 0, player.x, player.y, 250);
-        grad.addColorStop(0, 'rgba(51, 204, 255, 0.15)');
-        grad.addColorStop(1, 'transparent');
-        ctx.fillStyle = grad;
-        ctx.fillRect(0,0, canvas.width, canvas.height);
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x000000);
 
-        ctx.strokeStyle = '#ff3333';
-        ctx.lineWidth = 2;
-        ctx.setLineDash([5, 5]);
-        ctx.strokeRect(shop0.x, shop0.y, shop0.w, shop0.h);
-        ctx.setLineDash([]);
-        
-        ctx.fillStyle = '#fff';
-        ctx.textAlign = 'center';
-        ctx.fillText("0 Shop", canvas.width/2, shop0.y + 60);
+const camera = new THREE.PerspectiveCamera(
+75,
+window.innerWidth/window.innerHeight,
+0.1,
+1000
+);
 
-        ctx.shadowBlur = 15;
-        ctx.shadowColor = "red";
-        ctx.fillStyle = "red";
-        ctx.beginPath();
-        ctx.arc(canvas.width/2, shop0.y + 30, 8, 0, Math.PI*2);
-        ctx.fill();
-        ctx.shadowBlur = 0;
+camera.position.set(0,2,6);
 
-        ctx.fillStyle = '#33ccff';
-        ctx.beginPath();
-        ctx.arc(player.x, player.y, player.size, 0, Math.PI*2);
-        ctx.fill();
-    }
+const renderer = new THREE.WebGLRenderer({antialias:true});
+renderer.setSize(window.innerWidth,window.innerHeight);
+document.body.appendChild(renderer.domElement);
 
-    function update() {
-        const dist = Math.hypot(player.x - canvas.width/2, player.y - (shop0.y + 60));
-        if (dist < 80) {
-            document.getElementById('clock-view').style.display = 'block';
-            updateClockHands();
-        } else {
-            document.getElementById('clock-view').style.display = 'none';
-        }
-    }
+//// الإضاءة
 
-    function updateClockHands() {
-        const now = new Date();
-        const s = now.getSeconds() * 6;
-        const m = now.getMinutes() * 6;
-        const h = (now.getHours() % 12) * 30 + (m / 12);
-        
-        document.getElementById('s-hand').style.transform = `translateZ(20px) rotate(${s}deg)`;
-        document.getElementById('m-hand').style.transform = `translateZ(20px) rotate(${m}deg)`;
-        document.getElementById('h-hand').style.transform = `translateZ(20px) rotate(${h}deg)`;
-    }
+const light = new THREE.PointLight(0xffffff,1.2,30);
+light.position.set(0,5,0);
+scene.add(light);
 
-    window.addEventListener('keydown', (e) => {
-        if (e.key === "ArrowUp") player.y -= player.speed;
-        if (e.key === "ArrowDown") player.y += player.speed;
-        if (e.key === "ArrowLeft") player.x -= player.speed;
-        if (e.key === "ArrowRight") player.x += player.speed;
-    });
+const ambient = new THREE.AmbientLight(0x404040);
+scene.add(ambient);
 
-    function loop() {
-        drawWorld();
-        update();
-        requestAnimationFrame(loop);
-    }
+//// الأرضية
 
-    loop();
+const floorGeo = new THREE.PlaneGeometry(60,60);
+const floorMat = new THREE.MeshStandardMaterial({color:0x111111});
+const floor = new THREE.Mesh(floorGeo,floorMat);
+
+floor.rotation.x = -Math.PI/2;
+
+scene.add(floor);
+
+//// اللاعب
+
+const playerGeo = new THREE.CapsuleGeometry(0.4,1.2,4,8);
+const playerMat = new THREE.MeshStandardMaterial({color:0xdddddd});
+
+const player = new THREE.Mesh(playerGeo,playerMat);
+player.position.y = 1;
+
+scene.add(player);
+
+//// رفوف الساعات
+
+function createShelf(x,z){
+
+const shelfGeo = new THREE.BoxGeometry(3,2,0.5);
+const shelfMat = new THREE.MeshStandardMaterial({color:0x333333});
+const shelf = new THREE.Mesh(shelfGeo,shelfMat);
+
+shelf.position.set(x,1,z);
+scene.add(shelf);
+
+for(let i=0;i<6;i++){
+
+const watchGeo = new THREE.CylinderGeometry(0.15,0.15,0.05,32);
+const watchMat = new THREE.MeshStandardMaterial({
+color:0xffd700,
+emissive:0x332200
+});
+
+const watch = new THREE.Mesh(watchGeo,watchMat);
+
+watch.rotation.x = Math.PI/2;
+watch.position.set(x-1.2+i*0.5,1.6,z+0.35);
+
+scene.add(watch);
+}
+}
+createShelf(-5,-5);
+createShelf(5,-5);
+createShelf(-5,-9);
+createShelf(5,-9);
+createShelf(-5,-13);
+createShelf(5,-13);
+const npcGeo = new THREE.CapsuleGeometry(0.45,1.3,4,8);
+const npcMat = new THREE.MeshStandardMaterial({color:0x111111});
+
+const npc = new THREE.Mesh(npcGeo,npcMat);
+npc.position.set(0,1,-15);
+
+scene.add(npc);
+
+const maskGeo = new THREE.SphereGeometry(0.35,16,16);
+const maskMat = new THREE.MeshStandardMaterial({
+color:0xffffff,
+emissive:0x111111
+});
+
+const mask = new THREE.Mesh(maskGeo,maskMat);
+mask.position.set(0,1.9,-15);
+
+scene.add(mask);
+
+const keys = {};
+
+document.addEventListener("keydown",(e)=>{
+keys[e.key.toLowerCase()] = true;
+});
+
+document.addEventListener("keyup",(e)=>{
+keys[e.key.toLowerCase()] = false;
+});
+
+function movePlayer(){
+
+let speed = 0.09;
+
+if(keys["w"]) player.position.z -= speed;
+if(keys["s"]) player.position.z += speed;
+if(keys["a"]) player.position.x -= speed;
+if(keys["d"]) player.position.x += speed;
+
+camera.position.x += (player.position.x - camera.position.x) * 0.1;
+camera.position.z += ((player.position.z + 6) - camera.position.z) * 0.1;
+
+}
+
+
+function npcLook(){
+
+npc.lookAt(player.position);
+mask.lookAt(player.position);
+
+}
+
+
+function animate(){
+
+requestAnimationFrame(animate);
+
+movePlayer();
+
+npcLook();
+
+camera.lookAt(player.position);
+
+renderer.render(scene,camera);
+
+}
+
+animate();
+
+window.addEventListener("resize",()=>{
+
+camera.aspect = window.innerWidth/window.innerHeight;
+camera.updateProjectionMatrix();
+
+renderer.setSize(window.innerWidth,window.innerHeight);
+
+});
+
 </script>
+
 </body>
 </html>
