@@ -3,22 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grand Royal Gallery</title>
+    <title>Elite Watch Boutique - Grand Opening</title>
     <style>
-        body { margin: 0; overflow: hidden; background: #fff; font-family: 'Segoe UI', sans-serif; }
-        #ui { position: absolute; top: 20px; left: 20px; color: #b8860b; background: rgba(255,255,255,0.9); padding: 15px 25px; border-radius: 10px; border: 2px solid #b8860b; pointer-events: none; z-index: 10; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        #joystick-container { position: absolute; bottom: 50px; left: 50px; width: 120px; height: 120px; z-index: 100; }
-        #start { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #fff; background: #b8860b; padding: 15px 60px; border: none; border-radius: 50px; cursor: pointer; z-index: 1000; font-weight: bold; font-size: 22px; box-shadow: 0 10px 20px rgba(184,134,11,0.4); transition: 0.3s; }
-        #start:hover { background: #966d09; transform: translate(-50%, -50%) scale(1.05); }
+        body { margin: 0; overflow: hidden; background: #000; font-family: 'Times New Roman', serif; }
+        #ui { position: absolute; top: 20px; left: 20px; color: #d4af37; background: rgba(0,0,0,0.85); padding: 15px 25px; border-left: 5px solid #d4af37; pointer-events: none; z-index: 10; border-radius: 5px; }
+        #joystick-container { position: absolute; bottom: 40px; left: 40px; width: 100px; height: 100px; z-index: 100; }
+        #start { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #000; background: #d4af37; padding: 15px 50px; border: none; cursor: pointer; z-index: 1000; font-weight: bold; font-size: 20px; letter-spacing: 3px; box-shadow: 0 0 40px rgba(212,175,55,0.4); }
     </style>
 </head>
 <body>
 
 <div id="ui">
-    <h2 style="margin:0; letter-spacing: 2px;">ELITE BOUTIQUE</h2>
-    <p style="margin:5px 0 0; color: #444; font-size: 14px;">إضاءة كاملة - تجربة فاخرة</p>
+    <h1 style="margin:0; letter-spacing: 5px;">ELITE</h1>
+    <p style="margin:5px 0 0; color: #fff; font-size: 10px; text-transform: uppercase;">Private Collection Experience</p>
 </div>
-<div id="start">دخول المعرض</div>
+<div id="start">دخول المعرض الخاص</div>
 <div id="joystick-container"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
@@ -26,148 +25,167 @@
 
 <script>
 let watches = [];
-let targetMove = { x: 0, z: 0 };
-let currentMove = { x: 0, z: 0 };
 
-// ==== 1. Scene & Bright Lighting ====
+// ==== 1. Scene & Lighting (High Intensity Mode) ====
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0xfafafa); // خلفية فاتحة جداً لنظافة التصميم
+scene.background = new THREE.Color(0x020202);
+scene.fog = new THREE.Fog(0x020202, 10, 40); // ضباب للعمق والغموض
 
-const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.set(0, 1.7, 30); // البداية من الخارج
+const camera = new THREE.PerspectiveCamera(65, window.innerWidth / window.innerHeight, 0.1, 1000);
+camera.position.set(0, 1.7, 30); // البداية من الخارج للداخل
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap; // ظلال ناعمة
 document.body.appendChild(renderer.domElement);
 
-// إضاءة عامة قوية (Bright White Interior)
-const ambientLight = new THREE.AmbientLight(0xffffff, 1.2); 
-scene.add(ambientLight);
+// إضاءة عامة هادئة
+const lightAmb = new THREE.AmbientLight(0xffffff, 0.4);
+scene.add(lightAmb);
 
-const sunLight = new THREE.DirectionalLight(0xffffff, 0.8);
-sunLight.position.set(5, 10, 7.5);
+// إضاءة شمسية ناعمة للدخول
+const sunLight = new THREE.DirectionalLight(0xffffff, 0.6);
+sunLight.position.set(5, 10, 20);
+sunLight.castShadow = true;
 scene.add(sunLight);
 
-// ==== 2. Architecture (Marble & Gold) ====
-// الأرضية: رخام أبيض لامع
+// ==== 2. المعمار (الأرضية والجدران الرخامية) ====
+// الأرضية الرخامية المصقولة
 const floor = new THREE.Mesh(
-    new THREE.PlaneGeometry(50, 150),
-    new THREE.MeshStandardMaterial({color: 0xffffff, roughness: 0.05, metalness: 0.2})
+    new THREE.PlaneGeometry(30, 120),
+    new THREE.MeshStandardMaterial({color: 0x050505, roughness: 0.05, metalness: 0.8})
 );
 floor.rotation.x = -Math.PI / 2;
+floor.receiveShadow = true;
 scene.add(floor);
 
-// السجاد: أحمر مخملي ناصع
+// السجاد الملكي الممتد
 const carpet = new THREE.Mesh(
-    new THREE.PlaneGeometry(6, 150),
-    new THREE.MeshStandardMaterial({color: 0x990000})
+    new THREE.PlaneGeometry(5, 120),
+    new THREE.MeshStandardMaterial({color: 0x440000, roughness: 0.8})
 );
 carpet.rotation.x = -Math.PI / 2;
-carpet.position.y = 0.03;
+carpet.position.y = 0.02;
 scene.add(carpet);
 
-// الجدران: بيضاء مع إطارات ذهبية
+// الجدران الجانبية المؤطرة بالذهب
 function createWall(x) {
     const wall = new THREE.Mesh(
-        new THREE.BoxGeometry(0.5, 15, 100),
-        new THREE.MeshStandardMaterial({color: 0xffffff})
+        new THREE.BoxGeometry(0.8, 12, 100),
+        new THREE.MeshStandardMaterial({color: 0x080808})
     );
-    wall.position.set(x, 7.5, 0);
+    wall.position.set(x, 6, 0);
+    wall.castShadow = true;
     scene.add(wall);
 
-    // إطار ذهبي سفلي
+    // إطار ذهبي علوي
     const trim = new THREE.Mesh(
-        new THREE.BoxGeometry(0.6, 0.5, 100),
+        new THREE.BoxGeometry(1, 0.2, 100),
         new THREE.MeshStandardMaterial({color: 0xd4af37, metalness: 1})
     );
-    trim.position.set(x, 0.25, 0);
+    trim.position.set(x, 0.1, 0);
     scene.add(trim);
 }
 createWall(-12);
 createWall(12);
 
-// ==== 3. Animated Luxury Watches ====
-function createWatchModel(colorHex) {
+// ==== 3. موديلات الساعات المتحركة والواقعية ====
+function createWatchModel(type) {
     const group = new THREE.Group();
-    const caseGeo = new THREE.TorusGeometry(0.3, 0.05, 16, 100);
-    const caseMat = new THREE.MeshStandardMaterial({color: colorHex, metalness: 1, roughness: 0.1});
+    let matColor = (type === 'gold') ? 0xffd700 : (type === 'silver' ? 0xc0c0c0 : 0x111111);
+    
+    // الهيكل الرئيسي
+    const caseGeo = new THREE.TorusGeometry(0.2, 0.03, 16, 100);
+    const caseMat = new THREE.MeshStandardMaterial({color: matColor, metalness: 1, roughness: 0.1});
     const watchCase = new THREE.Mesh(caseGeo, caseMat);
     
-    const dial = new THREE.Mesh(new THREE.CircleGeometry(0.26, 32), new THREE.MeshStandardMaterial({color: 0xffffff}));
-    dial.position.z = 0.02;
+    // المينا الداخلي
+    const face = new THREE.Mesh(new THREE.CircleGeometry(0.18, 32), new THREE.MeshStandardMaterial({color: 0x000, metalness: 0.5}));
+    face.position.z = 0.01;
 
-    const hands = new THREE.Mesh(new THREE.BoxGeometry(0.02, 0.2, 0.01), new THREE.MeshBasicMaterial({color: 0x000}));
-    hands.position.y = 0.1; hands.position.z = 0.03;
-    
-    group.add(watchCase, dial, hands);
+    // العقارب (Pointers)
+    const hand = new THREE.Mesh(new THREE.PlaneGeometry(0.01, 0.12), new THREE.MeshBasicMaterial({color: 0xffffff}));
+    hand.position.set(0, 0.06, 0.02);
+    face.add(hand);
+
+    group.add(watchCase, face);
     return group;
 }
 
-function addDisplay(x, z, color) {
-    // قاعدة كريستالية
-    const base = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.7, 0.7, 1.4, 32),
-        new THREE.MeshStandardMaterial({color: 0xffffff, transparent: true, opacity: 0.8, metalness: 0.5})
+function addDisplay(x, z, type) {
+    // القاعدة الكريستالية المصقولة
+    const pedestal = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.5, 0.6, 1.2, 32),
+        new THREE.MeshStandardMaterial({color: 0xffffff, transparent: true, opacity: 0.2, metalness: 0.5})
     );
-    base.position.set(x, 0.7, z);
-    scene.add(base);
+    pedestal.position.set(x, 0.65, z);
+    pedestal.castShadow = true;
+    scene.add(pedestal);
 
-    const watch = createWatchModel(color);
-    watch.position.set(x, 2, z);
+    const watch = createWatchModel(type);
+    watch.position.set(x, 1.6, z);
+    watch.castShadow = true;
     scene.add(watch);
     watches.push(watch);
 
-    // إضاءة Spotlight لكل ساعة (بيضاء نقية)
+    // إضاءة Spotlight مركزة وقوية لكل ساعة
     const spot = new THREE.SpotLight(0xffffff, 30);
-    spot.position.set(x, 8, z);
+    spot.position.set(x, 6, z);
     spot.target = watch;
+    spot.angle = 0.3;
+    spot.castShadow = true;
     scene.add(spot);
 }
 
-addDisplay(-6, 10, 0xd4af37); // ذهب
-addDisplay(6, 10, 0xc0c0c0);  // فضة
-addDisplay(-6, -5, 0x111111); // أسود ملكي
-addDisplay(6, -5, 0xd4af37);  // ذهب
-addDisplay(0, -15, 0xc0c0c0); // فضة
+// توزيع المعروضات بموديلات مختلفة
+addDisplay(-5, 10, 'gold');
+addDisplay(5, 10, 'silver');
+addDisplay(-5, 0, 'black');
+addDisplay(5, 0, 'gold');
+addDisplay(0, -10, 'silver');
 
-// ==== 4. الموظف الأنيق ====
-const staff = new THREE.Group();
-const suit = new THREE.Mesh(new THREE.BoxGeometry(0.7, 1.3, 0.4), new THREE.MeshStandardMaterial({color: 0x111}));
-const head = new THREE.Mesh(new THREE.SphereGeometry(0.25, 16, 16), new THREE.MeshStandardMaterial({color: 0xedc9af}));
-head.position.y = 0.9;
-const mask = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.12, 0.2), new THREE.MeshStandardMaterial({color: 0xffffff}));
-mask.position.set(0, 0.85, 0.18);
-staff.add(suit, head, mask);
-staff.position.set(0, 0.65, -25);
-scene.add(staff);
+// ==== 4. الموظف وطاولة الاستقبال ====
+const staffGroup = new THREE.Group();
+// البدلة
+const suit = new THREE.Mesh(new THREE.BoxGeometry(0.6, 1.2, 0.3), new THREE.MeshStandardMaterial({color: 0x000}));
+const head = new THREE.Mesh(new THREE.SphereGeometry(0.22, 16, 16), new THREE.MeshStandardMaterial({color: 0xdbac98}));
+head.position.y = 0.8;
+// الكمامة
+const mask = new THREE.Mesh(new THREE.BoxGeometry(0.25, 0.1, 0.1), new THREE.MeshStandardMaterial({color: 0xffffff}));
+mask.position.set(0, 0.75, 0.2);
+staffGroup.add(suit, head, mask);
+staffGroup.position.set(0, 0.6, -20);
+scene.add(staffGroup);
 
-// ==== 5. Controls & Smooth Animation ====
-let moveDir = { x: 0, y: 0 };
-const joystick = nipplejs.create({ zone: document.getElementById('joystick-container'), mode: 'static', position: {left: '70px', bottom: '70px'}, color: '#b8860b' });
+const desk = new THREE.Mesh(new THREE.BoxGeometry(4, 1.1, 1.5), new THREE.MeshStandardMaterial({color: 0x111, metalness: 0.8}));
+desk.position.set(0, 0.55, -18);
+desk.receiveShadow = true;
+scene.add(desk);
+
+// ==== 5. التحكم والحركة ====
+let moveDir = {x:0, y:0};
+const joystick = nipplejs.create({ zone: document.getElementById('joystick-container'), mode: 'static', position: {left: '60px', bottom: '60px'}, color: '#d4af37' });
 joystick.on('move', (e, d) => { moveDir.x = d.vector.x; moveDir.y = d.vector.y; });
-joystick.on('end', () => { moveDir = { x: 0, y: 0 }; });
+joystick.on('end', () => { moveDir = {x:0, y:0}; });
 
 let lon = 0, lat = 0;
-document.addEventListener('pointermove', (e) => { if(e.buttons === 1){ lon -= e.movementX * 0.15; lat -= e.movementY * 0.15; lat = Math.max(-85, Math.min(85, lat)); } });
+document.addEventListener('pointermove', (e) => { if(e.buttons === 1){ lon -= e.movementX * 0.1; lat -= e.movementY * 0.1; lat = Math.max(-85, Math.min(85, lat)); } });
 
 document.getElementById("start").onclick = () => { document.getElementById("start").style.display = "none"; };
 
 function animate() {
     requestAnimationFrame(animate);
     
-    // تحريك الساعات (دوران ناعم)
-    const time = Date.now() * 0.0015;
+    const time = Date.now() * 0.001;
+    // تحريك الساعات (دوران + تمايل جذاب)
     watches.forEach((w, i) => {
-        w.rotation.y += 0.02;
-        w.position.y = 2 + Math.sin(time + i) * 0.1;
+        w.rotation.y += 0.02; // دوران حول المحور
+        w.position.y = 1.6 + Math.sin(time + i) * 0.1; // حركة صعود ونزول بسيطة (تمايل)
     });
 
-    // سلاسة حركة الكاميرا (Damping)
-    currentMove.x += (moveDir.x * 0.18 - currentMove.x) * 0.1;
-    currentMove.z += (moveDir.y * 0.18 - currentMove.z) * 0.1;
-
+    // حركة الكاميرا
     const phi = THREE.MathUtils.degToRad(90 - lat);
     const theta = THREE.MathUtils.degToRad(lon);
     const target = new THREE.Vector3().setFromSphericalCoords(1, phi, theta).add(camera.position);
@@ -177,10 +195,13 @@ function animate() {
     fwd.y = 0; fwd.normalize();
     const rgt = new THREE.Vector3().crossVectors(camera.up, fwd).negate();
 
-    camera.position.addScaledVector(fwd, currentMove.z);
-    camera.position.addScaledVector(rgt, currentMove.x);
+    camera.position.addScaledVector(fwd, moveDir.y * 0.15);
+    camera.position.addScaledVector(rgt, moveDir.x * 0.15);
 
-    staff.lookAt(camera.position.x, 1.7, camera.position.z);
+    // حدود الحركة
+    camera.position.x = Math.max(-7, Math.min(7, camera.position.x));
+
+    staffGroup.lookAt(camera.position.x, 1.6, camera.position.z);
     renderer.render(scene, camera);
 }
 animate();
