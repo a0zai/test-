@@ -1,94 +1,138 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Dark Watch Shop - Surreal</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Luxury Watch Shop</title>
 <style>
-body { margin: 0; overflow: hidden; background: black; font-family: Arial; touch-action: none; }
-#ui { position: absolute; top: 10px; left: 10px; color: white; background: rgba(0,0,0,0.5); padding: 8px; border-radius: 8px; font-size: 12px; pointer-events: none; z-index: 10; }
-#joystick-container { position: absolute; bottom: 50px; left: 50px; width: 120px; height: 120px; z-index: 100; }
-#action-btn { position: absolute; bottom: 70px; right: 50px; width: 80px; height: 80px; background: rgba(255,255,255,0.2); border: 2px solid white; border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; z-index: 100; font-weight: bold; -webkit-tap-highlight-color: transparent; cursor:pointer; touch-action: none; user-select: none; }
-#start { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; background: black; padding: 20px; border: 1px solid white; cursor: pointer; z-index: 1000; }
-#msg { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #00ff88; font-size: 24px; text-shadow: 0 0 10px #00ff88; display: none; pointer-events: none; z-index: 500; text-align: center; }
+body { margin:0; overflow:hidden; background:#eee; font-family: Arial;}
+#ui { position:absolute; top:10px; left:10px; color:black; background: rgba(255,255,255,0.8); padding:8px; border-radius:8px; font-size:12px; pointer-events:none; z-index:10;}
+#joystick-container { position:absolute; bottom:50px; left:50px; width:120px; height:120px; z-index:100;}
+#start { position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); color:black; background:#fff; padding:20px; border:1px solid black; cursor:pointer; z-index:1000;}
 </style>
 </head>
 <body>
 
-<div id="ui">المحل 0 | حرك الجويستيك للمشي | اسحب للرؤية</div>
-<div id="start">دخول</div>
-<div id="msg">ساعة الـ 22 نبضت!</div>
+<div id="ui">Shop 0 | Move joystick to walk | Drag to look around</div>
+<div id="start">Enter</div>
 <div id="joystick-container"></div>
-<div id="action-btn">نبض</div>
 
 <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/nipplejs/0.9.1/nipplejs.min.js"></script>
 
 <script>
-// ==== المشهد والكاميرا ====
+// ==== Scene & Camera ====
 const scene = new THREE.Scene();
-scene.fog = new THREE.FogExp2(0x000000, 0.03);
+scene.background = new THREE.Color(0xffffff);
 
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
 camera.position.set(0, 1.6, 5);
+
 const renderer = new THREE.WebGLRenderer({antialias:true});
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(window.devicePixelRatio);
-renderer.setClearColor(0x000000);
 document.body.appendChild(renderer.domElement);
 
-// ==== الإضاءة ====
-const ambient = new THREE.AmbientLight(0x5500aa, 0.5);
-scene.add(ambient);
+// ==== Lighting ====
+scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+const spotLight = new THREE.SpotLight(0xffffff, 1.2);
+spotLight.position.set(0, 8, 0);
+spotLight.angle = Math.PI/6;
+spotLight.penumbra = 0.3;
+spotLight.castShadow = true;
+scene.add(spotLight);
 
-const light = new THREE.PointLight(0x00ff88, 2, 50);
-light.position.set(0, 4, 0);
-scene.add(light);
-
-// ==== الأرض والجدران ====
-const wallMat = new THREE.MeshStandardMaterial({color: 0x110044});
-const floorMat = new THREE.MeshStandardMaterial({color:0x330033, roughness:0.3, metalness:0.8});
-
+// ==== Floor & Walls ====
+const floorMat = new THREE.MeshStandardMaterial({color:0xcccccc, roughness:0.6, metalness:0.1});
 const floor = new THREE.Mesh(new THREE.PlaneGeometry(20, 60), floorMat);
-floor.rotation.x = -Math.PI / 2; scene.add(floor);
+floor.rotation.x = -Math.PI/2; scene.add(floor);
 
-const ceil = new THREE.Mesh(new THREE.PlaneGeometry(20, 60), wallMat);
-ceil.rotation.x = Math.PI / 2; ceil.position.y = 5; scene.add(ceil);
-
+const wallMat = new THREE.MeshStandardMaterial({color:0xffffff});
 const wallL = new THREE.Mesh(new THREE.PlaneGeometry(60, 5), wallMat);
-wallL.rotation.y = Math.PI / 2; wallL.position.set(-10,2.5,0); scene.add(wallL);
+wallL.rotation.y = Math.PI/2; wallL.position.set(-10,2.5,0); scene.add(wallL);
 
 const wallR = new THREE.Mesh(new THREE.PlaneGeometry(60,5), wallMat);
-wallR.rotation.y = -Math.PI / 2; wallR.position.set(10,2.5,0); scene.add(wallR);
+wallR.rotation.y = -Math.PI/2; wallR.position.set(10,2.5,0); scene.add(wallR);
 
 const wallBack = new THREE.Mesh(new THREE.PlaneGeometry(20,5), wallMat);
 wallBack.position.set(0,2.5,-30); scene.add(wallBack);
 
-// ==== إنشاء NPC والـ Mask ====
+const ceil = new THREE.Mesh(new THREE.PlaneGeometry(20, 60), wallMat);
+ceil.rotation.x = Math.PI/2; ceil.position.y = 5; scene.add(ceil);
+
+// ==== NPC (Staff) ====
 const npc = new THREE.Mesh(new THREE.CapsuleGeometry(0.4,1.2,4,8), new THREE.MeshStandardMaterial({color:0x000000}));
 npc.position.set(0,1,-22); scene.add(npc);
 
-const mask = new THREE.Mesh(new THREE.SphereGeometry(0.3,16,16), new THREE.MeshStandardMaterial({color:0xffffff}));
-mask.position.set(0,1.1,0);
-npc.add(mask);
+// ==== Shelves & Watches ====
+function createWatch(x, y, z, number) {
+    const geometry = new THREE.CylinderGeometry(0.15,0.15,0.05,32);
+    const canvas = document.createElement('canvas');
+    canvas.width = 128; canvas.height = 128;
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#FFD700';
+    ctx.fillRect(0,0,128,128);
+    ctx.fillStyle = 'black';
+    ctx.font = 'bold 50px Arial';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(number, 64, 64);
+    const texture = new THREE.CanvasTexture(canvas);
+    const material = new THREE.MeshStandardMaterial({map: texture});
+    const watch = new THREE.Mesh(geometry, material);
+    watch.rotation.x = Math.PI/2;
+    watch.position.set(x, y, z);
+    scene.add(watch);
+}
 
-// ==== الجويستيك ====
+function createShelf(x,z){
+    const shelf = new THREE.Mesh(new THREE.BoxGeometry(3,0.1,0.8),
+        new THREE.MeshStandardMaterial({color:0x444444}));
+    shelf.position.set(x,1.2,z); scene.add(shelf);
+    for(let i=0;i<4;i++){
+        createWatch(x-0.9+i*0.6,1.35,z,i+1);
+    }
+}
+[[-8,-5],[8,-5],[-8,-10],[8,-10],[-8,-15],[8,-15]].forEach(p=>createShelf(p[0],p[1]));
+
+// ==== Particles on walls ====
+function createWallParticles(wallX, width, height, depthStart, depthEnd, count) {
+    const geometry = new THREE.BufferGeometry();
+    const positions = [];
+    for(let i=0;i<count;i++){
+        const x = wallX; 
+        const y = 0.5 + Math.random()*height;
+        const z = depthStart + Math.random()*(depthEnd - depthStart);
+        positions.push(x, y, z);
+    }
+    geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+    const material = new THREE.PointsMaterial({color:0xffd700, size:0.05});
+    const points = new THREE.Points(geometry, material);
+    scene.add(points);
+    return points;
+}
+
+const leftWallParticles = createWallParticles(-10, 0.1, 4, -28, 28, 300);
+const rightWallParticles = createWallParticles(10, 0.1, 4, -28, 28, 300);
+const backWallParticles = createWallParticles(0, 20, 4, -30, -30, 200); // على الجدار الخلفي
+
+// ==== Joystick ====
 let moveDir={x:0,y:0};
 const joystick = nipplejs.create({
     zone: document.getElementById('joystick-container'),
     mode:'static',
     position:{left:'60px', bottom:'60px'},
-    color:'white',
+    color:'black',
     size:100
 });
 joystick.on('move',(evt,data)=>{ moveDir.x=data.vector.x; moveDir.y=data.vector.y; });
 joystick.on('end',()=>{ moveDir={x:0,y:0}; });
 
-// ==== التحكم بالكاميرا ====
+// ==== Pointer Camera Controls ====
 let lon=0, lat=0, phi=0, theta=0;
 let onPointerDownPointerX=0, onPointerDownPointerY=0, onPointerDownLon=0, onPointerDownLat=0;
 document.addEventListener('pointerdown', e=>{
-    if(e.target.id==='action-btn'||e.target.id==='start') return;
+    if(e.target.id==='start') return;
     onPointerDownPointerX = e.clientX;
     onPointerDownPointerY = e.clientY;
     onPointerDownLon = lon;
@@ -106,52 +150,10 @@ function onPointerUp(){
     document.removeEventListener('pointerup', onPointerUp);
 }
 
-// ==== ساعات معلقة على الجدران ====
-const wallWatches = [];
-function createWallWatches(wallX, wallZ, count){
-    for(let i=0; i<count; i++){
-        const watch = new THREE.Mesh(
-            new THREE.CylinderGeometry(0.15,0.15,0.05,32),
-            new THREE.MeshStandardMaterial({color:0xffd700, emissive:0x221100})
-        );
-        watch.rotation.x = Math.PI/2;
-        watch.position.set(
-            wallX + (Math.random()-0.5)*8,
-            1 + Math.random()*3,
-            wallZ + (Math.random()-0.5)*0.2
-        );
-        watch.rotation.z = Math.random()*Math.PI*2;
-        scene.add(watch);
-        wallWatches.push(watch);
-    }
-}
-createWallWatches(-10, 0, 8);
-createWallWatches(10, 0, 8);
-createWallWatches(0, -30, 6);
-
-// ==== زر النبض ====
-const actionBtn = document.getElementById("action-btn");
-function doPulse(){
-    const dist = camera.position.distanceTo(npc.position);
-    if(dist < 12){
-        document.getElementById("msg").style.display="block";
-        mask.material.emissive.setHex(0x00ff88);
-        light.intensity = 5; // وميض
-        setTimeout(()=>{
-            document.getElementById("msg").style.display="none";
-            mask.material.emissive.setHex(0x000000);
-            light.intensity = 2;
-        },2000);
-    }
-}
-actionBtn.addEventListener("pointerdown", e=>{ e.preventDefault(); doPulse(); });
-actionBtn.addEventListener("touchstart", e=>{ e.preventDefault(); doPulse(); });
-actionBtn.addEventListener("mousedown", e=>{ e.preventDefault(); doPulse(); });
-
-// ==== زر الدخول ====
+// ==== Start Button ====
 document.getElementById("start").onclick = ()=>{ document.getElementById("start").style.display="none"; };
 
-// ==== الأنيميشن الرئيسي ====
+// ==== Animation Loop ====
 function animate(){
     requestAnimationFrame(animate);
 
@@ -172,13 +174,11 @@ function animate(){
 
     npc.lookAt(camera.position);
 
-    wallWatches.forEach(w=>{ w.rotation.y += 0.01; });
-
     renderer.render(scene,camera);
 }
 animate();
 
-// ==== إعادة الحجم ====
+// ==== Window Resize ====
 window.addEventListener("resize", ()=>{
     camera.aspect = window.innerWidth/window.innerHeight;
     camera.updateProjectionMatrix();
