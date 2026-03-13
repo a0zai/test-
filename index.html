@@ -520,7 +520,8 @@ body {
 </footer>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-import { getDatabase, ref, push, onChildAdded, onValue, set, onDisconnect, serverTimestamp, remove } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+import { getDatabase, ref, push, onChildAdded, onValue, set, onDisconnect, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+
 const firebaseConfig = {
   apiKey: "AIzaSyBUb10JpH6iTD1sqSN7xz_lYDZUNSVennQ",
   authDomain: "testing-9b30c.firebaseapp.com",
@@ -533,86 +534,85 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
-const viewersRef = ref(db,"viewers");
+
+// المتغيرات العامة
+let visitorId = Math.random().toString(36).substring(2, 9);
+const viewersRef = ref(db, "viewers");
+const visitorRef = ref(db, "viewers/" + visitorId);
+const chatRef = ref(db, "chats");
+
 const viewersCountDiv = document.getElementById("viewersCount");
 const viewersPopup = document.getElementById("viewersListPopup");
-let userName = "";
-let visitorId = Math.random().toString(36).substring(2,9);
-let visitorRef = ref(db,"viewers/"+visitorId);
-let torchTrack = null;
-let interval;
-const totalDuration = 180;
 
-// ====== Viewers Handling ======
-set(visitorRef,{ name:"Guest" });
+// ====== إدارة الزوار (Viewers) ======
+set(visitorRef, { name: "Guest_" + visitorId.substring(0, 3) });
 onDisconnect(visitorRef).remove();
 
-onValue(viewersRef, snap=>{
+onValue(viewersRef, snap => {
   let v = snap.val();
   let count = v ? Object.keys(v).length : 0;
   viewersCountDiv.textContent = ` ${count}`;
 });
 
-viewersCountDiv.onclick = ()=>{
-  if(viewersPopup.style.display==="block"){ viewersPopup.style.display="none"; return; }
-  onValue(viewersRef, snap=>{
+viewersCountDiv.onclick = () => {
+  if (viewersPopup.style.display === "block") {
+    viewersPopup.style.display = "none";
+    return;
+  }
+  onValue(viewersRef, snap => {
     let v = snap.val();
     viewersPopup.innerHTML = "<strong>Viewers:</strong><br>" +
-      (v ? Object.values(v).map(x=>x.name).join("<br>") : "None");
-    viewersPopup.style.display="block";
-  },{onlyOnce:true});
+      (v ? Object.values(v).map(x => x.name).join("<br>") : "None");
+    viewersPopup.style.display = "block";
+  }, { onlyOnce: true });
 };
-window.addEventListener('load', () => {
-  document.getElementById('viewersCount').classList.add('visible');
-});
-import { ref, push, onChildAdded, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
 
-// المرجع الرئيسي للدردشة
-const chatRef = ref(db, "chats");
-
-// دالة لفتح وإغلاق صندوق الدردشة
 window.toggleChat = () => {
-    const chat = document.getElementById('chat-overlay');
-    chat.classList.toggle('active');
+  const chat = document.getElementById('chat-overlay');
+  chat.classList.toggle('active');
 };
 
-// جعل الساعة قابلة للضغط لفتح الدردشة
-document.querySelector('.clock-container').onclick = toggleChat;
+const clockContainer = document.querySelector('.clock-container');
+if(clockContainer) {
+    clockContainer.onclick = window.toggleChat;
+}
 
-// دالة إرسال الرسالة
 window.sendA0ZMessage = () => {
-    const textInput = document.getElementById('msgInput');
-    const roomInput = document.getElementById('roomInput');
-    
-    const text = textInput.value.trim();
-    const room = roomInput.value.trim() || "0"; // الغرفة الافتراضية هي 0
-    
-    if (text !== "") {
-        push(chatRef, {
-            room: room,
-            user: visitorId.substring(0, 4), // هوية المستخدم المجهولة
-            text: text,
-            timestamp: serverTimestamp()
-        });
-        textInput.value = ""; // مسح الحقل بعد الإرسال
-    }
+  const textInput = document.getElementById('msgInput');
+  const roomInput = document.getElementById('roomInput');
+  const text = textInput.value.trim();
+  const room = roomInput.value.trim() || "0";
+
+  if (text !== "") {
+    push(chatRef, {
+      room: room,
+      user: visitorId.substring(0, 4),
+      text: text,
+      timestamp: serverTimestamp()
+    });
+    textInput.value = "";
+  }
 };
 
-// استقبال الرسائل (Live)
 onChildAdded(chatRef, (snapshot) => {
-    const data = snapshot.val();
-    const activeRoom = document.getElementById('roomInput').value.trim() || "0";
-    
-    // إذا كانت الرسالة تنتمي للغرفة الحالية، اعرضها
-    if (data.room === activeRoom) {
-        const display = document.getElementById('messages-display');
-        const msgDiv = document.createElement("div");
-        msgDiv.innerHTML = `<span style="color:#555;">[${data.user}]:</span> ${data.text}`;
-        display.appendChild(msgDiv);
-        display.scrollTop = display.scrollHeight; // النزول لآخر رسالة تلقائياً
+  const data = snapshot.val();
+  const roomInput = document.getElementById('roomInput');
+  const activeRoom = roomInput ? (roomInput.value.trim() || "0") : "0";
+
+  if (data.room === activeRoom) {
+    const display = document.getElementById('messages-display');
+    if (display) {
+      const msgDiv = document.createElement("div");
+      msgDiv.innerHTML = `<span style="color:#555;">[${data.user}]:</span> ${data.text}`;
+      display.appendChild(msgDiv);
+      display.scrollTop = display.scrollHeight;
     }
+  }
 });
 
+window.addEventListener('load', () => {
+  if(viewersCountDiv) viewersCountDiv.classList.add('visible');
+});
 </script>
 <script>
 const hamburger = document.getElementById('hamburger');
