@@ -1,215 +1,757 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elite Watch Boutique - Grand Opening</title>
-    <style>
-        body { margin: 0; overflow: hidden; background: #000; font-family: 'Times New Roman', serif; }
-        #ui { position: absolute; top: 20px; left: 20px; color: #d4af37; background: rgba(0,0,0,0.85); padding: 15px 25px; border-left: 5px solid #d4af37; pointer-events: none; z-index: 10; border-radius: 5px; }
-        #joystick-container { position: absolute; bottom: 40px; left: 40px; width: 100px; height: 100px; z-index: 100; }
-        #start { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #000; background: #d4af37; padding: 15px 50px; border: none; cursor: pointer; z-index: 1000; font-weight: bold; font-size: 20px; letter-spacing: 3px; box-shadow: 0 0 40px rgba(212,175,55,0.4); }
-    </style>
+ <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>0 | Origin</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.fog.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.46/Tone.js"></script>
+<style>
+:root {
+    --sense-green: #00ff00;
+    --sense-red: #ff3333;
+    --sense-blue: #00d4ff;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    background: transparent !important;
+    color: white;
+    font-family: 'Courier New', monospace;
+    min-height: 100vh;
+    width: 100%;
+    overflow-x: hidden;
+}
+
+#vanta-bg, #particles-stars {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    pointer-events: none;
+}
+
+header, main, section {
+    background: transparent !important;
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.logo-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo {
+    width: 64px;
+    height: 64px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(90deg,#002b20,#004d2f);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+}
+
+.logo h1 {
+    margin: 0;
+    font-size: 14px;
+}
+#viewersCount {
+  position:fixed; top:15px; left:50%;
+  transform:translateX(-50%);
+  font-size:14px; font-weight:bold;
+  color:#ff3333; z-index:10000;
+  user-select:none;
+  background: rgba(0,0,0,0.5);
+  padding:6px 12px; border-radius:12px;
+  box-shadow:0 0 8px #ff0000;
+  cursor:pointer;
+}
+.fade-in-fog {
+  opacity: 0;
+  filter: blur(10px); 
+  transform: translateY(20px); 
+  transition: opacity 3s ease, filter 6s ease, transform 9s ease;
+}
+
+.fade-in-fog.visible {
+  opacity: 1;
+  filter: blur(0);
+  transform: translateY(0);
+}
+/* VIEWERS LIST */
+#viewersListPopup {
+  position: fixed;
+  top: 70px; 
+  left: 50%;
+  transform: translateX(-50%);
+  max-height: 200px;
+  width: 200px;
+  overflow-y: auto;
+  background: rgba(0, 0, 0, 0.9);
+  color: #00ff00; 
+  border: 1px solid #00ff00;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 7px;
+  display: none; 
+  z-index: 10001;
+  box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+}
+
+.header-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+#modeToggle {
+    cursor: pointer;
+    font-size: 24px;
+    transition: transform 0.3s ease;
+    filter: drop-shadow(0 0 5px rgba(0, 255, 0, 0.8));
+    animation: butterflyGlow 2s infinite alternate;
+}
+
+@keyframes butterflyGlow {
+    0% {
+        filter: drop-shadow(0 0 2px rgba(0, 255, 0, 0.5));
+        transform: scale(1);
+    }
+    100% {
+        filter: drop-shadow(0 0 15px rgba(0, 255, 0, 1)) brightness(1.2);
+        transform: scale(1.1);
+    }
+}
+
+.hamburger {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    background: inherit;
+    font-size: 28px;
+    user-select: none;
+    z-index: 1001;
+    transition: transform 0.2s;
+}
+
+.hamburger:active {
+    transform: scale(0.9);
+}
+
+nav {
+    position: absolute;
+    top: 60px;
+    right: 20px;
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 8px;
+    display: none;
+    flex-direction: column;
+    min-width: 160px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    z-index: 1002;
+}
+
+nav.active {
+    display: flex;
+}
+
+nav a {
+    padding: 12px 20px;
+    text-decoration: none;
+    color: #111;
+    font-weight: bold;
+    border-bottom: 1px solid #eee;
+}
+
+nav a:last-child {
+    border-bottom: none;
+}
+.clock-container {
+    transform-style: preserve-3d;
+    transform: translateZ(20px);
+    transition: transform 0.15s ease-out;
+    will-change: transform;
+    position: relative;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 1px solid #ff0000;
+}
+.glass-cover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translateZ(30px);
+}
+.clock-container::after {
+    content: 'A•Z';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 22px;
+    letter-spacing: 2px;
+    color: #000;
+    text-shadow: 0 0 7px #000;
+}
+.brand-name {
+    position: absolute;
+    top: 63%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--sense-green);
+    font-size: 1px;
+    letter-spacing: 7px;
+    opacity: 0.6;
+    text-transform: uppercase;
+}
+
+@keyframes pulse {
+    0%,100% { transform: translate(-50%, -50%) scale(1); opacity: 0.9; }
+    50% { transform: translate(-50%, -50%) scale(1.7); opacity: 0.4; }
+}
+.number {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    font-size: 10px;
+    font-weight: bold;
+    padding: 4px;
+    box-sizing: border-box;
+    color: #cccccc;
+}
+.n1  { transform: rotate(0deg); }    .n1 div  { transform: rotate(0deg); }
+.n2  { transform: rotate(30deg); }   .n2 div  { transform: rotate(-30deg); }
+.n3  { transform: rotate(60deg); }   .n3 div  { transform: rotate(-60deg); }
+.n4  { transform: rotate(90deg); }   .n4 div  { transform: rotate(-90deg); }
+.n5  { transform: rotate(120deg); }  .n5 div  { transform: rotate(-120deg); }
+.n6  { transform: rotate(150deg); }  .n6 div  { transform: rotate(-150deg); }
+.n7  { transform: rotate(180deg); }  .n7 div  { transform: rotate(-180deg); }
+.n8  { transform: rotate(210deg); }  .n8 div  { transform: rotate(-210deg); }
+.n9  { transform: rotate(240deg); }  .n9 div  { transform: rotate(-240deg); }
+.n10 { transform: rotate(270deg); }  .n10 div { transform: rotate(-270deg); }
+.n11 { transform: rotate(300deg); }  .n11 div { transform: rotate(-300deg); }
+.n12 { transform: rotate(330deg); }  .n12 div { transform: rotate(-330deg); }
+.hand {
+    position: absolute;
+    bottom: 50%;
+    left: 50%;
+    transform-origin: bottom;
+    border-radius: 10px;
+    transform: translateZ(20px);
+}
+.n1 {
+    position: absolute;
+    bottom: 100%; 
+    left: 50%;
+    transform: translateX(-50%) rotate(0deg); 
+    font-size: 14px;
+    color: #f1f5f9;
+    white-space: nowrap;
+    transition: opacity 0.3s ease;
+}
+.hour {
+    width: 3px;
+    height: 24px;
+    background: rgba(241,245,249,0.25);
+    box-shadow: 0 0 10px rgba(241,245,249,0.3); 
+}
+.minute {
+    width: 2px;
+    height: 36px;
+    background: var(--sense-red);
+    box-shadow: 0 0 11px var(--sense-red); 
+}
+.second {
+    width: 1.5px;
+    height: 48px;
+    background: var(--sense-blue);
+    box-shadow: 0 0 12px var(--sense-blue);
+}
+/* حاوية الدردشة المخفية */
+#chat-overlay {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.9);
+    width: 280px;
+    background: rgba(0, 0, 0, 0.85);
+    border: 1px solid var(--sense-green);
+    border-radius: 15px;
+    padding: 15px;
+    z-index: 10005;
+    display: none; /* مخفي افتراضياً */
+    flex-direction: column;
+    gap: 10px;
+    box-shadow: 0 0 30px rgba(0, 255, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+#chat-overlay.active {
+    display: flex;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+#messages-display {
+    height: 180px;
+    overflow-y: auto;
+    font-size: 11px;
+    color: #00ff00;
+    scrollbar-width: none;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.chat-input {
+    background: rgba(0, 50, 0, 0.3);
+    border: 1px solid #004d2f;
+    color: #00ff00;
+    padding: 8px;
+    font-size: 12px;
+    outline: none;
+    font-family: 'Courier New', monospace;
+}
+
+.chat-btn {
+    background: var(--sense-green);
+    color: black;
+    border: none;
+    padding: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-size: 10px;
+}
+
+/* زر إغلاق الدردشة */
+.close-chat {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background: #ff3333;
+    color: white;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.tagline {
+    margin-top: 33px;      
+    color: #ffffff;            
+    opacity: 0.85;         
+    font-size: 11px;        
+    letter-spacing: 2px;   
+    text-align: center;    
+    width: 100%;        
+}
+@media (max-width:600px){
+    .title { font-size:10px; letter-spacing:4px; }
+}
+body {
+    opacity: 0;
+    transition: opacity 3s ease-in;
+}
+body.loaded {
+    opacity: 1;
+}
+
+footer {
+  width: 100%;
+  padding: 80px 20px;
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+}
+
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  color: #1E90FF;
+  text-align: left;
+}
+
+.footer-links a {
+  color: #1E90FF;
+  text-decoration: none;
+  font-size: 14px;
+  transition: 0.3s;
+}
+
+.footer-links a:hover {
+  color: #00BFFF;
+}
+
+#threeContainer {
+  position: absolute;
+  bottom: 10px;
+  right: 10px; 
+  width: 100px;
+  height: 100px;
+  transform: translateX(-20px);
+}
+@keyframes moveLink {
+  0% { transform: translateX(0); }
+  50% { transform: translateX(10px); }
+  100% { transform: translateX(0); }
+}
+@keyframes fadeIn {
+      from { opacity: 0; transform: translateY(5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+@keyframes shake {
+  0% { transform: translate(0px, 0px); }
+  25% { transform: translate(2px, -2px); }
+  50% { transform: translate(-2px, 2px); }
+  75% { transform: translate(2px, 2px); }
+  100% { transform: translate(0px, 0px); }
+}
+body {
+  animation: none; 
+}
+</style>
 </head>
 <body>
-
-<div id="ui">
-    <h1 style="margin:0; letter-spacing: 5px;">ELITE</h1>
-    <p style="margin:5px 0 0; color: #fff; font-size: 10px; text-transform: uppercase;">Private Collection Experience</p>
+<div id="vanta-bg"></div>
+<div id="particles-stars"></div>
+<header>
+  <div class="logo-row">
+    <div class="logo"><h1>0</h1></div>
+    <div>
+      <div class="title">0</div>
+      <div class="subtitle">A0Z</div>
+    </div>
+  </div>
+  <div id="viewersCount" class="fade-in-fog">0</div>
+  <div id="viewersListPopup"></div>
+  <div class="header-bottom">
+    <div class="left-controls">
+      <div class="mode-toggle" id="modeToggle">🦋</div>
+    </div>
+    <div class="right-controls">
+<div class="hamburger" id="hamburger">⚫️</div>
+    </div>
+    <nav id="menu">
+      <a href="#home">Home</a>
+    </nav>
+  </div>
+</header>
+<main>
+  <section id="home" style="min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+    <div class="scene">
+    <div class="clock-container">
+        <div class="glass-cover"></div>
+        <div class="brand-name">0</div>
+        <div class="number n2"><div>12</div></div>
+        <div class="number n3"><div>11</div></div>
+        <div class="number n4"><div>10</div></div>
+        <div class="number n5"><div>9</div></div>
+        <div class="number n6"><div>8</div></div>
+        <div class="number n7"><div>Ƶ</div></div>
+        <div class="number n8"><div>6</div></div>
+        <div class="number n9"><div>5</div></div>
+        <div class="number n10"><div>4</div></div>
+        <div class="number n11"><div>3</div></div>
+        <div class="number n12"><div>2</div></div>
+        <div class="hand hour" id="hour">
+        <div class="n1">∞</div>
+        </div>
+        <div class="hand minute" id="minute"></div>
+        <div class="hand second" id="second"></div>
+    </div>
+    <div id="chat-overlay">
+    <div class="close-chat" onclick="toggleChat()">X</div>
+    <div style="font-size: 9px; color: #555; text-align: center;">SECURE CHANNEL: A0Z</div>
+    
+    <input type="text" id="roomInput" class="chat-input" placeholder="ROOM CODE (Default: 0)">
+    
+    <div id="messages-display"></div>
+    
+    <div style="display: flex; gap: 5px;">
+        <input type="text" id="msgInput" class="chat-input" style="flex: 1;" placeholder="MESSAGE...">
+        <button class="chat-btn" onclick="sendA0ZMessage()">SEND</button>
+    </div>
 </div>
-<div id="start">دخول المعرض الخاص</div>
-<div id="joystick-container"></div>
+    <div class="tagline">Zero Time</div>
+</div>
+      <a href="https://a0z.nl" target="_blank" 
+     style="
+       color: #FF0000;
+       font-size: 9px;
+       margin-bottom: 9px;
+       animation: moveLink 2s linear infinite alternate;
+     ">
+     ⚪️
+  </a>
+  </section>
+</main>
+<footer id="footer">
+  &copy; A0Z
+  <div class="footer-links">
+    <a href="#home">Home</a>
+  </div>
+  <div id="threeContainer"></div>
+</footer>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+import { getDatabase, ref, push, onChildAdded, onValue, set, onDisconnect, serverTimestamp, remove } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+const firebaseConfig = {
+  apiKey: "AIzaSyBUb10JpH6iTD1sqSN7xz_lYDZUNSVennQ",
+  authDomain: "testing-9b30c.firebaseapp.com",
+  databaseURL: "https://testing-9b30c-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "testing-9b30c",
+  storageBucket: "testing-9b30c.appspot.com",
+  messagingSenderId: "569390736740",
+  appId: "1:569390736740:web:4f017178b0b3df5ef28671"
+};
 
-<script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/nipplejs/0.9.1/nipplejs.min.js"></script>
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const viewersRef = ref(db,"viewers");
+const viewersCountDiv = document.getElementById("viewersCount");
+const viewersPopup = document.getElementById("viewersListPopup");
+let userName = "";
+let visitorId = Math.random().toString(36).substring(2,9);
+let visitorRef = ref(db,"viewers/"+visitorId);
+let torchTrack = null;
+let interval;
+const totalDuration = 180;
 
+// ====== Viewers Handling ======
+set(visitorRef,{ name:"Guest" });
+onDisconnect(visitorRef).remove();
+
+onValue(viewersRef, snap=>{
+  let v = snap.val();
+  let count = v ? Object.keys(v).length : 0;
+  viewersCountDiv.textContent = ` ${count}`;
+});
+
+viewersCountDiv.onclick = ()=>{
+  if(viewersPopup.style.display==="block"){ viewersPopup.style.display="none"; return; }
+  onValue(viewersRef, snap=>{
+    let v = snap.val();
+    viewersPopup.innerHTML = "<strong>Viewers:</strong><br>" +
+      (v ? Object.values(v).map(x=>x.name).join("<br>") : "None");
+    viewersPopup.style.display="block";
+  },{onlyOnce:true});
+};
+window.addEventListener('load', () => {
+  document.getElementById('viewersCount').classList.add('visible');
+});
+import { ref, push, onChildAdded, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+
+// المرجع الرئيسي للدردشة
+const chatRef = ref(db, "chats");
+
+// دالة لفتح وإغلاق صندوق الدردشة
+window.toggleChat = () => {
+    const chat = document.getElementById('chat-overlay');
+    chat.classList.toggle('active');
+};
+
+// جعل الساعة قابلة للضغط لفتح الدردشة
+document.querySelector('.clock-container').onclick = toggleChat;
+
+// دالة إرسال الرسالة
+window.sendA0ZMessage = () => {
+    const textInput = document.getElementById('msgInput');
+    const roomInput = document.getElementById('roomInput');
+    
+    const text = textInput.value.trim();
+    const room = roomInput.value.trim() || "0"; // الغرفة الافتراضية هي 0
+    
+    if (text !== "") {
+        push(chatRef, {
+            room: room,
+            user: visitorId.substring(0, 4), // هوية المستخدم المجهولة
+            text: text,
+            timestamp: serverTimestamp()
+        });
+        textInput.value = ""; // مسح الحقل بعد الإرسال
+    }
+};
+
+// استقبال الرسائل (Live)
+onChildAdded(chatRef, (snapshot) => {
+    const data = snapshot.val();
+    const activeRoom = document.getElementById('roomInput').value.trim() || "0";
+    
+    // إذا كانت الرسالة تنتمي للغرفة الحالية، اعرضها
+    if (data.room === activeRoom) {
+        const display = document.getElementById('messages-display');
+        const msgDiv = document.createElement("div");
+        msgDiv.innerHTML = `<span style="color:#555;">[${data.user}]:</span> ${data.text}`;
+        display.appendChild(msgDiv);
+        display.scrollTop = display.scrollHeight; // النزول لآخر رسالة تلقائياً
+    }
+});
+
+</script>
 <script>
-let watches = [];
+const hamburger = document.getElementById('hamburger');
+const menu = document.getElementById('menu');
+const footer = document.getElementById('footer');
+const navLinks = menu.querySelectorAll('a');
+const modeToggle = document.getElementById('modeToggle');
+let isDark = false;
+modeToggle.addEventListener('click', () => {
+  if (!isDark) {
+    document.body.style.filter = "invert(1)";
+    isDark = true;
+  } else {
+    document.body.style.filter = "none";
+    isDark = false;
+  }
+});
+hamburger.addEventListener('click', () => {
+  menu.classList.toggle('active');
+  if(menu.classList.contains('active')) {
+    footer.style.backgroundColor = '#ffffff';  
+    footer.style.color = '#000000';
+  } else {
+    footer.style.backgroundColor = 'rgba(128, 0, 128, 0.5)';  
+    footer.style.color = '#ffffff';
+  }
+  footer.scrollIntoView({ behavior: 'smooth' });
+});
 
-// ==== 1. Scene & Lighting (High Intensity Mode) ====
-const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x020202);
-scene.fog = new THREE.Fog(0x020202, 10, 40); // ضباب للعمق والغموض
+navLinks.forEach(link => {
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    const targetId = link.getAttribute('href').substring(1);
+    const targetSection = document.getElementById(targetId);
+    if (targetSection) {
+      targetSection.scrollIntoView({ behavior: 'smooth' });
+    }
+    menu.classList.remove('active');
+  });
+});
+</script>
+<script>
+(function() {
+  const container = document.getElementById('threeContainer');
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(75, container.clientWidth/container.clientHeight, 0.1, 1000);
+  const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+  renderer.setSize(container.clientWidth, container.clientHeight);
+  container.appendChild(renderer.domElement);
 
-const camera = new THREE.PerspectiveCamera(65, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.set(0, 1.7, 30); // البداية من الخارج للداخل
+const geometry = new THREE.TorusKnotGeometry(5, 1.2, 150, 20);
+  const material = new THREE.MeshStandardMaterial({ color: 0x00ffff, metalness: 0.8, roughness: 0.2 });
+  const torusKnot = new THREE.Mesh(geometry, material);
+  scene.add(torusKnot);
 
-const renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap; // ظلال ناعمة
-document.body.appendChild(renderer.domElement);
+  const light = new THREE.PointLight(0xffffff, 2, 100);
+  light.position.set(10,10,10);
+  scene.add(light);
 
-// إضاءة عامة هادئة
-const lightAmb = new THREE.AmbientLight(0xffffff, 0.4);
-scene.add(lightAmb);
+  camera.position.z = 20; 
 
-// إضاءة شمسية ناعمة للدخول
-const sunLight = new THREE.DirectionalLight(0xffffff, 0.6);
-sunLight.position.set(5, 10, 20);
-sunLight.castShadow = true;
-scene.add(sunLight);
-
-// ==== 2. المعمار (الأرضية والجدران الرخامية) ====
-// الأرضية الرخامية المصقولة
-const floor = new THREE.Mesh(
-    new THREE.PlaneGeometry(30, 120),
-    new THREE.MeshStandardMaterial({color: 0x050505, roughness: 0.05, metalness: 0.8})
-);
-floor.rotation.x = -Math.PI / 2;
-floor.receiveShadow = true;
-scene.add(floor);
-
-// السجاد الملكي الممتد
-const carpet = new THREE.Mesh(
-    new THREE.PlaneGeometry(5, 120),
-    new THREE.MeshStandardMaterial({color: 0x440000, roughness: 0.8})
-);
-carpet.rotation.x = -Math.PI / 2;
-carpet.position.y = 0.02;
-scene.add(carpet);
-
-// الجدران الجانبية المؤطرة بالذهب
-function createWall(x) {
-    const wall = new THREE.Mesh(
-        new THREE.BoxGeometry(0.8, 12, 100),
-        new THREE.MeshStandardMaterial({color: 0x080808})
-    );
-    wall.position.set(x, 6, 0);
-    wall.castShadow = true;
-    scene.add(wall);
-
-    // إطار ذهبي علوي
-    const trim = new THREE.Mesh(
-        new THREE.BoxGeometry(1, 0.2, 100),
-        new THREE.MeshStandardMaterial({color: 0xd4af37, metalness: 1})
-    );
-    trim.position.set(x, 0.1, 0);
-    scene.add(trim);
-}
-createWall(-12);
-createWall(12);
-
-// ==== 3. موديلات الساعات المتحركة والواقعية ====
-function createWatchModel(type) {
-    const group = new THREE.Group();
-    let matColor = (type === 'gold') ? 0xffd700 : (type === 'silver' ? 0xc0c0c0 : 0x111111);
-    
-    // الهيكل الرئيسي
-    const caseGeo = new THREE.TorusGeometry(0.2, 0.03, 16, 100);
-    const caseMat = new THREE.MeshStandardMaterial({color: matColor, metalness: 1, roughness: 0.1});
-    const watchCase = new THREE.Mesh(caseGeo, caseMat);
-    
-    // المينا الداخلي
-    const face = new THREE.Mesh(new THREE.CircleGeometry(0.18, 32), new THREE.MeshStandardMaterial({color: 0x000, metalness: 0.5}));
-    face.position.z = 0.01;
-
-    // العقارب (Pointers)
-    const hand = new THREE.Mesh(new THREE.PlaneGeometry(0.01, 0.12), new THREE.MeshBasicMaterial({color: 0xffffff}));
-    hand.position.set(0, 0.06, 0.02);
-    face.add(hand);
-
-    group.add(watchCase, face);
-    return group;
-}
-
-function addDisplay(x, z, type) {
-    // القاعدة الكريستالية المصقولة
-    const pedestal = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.5, 0.6, 1.2, 32),
-        new THREE.MeshStandardMaterial({color: 0xffffff, transparent: true, opacity: 0.2, metalness: 0.5})
-    );
-    pedestal.position.set(x, 0.65, z);
-    pedestal.castShadow = true;
-    scene.add(pedestal);
-
-    const watch = createWatchModel(type);
-    watch.position.set(x, 1.6, z);
-    watch.castShadow = true;
-    scene.add(watch);
-    watches.push(watch);
-
-    // إضاءة Spotlight مركزة وقوية لكل ساعة
-    const spot = new THREE.SpotLight(0xffffff, 30);
-    spot.position.set(x, 6, z);
-    spot.target = watch;
-    spot.angle = 0.3;
-    spot.castShadow = true;
-    scene.add(spot);
-}
-
-// توزيع المعروضات بموديلات مختلفة
-addDisplay(-5, 10, 'gold');
-addDisplay(5, 10, 'silver');
-addDisplay(-5, 0, 'black');
-addDisplay(5, 0, 'gold');
-addDisplay(0, -10, 'silver');
-
-// ==== 4. الموظف وطاولة الاستقبال ====
-const staffGroup = new THREE.Group();
-// البدلة
-const suit = new THREE.Mesh(new THREE.BoxGeometry(0.6, 1.2, 0.3), new THREE.MeshStandardMaterial({color: 0x000}));
-const head = new THREE.Mesh(new THREE.SphereGeometry(0.22, 16, 16), new THREE.MeshStandardMaterial({color: 0xdbac98}));
-head.position.y = 0.8;
-// الكمامة
-const mask = new THREE.Mesh(new THREE.BoxGeometry(0.25, 0.1, 0.1), new THREE.MeshStandardMaterial({color: 0xffffff}));
-mask.position.set(0, 0.75, 0.2);
-staffGroup.add(suit, head, mask);
-staffGroup.position.set(0, 0.6, -20);
-scene.add(staffGroup);
-
-const desk = new THREE.Mesh(new THREE.BoxGeometry(4, 1.1, 1.5), new THREE.MeshStandardMaterial({color: 0x111, metalness: 0.8}));
-desk.position.set(0, 0.55, -18);
-desk.receiveShadow = true;
-scene.add(desk);
-
-// ==== 5. التحكم والحركة ====
-let moveDir = {x:0, y:0};
-const joystick = nipplejs.create({ zone: document.getElementById('joystick-container'), mode: 'static', position: {left: '60px', bottom: '60px'}, color: '#d4af37' });
-joystick.on('move', (e, d) => { moveDir.x = d.vector.x; moveDir.y = d.vector.y; });
-joystick.on('end', () => { moveDir = {x:0, y:0}; });
-
-let lon = 0, lat = 0;
-document.addEventListener('pointermove', (e) => { if(e.buttons === 1){ lon -= e.movementX * 0.1; lat -= e.movementY * 0.1; lat = Math.max(-85, Math.min(85, lat)); } });
-
-document.getElementById("start").onclick = () => { document.getElementById("start").style.display = "none"; };
-
-function animate() {
+  function animate() {
     requestAnimationFrame(animate);
-    
-    const time = Date.now() * 0.001;
-    // تحريك الساعات (دوران + تمايل جذاب)
-    watches.forEach((w, i) => {
-        w.rotation.y += 0.02; // دوران حول المحور
-        w.position.y = 1.6 + Math.sin(time + i) * 0.1; // حركة صعود ونزول بسيطة (تمايل)
-    });
-
-    // حركة الكاميرا
-    const phi = THREE.MathUtils.degToRad(90 - lat);
-    const theta = THREE.MathUtils.degToRad(lon);
-    const target = new THREE.Vector3().setFromSphericalCoords(1, phi, theta).add(camera.position);
-    camera.lookAt(target);
-
-    const fwd = new THREE.Vector3(0,0,-1).applyQuaternion(camera.quaternion);
-    fwd.y = 0; fwd.normalize();
-    const rgt = new THREE.Vector3().crossVectors(camera.up, fwd).negate();
-
-    camera.position.addScaledVector(fwd, moveDir.y * 0.15);
-    camera.position.addScaledVector(rgt, moveDir.x * 0.15);
-
-    // حدود الحركة
-    camera.position.x = Math.max(-7, Math.min(7, camera.position.x));
-
-    staffGroup.lookAt(camera.position.x, 1.6, camera.position.z);
+    torusKnot.rotation.x += 0.01;
+    torusKnot.rotation.y += 0.005;
     renderer.render(scene, camera);
-}
-animate();
-
-window.addEventListener("resize", () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
+  }
+  animate();
+  window.addEventListener('resize', () => {
+    camera.aspect = container.clientWidth / container.clientHeight;
     camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(container.clientWidth, container.clientHeight);
+  });
+})();
+</script>
+<script>
+const hour = document.getElementById('hour');
+const minute = document.getElementById('minute'); 
+const second = document.getElementById('second');
+const n1 = hour.querySelector('.n1'); 
+function updateClock() {
+    const now = new Date();
+    const ms = now.getMilliseconds();
+    const s = now.getSeconds() + ms / 1000;
+    const m = now.getMinutes() + s / 60;
+    const h = (now.getHours() % 12) + m / 60;
+    hour.style.transform = `translateX(-50%) rotate(${-h*30 + 30}deg)`;
+    if (n1) {
+        n1.style.transform = `translateX(-50%) rotate(${h*30 - 30}deg)`;
+        n1.innerText = "∞";
+        n1.style.fontWeight = '600';
+        n1.style.letterSpacing = '2px';
+        n1.style.fontSize = '18px';
+        n1.style.color = '#f1f5f9'; 
+    }
+    second.style.transform = `translateX(-50%) rotate(${-s*6 + 0}deg)`;
+    minute.style.transform = `translateX(-50%) rotate(${-m*6 + 0}deg)`;
+    requestAnimationFrame(updateClock);
+}
+updateClock();
+window.addEventListener('load', () => {
+    document.body.classList.add('loaded');
+});
+
+</script>
+<script>
+VANTA.FOG({
+    el: "#vanta-bg",
+    mouseControls: true,
+    touchControls: true,
+    gyroControls: false,
+    minHeight: 200.0,
+    minWidth: 200.0,
+    highlightColor: 0x00ff00,
+    midtoneColor: 0x90e0ef,
+    lowlightColor: 0x0b132b,
+    baseColor: 0x000000,
+    blurFactor: 0.12,
+    speed: 0.3,
+    zoom: 0.9
+});
+particlesJS("particles-stars", {
+    particles: {
+        number: { value: 78, density: { enable: true, value_area: 800 } },
+        color: { value: "#ffffff" },
+        opacity: { 
+            value: 0.6, 
+            random: true,
+            anim: { enable: true, speed: 1.2, opacity_min: 0.2, sync: false }
+        },
+        size: { 
+            value: 1.5, 
+            random: true,
+            anim: { enable: true, speed: 1, size_min: 0.5, sync: false }
+        },
+        move: { enable: true, speed: 0.2, direction: "left", random: true },
+        line_linked: { enable: false }
+    },
+    retina_detect: true
 });
 </script>
 </body>
