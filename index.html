@@ -752,41 +752,45 @@ function getDistance(lat1, lon1, lat2, lon2) {
 }
 
 function startLiveTracking(room) {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((pos) => {
-            if (!userName) return;
-            const myLoc = { 
-                lat: pos.coords.latitude, 
-                lng: pos.coords.longitude,
-                joinedAt: serverTimestamp()
-            };
-            
-            set(ref(db, `rooms/${room}/locations/${userName}`), myLoc)
-            .then(() => console.log("Success"))
-            .catch(err => console.error(err));
+    if (!navigator.geolocation) {
+        alert("متصفحك لا يدعم الـ GPS");
+        return;
+    }
 
-        }, (err) => {
-            console.error(err);
-            alert("GPS Error");
-        }, { enableHighAccuracy: true });
+    const options = { 
+        enableHighAccuracy: false, 
+        timeout: 15000, 
+        maximumAge: 0 
+    };
 
-        onValue(ref(db, `rooms/${room}/locations`), (snap) => {
-            const users = snap.val();
-            if (users && userName && users[userName]) {
-                const myData = users[userName];
-                for (let id in users) {
-                    if (id !== userName) {
-                        const d = getDistance(myData.lat, myData.lng, users[id].lat, users[id].lng);
-                        document.getElementById('distanceText').innerText = `Distance: ${d.toFixed(0)}m`;
-                        break; 
+    navigator.geolocation.getCurrentPosition((pos) => {
+        const myLoc = { 
+            lat: pos.coords.latitude, 
+            lng: pos.coords.longitude 
+        };
+        
+        set(ref(db, `rooms/${room}/locations/${userName}`), myLoc)
+        .then(() => {
+            console.log("Location sent!");
+            onValue(ref(db, `rooms/${room}/locations`), (snap) => {
+                const users = snap.val();
+                if (users && users[userName]) {
+                    for (let id in users) {
+                        if (id !== userName) {
+                            const d = getDistance(myLoc.lat, myLoc.lng, users[id].lat, users[id].lng);
+                            document.getElementById('distanceText').innerText = `Distance: ${d.toFixed(0)}m`;
+                            break;
+                        }
                     }
                 }
-            }
+            });
         });
-    } else {
-        alert("Not Supported");
-    }
+
+    }, (err) => {
+        alert("GPS Error: " + err.message + " (Code: " + err.code + ")");
+    }, options);
 }
+
 
 document.getElementById('joinRoomBtn').onclick = () => {
     if (!userName) { 
