@@ -323,6 +323,10 @@
   <div id="particles-js"></div>
   <img src="https://avatars.githubusercontent.com/u/201962374?v=4" alt="Overlay Image" id="overlayImage" />
 <div id="hamburger">☰</div>
+<!-- Sidebar menu -->
+<div id="sidebar">
+  <div id="closeSidebar">&times;</div>
+  <h2>👑Contact👑</h2>
 
   <div id="viewersCount">👁️‍🗨️ 0</div>
 <div id="viewersListPopup" style="
@@ -345,7 +349,7 @@
   <div id="chatWrapper">
     <div id="namePrompt">
       <h2>👁️‍🗨️Enter your name to join the chat👁️‍🗨️</h2>
-
+      <!-- أضف هذا في body الصفحة -->
 <video id="smallCamera" autoplay muted playsinline></video>
       <input id="nameInput" placeholder="Your name   👑    &" autocomplete="off" />
       <button id="joinBtn">Join Chat</button>
@@ -366,13 +370,14 @@
     import { getDatabase, ref, push, onChildAdded, onValue, set, onDisconnect, serverTimestamp, remove } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
 
     const firebaseConfig = {
-        apiKey: "AIzaSyBUb10JpH6iTD1sqSN7xz_lYDZUNSVennQ",
-        authDomain: "testing-9b30c.firebaseapp.com",
-        databaseURL: "https://testing-9b30c-default-rtdb.europe-west1.firebasedatabase.app",
-        projectId: "testing-9b30c",
-        storageBucket: "testing-9b30c.appspot.com",
-        messagingSenderId: "569390736740",
-        appId: "1:569390736740:web:4f017178b0b3df5ef28671"
+      apiKey: "AIzaSyA7Pu0DJOWmdoDYUUVP1J9aqhxh4f3wyfA",
+      authDomain: "a0zai-56c3a.firebaseapp.com",
+      databaseURL: "https://a0zai-56c3a-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "a0zai-56c3a",
+      storageBucket: "a0zai-56c3a.firebasestorage.app",
+      messagingSenderId: "198838438266",
+      appId: "1:198838438266:web:379e782653f014a32a2ec3",
+      measurementId: "G-85PDXY00J4"
     };
 
     const app = initializeApp(firebaseConfig);
@@ -680,7 +685,7 @@ function showCapturedImage(imgSrc) {
   messagesDiv.appendChild(container);
   messagesDiv.scrollTop = messagesDiv.scrollHeight;
 
-
+  // إزالة الصورة بعد 3 ثواني
   setTimeout(() => {
     container.remove();
   }, 3000);
