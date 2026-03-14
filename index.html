@@ -789,6 +789,49 @@ const hamburger = document.getElementById('hamburger');
     });
   </script>
   <script>
+  const clock = document.querySelector('.clock-container');
+const scene = document.querySelector('.scene');
+let currentX = 0, currentY = 0, targetX = 0, targetY = 0;
+
+scene.addEventListener('mousemove', (e) => {
+    const rect = scene.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    targetY = (x - centerX) / centerX * 5; 
+    targetX = -(y - centerY) / centerY * 6; 
+});
+
+scene.addEventListener('mouseleave', () => {
+    targetX = 0;
+    targetY = 0;
+});
+
+function animate3D() {
+    currentX += (targetX - currentX) * 0.17;
+    currentY += (targetY - currentY) * 0.14;
+
+    clock.style.transform = `rotateX(${currentX}deg) rotateY(${currentY}deg)`;
+    clock.style.filter = `drop-shadow(${currentY}px ${currentX*2}px 60px rgba(0,0,0,0.6))`;
+    requestAnimationFrame(animate3D);
+}
+animate3D();
+let touchX = 0, touchY = 0;
+scene.addEventListener('touchstart', e => {
+    touchX = e.touches[0].clientX;
+    touchY = e.touches[0].clientY;
+}, { passive: true });
+scene.addEventListener('touchmove', e => {
+    const dx = e.touches[0].clientX - touchX;
+    const dy = e.touches[0].clientY - touchY;
+    targetY = dx * 0.45;
+    targetX = -dy * 0.45;
+    if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {
+        if (e.cancelable) e.preventDefault();
+    }
+}, { passive: false 
+});
   const modal = document.getElementById("paymentModal");
   const img = document.getElementById("mirrorGateImage");
   const span = document.getElementsByClassName("close")[0];
