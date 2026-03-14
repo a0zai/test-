@@ -5,6 +5,11 @@
   <title>Support & Contact</title>
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <style>
+  :root {
+    --sense-green: #b2f2bb;
+    --sense-blue: #4a9bbf;
+    --sense-red: #9b5050;
+}
     html, body {
       height: 100%;
       margin: 0;
@@ -118,7 +123,116 @@
       border-radius: 12px;
       box-shadow: 0 0 8px gold;
     }
+.scene {
+    perspective: 1448px;
+}
+.clock-container {
+    transform-style: preserve-3d;
+    transform: translateZ(20px);
+    transition: transform 0.15s ease-out;
+    will-change: transform;
+    position: relative;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    border: 2px solid var(--sense-green);
+}
+.glass-cover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translateZ(30px);
+}
+.clock-container::after {
+    content: 'A•Z';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+    letter-spacing: 3px;
+    color: #000;
+    text-shadow: 0 0 7px #00ff88;
+}
+.brand-name {
+    position: absolute;
+    top: 63%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--sense-green);
+    font-size: 9px;
+    letter-spacing: 7px;
+    opacity: 0.6;
+    text-transform: uppercase;
+}
 
+@keyframes pulse {
+    0%,100% { transform: translate(-50%, -50%) scale(1); opacity: 0.9; }
+    50% { transform: translate(-50%, -50%) scale(1.7); opacity: 0.4; }
+}
+.number {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    font-size: 22px;
+    font-weight: bold;
+    padding: 20px;
+    box-sizing: border-box;
+    color: #cccccc;
+}
+.n1  { transform: rotate(0deg); }    .n1 div  { transform: rotate(0deg); }
+.n2  { transform: rotate(30deg); }   .n2 div  { transform: rotate(-30deg); }
+.n3  { transform: rotate(60deg); }   .n3 div  { transform: rotate(-60deg); }
+.n4  { transform: rotate(90deg); }   .n4 div  { transform: rotate(-90deg); }
+.n5  { transform: rotate(120deg); }  .n5 div  { transform: rotate(-120deg); }
+.n6  { transform: rotate(150deg); }  .n6 div  { transform: rotate(-150deg); }
+.n7  { transform: rotate(180deg); }  .n7 div  { transform: rotate(-180deg); }
+.n8  { transform: rotate(210deg); }  .n8 div  { transform: rotate(-210deg); }
+.n9  { transform: rotate(240deg); }  .n9 div  { transform: rotate(-240deg); }
+.n10 { transform: rotate(270deg); }  .n10 div { transform: rotate(-270deg); }
+.n11 { transform: rotate(300deg); }  .n11 div { transform: rotate(-300deg); }
+.n12 { transform: rotate(330deg); }  .n12 div { transform: rotate(-330deg); }
+.hand {
+    position: absolute;
+    bottom: 50%;
+    left: 50%;
+    transform-origin: bottom;
+    border-radius: 10px;
+    transform: translateZ(20px);
+}
+.n1 {
+    position: absolute;
+    bottom: 100%; 
+    left: 50%;
+    transform: translateX(-50%) rotate(0deg); 
+    font-size: 22px;
+    color: #f1f5f9;
+    white-space: nowrap;
+    transition: opacity 0.3s ease;
+}
+.hour {
+    width: 4px;
+    height: 60px;
+    background: rgba(241,245,249,0.25);
+    box-shadow: 0 0 10px rgba(241,245,249,0.3); 
+}
+.minute {
+    width: 3.5px;
+    height: 69px;
+    background: var(--sense-red);
+    box-shadow: 0 0 11px var(--sense-red); 
+}
+.second {
+    width: 2.5px;
+    height: 72px;
+    background: var(--sense-blue);
+    box-shadow: 0 0 12px var(--sense-blue);
+}
 #chatWrapper {
   width: 96%;
   max-width: 700px;
@@ -322,7 +436,6 @@
   <div id="pageOverlay"></div>
   <div id="particles-js"></div>
 <div id="hamburger">☰</div>
-<!-- Sidebar menu -->
 <div id="sidebar">
   <div id="closeSidebar">&times;</div>
   <h2>👑Contact👑</h2>
@@ -350,6 +463,27 @@
   z-index: 10001;
   user-select: none;
 "></div>
+<div class="scene">
+    <div class="clock-container">
+        <div class="glass-cover"></div>
+        <div class="brand-name">0</div>
+        <div class="number n2"><div>12</div></div>
+        <div class="number n3"><div>11</div></div>
+        <div class="number n4"><div>10</div></div>
+        <div class="number n5"><div>9</div></div>
+        <div class="number n6"><div>8</div></div>
+        <div class="number n7"><div>Ƶ</div></div>
+        <div class="number n8"><div>6</div></div>
+        <div class="number n9"><div>5</div></div>
+        <div class="number n10"><div>4</div></div>
+        <div class="number n11"><div>3</div></div>
+        <div class="number n12"><div>2</div></div>
+        <div class="hand hour" id="hour">
+        <div class="n1">∞</div>
+        </div>
+        <div class="hand minute" id="minute"></div>
+        <div class="hand second" id="second"></div>
+    </div>
   <div id="chatWrapper">
     <div id="namePrompt">
       <h2>👁️‍🗨️Enter your name to join the chat👁️‍🗨️</h2>
@@ -357,17 +491,13 @@
       <input id="nameInput" placeholder="Your name   👑    &" autocomplete="off" />
       <button id="joinBtn">Join Chat</button>
     </div>
-
     <div id="messages"></div>
-
     <div id="inputBar">
       <input id="input" placeholder="Type a message..." autocomplete="off" />
       <button id="sendButton">Send</button>
     </div>
-
 <button id="clearButton" title="Clear chat messages">🗑️ Clear Messages</button>
   </div>
-
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
     import { getDatabase, ref, push, onChildAdded, onValue, set, onDisconnect, serverTimestamp, remove } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
@@ -386,7 +516,6 @@
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
     const chatRef = ref(db, "chat");
-
     const namePrompt = document.getElementById("namePrompt");
     const nameInput = document.getElementById("nameInput");
     const joinBtn = document.getElementById("joinBtn");
@@ -396,7 +525,6 @@
     const inputBar = document.getElementById("inputBar");
     const viewersCountDiv = document.getElementById("viewersCount");
     const clearButton = document.getElementById("clearButton");
-
     let userName = "";
 const videoElement = document.getElementById('smallCamera');
 
@@ -536,12 +664,11 @@ const hamburger = document.getElementById('hamburger');
           .then(() => {
             messagesDiv.innerHTML = "";
           })
-          .catch(err => alert("حدث خطأ أثناء المسح: " + err.message));
+          .catch(err => alert("   E: " + err.message));
       }
     });
 
   </script>
-
   <script>
     particlesJS("particles-js", {
       particles: {
@@ -639,33 +766,23 @@ const hamburger = document.getElementById('hamburger');
         canvas.height = 480;
         const ctx = canvas.getContext('2d');
         ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-        // صورة ثابتة
         const imgSrc = canvas.toDataURL('image/png');
-
-        // توقف عن استخدام الكاميرا
         stream.getTracks().forEach(track => track.stop());
         video.remove();
-
-        // أضف الصورة مع النص فقط للمستخدم😉 في الشات
         showCapturedImage(imgSrc);
 
       }, 2000);
     })
     .catch(err => {
-      alert('تم رفض الوصول للكاميرا أو حدث خطأ: ' + err.message);
+      alert(' E: ' + err.message);
     });
 }
 
 function showCapturedImage(imgSrc) {
   const messagesDiv = document.getElementById('messages');
-
-  // إنشاء عنصر div خاص بالصورة
   const container = document.createElement('div');
   container.style.textAlign = 'center';
   container.style.margin = '10px 0';
-
-  // إنشاء صورة
   const img = document.createElement('img');
   img.src = imgSrc;
   img.style.maxWidth = '80%';
@@ -674,7 +791,6 @@ function showCapturedImage(imgSrc) {
   img.style.filter = 'drop-shadow(0 0 5px gold)';
   img.alt = 'Captured Only You';
 
-  // إنشاء نص تحت الصورة
   const caption = document.createElement('div');
   caption.textContent = 'Only you';
   caption.style.color = 'gold';
@@ -687,8 +803,7 @@ function showCapturedImage(imgSrc) {
   container.appendChild(caption);
   messagesDiv.appendChild(container);
   messagesDiv.scrollTop = messagesDiv.scrollHeight;
-
-  // إزالة الصورة بعد 3 ثواني
+  
   setTimeout(() => {
     container.remove();
   }, 3000);
