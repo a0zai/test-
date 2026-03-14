@@ -753,23 +753,38 @@ function getDistance(lat1, lon1, lat2, lon2) {
 
 function startLiveTracking(room) {
     if (navigator.geolocation) {
-        navigator.geolocation.watchPosition((pos) => {
+        navigator.geolocation.getCurrentPosition((pos) => {
             if (!userName) return;
-            const myLoc = { lat: pos.coords.latitude, lng: pos.coords.longitude };
-            set(ref(db, `rooms/${room}/locations/${userName}`), myLoc);
-            onValue(ref(db, `rooms/${room}/locations`), (snap) => {
-                const users = snap.val();
-                if (users) {
-                    for (let id in users) {
-                        if (id !== userName) {
-                            const d = getDistance(myLoc.lat, myLoc.lng, users[id].lat, users[id].lng);
-                            document.getElementById('distanceText').innerText = `Distance: ${d.toFixed(0)}m`;
-                            break; 
-                        }
+            const myLoc = { 
+                lat: pos.coords.latitude, 
+                lng: pos.coords.longitude,
+                joinedAt: serverTimestamp()
+            };
+            
+            set(ref(db, `rooms/${room}/locations/${userName}`), myLoc)
+            .then(() => console.log("Success"))
+            .catch(err => console.error(err));
+
+        }, (err) => {
+            console.error(err);
+            alert("GPS Error");
+        }, { enableHighAccuracy: true });
+
+        onValue(ref(db, `rooms/${room}/locations`), (snap) => {
+            const users = snap.val();
+            if (users && userName && users[userName]) {
+                const myData = users[userName];
+                for (let id in users) {
+                    if (id !== userName) {
+                        const d = getDistance(myData.lat, myData.lng, users[id].lat, users[id].lng);
+                        document.getElementById('distanceText').innerText = `Distance: ${d.toFixed(0)}m`;
+                        break; 
                     }
                 }
-            });
-        }, (err) => console.error(err), { enableHighAccuracy: true });
+            }
+        });
+    } else {
+        alert("Not Supported");
     }
 }
 
