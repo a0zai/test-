@@ -71,11 +71,11 @@
     user-select: none;
   }
 
-  /* القائمة الجانبية */
+
   #sidebar {
     position: fixed;
     top: 0;
-    left: -250px; /* مخفية خارج الشاشة */
+    left: -250px; 
     width: 250px;
     height: 100%;
     background-color: rgba(0,0,0,0.9);
@@ -112,6 +112,9 @@
     font-size: 24px;
     cursor: pointer;
   }
+  .scene {
+    perspective: 1448px;
+}
 .clock-container {
     transform-style: preserve-3d;
     transform: translateZ(20px);
@@ -461,6 +464,7 @@
     🤫.
   </p>
   </div>
+  <div class="scene">
   <div class="clock-container">
         <div class="glass-cover"></div>
         <div class="brand-name">0</div>
