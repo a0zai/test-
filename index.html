@@ -438,7 +438,6 @@
       color: black;
     }
 
-    /* زر مسح الرسائل */
     #clearButton {
       margin-top: 10px;
       align-self: flex-end;
@@ -457,6 +456,39 @@
       background-color: #ff5555;
       color: black;
     }
+.action-btn {
+    width: 100%;
+    background: transparent;
+    color: gold;
+    border: 1px solid gold;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    transition: 0.3s;
+    margin-top: 10px;
+}
+
+.action-btn:hover {
+    background: rgba(255, 215, 0, 0.1);
+    box-shadow: 0 0 10px gold;
+}
+
+
+.radar-pulse {
+    width: 10px;
+    height: 10px;
+    background: #00ffcc;
+    border-radius: 50%;
+    display: inline-block;
+    animation: pulse-ring 1.5s infinite;
+}
+
+@keyframes pulse-ring {
+    0% { transform: scale(0.5); opacity: 1; }
+    100% { transform: scale(2.5); opacity: 0; }
+}
 
   </style>
 </head>
@@ -468,13 +500,21 @@
 <div id="hamburger">☰</div>
 <div id="sidebar">
   <div id="closeSidebar">&times;</div>
-  <h2>👑Contact👑</h2>
-  <h3 class="section-title">🪞 Mirror.Gate Card</h3>
+  <h2>👑🚪👑</h2>
+  <h3 class="section-title">🪞 Mirror Card</h3>
   <img src="https://avatars.githubusercontent.com/u/201962374?s=96&v=4" alt="Mirror Note Card" id="mirrorNoteImage" class="product-image" />
-  <p class="product-description">
-    🤫.
-  </p>
+  <p class="product-description">🤫. Your location is 0.</p>
+  <hr style="border: 0.5px solid #444; margin: 20px 0;">
+  <div id="controlCenter">
+      <button id="joinRoomBtn" class="sidebar-btn">🔐 Join Room</button>
+      <button id="leaveRoomBtn" class="sidebar-btn" style="display:none; color: #ff5555; border-color: #ff5555;">🚪 Exit Room</button>
+      <p id="roomStatus" style="font-size: 11px; color: gold; margin-top: 5px;">📍 Status: Global Hall</p>
+      <div id="radarBox" style="display:none; margin-top: 20px; border: 1px dashed gold; padding: 10px; border-radius: 8px;">
+          <div class="pulse-dot"></div>
+          <span id="distanceText" style="color:#00ffcc; font-size: 16px;">Distance: ---</span>
+      </div>
   </div>
+</div>
   <div class="clock-container">
         <div class="glass-cover"></div>
         <div class="brand-name">0</div>
@@ -571,6 +611,9 @@ updateClock();
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
     const chatRef = ref(db, "chat");
+    let currentChatRef = chatRef; 
+    let roomCode = "";
+    let roomListener = null; 
     const namePrompt = document.getElementById("namePrompt");
     const nameInput = document.getElementById("nameInput");
     const joinBtn = document.getElementById("joinBtn");
@@ -654,44 +697,34 @@ document.addEventListener('click', (e) => {
     viewersListPopup.style.display = 'none';
   }
 });
-    sendButton.addEventListener("click", () => {
-      const text = input.value.trim();
-      if (text && userName) {
-        push(chatRef, { text, user: userName, timestamp: serverTimestamp() });
+   sendButton.onclick = () => {
+    const text = input.value.trim();
+    if (text && userName) {
+        push(currentChatRef, { text, user: userName, timestamp: serverTimestamp() });
         input.value = "";
-      }
-    });
+    }
+};
 
-    input.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") {
-        sendButton.click();
-      }
-    });
 let joinedAt = Date.now();
 
-onChildAdded(chatRef, (snapshot) => {
-  const msg = snapshot.val();
-  if (msg.timestamp && msg.timestamp < joinedAt) {
-    // ignore old messages
-    return;
-  }
+function listenToMessages(targetRef) {
+    messagesDiv.innerHTML = ""; 
+    
+    onChildAdded(targetRef, (snapshot) => {
+        const msg = snapshot.val();
+        if (msg.timestamp && msg.timestamp < joinedAt) return;
 
-  if (msg && msg.text && msg.user) {
-    const div = document.createElement("div");
-    div.className = "msg";
+        if (msg && msg.text && msg.user) {
+            const div = document.createElement("div");
+            div.className = "msg";
+            div.textContent = `${msg.user}: ${msg.text}`;
+            messagesDiv.appendChild(div);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+    });
+}
 
-    if (userName === 'A123696321Z') {
-
-      div.innerHTML = `<span class="username">${msg.user}:</span> ${msg.text}`;
-    } else {
-
-      div.textContent = `${msg.user}: ${msg.text}`;
-    }
-
-    messagesDiv.appendChild(div);
-    messagesDiv.scrollTop = messagesDiv.scrollHeight;
-  }
-});
+listenToMessages(chatRef);
 
 const hamburger = document.getElementById('hamburger');
   const sidebar = document.getElementById('sidebar');
@@ -934,6 +967,55 @@ function showCapturedImage(imgSrc) {
     container.remove();
   }, 3000);
 }
+function getDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371e3;
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+              Math.sin(dLon/2) * Math.sin(dLon/2);
+    return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)));
+}
+
+document.getElementById('joinRoomBtn').onclick = () => {
+    const code = prompt("Enter 7-character Code:");
+    if (code && code.length >= 7) {
+        roomCode = code;
+        currentChatRef = ref(db, "rooms/" + code + "/chat");
+        
+        document.getElementById('roomStatus').innerText = "📍 Room: " + code;
+        document.getElementById('joinRoomBtn').style.display = "none";
+        document.getElementById('leaveRoomBtn').style.display = "block";
+        document.getElementById('radarBox').style.display = "block";
+        
+        listenToMessages(currentChatRef); 
+        startLiveTracking(code); 
+    }
+};
+
+function startLiveTracking(room) {
+    if (navigator.geolocation) {
+        navigator.geolocation.watchPosition((pos) => {
+            const myLoc = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+            set(ref(db, "rooms/" + room + "/locations/" + userName), myLoc);
+            
+            onValue(ref(db, "rooms/" + room + "/locations"), (snap) => {
+                const users = snap.val();
+                for (let user in users) {
+                    if (user !== userName) {
+                        const d = getDistance(myLoc.lat, myLoc.lng, users[user].lat, users[user].lng);
+                        document.getElementById('distanceText').innerText = `Distance: ${d.toFixed(0)}m`;
+                        break; 
+                    }
+                }
+            });
+        }, null, { enableHighAccuracy: true });
+    }
+}
+
+document.getElementById('leaveRoomBtn').onclick = () => {
+    location.reload();
+};
 
 </script>
 </body>
