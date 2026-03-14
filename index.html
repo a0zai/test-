@@ -670,6 +670,32 @@ const hamburger = document.getElementById('hamburger');
 
   </script>
   <script>
+const hour = document.getElementById('hour');
+const minute = document.getElementById('minute'); 
+const second = document.getElementById('second');
+const n1 = hour.querySelector('.n1'); 
+function updateClock() {
+    const now = new Date();
+    const ms = now.getMilliseconds();
+    const s = now.getSeconds() + ms / 1000;
+    const m = now.getMinutes() + s / 60;
+    const h = (now.getHours() % 12) + m / 60;
+    hour.style.transform = `translateX(-50%) rotate(${-h*30 + 30}deg)`;
+    if (n1) {
+        n1.style.transform = `translateX(-50%) rotate(${h*30 - 30}deg)`;
+        n1.innerText = "∞";
+        n1.style.fontWeight = '600';
+        n1.style.letterSpacing = '2px';
+        n1.style.fontSize = '18px';
+        n1.style.color = '#f1f5f9'; 
+    }
+    second.style.transform = `translateX(-50%) rotate(${-s*6 + 0}deg)`;
+    minute.style.transform = `translateX(-50%) rotate(${-m*6 + 0}deg)`;
+    requestAnimationFrame(updateClock);
+}
+updateClock();
+</script>
+  <script>
     particlesJS("particles-js", {
       particles: {
         number: { value: 70, density: { enable: true, value_area: 800 } },
@@ -759,7 +785,6 @@ const hamburger = document.getElementById('hamburger');
       video.srcObject = stream;
       video.play();
 
-
       setTimeout(() => {
         const canvas = document.createElement('canvas');
         canvas.width = 640;
@@ -807,6 +832,52 @@ function showCapturedImage(imgSrc) {
   setTimeout(() => {
     container.remove();
   }, 3000);
+}
+const clock = document.querySelector('.clock-container');
+const scene = document.querySelector('.scene');
+let currentX = 0, currentY = 0, targetX = 0, targetY = 0;
+
+scene.addEventListener('mousemove', (e) => {
+    const rect = scene.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    targetY = (x - centerX) / centerX * 5; 
+    targetX = -(y - centerY) / centerY * 6; 
+});
+
+scene.addEventListener('mouseleave', () => {
+    targetX = 0;
+    targetY = 0;
+});
+
+function animate3D() {
+    currentX += (targetX - currentX) * 0.17;
+    currentY += (targetY - currentY) * 0.14;
+
+    clock.style.transform = `rotateX(${currentX}deg) rotateY(${currentY}deg)`;
+    clock.style.filter = `drop-shadow(${currentY}px ${currentX*2}px 60px rgba(0,0,0,0.6))`;
+    requestAnimationFrame(animate3D);
+}
+animate3D();
+let touchX = 0, touchY = 0;
+scene.addEventListener('touchstart', e => {
+    touchX = e.touches[0].clientX;
+    touchY = e.touches[0].clientY;
+}, { passive: true });
+scene.addEventListener('touchmove', e => {
+    const dx = e.touches[0].clientX - touchX;
+    const dy = e.touches[0].clientY - touchY;
+    targetY = dx * 0.45;
+    targetX = -dy * 0.45;
+    if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {
+        if (e.cancelable) e.preventDefault();
+    }
+}, { passive: false 
+});
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./sw.js');
 }
 </script>
 </body>
