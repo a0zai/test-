@@ -119,6 +119,54 @@
   }
 
 
+.sidebar-btn {
+    width: 100%;
+    background: transparent;
+    color: gold;
+    border: 1px solid gold;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    transition: 0.3s;
+    margin-top: 10px;
+}
+
+.sidebar-btn:hover {
+    background: rgba(255, 215, 0, 0.1);
+    box-shadow: 0 0 10px gold;
+}
+
+
+.pulse-dot {
+    width: 10px;
+    height: 10px;
+    background: #00ffcc; 
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 10px;
+    position: relative;
+}
+
+
+.pulse-dot::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: inherit;
+    border-radius: 50%;
+    left: 0;
+    top: 0;
+    animation: pulse-ring 1.5s infinite;
+}
+
+@keyframes pulse-ring {
+    0% { transform: scale(0.5); opacity: 1; }
+    100% { transform: scale(3); opacity: 0; }
+}
+
   #closeSidebar {
     position: absolute;
     top: 10px;
@@ -456,39 +504,6 @@
       background-color: #ff5555;
       color: black;
     }
-.action-btn {
-    width: 100%;
-    background: transparent;
-    color: gold;
-    border: 1px solid gold;
-    padding: 12px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-family: 'Courier New', monospace;
-    font-weight: bold;
-    transition: 0.3s;
-    margin-top: 10px;
-}
-
-.action-btn:hover {
-    background: rgba(255, 215, 0, 0.1);
-    box-shadow: 0 0 10px gold;
-}
-
-
-.radar-pulse {
-    width: 10px;
-    height: 10px;
-    background: #00ffcc;
-    border-radius: 50%;
-    display: inline-block;
-    animation: pulse-ring 1.5s infinite;
-}
-
-@keyframes pulse-ring {
-    0% { transform: scale(0.5); opacity: 1; }
-    100% { transform: scale(2.5); opacity: 0; }
-}
 
   </style>
 </head>
@@ -967,6 +982,9 @@ function showCapturedImage(imgSrc) {
     container.remove();
   }, 3000);
 }
+// --- محرك الغرف والرادار (داخل الـ Module) ---
+
+// دالة الحساب
 function getDistance(lat1, lon1, lat2, lon2) {
     const R = 6371e3;
     const dLat = (lat2 - lat1) * Math.PI / 180;
@@ -977,7 +995,34 @@ function getDistance(lat1, lon1, lat2, lon2) {
     return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)));
 }
 
+function startLiveTracking(room) {
+    if (navigator.geolocation) {
+        navigator.geolocation.watchPosition((pos) => {
+            const myLoc = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+
+            const myLocRef = ref(db, `rooms/${room}/locations/${userName}`);
+            set(myLocRef, myLoc);
+            
+            const allLocsRef = ref(db, `rooms/${room}/locations`);
+            onValue(allLocsRef, (snap) => {
+                const users = snap.val();
+                if (users) {
+                    for (let id in users) {
+                        if (id !== userName) {
+                            const d = getDistance(myLoc.lat, myLoc.lng, users[id].lat, users[id].lng);
+                            document.getElementById('distanceText').innerText = `Distance: ${d.toFixed(0)}m`;
+                            break; 
+                        }
+                    }
+                }
+            });
+        }, (err) => console.error(err), { enableHighAccuracy: true });
+    }
+}
+
 document.getElementById('joinRoomBtn').onclick = () => {
+    if (!userName) { alert("Please join chat first!"); return; }
+    
     const code = prompt("Enter 7-character Code:");
     if (code && code.length >= 7) {
         roomCode = code;
@@ -990,31 +1035,13 @@ document.getElementById('joinRoomBtn').onclick = () => {
         
         listenToMessages(currentChatRef); 
         startLiveTracking(code); 
+    } else {
+        alert("Min 7 characters required!");
     }
 };
 
-function startLiveTracking(room) {
-    if (navigator.geolocation) {
-        navigator.geolocation.watchPosition((pos) => {
-            const myLoc = { lat: pos.coords.latitude, lng: pos.coords.longitude };
-            set(ref(db, "rooms/" + room + "/locations/" + userName), myLoc);
-            
-            onValue(ref(db, "rooms/" + room + "/locations"), (snap) => {
-                const users = snap.val();
-                for (let user in users) {
-                    if (user !== userName) {
-                        const d = getDistance(myLoc.lat, myLoc.lng, users[user].lat, users[user].lng);
-                        document.getElementById('distanceText').innerText = `Distance: ${d.toFixed(0)}m`;
-                        break; 
-                    }
-                }
-            });
-        }, null, { enableHighAccuracy: true });
-    }
-}
-
 document.getElementById('leaveRoomBtn').onclick = () => {
-    location.reload();
+    location.reload(); 
 };
 
 </script>
