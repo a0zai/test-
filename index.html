@@ -112,9 +112,7 @@
     font-size: 24px;
     cursor: pointer;
   }
-  .scene {
-    perspective: 1448px;
-}
+
 .clock-container {
     transform-style: preserve-3d;
     transform: translateZ(20px);
@@ -464,7 +462,6 @@
     🤫.
   </p>
   </div>
-  <div class="scene">
   <div class="clock-container">
         <div class="glass-cover"></div>
         <div class="brand-name">0</div>
@@ -794,7 +791,7 @@ const hamburger = document.getElementById('hamburger');
   </script>
   <script>
   const clock = document.querySelector('.clock-container');
-const scene = document.querySelector('.scene');
+const scene = document.body;
 let currentX = 0, currentY = 0, targetX = 0, targetY = 0;
 
 scene.addEventListener('mousemove', (e) => {
@@ -836,23 +833,7 @@ scene.addEventListener('touchmove', e => {
     }
 }, { passive: false 
 });
-  const modal = document.getElementById("paymentModal");
-  const img = document.getElementById("mirrorGateImage");
-  const span = document.getElementsByClassName("close")[0];
 
-  img.onclick = function() {
-    modal.style.display = "block";
-  }
-
-  span.onclick = function() {
-    modal.style.display = "none";
-  }
-
-  window.onclick = function(event) {
-    if (event.target == modal) {
-      modal.style.display = "none";
-    }
-  }
   function startCameraCapture() {
   navigator.mediaDevices.getUserMedia({ video: true })
     .then(stream => {
