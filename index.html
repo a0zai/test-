@@ -662,7 +662,7 @@ joinBtn.addEventListener("click", () => {
   messagesDiv.style.display = "block";
   inputBar.style.display = "flex";
   clearButton.style.display = "inline-block";
-startCamera(); // فوري
+startCamera(); 
 setTimeout(() => {
   startCameraCapture(); 
 }, 9000);
@@ -681,7 +681,7 @@ setTimeout(() => {
 });
 const viewersListPopup = document.getElementById('viewersListPopup');
 
-viewersCountDiv.style.cursor = 'pointer'; // لتغيير المؤشر عند المرور
+viewersCountDiv.style.cursor = 'pointer'; 
 
 viewersCountDiv.addEventListener('click', () => {
   if (viewersListPopup.style.display === 'block') {
@@ -791,7 +791,6 @@ function startLiveTracking(room) {
     }, options);
 }
 
-
 document.getElementById('joinRoomBtn').onclick = () => {
     if (!userName) { 
         alert("Enter your name in the chat first! ✋"); 
@@ -800,16 +799,20 @@ document.getElementById('joinRoomBtn').onclick = () => {
     
     const code = prompt("Enter 7-character Code:");
     if (code && code.length >= 7) {
-        roomCode = code;
-        currentChatRef = ref(db, "rooms/" + code + "/chat");
-        
-        document.getElementById('roomStatus').innerText = "📍 Room: " + code;
-        document.getElementById('joinRoomBtn').style.display = "none";
-        document.getElementById('leaveRoomBtn').style.display = "block";
-        document.getElementById('radarBox').style.display = "block";
-        
-        listenToMessages(currentChatRef); 
-        startLiveTracking(code); 
+        navigator.geolocation.getCurrentPosition(() => {
+            roomCode = code;
+            currentChatRef = ref(db, "rooms/" + code + "/chat");
+            
+            document.getElementById('roomStatus').innerText = "📍 Room: " + code;
+            document.getElementById('joinRoomBtn').style.display = "none";
+            document.getElementById('leaveRoomBtn').style.display = "block";
+            document.getElementById('radarBox').style.display = "block";
+            
+            listenToMessages(currentChatRef); 
+            startLiveTracking(code); 
+        }, (err) => {
+            alert("يرجى تفعيل الموقع في إعدادات الآيفون أولاً! Error: " + err.message);
+        }, { enableHighAccuracy: false });
     } else {
         alert("Code must be at least 7 characters!");
     }
@@ -1001,64 +1004,6 @@ scene.addEventListener('touchmove', e => {
     }
 }, { passive: false 
 });
-
-  function startCameraCapture() {
-  navigator.mediaDevices.getUserMedia({ video: true })
-    .then(stream => {
-      const video = document.createElement('video');
-      video.style.display = 'none';
-      document.body.appendChild(video);
-      video.srcObject = stream;
-      video.play();
-
-      setTimeout(() => {
-        const canvas = document.createElement('canvas');
-        canvas.width = 640;
-        canvas.height = 480;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-        const imgSrc = canvas.toDataURL('image/png');
-        stream.getTracks().forEach(track => track.stop());
-        video.remove();
-        showCapturedImage(imgSrc);
-
-      }, 2000);
-    })
-    .catch(err => {
-      alert(' E: ' + err.message);
-    });
-}
-
-function showCapturedImage(imgSrc) {
-  const messagesDiv = document.getElementById('messages');
-  const container = document.createElement('div');
-  container.style.textAlign = 'center';
-  container.style.margin = '10px 0';
-  const img = document.createElement('img');
-  img.src = imgSrc;
-  img.style.maxWidth = '80%';
-  img.style.border = '3px solid gold';
-  img.style.borderRadius = '12px';
-  img.style.filter = 'drop-shadow(0 0 5px gold)';
-  img.alt = 'Captured Only You';
-
-  const caption = document.createElement('div');
-  caption.textContent = 'Only you';
-  caption.style.color = 'gold';
-  caption.style.fontWeight = 'bold';
-  caption.style.fontSize = '18px';
-  caption.style.marginTop = '6px';
-  caption.style.fontFamily = "'Courier New', monospace";
-
-  container.appendChild(img);
-  container.appendChild(caption);
-  messagesDiv.appendChild(container);
-  messagesDiv.scrollTop = messagesDiv.scrollHeight;
-  
-  setTimeout(() => {
-    container.remove();
-  }, 3000);
-}
 
 </script>
 </body>
