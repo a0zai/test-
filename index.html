@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>A∞Z | Quantum Node</title>
+  <title>A∞Z | Quantum Node v3</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.fog.min.js"></script>
   <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
@@ -12,7 +12,7 @@
       --sense-green: #00ffcc;
       --sense-blue: #4a9bbf;
       --sense-red: #ff5555;
-      --terminal-bg: rgba(0, 10, 5, 0.9);
+      --terminal-bg: rgba(0, 10, 5, 0.95);
     }
     * { box-sizing: border-box; }
     html, body {
@@ -54,17 +54,17 @@
     #nameInput, #roomInput { background: #000; border: 1px solid var(--sense-green); color: gold; padding: 12px; width: 85%; text-align: center; border-radius: 5px; outline: none; }
     #roomInput { border-color: var(--sense-blue); color: var(--sense-blue); }
 
-    #messages { flex: 1; overflow-y: auto; padding: 15px; display: none; }
-    .msg-item { margin-bottom: 12px; font-size: 14px; word-break: break-word; }
+    #messages { flex: 1; overflow-y: auto; padding: 15px; display: none; scroll-behavior: smooth;}
+    .msg-item { margin-bottom: 12px; font-size: 14px; word-break: break-word; text-align: left;}
 
-    .quantum-img-container { position: relative; border-radius: 8px; overflow: hidden; border: 1px solid var(--sense-green); margin: 10px 0; width: 100%; background: #000; }
+    .quantum-img-container { position: relative; border-radius: 8px; overflow: hidden; border: 1px solid var(--sense-green); margin: 10px 0; width: 100%; max-width: 300px; background: #000; }
     .quantum-noise { position: absolute; inset: 0; z-index: 2; background: url('https://media.giphy.com/media/oEI9uWUicG68U/giphy.gif'); opacity: 0.4; mix-blend-mode: screen; }
     .p2p-img { width: 100%; display: block; opacity: 0; transition: 2s ease; }
     .decoded .p2p-img { opacity: 1; }
     .decoded .quantum-noise { display: none; }
 
-    #inputBar { display: none; padding: 10px; background: rgba(0,0,0,0.5); border-top: 1px solid rgba(0, 255, 204, 0.2); gap: 10px; }
-    #input { flex: 1; padding: 12px; background: transparent; border: none; color: #fff; outline: none; }
+    #inputBar { display: none; padding: 10px; background: rgba(0,0,0,0.5); border-top: 1px solid rgba(0, 255, 204, 0.2); gap: 10px; align-items: center;}
+    #input { flex: 1; padding: 12px; background: transparent; border: none; color: #fff; outline: none; font-family: inherit;}
     
     .clock-container { position: fixed; top: 45%; left: 50%; transform: translate(-50%, -50%); width: 250px; height: 250px; opacity: 0.2; z-index: 1; pointer-events: none; }
     .hand { position: absolute; bottom: 50%; left: 50%; transform-origin: bottom; }
@@ -75,7 +75,7 @@
 </head>
 <body>
 
-  <div id="pageOverlay"> <h2 style="color:var(--sense-green)">A∞Z QUANTUM_LINK...</h2> </div>
+  <div id="pageOverlay"> <h2 style="color:var(--sense-green)">A∞Z QUANTUM_LINK_v3...</h2> </div>
   <div id="vanta-bg"></div>
   
   <div id="byteDashboard">
@@ -87,36 +87,40 @@
   <div id="hamburger">☰</div>
   <div id="sidebar">
     <div id="closeSidebar" style="cursor:pointer; text-align:right;">[X]</div>
-    <h3 style="color:var(--sense-green)">SYSTEM_CORE</h3>
-    <p id="myPeerIdDisplay" style="font-size: 9px; color: gold; background: #111; padding: 10px; word-break: break-all;">ID: NOT_READY</p>
-    <button id="connectPeerBtn" class="sidebar-btn">CONNECT_NODE</button>
+    <h3 style="color:var(--sense-green); border-bottom: 1px solid #333; padding-bottom: 10px;">SYSTEM_CORE</h3>
+    <p id="myPeerIdDisplay" style="font-size: 9px; color: gold; background: #111; padding: 10px; margin-top:20px; border-radius:4px; word-break: break-all;">ID: NOT_READY</p>
+    <div id="usersList" style="font-size: 10px; color: #fff; margin-top: 20px; text-align: left;">
+        <div style="color: var(--sense-blue); margin-bottom: 5px;">ACTIVE_NODES_IN_ROOM:</div>
+        <div id="usersListContent"></div>
+    </div>
   </div>
 
   <div class="clock-container">
     <div class="hand hour" id="hour"></div>
     <div class="hand minute" id="minute"></div>
     <div class="hand second" id="second"></div>
+    <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); color:rgba(255,255,255,0.1); font-size:40px;">∞</div>
   </div>
 
   <div id="chatWrapper">
     <div id="namePrompt">
-      <video id="smallCamera" autoplay muted playsinline style="width:100px; height:100px; border-radius:50%; object-fit:cover; border:2px solid var(--sense-green);"></video>
+      <video id="smallCamera" autoplay muted playsinline style="width:100px; height:100px; border-radius:50%; object-fit:cover; border:2px solid var(--sense-green); box-shadow: 0 0 20px var(--sense-green);"></video>
       <input id="nameInput" placeholder="YOUR_IDENTITY" />
       <input id="roomInput" placeholder="ROOM_CODE (e.g. 777)" />
       <button id="joinBtn" class="sidebar-btn" style="width:150px">INITIALIZE_LINK</button>
     </div>
     <div id="messages"></div>
     <div id="inputBar">
-      <label for="fileInput" style="cursor:pointer; font-size:22px;">⚛️</label>
+      <label for="fileInput" style="cursor:pointer; font-size:22px; padding: 0 5px;">⚛️</label>
       <input type="file" id="fileInput" style="display:none;" accept="image/*">
       <input id="input" placeholder="Inject data stream..." autocomplete="off" />
-      <button id="sendButton" style="background:transparent; color:gold; border:none; font-weight:bold; cursor:pointer;">>>PUSH</button>
+      <button id="sendButton" style="background:transparent; color:gold; border:none; font-weight:bold; cursor:pointer; font-family: inherit;">>>PUSH</button>
     </div>
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-    import { getDatabase, ref, push, onChildAdded, set, update, get } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+    import { getDatabase, ref, push, onChildAdded, onValue, set, update, get, onDisconnect } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyA7Pu0DJOWmdoDYUUVP1J9aqhxh4f3wyfA",
@@ -127,8 +131,9 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
-    let userName = "", roomCode = "", sessionId = "", bytesRemaining = 99.00, peer = null, activeP2PConn = null;
+    let userName = "", roomCode = "", sessionId = "", bytesRemaining = 99.00, peer = null, activeP2PConns = {};
 
+    // --- Quantum Image Decoding ---
     function renderQuantumImage(user, url) {
         const msgDiv = document.getElementById("messages");
         const container = document.createElement("div");
@@ -139,6 +144,7 @@
         setTimeout(() => container.classList.add('decoded'), 2000);
     }
 
+    // --- P2P Logic ---
     function initP2P(id) {
         if(peer) peer.destroy();
         peer = new Peer(id);
@@ -146,9 +152,9 @@
             document.getElementById('myPeerIdDisplay').innerText = "NODE_ID: " + myId;
         });
         peer.on('connection', (conn) => {
-            activeP2PConn = conn;
+            activeP2PConns[conn.peer] = conn;
             setupP2PListeners(conn);
-            logAction("SYSTEM", "P2P_LINK_ESTABLISHED", "var(--sense-green)");
+            logAction("SYSTEM", "P2P_LINK_ESTABLISHED_WITH_" + conn.peer.toUpperCase(), "var(--sense-green)");
         });
     }
 
@@ -160,6 +166,9 @@
             } else {
                 logAction(data.user, data.text, "var(--sense-blue)");
             }
+        });
+        conn.on('close', () => {
+            delete activeP2PConns[conn.peer];
         });
     }
 
@@ -174,6 +183,24 @@
             const m = snap.val();
             logAction(m.user, m.text, "gold");
         });
+
+        // تحديث قائمة المستخدمين في الغرفة
+        const roomUsersRef = ref(db, "rooms/" + roomCode);
+        onValue(roomUsersRef, (snapshot) => {
+            const users = snapshot.val();
+            const listContent = document.getElementById("usersListContent");
+            listContent.innerHTML = "";
+            if(users) {
+                Object.keys(users).forEach(u => {
+                    if(u !== userName) {
+                        const userDiv = document.createElement("div");
+                        userDiv.innerHTML = `<span style="color:var(--sense-green);">●</span> ${u}`;
+                        listContent.appendChild(userDiv);
+                    }
+                });
+            }
+        });
+
         updateUI();
     }
 
@@ -195,7 +222,6 @@
         roomCode = document.getElementById("roomInput").value.trim();
         
         if (userName && roomCode) {
-            // إنشاء بصمة فريدة للجهاز داخل الغرفة لضمان عدم تكرار الرصيد
             let deviceFingerprint = localStorage.getItem('a0z_fingerprint');
             if(!deviceFingerprint) {
                 deviceFingerprint = Math.random().toString(36).substring(7);
@@ -205,16 +231,25 @@
             sessionId = roomCode + "_" + deviceFingerprint;
             
             // تهيئة الـ P2P بهوية سهلة: كود الغرفة + الاسم
-            initP2P(roomCode + "_" + userName);
+            const myPeerId = roomCode + "_" + userName;
+            initP2P(myPeerId);
 
-            // جلب الرصيد الخاص بهذا المستخدم في هذه الغرفة
+            // جلب الرصيد وتسجيل التواجد في الغرفة
             const snap = await get(ref(db, "devices/" + sessionId));
             if (snap.exists()) {
                 bytesRemaining = snap.val().bytesRemaining ?? 99.00;
             } else {
                 bytesRemaining = 99.00;
-                set(ref(db, "devices/" + sessionId), { name: userName, room: roomCode, bytesRemaining: 99.00 });
             }
+            
+            // تسجيل الدخول وتحديث الرصيد
+            update(ref(db, "devices/" + sessionId), { name: userName, room: roomCode, bytesRemaining: bytesRemaining });
+            
+            // تسجيل التواجد النشط وحذفه عند انقطاع الاتصال
+            const myPresenceRef = ref(db, "rooms/" + roomCode + "/" + userName);
+            set(myPresenceRef, true);
+            onDisconnect(myPresenceRef).remove();
+
             unlock();
         } else {
             alert("⚠️ أدخل اسمك وكود الغرفة!");
@@ -225,10 +260,8 @@
         const text = document.getElementById("input").value.trim();
         if (!text) return;
 
-        if (activeP2PConn && activeP2PConn.open) {
-            activeP2PConn.send({ user: userName, text: text });
-            logAction("YOU (P2P)", text, "var(--sense-green)");
-        } else if (bytesRemaining > 0) {
+        // إرسال النص للجميع عبر فايربيس (يخصم بايتات)
+        if (bytesRemaining > 0) {
             const size = new Blob([text]).size;
             bytesRemaining -= size;
             update(ref(db, "devices/" + sessionId), { bytesRemaining });
@@ -238,25 +271,66 @@
         document.getElementById("input").value = "";
     };
 
+    // --- تحديث وظيفة إرسال الصور: إرسال ذكي للجميع P2P ---
     document.getElementById('fileInput').onchange = (e) => {
         const file = e.target.files[0];
-        if (file && activeP2PConn?.open) {
-            const r = new FileReader();
-            r.onload = (evt) => {
-                activeP2PConn.send({ type: 'image', data: evt.target.result, fileType: file.type, user: userName });
-                renderQuantumImage("YOU", URL.createObjectURL(file));
-            };
-            r.readAsArrayBuffer(file);
-        } else { alert("⚠️ لخصم الصفر بايت، يجب ربط النفق (Connect Node) أولاً!"); }
+        if (!file) return;
+
+        // جلب قائمة المستخدمين الحاليين في الغرفة لإرسال الصورة لهم P2P
+        get(ref(db, "rooms/" + roomCode)).then((snapshot) => {
+            const users = snapshot.val();
+            if(users) {
+                const reader = new FileReader();
+                reader.onload = (evt) => {
+                    const imageData = evt.target.result;
+                    let sentCount = 0;
+
+                    // إرسال الصورة لكل مستخدم في الغرفة (باستثناء نفسك)
+                    Object.keys(users).forEach(u => {
+                        if(u !== userName) {
+                            const targetId = roomCode + "_" + u;
+                            let conn = activeP2PConns[targetId];
+
+                            // إذا لم يكن هناك اتصال مفتوح، ننشئ واحداً مؤقتاً ونرسل
+                            if(!conn || !conn.open) {
+                                conn = peer.connect(targetId);
+                                conn.on('open', () => {
+                                    activeP2PConns[targetId] = conn;
+                                    conn.send({ type: 'image', data: imageData, fileType: file.type, user: userName });
+                                });
+                            } else {
+                                // الاتصال مفتوح مسبقاً، نرسل فوراً
+                                conn.send({ type: 'image', data: imageData, fileType: file.type, user: userName });
+                            }
+                            sentCount++;
+                        }
+                    });
+
+                    if(sentCount > 0) {
+                        // عرض الصورة عندك أيضاً
+                        renderQuantumImage("YOU", URL.createObjectURL(file));
+                    } else {
+                        alert("⚠️ لا يوجد مستخدمون آخرون في الغرفة حالياً لإرسال الصورة لهم P2P.");
+                    }
+                };
+                reader.readAsArrayBuffer(file);
+            } else {
+                 alert("⚠️ لا يوجد مستخدمون في الغرفة.");
+            }
+        });
     };
 
     document.getElementById('connectPeerBtn').onclick = () => {
-        const targetName = prompt("اسم الشخص الذي تريد الاتصال به في هذه الغرفة:");
+        const targetName = prompt("اسم الشخص الذي تريد الاتصال به P2P (في نفس الغرفة):");
         if (targetName) {
             const targetId = roomCode + "_" + targetName;
+            if(activeP2PConns[targetId] && activeP2PConns[targetId].open) {
+                alert("أنت متصل بالفعل بـ " + targetName);
+                return;
+            }
             const conn = peer.connect(targetId);
             conn.on('open', () => { 
-                activeP2PConn = conn; 
+                activeP2PConns[targetId] = conn; 
                 setupP2PListeners(conn); 
                 logAction("SYSTEM", "TUNNEL_READY_WITH_" + targetName.toUpperCase(), "gold"); 
             });
