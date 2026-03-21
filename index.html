@@ -2,115 +2,144 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>A∞Z | Quantum P2P Node</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A∞Z | Quantum Node</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.fog.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
   <style>
     :root {
       --sense-green: #00ffcc;
       --sense-blue: #4a9bbf;
       --sense-red: #ff5555;
-      --terminal-bg: rgba(0, 15, 5, 0.85);
+      --terminal-bg: rgba(0, 10, 5, 0.9);
+      --glass: rgba(255, 255, 255, 0.05);
     }
+    * { box-sizing: border-box; }
     html, body {
       height: 100%; margin: 0; padding: 0; background-color: #000;
       color: gold; font-family: 'Courier New', monospace; overflow: hidden;
-      display: flex; justify-content: center; align-items: center; text-align: center;
     }
-    #vanta-bg { position: fixed; inset: 0; z-index: 0; opacity: 0.4; pointer-events: none; }
-    #pageOverlay { position: fixed; inset: 0; backdrop-filter: blur(15px); background: #000; z-index: 9999; transition: 1.5s; }
+    #vanta-bg { position: fixed; inset: 0; z-index: 0; opacity: 0.5; }
+    
+    /* الطبقة التمهيدية */
+    #pageOverlay { position: fixed; inset: 0; backdrop-filter: blur(15px); background: #000; z-index: 9999; transition: 1.5s; display: flex; align-items: center; justify-content: center; }
     #pageOverlay.fade-out { opacity: 0; pointer-events: none; }
-    
-    #hamburger { position: fixed; top: 20px; left: 20px; font-size: 28px; cursor: pointer; color: var(--sense-green); z-index: 10000; text-shadow: 0 0 10px var(--sense-green); }
-    
+
+    /* لوحة العداد - تحسين الموقع للموبايل */
+    #byteDashboard {
+      position: fixed; top: 15px; right: 15px;
+      border-right: 3px solid var(--sense-red); padding: 5px 15px;
+      background: rgba(0,0,0,0.7); z-index: 1001; text-align: right;
+      backdrop-filter: blur(5px); pointer-events: none;
+    }
+    #byteCounter { font-size: 22px; font-weight: bold; color: #fff; display: block; }
+
+    /* الهومبرغر */
+    #hamburger { position: fixed; top: 15px; left: 15px; font-size: 26px; cursor: pointer; color: var(--sense-green); z-index: 1002; transition: 0.3s; }
+    #hamburger:hover { text-shadow: 0 0 15px var(--sense-green); }
+
+    /* السايد بار */
     #sidebar {
-      position: fixed; top: 0; left: -280px; width: 280px; height: 100%;
+      position: fixed; top: 0; left: -100%; width: 280px; height: 100%;
       background: rgba(0,0,0,0.95); backdrop-filter: blur(20px);
-      padding: 40px 20px; transition: 0.4s cubic-bezier(0.1, 0.7, 0.1, 1);
-      z-index: 9999; border-right: 1px solid gold;
+      padding: 60px 20px; transition: 0.5s cubic-bezier(0.1, 0.7, 0.1, 1);
+      z-index: 9999; border-right: 1px solid var(--sense-green);
     }
     #sidebar.open { left: 0; }
     .sidebar-btn {
       width: 100%; background: transparent; color: gold; border: 1px solid gold;
-      padding: 12px; border-radius: 4px; cursor: pointer; margin-top: 10px; font-weight: bold;
+      padding: 12px; border-radius: 4px; cursor: pointer; margin-top: 15px; font-weight: bold; font-family: inherit;
     }
 
+    /* صندوق الشات الرئيسي */
     #chatWrapper {
-      width: 95%; max-width: 700px; height: 65vh; background: var(--terminal-bg);
-      border: 1px solid var(--sense-green); border-radius: 5px; padding: 20px;
-      position: fixed; bottom: 20px; z-index: 10; display: flex; flex-direction: column;
-      box-shadow: 0 0 30px rgba(0, 255, 204, 0.1);
+      width: 92%; max-width: 500px; height: 75vh; background: var(--terminal-bg);
+      border: 1px solid rgba(0, 255, 204, 0.3); border-radius: 12px;
+      position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+      z-index: 100; display: flex; flex-direction: column; overflow: hidden;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
     }
-    #messages { flex: 1; overflow-y: auto; padding: 10px; text-align: left; }
-    
-    /* تأثير فك التشفير الكمي للصور */
+
+    /* واجهة الدخول */
+    #namePrompt {
+      flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; padding: 20px;
+    }
+    #nameInput { background: #000; border: 1px solid var(--sense-green); color: gold; padding: 12px; width: 80%; text-align: center; border-radius: 5px; outline: none; }
+
+    /* منطقة الرسائل */
+    #messages { flex: 1; overflow-y: auto; padding: 15px; display: none; scroll-behavior: smooth; }
+    .msg-item { margin-bottom: 12px; font-size: 14px; line-height: 1.4; animation: fadeIn 0.3s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(5s); } to { opacity: 1; transform: translateY(0); } }
+
+    /* الصور والـ Quantum Noise */
     .quantum-img-container {
-      position: relative; overflow: hidden; border: 1px solid var(--sense-green);
-      margin: 10px 0; max-width: 300px; min-height: 150px; background: #000;
+      position: relative; border-radius: 8px; overflow: hidden; border: 1px solid var(--sense-green);
+      margin: 10px 0; width: 100%; background: #000;
     }
-    .quantum-noise {
-      position: absolute; inset: 0; z-index: 2;
-      background: url('https://media.giphy.com/media/oEI9uWUicG68U/giphy.gif'); /* ستاتيك غليتش */
-      opacity: 0.8; mix-blend-mode: screen; pointer-events: none;
-    }
-    .p2p-img { width: 100%; display: block; filter: brightness(1.2) contrast(1.1); opacity: 0; transition: opacity 2s ease-in; }
+    .quantum-noise { position: absolute; inset: 0; z-index: 2; background: url('https://media.giphy.com/media/oEI9uWUicG68U/giphy.gif'); opacity: 0.4; mix-blend-mode: screen; }
+    .p2p-img { width: 100%; display: block; opacity: 0; transition: 2s ease; }
     .decoded .p2p-img { opacity: 1; }
     .decoded .quantum-noise { display: none; }
 
-    #inputBar { display: none; gap: 10px; margin-top: 10px; }
-    #input { flex: 1; padding: 10px; background: transparent; border: 1px solid gold; color: #fff; outline: none; }
+    /* شريط الإدخال */
+    #inputBar { display: none; padding: 10px; background: rgba(0,0,0,0.5); border-top: 1px solid rgba(0, 255, 204, 0.2); gap: 10px; }
+    #input { flex: 1; padding: 12px; background: transparent; border: none; color: #fff; outline: none; font-family: inherit; }
     
-    #byteDashboard {
-      position: fixed; top: 80px; left: 20px; border-left: 3px solid var(--sense-red);
-      padding: 10px 20px; background: rgba(0,0,0,0.8); z-index: 10001; text-align: left;
+    /* الساعة الخلفية */
+    .clock-container { 
+      position: fixed; top: 45%; left: 50%; transform: translate(-50%, -50%); 
+      width: 250px; height: 250px; opacity: 0.2; z-index: 1; pointer-events: none;
     }
-    .clock-container { width: 300px; height: 300px; position: relative; opacity: 0.7; }
-    .hand { position: absolute; bottom: 50%; left: 50%; transform-origin: bottom; }
-    .hour { width: 4px; height: 70px; background: #fff; }
-    .minute { width: 3px; height: 100px; background: var(--sense-red); }
-    .second { width: 1px; height: 120px; background: var(--sense-blue); }
+    .hand { position: absolute; bottom: 50%; left: 50%; transform-origin: bottom; border-radius: 10px; }
+    .hour { width: 5px; height: 60px; background: #fff; }
+    .minute { width: 3px; height: 90px; background: var(--sense-red); }
+    .second { width: 1px; height: 110px; background: var(--sense-blue); }
   </style>
 </head>
 <body>
-  <div id="pageOverlay"></div>
+  <div id="pageOverlay"> <h2 style="color:var(--sense-green)">A∞Z QUANTUM_LINK...</h2> </div>
   <div id="vanta-bg"></div>
   
   <div id="byteDashboard">
-    <div style="font-size: 10px; color: var(--sense-red); letter-spacing: 2px;">QUANTUM NODE STATUS</div>
-    <div id="byteCounter" style="font-size: 28px; font-weight: bold;">99.00 B</div>
-    <div id="status5G" style="font-size: 9px; color: var(--sense-green);">● SYNCING WITH ENTANGLED PEER</div>
+    <div style="font-size: 9px; color: var(--sense-red);">DATA_RESERVE</div>
+    <div id="byteCounter">99.00 B</div>
+    <div style="font-size: 8px; color: var(--sense-green);">NODE: ONLINE</div>
   </div>
 
   <div id="hamburger">☰</div>
   <div id="sidebar">
-    <div id="closeSidebar" style="cursor:pointer;">[ CLOSE_X ]</div>
-    <h3 style="color:var(--sense-green)">A∞Z_CORE</h3>
-    <p id="myPeerIdDisplay" style="font-size: 10px; color: gold; background: #111; padding: 5px; word-break: break-all;">ID: WAITING...</p>
-    <button id="connectPeerBtn" class="sidebar-btn">CONNECT PEER</button>
-    <button id="startLiveBtn" class="sidebar-btn" style="border-color:var(--sense-red)">INITIATE LIVE</button>
+    <div id="closeSidebar" style="cursor:pointer; text-align:right;">[X]</div>
+    <h3 style="color:var(--sense-green); border-bottom: 1px solid #333; padding-bottom: 10px;">SYSTEM_CORE</h3>
+    <p id="myPeerIdDisplay" style="font-size: 9px; color: gold; background: #111; padding: 10px; margin-top:20px; border-radius:4px; word-break: break-all;">ID: FETCHING...</p>
+    <button id="connectPeerBtn" class="sidebar-btn">CONNECT_NODE</button>
+    <button id="startLiveBtn" class="sidebar-btn" style="border-color:var(--sense-red)">INIT_STREAM</button>
   </div>
 
   <div class="clock-container">
     <div class="hand hour" id="hour"></div>
     <div class="hand minute" id="minute"></div>
     <div class="hand second" id="second"></div>
+    <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); color:rgba(255,255,255,0.1); font-size:40px;">∞</div>
   </div>
 
   <div id="chatWrapper">
     <div id="namePrompt">
-      <video id="smallCamera" autoplay muted playsinline style="width:120px; border-radius:50%; border:2px solid var(--sense-green);"></video>
-      <p>ID_AUTH_REQUIRED</p>
-      <input id="nameInput" placeholder="IDENTITY..." style="background:transparent; border:1px solid var(--sense-green); color:gold; padding:10px;" />
-      <button id="joinBtn" class="sidebar-btn" style="width:120px">ENTER</button>
+      <video id="smallCamera" autoplay muted playsinline style="width:100px; height:100px; border-radius:50%; object-fit:cover; border:2px solid var(--sense-green); box-shadow: 0 0 20px var(--sense-green);"></video>
+      <div style="text-align:center;">
+        <div style="color:var(--sense-red); font-size:12px; margin-bottom:5px;">UNAUTHORIZED ACCESS</div>
+        <input id="nameInput" placeholder="ENTER_PROXY_ID" />
+      </div>
+      <button id="joinBtn" class="sidebar-btn" style="width:150px">AUTHENTICATE</button>
     </div>
+
     <div id="messages"></div>
+
     <div id="inputBar">
-      <label for="fileInput" style="cursor:pointer; font-size:20px;">⚛️</label>
+      <label for="fileInput" style="cursor:pointer; font-size:22px; padding:0 5px;">⚛️</label>
       <input type="file" id="fileInput" style="display:none;" accept="image/*">
-      <input id="input" placeholder="Quantum stream..." autocomplete="off" />
-      <button id="sendButton" style="background:transparent; color:gold; border:none; cursor:pointer;">PUSH</button>
+      <input id="input" placeholder="Inject data stream..." autocomplete="off" />
+      <button id="sendButton" style="background:transparent; color:gold; border:none; font-weight:bold; cursor:pointer;">>>PUSH</button>
     </div>
   </div>
 
@@ -127,31 +156,20 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
-    let userName = "";
-    let sessionId = "";
-    let bytesRemaining = 99.00;
-    let peer = null;
-    let activeP2PConn = null;
+    let userName = "", sessionId = "", bytesRemaining = 99.00, peer = null, activeP2PConn = null;
 
-    // --- QUANTUM DECODING RENDERER ---
+    // --- Quantum Image Decoding ---
     function renderQuantumImage(user, url) {
         const msgDiv = document.getElementById("messages");
         const container = document.createElement("div");
         container.className = "quantum-img-container";
-        container.innerHTML = `
-            <div class="quantum-noise"></div>
-            <img src="${url}" class="p2p-img">
-            <div style="font-size:10px; padding:5px; color:var(--sense-green)">DECODING BYTES FROM: ${user}...</div>
-        `;
+        container.innerHTML = `<div class="quantum-noise"></div><img src="${url}" class="p2p-img"><div style="font-size:9px; padding:5px; color:var(--sense-green)">DECODING_FROM: ${user}</div>`;
         msgDiv.appendChild(container);
         msgDiv.scrollTop = msgDiv.scrollHeight;
-
-        // محاكاة فك التشفير الكمي (بعد 2 ثانية تظهر الصورة)
-        setTimeout(() => {
-            container.classList.add('decoded');
-        }, 2500);
+        setTimeout(() => container.classList.add('decoded'), 2000);
     }
 
+    // --- P2P Logic ---
     function initP2P(id) {
         peer = new Peer(id);
         peer.on('open', (myId) => document.getElementById('myPeerIdDisplay').innerText = "NODE_ID: " + myId);
@@ -165,7 +183,7 @@
                     logAction(data.user, data.text, "var(--sense-blue)");
                 }
             });
-            logAction("SYSTEM", "QUANTUM TUNNEL ESTABLISHED", "gold");
+            logAction("SYSTEM", "SECURE_P2P_LINK_OPEN", "var(--sense-green)");
         });
     }
 
@@ -177,7 +195,7 @@
             initP2P(sessionId);
             const snap = await get(ref(db, "devices/" + sessionId));
             if (snap.exists()) { userName = snap.val().name; bytesRemaining = snap.val().bytesRemaining || 99.00; unlock(); }
-        } catch (e) {}
+        } catch (e) { console.log("Init Error"); }
     }
 
     function unlock() {
@@ -191,13 +209,15 @@
     function logAction(user, text, color) {
         const msgDiv = document.getElementById("messages");
         const d = document.createElement("div");
-        d.innerHTML = `<span style="color:${color}">[${user}]:</span> ${text}`;
+        d.className = "msg-item";
+        d.innerHTML = `<span style="color:${color}; font-weight:bold;">[${user}]:</span> ${text}`;
         msgDiv.appendChild(d);
         msgDiv.scrollTop = msgDiv.scrollHeight;
     }
 
     function updateUI() { document.getElementById('byteCounter').innerText = `${bytesRemaining.toFixed(2)} B`; }
 
+    // --- Events ---
     document.getElementById("joinBtn").onclick = () => {
         userName = document.getElementById("nameInput").value;
         if (userName) { set(ref(db, "devices/" + sessionId), { name: userName, bytesRemaining: 99.00 }); unlock(); }
@@ -227,17 +247,14 @@
                 renderQuantumImage("YOU", URL.createObjectURL(file));
             };
             r.readAsArrayBuffer(file);
-        }
+        } else { alert("Establish P2P connection first!"); }
     };
 
     document.getElementById('connectPeerBtn').onclick = () => {
-        const id = prompt("PEER_NODE_ID:");
+        const id = prompt("TARGET_NODE_ID:");
         if (id) {
             const conn = peer.connect(id);
-            conn.on('open', () => {
-                activeP2PConn = conn;
-                logAction("SYSTEM", "TUNNEL_READY", "gold");
-            });
+            conn.on('open', () => { activeP2PConn = conn; logAction("SYSTEM", "TUNNEL_ESTABLISHED", "gold"); });
         }
     };
 
@@ -245,13 +262,13 @@
     document.getElementById('closeSidebar').onclick = () => document.getElementById('sidebar').classList.remove('open');
 
     window.onload = () => {
-        setTimeout(() => document.getElementById('pageOverlay').classList.add('fade-out'), 1000);
+        setTimeout(() => document.getElementById('pageOverlay').classList.add('fade-out'), 1500);
         initDevice();
+        // بدء الكاميرا للتوثيق
+        navigator.mediaDevices.getUserMedia({ video: true }).then(s => document.getElementById('smallCamera').srcObject = s).catch(e=>null);
     };
-</script>
 
-<script>
-    // Clock Logic
+    // Clock Animation
     setInterval(() => {
         const now = new Date();
         document.getElementById('hour').style.transform = `translateX(-50%) rotate(${now.getHours() * 30}deg)`;
@@ -259,13 +276,7 @@
         document.getElementById('second').style.transform = `translateX(-50%) rotate(${now.getSeconds() * 6}deg)`;
     }, 1000);
 
-    VANTA.FOG({
-      el: "#vanta-bg",
-      mouseControls: true, touchControls: true,
-      highlightColor: 0x00ffcc, midtoneColor: 0x111111,
-      lowlightColor: 0x0, baseColor: 0x0,
-      blurFactor: 0.3, speed: 1.0
-    });
+    VANTA.FOG({ el: "#vanta-bg", mouseControls: true, touchControls: true, highlightColor: 0x00ffcc, midtoneColor: 0x0, lowlightColor: 0x0, baseColor: 0x0, blurFactor: 0.3, speed: 1.0 });
 </script>
 </body>
 </html>
