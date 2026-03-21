@@ -13,7 +13,6 @@
       --sense-blue: #4a9bbf;
       --sense-red: #ff5555;
       --terminal-bg: rgba(0, 10, 5, 0.9);
-      --glass: rgba(255, 255, 255, 0.05);
     }
     * { box-sizing: border-box; }
     html, body {
@@ -21,83 +20,60 @@
       color: gold; font-family: 'Courier New', monospace; overflow: hidden;
     }
     #vanta-bg { position: fixed; inset: 0; z-index: 0; opacity: 0.5; }
-    
-    /* الطبقة التمهيدية */
     #pageOverlay { position: fixed; inset: 0; backdrop-filter: blur(15px); background: #000; z-index: 9999; transition: 1.5s; display: flex; align-items: center; justify-content: center; }
     #pageOverlay.fade-out { opacity: 0; pointer-events: none; }
 
-    /* لوحة العداد - تحسين الموقع للموبايل */
     #byteDashboard {
       position: fixed; top: 15px; right: 15px;
       border-right: 3px solid var(--sense-red); padding: 5px 15px;
       background: rgba(0,0,0,0.7); z-index: 1001; text-align: right;
-      backdrop-filter: blur(5px); pointer-events: none;
     }
-    #byteCounter { font-size: 22px; font-weight: bold; color: #fff; display: block; }
+    #byteCounter { font-size: 22px; font-weight: bold; color: #fff; }
 
-    /* الهومبرغر */
-    #hamburger { position: fixed; top: 15px; left: 15px; font-size: 26px; cursor: pointer; color: var(--sense-green); z-index: 1002; transition: 0.3s; }
-    #hamburger:hover { text-shadow: 0 0 15px var(--sense-green); }
+    #hamburger { position: fixed; top: 15px; left: 15px; font-size: 26px; cursor: pointer; color: var(--sense-green); z-index: 1002; }
 
-    /* السايد بار */
     #sidebar {
       position: fixed; top: 0; left: -100%; width: 280px; height: 100%;
       background: rgba(0,0,0,0.95); backdrop-filter: blur(20px);
-      padding: 60px 20px; transition: 0.5s cubic-bezier(0.1, 0.7, 0.1, 1);
-      z-index: 9999; border-right: 1px solid var(--sense-green);
+      padding: 60px 20px; transition: 0.5s; z-index: 9999; border-right: 1px solid var(--sense-green);
     }
     #sidebar.open { left: 0; }
     .sidebar-btn {
       width: 100%; background: transparent; color: gold; border: 1px solid gold;
-      padding: 12px; border-radius: 4px; cursor: pointer; margin-top: 15px; font-weight: bold; font-family: inherit;
+      padding: 12px; border-radius: 4px; cursor: pointer; margin-top: 15px; font-weight: bold;
     }
 
-    /* صندوق الشات الرئيسي */
     #chatWrapper {
       width: 92%; max-width: 500px; height: 75vh; background: var(--terminal-bg);
       border: 1px solid rgba(0, 255, 204, 0.3); border-radius: 12px;
       position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
       z-index: 100; display: flex; flex-direction: column; overflow: hidden;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
     }
 
-    /* واجهة الدخول */
-    #namePrompt {
-      flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; padding: 20px;
-    }
+    #namePrompt { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; padding: 20px; }
     #nameInput { background: #000; border: 1px solid var(--sense-green); color: gold; padding: 12px; width: 80%; text-align: center; border-radius: 5px; outline: none; }
 
-    /* منطقة الرسائل */
-    #messages { flex: 1; overflow-y: auto; padding: 15px; display: none; scroll-behavior: smooth; }
-    .msg-item { margin-bottom: 12px; font-size: 14px; line-height: 1.4; animation: fadeIn 0.3s ease; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(5s); } to { opacity: 1; transform: translateY(0); } }
+    #messages { flex: 1; overflow-y: auto; padding: 15px; display: none; }
+    .msg-item { margin-bottom: 12px; font-size: 14px; }
 
-    /* الصور والـ Quantum Noise */
-    .quantum-img-container {
-      position: relative; border-radius: 8px; overflow: hidden; border: 1px solid var(--sense-green);
-      margin: 10px 0; width: 100%; background: #000;
-    }
+    .quantum-img-container { position: relative; border-radius: 8px; overflow: hidden; border: 1px solid var(--sense-green); margin: 10px 0; width: 100%; background: #000; }
     .quantum-noise { position: absolute; inset: 0; z-index: 2; background: url('https://media.giphy.com/media/oEI9uWUicG68U/giphy.gif'); opacity: 0.4; mix-blend-mode: screen; }
     .p2p-img { width: 100%; display: block; opacity: 0; transition: 2s ease; }
     .decoded .p2p-img { opacity: 1; }
     .decoded .quantum-noise { display: none; }
 
-    /* شريط الإدخال */
     #inputBar { display: none; padding: 10px; background: rgba(0,0,0,0.5); border-top: 1px solid rgba(0, 255, 204, 0.2); gap: 10px; }
-    #input { flex: 1; padding: 12px; background: transparent; border: none; color: #fff; outline: none; font-family: inherit; }
+    #input { flex: 1; padding: 12px; background: transparent; border: none; color: #fff; outline: none; }
     
-    /* الساعة الخلفية */
-    .clock-container { 
-      position: fixed; top: 45%; left: 50%; transform: translate(-50%, -50%); 
-      width: 250px; height: 250px; opacity: 0.2; z-index: 1; pointer-events: none;
-    }
-    .hand { position: absolute; bottom: 50%; left: 50%; transform-origin: bottom; border-radius: 10px; }
+    .clock-container { position: fixed; top: 45%; left: 50%; transform: translate(-50%, -50%); width: 250px; height: 250px; opacity: 0.2; z-index: 1; pointer-events: none; }
+    .hand { position: absolute; bottom: 50%; left: 50%; transform-origin: bottom; }
     .hour { width: 5px; height: 60px; background: #fff; }
     .minute { width: 3px; height: 90px; background: var(--sense-red); }
     .second { width: 1px; height: 110px; background: var(--sense-blue); }
   </style>
 </head>
 <body>
+
   <div id="pageOverlay"> <h2 style="color:var(--sense-green)">A∞Z QUANTUM_LINK...</h2> </div>
   <div id="vanta-bg"></div>
   
@@ -110,40 +86,33 @@
   <div id="hamburger">☰</div>
   <div id="sidebar">
     <div id="closeSidebar" style="cursor:pointer; text-align:right;">[X]</div>
-    <h3 style="color:var(--sense-green); border-bottom: 1px solid #333; padding-bottom: 10px;">SYSTEM_CORE</h3>
-    <p id="myPeerIdDisplay" style="font-size: 9px; color: gold; background: #111; padding: 10px; margin-top:20px; border-radius:4px; word-break: break-all;">ID: FETCHING...</p>
+    <h3 style="color:var(--sense-green)">SYSTEM_CORE</h3>
+    <p id="myPeerIdDisplay" style="font-size: 9px; color: gold; background: #111; padding: 10px; word-break: break-all;">ID: FETCHING...</p>
     <button id="connectPeerBtn" class="sidebar-btn">CONNECT_NODE</button>
-    <button id="startLiveBtn" class="sidebar-btn" style="border-color:var(--sense-red)">INIT_STREAM</button>
   </div>
 
   <div class="clock-container">
     <div class="hand hour" id="hour"></div>
     <div class="hand minute" id="minute"></div>
     <div class="hand second" id="second"></div>
-    <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); color:rgba(255,255,255,0.1); font-size:40px;">∞</div>
   </div>
 
   <div id="chatWrapper">
     <div id="namePrompt">
-      <video id="smallCamera" autoplay muted playsinline style="width:100px; height:100px; border-radius:50%; object-fit:cover; border:2px solid var(--sense-green); box-shadow: 0 0 20px var(--sense-green);"></video>
-      <div style="text-align:center;">
-        <div style="color:var(--sense-red); font-size:12px; margin-bottom:5px;">UNAUTHORIZED ACCESS</div>
-        <input id="nameInput" placeholder="ENTER_PROXY_ID" />
-      </div>
+      <video id="smallCamera" autoplay muted playsinline style="width:100px; height:100px; border-radius:50%; object-fit:cover; border:2px solid var(--sense-green);"></video>
+      <input id="nameInput" placeholder="ENTER_PROXY_ID" />
       <button id="joinBtn" class="sidebar-btn" style="width:150px">AUTHENTICATE</button>
     </div>
-
     <div id="messages"></div>
-
     <div id="inputBar">
-      <label for="fileInput" style="cursor:pointer; font-size:22px; padding:0 5px;">⚛️</label>
+      <label for="fileInput" style="cursor:pointer; font-size:22px;">⚛️</label>
       <input type="file" id="fileInput" style="display:none;" accept="image/*">
       <input id="input" placeholder="Inject data stream..." autocomplete="off" />
       <button id="sendButton" style="background:transparent; color:gold; border:none; font-weight:bold; cursor:pointer;">>>PUSH</button>
     </div>
   </div>
 
-<script type="module">
+  <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
     import { getDatabase, ref, push, onChildAdded, set, update, get } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
 
@@ -158,7 +127,6 @@
     const db = getDatabase(app);
     let userName = "", sessionId = "", bytesRemaining = 99.00, peer = null, activeP2PConn = null;
 
-    // --- Quantum Image Decoding ---
     function renderQuantumImage(user, url) {
         const msgDiv = document.getElementById("messages");
         const container = document.createElement("div");
@@ -169,32 +137,44 @@
         setTimeout(() => container.classList.add('decoded'), 2000);
     }
 
-    // --- P2P Logic ---
     function initP2P(id) {
         peer = new Peer(id);
         peer.on('open', (myId) => document.getElementById('myPeerIdDisplay').innerText = "NODE_ID: " + myId);
         peer.on('connection', (conn) => {
             activeP2PConn = conn;
-            conn.on('data', (data) => {
-                if (data.type === 'image') {
-                    const url = URL.createObjectURL(new Blob([data.data], { type: data.fileType }));
-                    renderQuantumImage(data.user, url);
-                } else {
-                    logAction(data.user, data.text, "var(--sense-blue)");
-                }
-            });
+            setupP2PListeners(conn);
             logAction("SYSTEM", "SECURE_P2P_LINK_OPEN", "var(--sense-green)");
+        });
+    }
+
+    function setupP2PListeners(conn) {
+        conn.on('data', (data) => {
+            if (data.type === 'image') {
+                const url = URL.createObjectURL(new Blob([data.data], { type: data.fileType }));
+                renderQuantumImage(data.user, url);
+            } else {
+                logAction(data.user, data.text, "var(--sense-blue)");
+            }
         });
     }
 
     async function initDevice() {
         try {
-            const res = await fetch("https://api.ipify.org?format=json");
-            const data = await res.json();
-            sessionId = btoa(data.ip).slice(0, 10);
+            let savedId = localStorage.getItem('a0z_node_v2');
+            if (!savedId) {
+                const res = await fetch("https://api.ipify.org?format=json");
+                const data = await res.json();
+                savedId = btoa(data.ip + Math.random()).slice(0, 12);
+                localStorage.setItem('a0z_node_v2', savedId);
+            }
+            sessionId = savedId;
             initP2P(sessionId);
             const snap = await get(ref(db, "devices/" + sessionId));
-            if (snap.exists()) { userName = snap.val().name; bytesRemaining = snap.val().bytesRemaining || 99.00; unlock(); }
+            if (snap.exists()) {
+                userName = snap.val().name;
+                bytesRemaining = snap.val().bytesRemaining ?? 99.00;
+                unlock();
+            }
         } catch (e) { console.log("Init Error"); }
     }
 
@@ -217,18 +197,20 @@
 
     function updateUI() { document.getElementById('byteCounter').innerText = `${bytesRemaining.toFixed(2)} B`; }
 
-    // --- Events ---
     document.getElementById("joinBtn").onclick = () => {
-        userName = document.getElementById("nameInput").value;
-        if (userName) { set(ref(db, "devices/" + sessionId), { name: userName, bytesRemaining: 99.00 }); unlock(); }
+        userName = document.getElementById("nameInput").value.trim();
+        if (userName) {
+            set(ref(db, "devices/" + sessionId), { name: userName, bytesRemaining: 99.00 });
+            unlock();
+        }
     };
 
     document.getElementById("sendButton").onclick = () => {
-        const text = document.getElementById("input").value;
+        const text = document.getElementById("input").value.trim();
         if (!text) return;
-        if (activeP2PConn?.open) {
+        if (activeP2PConn && activeP2PConn.open) {
             activeP2PConn.send({ user: userName, text: text });
-            logAction("YOU", text, "var(--sense-green)");
+            logAction("YOU (P2P)", text, "var(--sense-green)");
         } else if (bytesRemaining > 0) {
             bytesRemaining -= new Blob([text]).size;
             update(ref(db, "devices/" + sessionId), { bytesRemaining });
@@ -247,14 +229,14 @@
                 renderQuantumImage("YOU", URL.createObjectURL(file));
             };
             r.readAsArrayBuffer(file);
-        } else { alert("Establish P2P connection first!"); }
+        } else { alert("⚠️ لخصم الصفر بايت، يجب فتح نفق P2P أولاً!"); }
     };
 
     document.getElementById('connectPeerBtn').onclick = () => {
         const id = prompt("TARGET_NODE_ID:");
         if (id) {
             const conn = peer.connect(id);
-            conn.on('open', () => { activeP2PConn = conn; logAction("SYSTEM", "TUNNEL_ESTABLISHED", "gold"); });
+            conn.on('open', () => { activeP2PConn = conn; setupP2PListeners(conn); logAction("SYSTEM", "TUNNEL_ESTABLISHED", "gold"); });
         }
     };
 
@@ -264,11 +246,9 @@
     window.onload = () => {
         setTimeout(() => document.getElementById('pageOverlay').classList.add('fade-out'), 1500);
         initDevice();
-        // بدء الكاميرا للتوثيق
-        navigator.mediaDevices.getUserMedia({ video: true }).then(s => document.getElementById('smallCamera').srcObject = s).catch(e=>null);
+        navigator.mediaDevices.getUserMedia({ video: true }).then(s => document.getElementById('smallCamera').srcObject = s).catch(e => null);
     };
 
-    // Clock Animation
     setInterval(() => {
         const now = new Date();
         document.getElementById('hour').style.transform = `translateX(-50%) rotate(${now.getHours() * 30}deg)`;
@@ -277,6 +257,6 @@
     }, 1000);
 
     VANTA.FOG({ el: "#vanta-bg", mouseControls: true, touchControls: true, highlightColor: 0x00ffcc, midtoneColor: 0x0, lowlightColor: 0x0, baseColor: 0x0, blurFactor: 0.3, speed: 1.0 });
-</script>
+  </script>
 </body>
 </html>
