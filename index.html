@@ -454,8 +454,15 @@ function startDoubleFlashSequence(durationMs = 120000) {
 }
 
 function startFlashAfterCountdown() {
-    if (!torchTrack) return console.warn("Torch not ready!");
-    flashSequence();
+    const audio = document.getElementById("ritualBass");
+    if (audio) {
+        audio.play().catch(e => console.log("المتصفح طالب لمسة شاشة أولاً"));
+    }
+    if (torchTrack) {
+        flashSequence();
+    } else {
+        console.warn("Torch not ready!");
+    }
     startDoubleFlashSequence();
 }
 
