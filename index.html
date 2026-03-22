@@ -3,20 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A∞Z | The Voice Swapper</title>
+    <title>A∞Z | The Voice Swapper (Bypass Mode)</title>
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
     <style>
         body { margin: 0; background: #000; color: #ff3333; font-family: 'Courier New', monospace; overflow: hidden; display: flex; justify-content: center; align-items: center; height: 100vh; }
         #particles-js { position: fixed; width: 100%; height: 100%; z-index: 0; }
-        #ui-wrapper { z-index: 10; background: rgba(0,0,0,0.9); padding: 30px; border: 2px solid red; border-radius: 20px; text-align: center; width: 340px; box-shadow: 0 0 20px rgba(255,0,0,0.3); }
+        #ui-wrapper { z-index: 10; background: rgba(0,0,0,0.9); padding: 30px; border: 1px solid red; border-radius: 20px; text-align: center; width: 340px; box-shadow: 0 0 20px rgba(255,0,0,0.3); }
         .btn-group { display: flex; gap: 10px; margin-top: 20px; flex-direction: column; }
         button { background: transparent; border: 2px solid red; color: red; padding: 12px; cursor: pointer; font-weight: bold; border-radius: 8px; transition: 0.3s; font-size: 14px; text-transform: uppercase; }
         button:hover:not(:disabled) { background: red; color: black; box-shadow: 0 0 15px red; }
         button:disabled { border-color: #440000; color: #440000; cursor: not-allowed; }
-        #status { font-size: 13px; margin: 20px 0; color: #ff6666; min-height: 50px; border-top: 1px dashed #440000; padding-top: 10px; }
-        .trigger-btn { display: none; margin-top: 10px; border-color: #00ff00; color: #00ff00; }
-        .trigger-btn:hover { background: #00ff00 !important; }
+        #status { font-size: 13px; margin: 20px 0; color: #ff6666; min-height: 50px; border-top: 1px dashed #440000; padding-top: 10px; line-height: 1.4; }
+        .trigger-btn { display: none; margin-top: 10px; }
         .identity-tag { color: #880000; font-size: 11px; margin-bottom: 10px; }
+        .flash { animation: screenFlash 0.2s ease-in-out; }
+        @keyframes screenFlash { 0% { background: white; } 100% { background: black; } }
     </style>
 </head>
 <body>
@@ -24,25 +25,24 @@
 <div id="particles-js"></div>
 
 <div id="ui-wrapper">
-    <div class="identity-tag" id="nodeId">INITIALIZING NODE...</div>
+    <div class="identity-tag" id="nodeId">INITIALIZING...</div>
     <h2 style="margin:0; letter-spacing:5px;">A∞Z SWAP</h2>
     
-    <div id="status">Detecting device system...</div>
+    <div id="status">Bypass Mode Active. Ready to record.</div>
 
     <div class="btn-group" id="setupArea">
         <button id="recordBtn">1. RECORD MY VOICE 🎤</button>
     </div>
 
     <div class="btn-group" id="controlArea" style="display:none;">
-        <button id="triggerSiri" class="trigger-btn" style="display:block;">WAKE MY SIRI 🔴</button>
-        <button id="triggerBixby" class="trigger-btn" style="display:block; border-color: #008cff; color: #008cff;">WAKE MY BIXBY 🔵</button>
+        <button id="triggerSiri" class="trigger-btn" style="display:block; border-color: #ff0000; color: #ff0000;">WAKE TWIN'S SIRI 🔴</button>
+        <button id="triggerBixby" class="trigger-btn" style="display:block; border-color: #008cff; color: #008cff;">WAKE TWIN'S BIXBY 🔵</button>
     </div>
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-import { getDatabase, ref, set, onValue, onDisconnect, remove, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
-import { getStorage, ref as sRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-storage.js";
+import { getDatabase, ref, set, onValue, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
 
 // ====== FIREBASE CONFIG ======
 const firebaseConfig = {
@@ -55,7 +55,14 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
-const storage = getStorage(app);
+
+// --- Helpers ---
+const blobToBase64 = blob => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(blob);
+});
 
 // --- State ---
 const visitorId = "NODE-" + Math.random().toString(36).substring(2, 6).toUpperCase();
@@ -70,9 +77,9 @@ document.getElementById("nodeId").textContent = `ID: ${visitorId} | OS: ${device
 const statusDiv = document.getElementById("status");
 const recordBtn = document.getElementById("recordBtn");
 
-statusDiv.innerHTML = `Device detected. To wake your system, we need your voice pattern.<br><b>Target: "${triggerPhrase}"</b>`;
+statusDiv.innerHTML = `System Ready. Click to record your trigger.<br><b>Say: "${triggerPhrase}"</b>`;
 
-// --- Step 1: Record & Upload ---
+// --- Step 1: Record & Bypass Storage ---
 recordBtn.onclick = async () => {
     try {
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -81,39 +88,37 @@ recordBtn.onclick = async () => {
 
         mediaRecorder.ondataavailable = e => chunks.push(e.data);
         mediaRecorder.onstop = async () => {
-            statusDiv.textContent = "📤 UPLOADING VOICE PATTERN...";
+            statusDiv.textContent = "⚡ INJECTING DATA TO DATABASE...";
             const blob = new Blob(chunks, { type: 'audio/webm' });
-            const voiceRef = sRef(storage, `spirits/${visitorId}.webm`);
-            await uploadBytes(voiceRef, blob);
-            const url = await getDownloadURL(voiceRef);
+            
+            // الالتفاف: تحويل الصوت لنص Base64
+            const base64Audio = await blobToBase64(blob);
 
-            // Save to Database
+            // حفظ في الـ Database مباشرة
             await set(ref(db, `users/${visitorId}`), {
                 id: visitorId,
-                voiceUrl: url,
+                voiceData: base64Audio, // الصوت مخزن كنص هنا
                 type: deviceType,
                 status: 'ready'
             });
 
-            statusDiv.textContent = "✅ RECORDED. WAITING FOR TWIN...";
-            recordBtn.disabled = true;
+            statusDiv.innerHTML = "<b style='color: #00ff00;'>✅ SPIRIT INJECTED.</b><br>Manual Override Active.";
+            recordBtn.style.display = "none"; 
+            document.getElementById("controlArea").style.display = "flex";
             initPairing();
         };
 
-        statusDiv.innerHTML = `🔴 RECORDING...<br>Say <b>"${triggerPhrase}"</b> clearly.`;
+        statusDiv.innerHTML = `🔴 RECORDING...<br>Say <b>"${triggerPhrase}"</b>`;
         mediaRecorder.start();
-        setTimeout(() => mediaRecorder.stop(), 3000);
+        setTimeout(() => mediaRecorder.stop(), 2500); // 2.5 ثانية تكفي ومثالية للحجم
     } catch (e) {
-        statusDiv.textContent = "❌ MIC ERROR. CHECK PERMISSIONS.";
+        statusDiv.textContent = "❌ ERROR: " + e.message;
     }
 };
 
 // --- Step 2: Swap Logic ---
 function initPairing() {
-    // يدوياً للتجربة: أول جهازين يدخلوا "main_room_test" بتبادلوا
     const roomRef = ref(db, `rooms/${currentRoomId}`);
-    
-    // تسجيل الدخول للغرفة
     onValue(roomRef, (snap) => {
         const room = snap.val();
         if (!room) {
@@ -121,7 +126,6 @@ function initPairing() {
         } else if (room.user1 !== visitorId && !room.user2) {
             set(roomRef, { ...room, user2: visitorId });
         }
-
         if (room && (room.user1 === visitorId || room.user2 === visitorId)) {
             const twinId = (visitorId === room.user1) ? room.user2 : room.user1;
             if (twinId) listenForTwin(twinId);
@@ -132,11 +136,10 @@ function initPairing() {
 function listenForTwin(twinId) {
     onValue(ref(db, `users/${twinId}`), (snap) => {
         const data = snap.val();
-        if (data && data.voiceUrl) {
-            twinVoiceAudio = new Audio(data.voiceUrl);
+        if (data && data.voiceData) {
+            twinVoiceAudio = new Audio(data.voiceData);
             twinVoiceAudio.preload = "auto";
-            statusDiv.innerHTML = `<b style="color:green;">🔗 TWIN CONNECTED!</b><br>You can now trigger your device using your twin's phone.`;
-            document.getElementById("controlArea").style.display = "flex";
+            statusDiv.innerHTML = `<b style="color:green;">🔗 TWIN LINKED.</b><br>Your twin can now trigger your ${deviceType}.`;
         }
     });
 }
@@ -153,11 +156,9 @@ function sendTrigger(type) {
     });
 }
 
-// Listen for Action
 onValue(ref(db, `rooms/${currentRoomId}/action`), (snap) => {
     const action = snap.val();
     if (action && action.sender !== visitorId) {
-
         if (twinVoiceAudio) {
             twinVoiceAudio.play();
             document.body.classList.add("flash");
@@ -167,7 +168,6 @@ onValue(ref(db, `rooms/${currentRoomId}/action`), (snap) => {
     }
 });
 
-// Particles
 particlesJS("particles-js", {
     particles: { number: { value: 40 }, color: { value: "#ff0000" }, shape: { type: "circle" }, opacity: { value: 0.2 }, size: { value: 2 }, line_linked: { enable: true, color: "#ff0000", opacity: 0.1 }, move: { speed: 0.5 } }
 });
