@@ -10,73 +10,496 @@
         #particles-js { position: fixed; width: 100%; height: 100%; z-index: 0; }
         #ui-wrapper { z-index: 10; background: rgba(0,0,0,0.9); padding: 40px; border: 1px solid red; border-radius: 20px; text-align: center; width: 300px; box-shadow: 0 0 20px red; }
         
-        .main-btn { 
-            background: transparent; border: 2px solid #ff0000; color: #ff0000; 
-            padding: 20px; cursor: pointer; font-weight: bold; border-radius: 10px; 
-            width: 100%; font-size: 18px; text-transform: uppercase; transition: 0.3s;
-        }
-        .main-btn:hover { background: #ff0000; color: #000; box-shadow: 0 0 30px #ff0000; }
-        #status { margin-top: 20px; font-size: 12px; color: #666; }
-        .flash { animation: flashAnim 0.1s infinite; }
-        @keyframes flashAnim { 0% { background: #000; } 50% { background: #200; } 100% { background: #000; } }
-    </style>
+#viewersCount {
+  position:fixed; top:15px; left:50%;
+  transform:translateX(-50%);
+  font-size:24px; font-weight:bold;
+  color:#ff3333; z-index:10000;
+  user-select:none;
+  background: rgba(0,0,0,0.5);
+  padding:6px 12px; border-radius:12px;
+  box-shadow:0 0 8px #ff0000;
+  cursor:pointer;
+}
+.fade-in-fog {
+  opacity: 0;
+  filter: blur(10px); 
+  transform: translateY(20px); 
+  transition: opacity 3s ease, filter 6s ease, transform 9s ease;
+}
+
+.fade-in-fog.visible {
+  opacity: 1;
+  filter: blur(0);
+  transform: translateY(0);
+}
+/* VIEWERS LIST */
+#viewersListPopup {
+  position:fixed; top:50px; right:20px;
+  max-height:200px; width:200px;
+  overflow-y:auto;
+  background: rgba(0,0,0,0.85);
+  color:#ff5555;
+  border:1px solid #ff3333;
+  border-radius:8px;
+  padding:10px;
+  font-size:14px;
+  display:none; z-index:10001;
+}
+
+/* SPHERE */
+#threeSphere {
+  position: fixed;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 260px; height: 260px;
+  z-index: 9999; pointer-events: none;
+}
+
+/* CHAT + UI */
+#chatWrapper {
+  width:96%; max-width:700px; max-height:66vh;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(8px);
+  border-radius:12px;
+  padding:20px;
+  position: fixed;
+  bottom:20px;
+  left:50%; transform:translateX(-50%);
+  z-index:10;
+  display:flex; flex-direction:column;
+  color:#ff3333;
+}
+
+#smallCamera {
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10000;
+  pointer-events: none;
+}
+
+/* NAME INPUT */
+#nameInput {
+  width:250px; padding:15px 20px;
+  font-size:16px; border-radius:8px;
+  border:2px solid red;
+  background-color:#111;
+  color:#ff3333;
+  font-family:'Courier New';
+}
+#joinBtn {
+  margin-top:10px;
+  padding:10px 20px;
+  font-size:17px;
+  border-radius:6px;
+  border:2px solid #ff3333;
+  background:transparent;
+  color:#ff3333;
+  cursor:pointer;
+  font-weight:bold;
+  text-shadow:0 0 6px red;
+}
+#joinBtn:hover { background:#ff3333; color:black; }
+
+/* MESSAGES */
+#messages {
+  flex:1; overflow-y:auto;
+  padding:20px;
+  border:1px solid #ff3333;
+  border-radius:8px;
+  display:none;
+  margin-bottom:10px;
+  max-height:55vh;
+  color:#ff6666;
+  text-align:left;
+}
+
+/* INPUT BAR */
+#inputBar {
+  display:none;
+  gap:10px;
+}
+#inputBar input {
+  flex-grow:1; padding:10px;
+  font-size:18px; border-radius:6px;
+  border:1px solid #ff3333;
+  background-color:#111;
+  color:red;
+}
+#inputBar button {
+  padding:10px 20px;
+  border-radius:6px;
+  border:2px solid red;
+  background:transparent;
+  color:red; cursor:pointer;
+}
+#inputBar button:hover {
+  background:red; color:black;
+}
+
+/* CLEAR BTN */
+#clearButton {
+  margin-top:10px;
+  align-self:flex-end;
+  padding:6px 12px;
+  border:2px solid #ff6666;
+  background:transparent;
+  color:#ff6666;
+  cursor:pointer;
+}
+#clearButton:hover { background:#ff6666; color:black; }
+
+/* TIMER */
+#globalTimerContainer {
+  position:fixed;
+  top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  width:260px; height:260px;
+  z-index:10000;
+}
+#globalTimerCanvas {
+  width:260px; height:260px;
+}
+#globalTimerText {
+  position:absolute;
+  top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  color:red; font-size:53px;
+  font-weight:bold;
+  text-shadow:0 0 6px #ff0000;
+}
+#resetTimerButton {
+  position: absolute;
+  bottom: 0; 
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  font-size: 0;
+  border: none;
+  background: transparent;
+  opacity: 0; 
+  cursor: pointer;
+  user-select: none;
+}
+/* FLASH EFFECT */
+.flash {
+    background-color: white !important;
+}
+
+.flash2 {
+    background-color: #ff0000 !important;
+}
+
+.flash,
+.flash2 {
+    transition: background-color 0.08s ease;
+}    </style>
 </head>
 <body>
-
 <div id="particles-js"></div>
-
 <div id="ui-wrapper">
-    <h2 style="letter-spacing: 5px;">A∞Z SYSTEM</h2>
-    <p style="font-size: 10px; color: #800;">GLOBAL AUDIO PROTOCOL</p>
-    
-    <button id="playAllBtn" class="main-btn">ACTIVATE ALL ⚡</button>
-    
-    <div id="status">Waiting for signal...</div>
+<div id="viewersCount" class="fade-in-fog">👁️‍🗨️ 0</div>
+<div id="viewersListPopup" class="fade-in-fog"></div>
+<div id="threeSphere" class="fade-in-fog"></div>
+<!-- GLOBAL TIMER -->
+<div id="globalTimerContainer" class="fade-in-fog">
+  <canvas id="globalTimerCanvas" width="260" height="260"></canvas>
+  <div id="globalTimerText">0:03</div>
+  <button id="resetTimerButton"></button>
 </div>
 
-<audio id="globalAudio" src="seensee.mp3" preload="auto"></audio>
+<!-- CHAT -->
+<div id="chatWrapper" class="fade-in-fog">
+  <div id="namePrompt">
+    <h2 style="color:#ff3333; text-shadow:0 0 8px red;">🕯️</h2>
+    <video id="smallCamera" autoplay muted playsinline></video>
+    <input id="nameInput" placeholder="Name?" autocomplete="off" />
+    <button id="joinBtn">Enter 🪶</button>
+    </div>
+      <div id="pinnedMessage" style="
+    padding:13px;
+    margin-bottom:15px;
+    border:1px solid #ff0000;
+    border-radius:10px;
+    background:rgba(255,0,0,0.12);
+    color:#ff6666;
+    font-weight:bold;
+    text-align:center;
+    font-size:17px;
+    text-shadow:0 0 6px red;
+    box-shadow:0 0 12px rgba(255,0,0,0.3);
+    letter-spacing:1px;
+  ">
+   ⛧ Join the chat ⛧
+  </div>
+  <div id="messages"></div>
+  <div id="inputBar">
+    <input id="input" placeholder="Say something..." autocomplete="off"/>
+    <button id="sendButton">Send</button>
+    <button id="clearButton">Clear</button>
+  </div>
+</div>
+<audio id="ritualBass" src="seensee.mp3"></audio>
+<script>
+const container = document.getElementById("threeSphere");
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(
+  75, container.clientWidth / container.clientHeight, 0.1, 1000
+);
+const renderer = new THREE.WebGLRenderer({ alpha: true });
+renderer.setSize(container.clientWidth, container.clientHeight);
+container.appendChild(renderer.domElement);
 
+const geometry = new THREE.SphereGeometry(3, 32, 32);
+const material = new THREE.MeshBasicMaterial({
+  color: 0xaa0000,
+  wireframe: true,
+  transparent: true,
+  opacity: 0.35
+});
+
+const sphere = new THREE.Mesh(geometry, material);
+scene.add(sphere);
+camera.position.z = 5;
+
+function animate() {
+  requestAnimationFrame(animate);
+  sphere.rotation.x += 0.01;
+  sphere.rotation.y += 0.01;
+  renderer.render(scene, camera);
+}
+animate();
+</script>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-import { getDatabase, ref, set, onValue, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+import { getDatabase, ref, push, onChildAdded, onValue, set, onDisconnect, serverTimestamp, remove } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
 
+// ====== Firebase Config ======
 const firebaseConfig = {
-    apiKey: "AIzaSyBUb10JpH6iTD1sqSN7xz_lYDZUNSVennQ",
-    authDomain: "testing-9b30c.firebaseapp.com",
-    databaseURL: "https://testing-9b30c-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId: "testing-9b30c"
+  apiKey: "AIzaSyBUb10JpH6iTD1sqSN7xz_lYDZUNSVennQ",
+  authDomain: "testing-9b30c.firebaseapp.com",
+  databaseURL: "https://testing-9b30c-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "testing-9b30c",
+  storageBucket: "testing-9b30c.appspot.com",
+  messagingSenderId: "569390736740",
+  appId: "1:569390736740:web:4f017178b0b3df5ef28671"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-const audio = document.getElementById("globalAudio");
-const btn = document.getElementById("playAllBtn");
-const status = document.getElementById("status");
-btn.onclick = () => {
-    set(ref(db, 'global_trigger'), {
-        action: 'PLAY',
-        timestamp: serverTimestamp()
-    });
-    status.textContent = "SIGNAL SENT!";
-};
+const chatRef = ref(db,"chat");
+const viewersRef = ref(db,"viewers");
+const globalCountdownRef = ref(db,"globalCountdown");
 
-onValue(ref(db, 'global_trigger'), (snap) => {
-    const data = snap.val();
-    if (data && data.action === 'PLAY') {
-        // تشغيل الغنية عند الكل
-        audio.currentTime = 0; // يبدأ من الأول
-        audio.play().then(() => {
-            status.textContent = "SYSTEM ACTIVE: PLAYING...";
-            document.body.classList.add("flash");
-            setTimeout(() => document.body.classList.remove("flash"), 5000);
-        }).catch(e => {
-            status.innerHTML = "<b style='color:yellow;'>TAP SCREEN TO JOIN AUDIO!</b>";
-        });
-    }
+// ====== DOM Elements ======
+const namePrompt = document.getElementById("namePrompt");
+const nameInput = document.getElementById("nameInput");
+const joinBtn = document.getElementById("joinBtn");
+const messagesDiv = document.getElementById("messages");
+const inputBar = document.getElementById("inputBar");
+const input = document.getElementById("input");
+const sendBtn = document.getElementById("sendButton");
+const clearBtn = document.getElementById("clearButton");
+const smallCam = document.getElementById("smallCamera");
+const viewersCountDiv = document.getElementById("viewersCount");
+const viewersPopup = document.getElementById("viewersListPopup");
+const timerText = document.getElementById("globalTimerText");
+const timerCanvas = document.getElementById("globalTimerCanvas");
+const ctx = timerCanvas.getContext("2d");
+
+// ====== Variables ======
+let userName = "";
+let visitorId = Math.random().toString(36).substring(2,9);
+let visitorRef = ref(db,"viewers/"+visitorId);
+let torchTrack = null;
+let interval;
+const totalDuration = 3;
+
+// ====== Viewers Handling ======
+set(visitorRef,{ name:"Guest" });
+onDisconnect(visitorRef).remove();
+
+onValue(viewersRef, snap=>{
+  let v = snap.val();
+  let count = v ? Object.keys(v).length : 0;
+  viewersCountDiv.textContent = `👁️‍🗨️ ${count}`;
 });
 
-// Particles
+viewersCountDiv.onclick = ()=>{
+  if(viewersPopup.style.display==="block"){ viewersPopup.style.display="none"; return; }
+  onValue(viewersRef, snap=>{
+    let v = snap.val();
+    viewersPopup.innerHTML = "<strong>Viewers:</strong><br>" +
+      (v ? Object.values(v).map(x=>x.name).join("<br>") : "None");
+    viewersPopup.style.display="block";
+  },{onlyOnce:true});
+};
+
+// ====== Camera & Torch ======
+async function startCamera() {
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+        smallCam.srcObject = stream;
+        await smallCam.play();
+        torchTrack = stream.getVideoTracks()[0];
+    } catch(e){
+        console.error("Camera error:", e);
+    }
+}
+
+// ====== Chat Handling ======
+joinBtn.onclick = ()=>{
+  let name = nameInput.value.trim();
+  if(!name){ alert("Enter a name"); return; }
+
+  userName = name;
+  set(visitorRef,{name:userName});
+  namePrompt.style.display="none";
+  messagesDiv.style.display="block";
+  inputBar.style.display="flex";
+  messagesDiv.classList.add('visible');
+  inputBar.classList.add('visible');
+  startCamera();
+};
+
+sendBtn.onclick = ()=>{
+  let txt = input.value.trim();
+  if(txt && userName){
+    push(chatRef,{ user:userName, text:txt, timestamp:serverTimestamp() });
+    input.value="";
+  }
+};
+input.onkeydown = e=>{ if(e.key==="Enter") sendBtn.onclick(); };
+
+clearBtn.onclick = ()=>{
+  if(confirm("Clear chat?")){
+    remove(chatRef);
+    messagesDiv.innerHTML="";
+  }
+};
+
+let joinTime = Date.now();
+onChildAdded(chatRef, snap=>{
+  let msg = snap.val();
+  if(msg.timestamp && msg.timestamp < joinTime - 5000) return;
+  let div = document.createElement("div");
+  div.textContent = `${msg.user}: ${msg.text}`;
+  messagesDiv.appendChild(div);
+  messagesDiv.scrollTop = messagesDiv.scrollHeight;
+});
+
+// ====== FLASH ======
+function toggleTorch(on) {
+    if (!torchTrack) return;
+    torchTrack.applyConstraints({ advanced: [{ torch: on }] }).catch(e => console.error("Torch toggle error:", e));
+}
+
+function flashSequence() {
+    let t = 0;
+    const interval = setInterval(() => {
+        toggleTorch(t % 2 === 0);
+        t++;
+        if (t > 120) {  
+            toggleTorch(false);
+            clearInterval(interval);
+        }
+    }, 1000);
+}
+
+function startDoubleFlashSequence(durationMs = 120000) {
+    let flashing = true;
+    function doFlash() {
+        if (!flashing) return;
+        document.body.classList.add("flash");
+        setTimeout(() => {
+            document.body.classList.remove("flash");
+            setTimeout(() => {
+                document.body.classList.add("flash2");
+                setTimeout(() => {
+                    document.body.classList.remove("flash2");
+                    setTimeout(doFlash, 300);
+                }, 80);
+            }, 80);
+        }, 80);
+    }
+    doFlash();
+    setTimeout(() => {
+        flashing = false;
+        document.body.classList.remove("flash");
+        document.body.classList.remove("flash2");
+    }, durationMs);
+}
+
+function startFlashAfterCountdown() {
+    if (!torchTrack) return console.warn("Torch not ready!");
+    flashSequence();
+    startDoubleFlashSequence();
+}
+
+// ====== TIMER ======
+function drawCircle(p){
+  ctx.clearRect(0,0,260,260);
+  let r = 120;
+  ctx.beginPath();
+  ctx.arc(130,130,r,0,Math.PI*2);
+  ctx.strokeStyle="rgba(80,0,0,0.3)";
+  ctx.lineWidth=8;
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.arc(130,130,r,-Math.PI/2, -Math.PI/2 + Math.PI*2*p);
+  ctx.strokeStyle="red";
+  ctx.lineWidth=8;
+  ctx.stroke();
+}
+
+function startLocal(startTime){
+  if (interval) clearInterval(interval);
+  function update(){
+    let now = Date.now();
+    let elapsed = Math.floor((now - startTime) / 1000);
+    let remain = totalDuration - elapsed;
+    if (remain <= 0) {
+      clearInterval(interval);
+      timerText.textContent = "0:00";
+      drawCircle(0);
+      startFlashAfterCountdown();
+      return;
+    }
+    let m = Math.floor(remain / 60);
+    let s = remain % 60;
+    timerText.textContent = `${m}:${s < 10 ? '0'+s : s}`;
+    drawCircle(remain / totalDuration);
+  }
+  interval = setInterval(update, 1000);
+  update();
+}
+
+function setStart() {
+    set(globalCountdownRef,{startTime:serverTimestamp()});
+}
+const resetTimerButton = document.getElementById('resetTimerButton');
+resetTimerButton.addEventListener('click', setStart);
+onValue(globalCountdownRef, snap=>{
+  let d = snap.val();
+  if(d && d.startTime){
+    startLocal(d.startTime);
+  } else if(userName){
+    setStart();
+  }
+});
+
+window.addEventListener('load', () => {
+    startCamera();
+});
+</script>
 particlesJS("particles-js", {
     particles: { number: { value: 60 }, color: { value: "#ff0000" }, shape: { type: "circle" }, opacity: { value: 0.3 }, size: { value: 2 }, line_linked: { enable: true, color: "#ff0000", opacity: 0.2 }, move: { speed: 1 } }
 });
