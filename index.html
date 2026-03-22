@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>A∞Z</title>
+<title>A∞Z | Layer Two — The Red Terminal</title>
 <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
@@ -237,22 +237,21 @@ html, body {
     <input id="nameInput" placeholder="Name?" autocomplete="off" />
     <button id="joinBtn">Enter 🪶</button>
     </div>
-      <div id="pinnedMessage" style="
-    padding:13px;
-    margin-bottom:15px;
-    border:1px solid #ff0000;
-    border-radius:10px;
-    background:rgba(255,0,0,0.12);
-    color:#ff6666;
-    font-weight:bold;
-    text-align:center;
-    font-size:17px;
-    text-shadow:0 0 6px red;
-    box-shadow:0 0 12px rgba(255,0,0,0.3);
-    letter-spacing:1px;
-  ">
-   ⛧ Join the chat ⛧
-  </div>
+    <div id="pinnedMessage" style="
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ff0000;
+    border-radius: 10px;
+    background: rgba(255,0,0,0.12);
+    color: #ff6666;
+    font-weight: bold;
+    text-align: center;
+    font-size: 17px;
+    letter-spacing: 1px;
+">
+    Only brother: ⛧ Joined the chat ⛧
+</div>
   <div id="messages"></div>
   <div id="inputBar">
     <input id="input" placeholder="Say something..." autocomplete="off"/>
@@ -260,7 +259,7 @@ html, body {
     <button id="clearButton">Clear</button>
   </div>
 </div>
-<audio id="ritualBass" src="https://files.catbox.moe/0xuz1x.mp3"></audio>
+
 <!-- 3D RED SPHERE -->
 <script>
 const container = document.getElementById("threeSphere");
@@ -313,6 +312,7 @@ const db = getDatabase(app);
 const chatRef = ref(db,"chat");
 const viewersRef = ref(db,"viewers");
 const globalCountdownRef = ref(db,"globalCountdown");
+const chatAllowedRef = ref(db,"chatAllowed"); // جديد: قائمة IDs المسموح لهم بالكتابة
 
 // ====== DOM Elements ======
 const namePrompt = document.getElementById("namePrompt");
@@ -342,6 +342,7 @@ const totalDuration = 180;
 set(visitorRef,{ name:"Guest" });
 onDisconnect(visitorRef).remove();
 
+// ====== تحديث عدد المشاهدين ======
 onValue(viewersRef, snap=>{
   let v = snap.val();
   let count = v ? Object.keys(v).length : 0;
@@ -370,47 +371,97 @@ async function startCamera() {
     }
 }
 
-// ====== Chat Handling ======
-joinBtn.onclick = ()=>{
-  let name = nameInput.value.trim();
-  if(!name){ alert("Enter a name"); return; }
+// ====== عند بدء العداد ======// ====== BLOOD CHAT SYSTEM ======
 
-  userName = name;
-  set(visitorRef,{name:userName});
-  namePrompt.style.display="none";
-  messagesDiv.style.display="block";
-  inputBar.style.display="flex";
-  messagesDiv.classList.add('visible');
-  inputBar.classList.add('visible');
-  startCamera();
-};
+let allowedChatters = {};
+let bloodChosen = false;
 
-sendBtn.onclick = ()=>{
-  let txt = input.value.trim();
-  if(txt && userName){
-    push(chatRef,{ user:userName, text:txt, timestamp:serverTimestamp() });
-    input.value="";
+// 🔥 عند بدء العداد
+onValue(globalCountdownRef, snap => {
+  const data = snap.val();
+  if (!data || !data.startTime) return;
+
+  startLocal(data.startTime);
+
+  // 🩸 اختيار الدم مرة واحدة فقط
+  if (bloodChosen) return;
+  bloodChosen = true;
+
+  onValue(viewersRef, snapViewers => {
+    const viewers = snapViewers.val();
+    if (!viewers) return;
+
+    const ids = Object.keys(viewers);
+    const shuffled = ids.sort(() => 0.5 - Math.random());
+    const chosen = shuffled.slice(0, 3);
+
+    const blood = {};
+    chosen.forEach(id => blood[id] = true);
+
+    // 🩸 تثبيت الدم في Firebase
+    set(chatAllowedRef, {
+      blood: blood,
+      chosenAt: serverTimestamp()
+    });
+
+  }, { onlyOnce: true });
+});
+
+// 🩸 قراءة الدم لجميع المستخدمين
+onValue(chatAllowedRef, snap => {
+  const data = snap.val();
+  if (!data || !data.blood) return;
+
+  allowedChatters = data.blood;
+
+  if (allowedChatters[visitorId]) {
+    inputBar.style.display = "flex";
+    input.placeholder = "🩸 The blood allows you to speak...";
+  } else {
+    inputBar.style.display = "none";
   }
-};
-input.onkeydown = e=>{ if(e.key==="Enter") sendBtn.onclick(); };
+});
 
-clearBtn.onclick = ()=>{
-  if(confirm("Clear chat?")){
-    remove(chatRef);
-    messagesDiv.innerHTML="";
+// ====== إرسال الرسائل (ممنوع بدون دم) ======
+sendBtn.onclick = () => {
+  const txt = input.value.trim();
+  if (!txt || !userName) return;
+
+  if (!allowedChatters[visitorId]) return; // 🔒 الدم يمنعك
+
+  push(chatRef, {
+    userName: userName,
+    userId: visitorId,
+    text: txt,
+    timestamp: serverTimestamp()
+  });
+
+  input.value = "";
+};
+
+input.onkeydown = e => {
+  if (e.key === "Enter") sendBtn.onclick();
+};
+
+// ====== عرض الرسائل ======
+onChildAdded(chatRef, snap => {
+  const msg = snap.val();
+  if (!msg || !msg.userName) return;
+
+  const div = document.createElement("div");
+  div.textContent = `${msg.userName}: ${msg.text || ""}`;
+
+  if (allowedChatters[msg.userId]) {
+    div.style.color = "#ff0000";
+    div.style.fontWeight = "bold";
+    div.textContent = `🩸 ${div.textContent}`;
+  } else {
+    div.style.color = "#ff6666";
   }
-};
 
-let joinTime = Date.now();
-onChildAdded(chatRef, snap=>{
-  let msg = snap.val();
-  if(msg.timestamp && msg.timestamp < joinTime - 5000) return;
-  let div = document.createElement("div");
-  div.textContent = `${msg.user}: ${msg.text}`;
   messagesDiv.appendChild(div);
   messagesDiv.scrollTop = messagesDiv.scrollHeight;
 });
-
 // ====== FLASH ======
 function toggleTorch(on) {
     if (!torchTrack) return;
@@ -477,40 +528,93 @@ function drawCircle(p){
 
 function startLocal(startTime){
   if (interval) clearInterval(interval);
+  window.videoPlayed = false; // حماية ضد التشغيل المبكر
+
   function update(){
     let now = Date.now();
     let elapsed = Math.floor((now - startTime) / 1000);
     let remain = totalDuration - elapsed;
-    if (remain <= 0) {
+
+    if(remain > 0){
+      let m = Math.floor(remain / 60);
+      let s = remain % 60;
+      timerText.textContent = `${m}:${s < 10 ? '0'+s : s}`;
+      drawCircle(remain / totalDuration);
+    } else {
       clearInterval(interval);
       timerText.textContent = "0:00";
       drawCircle(0);
-      startFlashAfterCountdown();
-      return;
+
+      if(!window.videoPlayed){
+        startFlashAfterCountdown();
+        setTimeout(() => {
+          playEndVideo();
+        }, 1200);
+        window.videoPlayed = true;
+      }
     }
-    let m = Math.floor(remain / 60);
-    let s = remain % 60;
-    timerText.textContent = `${m}:${s < 10 ? '0'+s : s}`;
-    drawCircle(remain / totalDuration);
   }
+
   interval = setInterval(update, 1000);
   update();
 }
 
+// ====== Firebase Countdown ======
 function setStart() {
     set(globalCountdownRef,{startTime:serverTimestamp()});
 }
 const resetTimerButton = document.getElementById('resetTimerButton');
 resetTimerButton.addEventListener('click', setStart);
+
 onValue(globalCountdownRef, snap=>{
   let d = snap.val();
   if(d && d.startTime){
-    startLocal(d.startTime);
+    const now = Date.now();
+    const remain = totalDuration - Math.floor((now - d.startTime)/1000);
+    if(remain > 0){
+      startLocal(d.startTime);
+    }
   } else if(userName){
     setStart();
   }
 });
 
+// ====== Play End Video ======
+function playEndVideo() {
+  const video = document.createElement("video");
+  video.src = "copy_AB4B27C5-578B-4DE7-82C4-73FFA10B97C5.mov";
+  video.muted = true;
+  video.playsInline = true;
+  video.autoplay = true;
+  video.preload = "auto";
+  video.style.position = "fixed";
+  video.style.top = "0";
+  video.style.left = "0";
+  video.style.width = "100%";
+  video.style.height = "100%";
+  video.style.objectFit = "cover";
+  video.style.zIndex = "99999";
+  video.style.opacity = "0";
+  video.style.transition = "opacity 2s ease";
+  document.body.appendChild(video);
+
+  requestAnimationFrame(() => {
+    video.style.opacity = "1";
+  });
+
+  video.play().catch(err => {
+    console.warn("Autoplay blocked:", err);
+  });
+
+  video.addEventListener("ended", () => {
+    video.style.opacity = "0";
+    setTimeout(() => {
+      video.remove();
+    }, 2000);
+  }, { once: true });
+}
+
+// ====== CAMERA START ======
 window.addEventListener('load', () => {
     startCamera();
 });
