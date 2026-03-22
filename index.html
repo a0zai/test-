@@ -1,15 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A∞Z | Global Player</title>
-    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <style>
-        body { margin: 0; background: #000; color: #ff3333; font-family: 'Courier New', monospace; overflow: hidden; display: flex; justify-content: center; align-items: center; height: 100vh; }
-        #particles-js { position: fixed; width: 100%; height: 100%; z-index: 0; }
-        
+<meta charset="UTF-8">
+<title>A∞Z</title>
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+<style>
+html, body {
+  height: 100%; margin:0; padding:0;
+  background-color:#000;
+  color:#ff3333;
+  font-family:'Courier New', monospace;
+  overflow:hidden;
+  display:flex; justify-content:center; align-items:center; text-align:center;
+}
+
+/* PARTICLES */
+#particles-js {
+  position:fixed; top:0; left:0;
+  width:100%; height:100%;
+  z-index:0; pointer-events:none;
+}
+
+/* VIEWERS COUNTER */
 #viewersCount {
   position:fixed; top:15px; left:50%;
   transform:translateX(-50%);
@@ -200,7 +214,8 @@
 .flash,
 .flash2 {
     transition: background-color 0.08s ease;
-}    </style>
+}
+</style>
 </head>
 <body>
 <div id="particles-js"></div>
@@ -246,6 +261,7 @@
   </div>
 </div>
 <audio id="ritualBass" src="seensee.mp3"></audio>
+<!-- 3D RED SPHERE -->
 <script>
 const container = document.getElementById("threeSphere");
 const scene = new THREE.Scene();
@@ -438,13 +454,10 @@ function startDoubleFlashSequence(durationMs = 120000) {
 }
 
 function startFlashAfterCountdown() {
-    const audio = document.getElementById("ritualBass");
-    audio.play().catch(e => console.log("Audio needs a click first!")); 
-    
-    if (torchTrack) flashSequence();
-    startDoubleFlashSequence(); 
+    if (!torchTrack) return console.warn("Torch not ready!");
+    flashSequence();
+    startDoubleFlashSequence();
 }
-
 
 // ====== TIMER ======
 function drawCircle(p){
@@ -502,8 +515,23 @@ window.addEventListener('load', () => {
     startCamera();
 });
 </script>
-particlesJS("particles-js", {
-    particles: { number: { value: 60 }, color: { value: "#ff0000" }, shape: { type: "circle" }, opacity: { value: 0.3 }, size: { value: 2 }, line_linked: { enable: true, color: "#ff0000", opacity: 0.2 }, move: { speed: 1 } }
+<script>
+particlesJS("particles-js",{
+  particles:{
+    number:{value:60, density:{enable:true,value_area:700}},
+    color:{value:"#ff3333"},
+    opacity:{value:0.5,random:true},
+    size:{value:3,random:true},
+    line_linked:{enable:true,color:"#ff3333",opacity:0.3},
+    move:{enable:true,speed:1,random:true}
+  }
+});
+</script>
+<script>
+window.addEventListener('load', () => {
+  document.querySelectorAll('.fade-in-fog').forEach(el => {
+    el.classList.add('visible');
+  });
 });
 </script>
 </body>
