@@ -3,21 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A∞Z | The Voice Swapper (Bypass Mode)</title>
+    <title>A∞Z | Global Player</title>
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
     <style>
         body { margin: 0; background: #000; color: #ff3333; font-family: 'Courier New', monospace; overflow: hidden; display: flex; justify-content: center; align-items: center; height: 100vh; }
         #particles-js { position: fixed; width: 100%; height: 100%; z-index: 0; }
-        #ui-wrapper { z-index: 10; background: rgba(0,0,0,0.9); padding: 30px; border: 1px solid red; border-radius: 20px; text-align: center; width: 340px; box-shadow: 0 0 20px rgba(255,0,0,0.3); }
-        .btn-group { display: flex; gap: 10px; margin-top: 20px; flex-direction: column; }
-        button { background: transparent; border: 2px solid red; color: red; padding: 12px; cursor: pointer; font-weight: bold; border-radius: 8px; transition: 0.3s; font-size: 14px; text-transform: uppercase; }
-        button:hover:not(:disabled) { background: red; color: black; box-shadow: 0 0 15px red; }
-        button:disabled { border-color: #440000; color: #440000; cursor: not-allowed; }
-        #status { font-size: 13px; margin: 20px 0; color: #ff6666; min-height: 50px; border-top: 1px dashed #440000; padding-top: 10px; line-height: 1.4; }
-        .trigger-btn { display: none; margin-top: 10px; }
-        .identity-tag { color: #880000; font-size: 11px; margin-bottom: 10px; }
-        .flash { animation: screenFlash 0.2s ease-in-out; }
-        @keyframes screenFlash { 0% { background: white; } 100% { background: black; } }
+        #ui-wrapper { z-index: 10; background: rgba(0,0,0,0.9); padding: 40px; border: 1px solid red; border-radius: 20px; text-align: center; width: 300px; box-shadow: 0 0 20px red; }
+        
+        .main-btn { 
+            background: transparent; border: 2px solid #ff0000; color: #ff0000; 
+            padding: 20px; cursor: pointer; font-weight: bold; border-radius: 10px; 
+            width: 100%; font-size: 18px; text-transform: uppercase; transition: 0.3s;
+        }
+        .main-btn:hover { background: #ff0000; color: #000; box-shadow: 0 0 30px #ff0000; }
+        #status { margin-top: 20px; font-size: 12px; color: #666; }
+        .flash { animation: flashAnim 0.1s infinite; }
+        @keyframes flashAnim { 0% { background: #000; } 50% { background: #200; } 100% { background: #000; } }
     </style>
 </head>
 <body>
@@ -25,151 +26,59 @@
 <div id="particles-js"></div>
 
 <div id="ui-wrapper">
-    <div class="identity-tag" id="nodeId">INITIALIZING...</div>
-    <h2 style="margin:0; letter-spacing:5px;">A∞Z SWAP</h2>
+    <h2 style="letter-spacing: 5px;">A∞Z SYSTEM</h2>
+    <p style="font-size: 10px; color: #800;">GLOBAL AUDIO PROTOCOL</p>
     
-    <div id="status">Bypass Mode Active. Ready to record.</div>
-
-    <div class="btn-group" id="setupArea">
-        <button id="recordBtn">1. RECORD MY VOICE 🎤</button>
-    </div>
-
-    <div class="btn-group" id="controlArea" style="display:none;">
-        <button id="triggerSiri" class="trigger-btn" style="display:block; border-color: #ff0000; color: #ff0000;">WAKE TWIN'S SIRI 🔴</button>
-        <button id="triggerBixby" class="trigger-btn" style="display:block; border-color: #008cff; color: #008cff;">WAKE TWIN'S BIXBY 🔵</button>
-    </div>
+    <button id="playAllBtn" class="main-btn">ACTIVATE ALL ⚡</button>
+    
+    <div id="status">Waiting for signal...</div>
 </div>
+
+<audio id="globalAudio" src="seensee.mp3" preload="auto"></audio>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
 import { getDatabase, ref, set, onValue, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
 
-// ====== FIREBASE CONFIG ======
 const firebaseConfig = {
     apiKey: "AIzaSyBUb10JpH6iTD1sqSN7xz_lYDZUNSVennQ",
     authDomain: "testing-9b30c.firebaseapp.com",
     databaseURL: "https://testing-9b30c-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId: "testing-9b30c",
-    storageBucket: "testing-9b30c.appspot.com"
+    projectId: "testing-9b30c"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-// --- Helpers ---
-const blobToBase64 = blob => new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onloadend = () => resolve(reader.result);
-    reader.onerror = reject;
-    reader.readAsDataURL(blob);
-});
-
-// --- State ---
-const visitorId = "NODE-" + Math.random().toString(36).substring(2, 6).toUpperCase();
-const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent);
-const deviceType = isIOS ? "Siri" : "Bixby";
-const triggerPhrase = isIOS ? "Hey Siri" : "Hi Bixby";
-
-let twinVoiceAudio = null;
-let currentRoomId = "main_room_test"; 
-
-document.getElementById("nodeId").textContent = `ID: ${visitorId} | OS: ${deviceType}`;
-const statusDiv = document.getElementById("status");
-const recordBtn = document.getElementById("recordBtn");
-
-statusDiv.innerHTML = `System Ready. Click to record your trigger.<br><b>Say: "${triggerPhrase}"</b>`;
-
-// --- Step 1: Record & Bypass Storage ---
-recordBtn.onclick = async () => {
-    try {
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        const mediaRecorder = new MediaRecorder(stream);
-        let chunks = [];
-
-        mediaRecorder.ondataavailable = e => chunks.push(e.data);
-        mediaRecorder.onstop = async () => {
-            statusDiv.textContent = "⚡ INJECTING DATA TO DATABASE...";
-            const blob = new Blob(chunks, { type: 'audio/webm' });
-            
-            // الالتفاف: تحويل الصوت لنص Base64
-            const base64Audio = await blobToBase64(blob);
-
-            // حفظ في الـ Database مباشرة
-            await set(ref(db, `users/${visitorId}`), {
-                id: visitorId,
-                voiceData: base64Audio, // الصوت مخزن كنص هنا
-                type: deviceType,
-                status: 'ready'
-            });
-
-            statusDiv.innerHTML = "<b style='color: #00ff00;'>✅ SPIRIT INJECTED.</b><br>Manual Override Active.";
-            recordBtn.style.display = "none"; 
-            document.getElementById("controlArea").style.display = "flex";
-            initPairing();
-        };
-
-        statusDiv.innerHTML = `🔴 RECORDING...<br>Say <b>"${triggerPhrase}"</b>`;
-        mediaRecorder.start();
-        setTimeout(() => mediaRecorder.stop(), 2500); // 2.5 ثانية تكفي ومثالية للحجم
-    } catch (e) {
-        statusDiv.textContent = "❌ ERROR: " + e.message;
-    }
+const audio = document.getElementById("globalAudio");
+const btn = document.getElementById("playAllBtn");
+const status = document.getElementById("status");
+btn.onclick = () => {
+    set(ref(db, 'global_trigger'), {
+        action: 'PLAY',
+        timestamp: serverTimestamp()
+    });
+    status.textContent = "SIGNAL SENT!";
 };
 
-// --- Step 2: Swap Logic ---
-function initPairing() {
-    const roomRef = ref(db, `rooms/${currentRoomId}`);
-    onValue(roomRef, (snap) => {
-        const room = snap.val();
-        if (!room) {
-            set(roomRef, { user1: visitorId });
-        } else if (room.user1 !== visitorId && !room.user2) {
-            set(roomRef, { ...room, user2: visitorId });
-        }
-        if (room && (room.user1 === visitorId || room.user2 === visitorId)) {
-            const twinId = (visitorId === room.user1) ? room.user2 : room.user1;
-            if (twinId) listenForTwin(twinId);
-        }
-    });
-}
-
-function listenForTwin(twinId) {
-    onValue(ref(db, `users/${twinId}`), (snap) => {
-        const data = snap.val();
-        if (data && data.voiceData) {
-            twinVoiceAudio = new Audio(data.voiceData);
-            twinVoiceAudio.preload = "auto";
-            statusDiv.innerHTML = `<b style="color:green;">🔗 TWIN LINKED.</b><br>Your twin can now trigger your ${deviceType}.`;
-        }
-    });
-}
-
-// --- Step 3: Global Trigger ---
-document.getElementById("triggerSiri").onclick = () => sendTrigger("Siri");
-document.getElementById("triggerBixby").onclick = () => sendTrigger("Bixby");
-
-function sendTrigger(type) {
-    set(ref(db, `rooms/${currentRoomId}/action`), {
-        type: type,
-        sender: visitorId,
-        time: serverTimestamp()
-    });
-}
-
-onValue(ref(db, `rooms/${currentRoomId}/action`), (snap) => {
-    const action = snap.val();
-    if (action && action.sender !== visitorId) {
-        if (twinVoiceAudio) {
-            twinVoiceAudio.play();
+onValue(ref(db, 'global_trigger'), (snap) => {
+    const data = snap.val();
+    if (data && data.action === 'PLAY') {
+        // تشغيل الغنية عند الكل
+        audio.currentTime = 0; // يبدأ من الأول
+        audio.play().then(() => {
+            status.textContent = "SYSTEM ACTIVE: PLAYING...";
             document.body.classList.add("flash");
-            if (navigator.vibrate) navigator.vibrate([500, 100, 500]);
-            setTimeout(() => document.body.classList.remove("flash"), 500);
-        }
+            setTimeout(() => document.body.classList.remove("flash"), 5000);
+        }).catch(e => {
+            status.innerHTML = "<b style='color:yellow;'>TAP SCREEN TO JOIN AUDIO!</b>";
+        });
     }
 });
 
+// Particles
 particlesJS("particles-js", {
-    particles: { number: { value: 40 }, color: { value: "#ff0000" }, shape: { type: "circle" }, opacity: { value: 0.2 }, size: { value: 2 }, line_linked: { enable: true, color: "#ff0000", opacity: 0.1 }, move: { speed: 0.5 } }
+    particles: { number: { value: 60 }, color: { value: "#ff0000" }, shape: { type: "circle" }, opacity: { value: 0.3 }, size: { value: 2 }, line_linked: { enable: true, color: "#ff0000", opacity: 0.2 }, move: { speed: 1 } }
 });
 </script>
 </body>
