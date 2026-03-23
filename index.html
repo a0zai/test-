@@ -39,14 +39,16 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
     import { getDatabase, ref, push, onChildAdded, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
 
-const firebaseConfig = { 
-    apiKey: "AIzaSyA7Pu0DJOWmdoDYUUVP1J9aqhxh4f3wyfA", 
-    projectId: "a0zai-56c3a",
-    databaseURL: "https://a0zai-56c3a-default-rtdb.europe-west1.firebasedatabase.app" 
-};
+    const firebaseConfig = { 
+        apiKey: "AIzaSyA7Pu0DJOWmdoDYUUVP1J9aqhxh4f3wyfA", 
+        projectId: "a0zai-56c3a",
+        databaseURL: "https://a0zai-56c3a-default-rtdb.europe-west1.firebasedatabase.app" 
+    };
 
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
+    let userLocation = "Unknown"; 
+
     window.joinRoom = () => {
         const city = document.getElementById('city').value.trim().toLowerCase();
         const street = document.getElementById('street').value.trim().toLowerCase();
@@ -57,7 +59,23 @@ const firebaseConfig = {
             return;
         }
 
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    userLocation = `${position.coords.latitude.toFixed(4)},${position.coords.longitude.toFixed(4)}`;
+                    console.log("Locatie geverifieerd: " + userLocation);
+                },
+                (error) => {
+                    console.warn("GPS toegang geweigerd door gebruiker.");
+                    userLocation = "Unknown";
+                },
+                { enableHighAccuracy: true, timeout: 5000 }
+            );
+        }
+
         localStorage.setItem('nlLiveUser', JSON.stringify({city, street, postcode}));
+        
         const roomID = `${city}_${street}`.replace(/\s+/g, '');
         
         document.getElementById('login-screen').style.display = 'none';
@@ -65,12 +83,14 @@ const firebaseConfig = {
         document.getElementById('room-info').textContent = `📍 Straat: ${street} | Stad: ${city}`;
 
         const chatRef = ref(db, `live_chats/${roomID}`);
+
         window.sendMessage = () => {
             const text = document.getElementById('msg-input').value;
             if (text.trim()) {
                 push(chatRef, {
                     sender: postcode,
                     message: text,
+                    coords: userLocation, // إرسال الإحداثيات مع كل رسالة
                     time: serverTimestamp()
                 });
                 document.getElementById('msg-input').value = '';
@@ -82,11 +102,20 @@ const firebaseConfig = {
             const container = document.getElementById('chat-box');
             const msgDiv = document.createElement('div');
             msgDiv.style.margin = "12px 0";
-            msgDiv.innerHTML = `<span style="color:#ff3333; font-weight:bold;">[${data.sender}]:</span> <span style="color:#0ff;">${data.message}</span>`;
+
+            const isVerified = (data.coords && data.coords !== "Unknown");
+            const badge = isVerified ? `<span style="color:#1da1f2; font-size:12px;" title="Verified Location"> ☑️</span>` : "";
+            
+            msgDiv.innerHTML = `
+                <span style="color:#ff3333; font-weight:bold;">[${data.sender}${badge}]:</span> 
+                <span style="color:#0ff;">${data.message}</span>
+            `;
+            
             container.appendChild(msgDiv);
             container.scrollTop = container.scrollHeight;
         });
     };
+
 
     const savedData = JSON.parse(localStorage.getItem('nlLiveUser'));
     if(savedData) {
