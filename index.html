@@ -3,90 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>B</title>
+    <title>test</title>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+        import { getDatabase, ref, push, onChildAdded, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBUb10JpH6iTD1sqSN7xz_lYDZUNSVennQ",
+            authDomain: "testing-9b30c.firebaseapp.com",
+            databaseURL: "https://testing-9b30c-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "testing-9b30c",
+            appId: "1:569390736740:web:4f017178b0b3df5ef28671"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // Auto-fill from localStorage
+        window.onload = () => {
+            const savedData = JSON.parse(localStorage.getItem('nlLiveUser'));
+            if(savedData) {
+                document.getElementById('city').value = savedData.city;
+                document.getElementById('street').value = savedData.street;
+                document.getElementById('postcode').value = savedData.postcode;
+            }
+        };
+
+        window.joinRoom = () => {
+            const city = document.getElementById('city').value.trim().toLowerCase();
+            const street = document.getElementById('street').value.trim().toLowerCase();
+            const postcode = document.getElementById('postcode').value.trim().toUpperCase();
+
+            if (!city || !street || !postcode) {
+                alert("Vul a.u.b. alle velden in om deel te nemen.");
+                return;
+            }
+
+            // Save for next time
+            localStorage.setItem('nlLiveUser', JSON.stringify({city, street, postcode}));
+
+            const roomID = `${city}_${street}`.replace(/\s+/g, '');
+            
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('chat-screen').style.display = 'flex';
+            document.getElementById('room-info').textContent = `📍 Straat: ${street} | Stad: ${city}`;
+
+            const chatRef = ref(db, `live_chats/${roomID}`);
+
+            window.sendMessage = () => {
+                const text = document.getElementById('msg-input').value;
+                if (text.trim()) {
+                    push(chatRef, {
+                        sender: postcode,
+                        message: text,
+                        time: serverTimestamp()
+                    });
+                    document.getElementById('msg-input').value = '';
+                }
+            };
+
+            onChildAdded(chatRef, (snap) => {
+                const data = snap.val();
+                const container = document.getElementById('chat-box');
+                const msgDiv = document.createElement('div');
+                msgDiv.style.margin = "12px 0";
+                msgDiv.innerHTML = `<span style="color:#ff3333; font-weight:bold;">[${data.sender}]:</span> <span style="color:#0ff;">${data.message}</span>`;
+                container.appendChild(msgDiv);
+                container.scrollTop = container.scrollHeight;
+            });
+        };
+    </script>
     <style>
-        body {
-            background-color: #0d1117;
-            color: #ffffff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            overflow: hidden;
-        }
-
-        .container {
-            text-align: center;
-            animation: fadeIn 1.5s ease-in-out;
-        }
-
-        .municipality-logo {
-            width: 140px;
-            margin-bottom: 20px;
-        }
-
-        h1 {
-            font-size: 2rem;
-            margin-bottom: 8px;
-            color: #58a6ff;
-        }
-
-        p {
-            font-size: 1.1rem;
-            color: #8b949e;
-            margin: 4px 0;
-        }
-
-        .loader-bar {
-            width: 180px;
-            height: 3px;
-            background: #30363d;
-            margin-top: 30px;
-            border-radius: 5px;
-            overflow: hidden;
-            display: inline-block;
-        }
-
-        .loader-progress {
-            width: 0%;
-            height: 100%;
-            background: #238636;
-            animation: load 4s linear forwards;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes load {
-            to { width: 100%; }
-        }
+        body { background: #000; color: #0ff; font-family: 'Courier New', monospace; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .box { width: 420px; padding: 25px; border: 1px solid #ff3333; background: rgba(15,0,0,0.95); box-shadow: 0 0 20px rgba(255,51,51,0.4); border-radius: 8px; }
+        input { width: 100%; padding: 12px; margin: 10px 0; background: #050505; border: 1px solid #ff3333; color: #ff3333; box-sizing: border-box; font-size: 16px; outline: none; }
+        input:focus { box-shadow: 0 0 5px #ff3333; }
+        button { width: 100%; padding: 12px; background: #ff3333; color: #000; border: none; font-weight: bold; cursor: pointer; font-size: 16px; transition: 0.3s; }
+        button:hover { background: #cc0000; color: #fff; }
+        #chat-screen { display: none; flex-direction: column; height: 85vh; width: 550px; }
+        #chat-box { flex: 1; overflow-y: auto; border: 1px solid #ff3333; padding: 15px; margin-bottom: 12px; background: #020202; border-radius: 4px; }
+        #room-info { color: #ff3333; font-size: 13px; margin-bottom: 10px; text-transform: capitalize; border-bottom: 1px solid #300; padding-bottom: 5px; }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <img src="https://cuatro.sim-cdn.nl/doetinchem/uploads/2023-11/gemeente-doetinchem.svg" alt="Gemeente Doetinchem" class="municipality-logo">
+    <div id="login-screen" class="box">
+        <h2 style="color: #ff3333; text-align: center; letter-spacing: 2px;">NL.LIVE 🇳🇱</h2>
+        <p style="color: #666; font-size: 12px; text-align: center;">Maak direct verbinding met je buren.</p>
+        <input type="text" id="city" placeholder="Stad">
+        <input type="text" id="street" placeholder="Straatnaam">
+        <input type="text" id="postcode" placeholder="Postcode (Identiteit)">
+        <button onclick="joinRoom()">VERBINDEN</button>
+    </div>
 
-        <h1>Bedankt voor uw inzet</h1>
-        <p>Ter waardering van uw werk voor <strong>N</strong>.</p>
-        <p>U wordt doorverwezen naar LinkedIn...</p>
-        
-        <div class="loader-bar">
-            <div class="loader-progress"></div>
+    <div id="chat-screen" class="box">
+        <div id="room-info"></div>
+        <div id="chat-box"></div>
+        <div style="display: flex; gap: 8px;">
+            <input type="text" id="msg-input" placeholder="Typ een bericht..." onkeydown="if(event.key==='Enter') sendMessage()">
+            <button onclick="sendMessage()" style="width: 100px;">VERZEND</button>
         </div>
     </div>
 
-    <script>
-        const linkedInURL = "https://www.linkedin.com/in/a0zai?utm_source=share_via&utm_content=profile&utm_medium=member_ios";
-
-        setTimeout(() => {
-            window.location.href = linkedInURL;
-        }, 4500);
-    </script>
 </body>
 </html>
