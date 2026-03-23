@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A0Z - TERMINAL V3</title>
+    <title>A0Z - TERMINAL V3 FINAL</title>
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
     <style>
         :root { --neon: #00ff41; --bg: #050505; }
         body { margin:0; font-family:'Courier New', monospace; background: var(--bg); color: var(--neon); overflow:hidden; }
         #particles-js { position:fixed; inset:0; z-index:1; pointer-events:none; }
-        
         .container { position:relative; z-index:10; display:flex; justify-content:center; align-items:center; height:100vh; }
         .box { 
             width:400px; max-width:92%; padding:20px; 
@@ -17,30 +16,14 @@
             box-shadow: inset 0 0 20px rgba(0,255,65,0.1), 0 0 15px rgba(0,255,65,0.4);
             text-align: center; box-sizing: border-box;
         }
-
         h2 { text-transform: uppercase; letter-spacing: 3px; border-bottom: 2px solid var(--neon); padding-bottom: 10px; margin-top:0; }
-        
         #chat-screen { display:none; flex-direction:column; height:85vh; width:450px; }
-        #chat-box { 
-            flex:1; overflow-y:auto; border: 1px solid var(--neon); padding:10px; 
-            background: #000; margin-bottom:10px; text-align:left; font-size:14px; line-height:1.4;
-        }
-
+        #chat-box { flex:1; overflow-y:auto; border: 1px solid var(--neon); padding:10px; background: #000; margin-bottom:10px; text-align:left; font-size:14px; line-height:1.4; }
         #meta-header { font-size:10px; margin-bottom:8px; display:flex; justify-content:space-between; border-bottom:1px solid #004411; padding-bottom:5px; }
         #char-count { color: var(--neon); font-size: 11px; text-align: right; margin-bottom: 5px; font-weight: bold; }
-
-        input { 
-            width:100%; padding:12px; background:#000; border:1px solid var(--neon); 
-            color:var(--neon); outline:none; font-family:inherit; box-sizing: border-box;
-        }
-
-        button { 
-            width:100%; padding:12px; background:var(--neon); color:#000; 
-            border:none; font-weight:bold; cursor:pointer; margin-top:10px;
-            text-transform:uppercase; font-family:inherit;
-        }
+        input { width:100%; padding:12px; background:#000; border:1px solid var(--neon); color:var(--neon); outline:none; font-family:inherit; box-sizing: border-box; }
+        button { width:100%; padding:12px; background:var(--neon); color:#000; border:none; font-weight:bold; cursor:pointer; margin-top:10px; text-transform:uppercase; font-family:inherit; }
         button:hover { background: #fff; box-shadow: 0 0 15px var(--neon); }
-        
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-thumb { background: var(--neon); }
     </style>
@@ -73,7 +56,7 @@
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-import { getDatabase, ref, push, onChildAdded, serverTimestamp, onValue, onDisconnect, set } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+import { getDatabase, ref, push, onChildAdded, serverTimestamp, onValue, onDisconnect, set, runTransaction } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
 
 const firebaseConfig = { 
     apiKey: "AIzaSyA7Pu0DJOWmdoDYUUVP1J9aqhxh4f3wyfA", 
@@ -100,7 +83,6 @@ window.initGPS = () => {
     navigator.geolocation.getCurrentPosition((p) => {
         const lat = p.coords.latitude;
         const lon = p.coords.longitude;
-        // نظام الـ 366 متر (تقريب 0.0033)
         const zID = `Z-${(Math.round(lat / 0.0033) * 0.0033).toFixed(4)}_${(Math.round(lon / 0.0033) * 0.0033).toFixed(4)}`.replace(/\./g, '');
         startRadar(zID);
     }, () => {
@@ -117,31 +99,45 @@ function startRadar(zID) {
     const msgRef = ref(db, `v3_final/${zID}/msgs`);
     const userRef = ref(db, `v3_final/${zID}/online/${deviceID}`);
     const allUsersRef = ref(db, `v3_final/${zID}/online`);
+    
+    // تاريخ اليوم لتتبع الاستهلاك
+    const today = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+    const usageRef = ref(db, `usage/${deviceID}/${today}`);
 
     // نظام التواجد (الأونلاين)
     set(userRef, { last: serverTimestamp() });
     onDisconnect(userRef).remove();
 
-    // تحديث عداد المشاهدة (الأونلاين)
+    // تحديث عداد الأونلاين
     onValue(allUsersRef, (s) => {
         const count = s.val() ? Object.keys(s.val()).length : 0;
         document.getElementById("online-val").textContent = `👥 ${count} ONLINE`;
     });
 
+    // تحديث عداد الحروف من السيرفر فوراً
+    onValue(usageRef, (snap) => {
+        let used = snap.val() || 0;
+        document.getElementById("char-count").textContent = `CHARS LEFT: ${99 - used}`;
+    });
+
     window.sendMsg = () => {
         const input = document.getElementById("msg-in");
         const val = input.value.trim();
-        const today = new Date().toDateString();
-        let used = parseInt(localStorage.getItem("used_" + today) || "0");
-
         if(!val) return;
-        if(used + val.length > 99) return alert("LIMIT REACHED!");
 
-        push(msgRef, { uid: deviceID, text: val, t: serverTimestamp() });
+        // استخدام Transaction لضمان دقة العداد ومنع الغش
+        runTransaction(usageRef, (currentUsed) => {
+            let used = currentUsed || 0;
+            if (used + val.length > 99) {
+                alert("Systeemfout: Daglimiet van 99 tekens bereikt!");
+                return; // إلغاء العملية
+            }
+            // إذا الأمور تمام، نبعث الرسالة
+            push(msgRef, { uid: deviceID, text: val, t: serverTimestamp() });
+            return used + val.length;
+        });
         
-        localStorage.setItem("used_" + today, (used + val.length).toString());
         input.value = "";
-        updateCounter();
     };
 
     onChildAdded(msgRef, (snap) => {
@@ -153,16 +149,9 @@ function startRadar(zID) {
         box.appendChild(line);
         box.scrollTop = box.scrollHeight;
     });
-
-    updateCounter();
 }
 
-function updateCounter() {
-    const today = new Date().toDateString();
-    let used = parseInt(localStorage.getItem("used_" + today) || "0");
-    document.getElementById("char-count").textContent = `CHARS LEFT: ${99 - used}`;
-}
-
+// الجزيئات
 particlesJS("particles-js", {
     "particles": {
         "number": { "value": 60 },
