@@ -35,76 +35,69 @@
             <button onclick="sendMessage()" style="width: 100px;">VERZEND</button>
         </div>
     </div>
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-        import { getDatabase, ref, push, onChildAdded, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+    import { getDatabase, ref, push, onChildAdded, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyBUb10JpH6iTD1sqSN7xz_lYDZUNSVennQ",
-  authDomain: "testing-9b30c.firebaseapp.com",
-  databaseURL: "https://testing-9b30c-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "testing-9b30c",
-  storageBucket: "testing-9b30c.appspot.com",
-  messagingSenderId: "569390736740",
-  appId: "1:569390736740:web:4f017178b0b3df5ef28671"
-};
+    const firebaseConfig = {
+        apiKey: "AIzaSyBUb10JpH6iTD1sqSN7xz_lYDZUNSVennQ",
+        authDomain: "testing-9b30c.firebaseapp.com",
+        databaseURL: "https://testing-9b30c-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "testing-9b30c",
+        storageBucket: "testing-9b30c.appspot.com",
+        messagingSenderId: "569390736740",
+        appId: "1:569390736740:web:4f017178b0b3df5ef28671"
+    };
 
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    window.joinRoom = () => {
+        const city = document.getElementById('city').value.trim().toLowerCase();
+        const street = document.getElementById('street').value.trim().toLowerCase();
+        const postcode = document.getElementById('postcode').value.trim().toUpperCase();
 
-        // Auto-fill from localStorage
-        window.onload = () => {
-            const savedData = JSON.parse(localStorage.getItem('nlLiveUser'));
-            if(savedData) {
-                document.getElementById('city').value = savedData.city;
-                document.getElementById('street').value = savedData.street;
-                document.getElementById('postcode').value = savedData.postcode;
+        if (!city || !street || !postcode) {
+            alert("Vul a.u.b. alle velden in om deel te nemen.");
+            return;
+        }
+
+        localStorage.setItem('nlLiveUser', JSON.stringify({city, street, postcode}));
+        const roomID = `${city}_${street}`.replace(/\s+/g, '');
+        
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('chat-screen').style.display = 'flex';
+        document.getElementById('room-info').textContent = `📍 Straat: ${street} | Stad: ${city}`;
+
+        const chatRef = ref(db, `live_chats/${roomID}`);
+        window.sendMessage = () => {
+            const text = document.getElementById('msg-input').value;
+            if (text.trim()) {
+                push(chatRef, {
+                    sender: postcode,
+                    message: text,
+                    time: serverTimestamp()
+                });
+                document.getElementById('msg-input').value = '';
             }
         };
 
-        window.joinRoom = () => {
-            const city = document.getElementById('city').value.trim().toLowerCase();
-            const street = document.getElementById('street').value.trim().toLowerCase();
-            const postcode = document.getElementById('postcode').value.trim().toUpperCase();
+        onChildAdded(chatRef, (snap) => {
+            const data = snap.val();
+            const container = document.getElementById('chat-box');
+            const msgDiv = document.createElement('div');
+            msgDiv.style.margin = "12px 0";
+            msgDiv.innerHTML = `<span style="color:#ff3333; font-weight:bold;">[${data.sender}]:</span> <span style="color:#0ff;">${data.message}</span>`;
+            container.appendChild(msgDiv);
+            container.scrollTop = container.scrollHeight;
+        });
+    };
 
-            if (!city || !street || !postcode) {
-                alert("Vul a.u.b. alle velden in om deel te nemen.");
-                return;
-            }
-
-            // Save for next time
-            localStorage.setItem('nlLiveUser', JSON.stringify({city, street, postcode}));
-
-            const roomID = `${city}_${street}`.replace(/\s+/g, '');
-            
-            document.getElementById('login-screen').style.display = 'none';
-            document.getElementById('chat-screen').style.display = 'flex';
-            document.getElementById('room-info').textContent = `📍 Straat: ${street} | Stad: ${city}`;
-
-            const chatRef = ref(db, `live_chats/${roomID}`);
-
-            window.sendMessage = () => {
-                const text = document.getElementById('msg-input').value;
-                if (text.trim()) {
-                    push(chatRef, {
-                        sender: postcode,
-                        message: text,
-                        time: serverTimestamp()
-                    });
-                    document.getElementById('msg-input').value = '';
-                }
-            };
-
-            onChildAdded(chatRef, (snap) => {
-                const data = snap.val();
-                const container = document.getElementById('chat-box');
-                const msgDiv = document.createElement('div');
-                msgDiv.style.margin = "12px 0";
-                msgDiv.innerHTML = `<span style="color:#ff3333; font-weight:bold;">[${data.sender}]:</span> <span style="color:#0ff;">${data.message}</span>`;
-                container.appendChild(msgDiv);
-                container.scrollTop = container.scrollHeight;
-            });
-        };
-    </script>
+    const savedData = JSON.parse(localStorage.getItem('nlLiveUser'));
+    if(savedData) {
+        document.getElementById('city').value = savedData.city;
+        document.getElementById('street').value = savedData.street;
+        document.getElementById('postcode').value = savedData.postcode;
+    }
+</script>
 </body>
 </html>
