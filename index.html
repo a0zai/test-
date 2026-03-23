@@ -47,7 +47,10 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
-    let userLocation = "Unknown"; 
+
+    let userLocation = "Unknown";
+    let deviceID = localStorage.getItem('nl_device_id') || btoa(navigator.userAgent + Math.random()).slice(0, 16);
+    localStorage.setItem('nl_device_id', deviceID); // بصمة الجهاز
 
     window.joinRoom = () => {
         const city = document.getElementById('city').value.trim().toLowerCase();
@@ -55,45 +58,59 @@
         const postcode = document.getElementById('postcode').value.trim().toUpperCase();
 
         if (!city || !street || !postcode) {
-            alert("Vul a.u.b. alle velden in om deel te nemen.");
+            alert("Vul a.u.b. alle velden in.");
             return;
         }
 
-
+        // إجبار طلب الموقع قبل الدخول
         if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    userLocation = `${position.coords.latitude.toFixed(4)},${position.coords.longitude.toFixed(4)}`;
-                    console.log("Locatie geverifieerd: " + userLocation);
-                },
-                (error) => {
-                    console.warn("GPS toegang geweigerd door gebruiker.");
-                    userLocation = "Unknown";
-                },
-                { enableHighAccuracy: true, timeout: 5000 }
-            );
+            navigator.geolocation.getCurrentPosition((position) => {
+                userLocation = `${position.coords.latitude.toFixed(4)},${position.coords.longitude.toFixed(4)}`;
+                proceedToChat(city, street, postcode);
+            }, (error) => {
+                alert("GPS is verplicht om deel te nemen aan de buurt-chat!");
+            });
+        } else {
+            alert("Je browser ondersteunt geen GPS.");
         }
+    };
 
+    function proceedToChat(city, street, postcode) {
         localStorage.setItem('nlLiveUser', JSON.stringify({city, street, postcode}));
-        
         const roomID = `${city}_${street}`.replace(/\s+/g, '');
         
         document.getElementById('login-screen').style.display = 'none';
         document.getElementById('chat-screen').style.display = 'flex';
-        document.getElementById('room-info').textContent = `📍 Straat: ${street} | Stad: ${city}`;
+        document.getElementById('room-info').textContent = `📍 ${street} | Stad: ${city}`;
 
         const chatRef = ref(db, `live_chats/${roomID}`);
 
         window.sendMessage = () => {
-            const text = document.getElementById('msg-input').value;
-            if (text.trim()) {
+            const input = document.getElementById('msg-input');
+            const text = input.value.trim();
+            
+            // --- نظام الـ 99 حرف (الليميت اليومي) ---
+            let today = new Date().toDateString();
+            let usedChars = parseInt(localStorage.getItem('chars_used_' + today) || "0");
+
+            if (usedChars + text.length > 99) {
+                alert(`Limiet bereikt! Je hebt nog maar ${99 - usedChars} tekens over voor vandaag.`);
+                return;
+            }
+
+            if (text) {
                 push(chatRef, {
                     sender: postcode,
                     message: text,
-                    coords: userLocation, // إرسال الإحداثيات مع كل رسالة
+                    coords: userLocation,
+                    device: deviceID, // البصمة
                     time: serverTimestamp()
                 });
-                document.getElementById('msg-input').value = '';
+                
+                // تحديث العداد
+                localStorage.setItem('chars_used_' + today, (usedChars + text.length).toString());
+                input.value = '';
+                updateCharCounter();
             }
         };
 
@@ -102,21 +119,22 @@
             const container = document.getElementById('chat-box');
             const msgDiv = document.createElement('div');
             msgDiv.style.margin = "12px 0";
-
-            const isVerified = (data.coords && data.coords !== "Unknown");
-            const badge = isVerified ? `<span style="color:#1da1f2; font-size:12px;" title="Verified Location"> ☑️</span>` : "";
-            
-            msgDiv.innerHTML = `
-                <span style="color:#ff3333; font-weight:bold;">[${data.sender}${badge}]:</span> 
-                <span style="color:#0ff;">${data.message}</span>
-            `;
-            
+            const badge = (data.coords && data.coords !== "Unknown") ? " ☑️" : "";
+            msgDiv.innerHTML = `<span style="color:#ff3333; font-weight:bold;">[${data.sender}${badge}]:</span> <span style="color:#0ff;">${data.message}</span>`;
             container.appendChild(msgDiv);
             container.scrollTop = container.scrollHeight;
         });
-    };
+        
+        updateCharCounter();
+    }
 
+    function updateCharCounter() {
+        let today = new Date().toDateString();
+        let used = parseInt(localStorage.getItem('chars_used_' + today) || "0");
+        document.getElementById('char-count').textContent = `Tekens over: ${99 - used}`;
+    }
 
+    // Auto-fill
     const savedData = JSON.parse(localStorage.getItem('nlLiveUser'));
     if(savedData) {
         document.getElementById('city').value = savedData.city;
