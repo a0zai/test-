@@ -5,11 +5,26 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>A0Z</title>
 
-<script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.fog.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 
 <style>
 body { background:#000; color:#0ff; font-family:monospace; margin:0; overflow:hidden;}
-#particles-js { position:absolute; width:100%; height:100%; z-index:1;}
+#vanta-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    opacity: 0.35;
+    filter: saturate(140%) contrast(115%);
+    pointer-events: none;
+}
+    #particles-js {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
 .container { position:relative; z-index:10; display:flex; justify-content:center; align-items:center; height:100vh;}
 .box { width:400px; padding:20px; border:1px solid #f33; background:#100; box-shadow:0 0 15px #f33;}
 button { width:100%; padding:12px; background:#f33; border:none; font-weight:bold; cursor:pointer;}
@@ -21,8 +36,8 @@ input { width:100%; padding:10px; background:#000; border:1px solid #f33; color:
 
 <body>
 
-<div id="particles-js"></div>
-
+<div id="vanta-bg"></div>
+  <div id="particles-js"></div>
 <div class="container">
 <div id="login" class="box">
 <h3 style="color:#f33;">A0Z 🔥</h3>
@@ -49,11 +64,11 @@ import {
  onDisconnect, set, onValue
 } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
 
-const app = initializeApp({
- apiKey:"AIzaSy...",
- projectId:"a0zai-56c3a",
- databaseURL:"https://a0zai-56c3a-default-rtdb.europe-west1.firebasedatabase.app"
-});
+ const firebaseConfig = { 
+        apiKey: "AIzaSyA7Pu0DJOWmdoDYUUVP1J9aqhxh4f3wyfA", 
+        projectId: "a0zai-56c3a",
+        databaseURL: "https://a0zai-56c3a-default-rtdb.europe-west1.firebasedatabase.app" 
+    };
 
 const db = getDatabase(app);
 
@@ -164,11 +179,76 @@ function updateCount(){
  document.getElementById("count").textContent = 99-used;
 }
 
-// 🌌 particles
-particlesJS("particles-js",{
- particles:{number:{value:40},color:{value:"#f33"},move:{speed:1}}
+VANTA.FOG({
+    el: "#vanta-bg",
+    mouseControls: true,
+    touchControls: true,
+    gyroControls: false,
+    minHeight: 200.0,
+    minWidth: 200.0,
+    highlightColor: 0x90e0ef,
+    midtoneColor: 0xb2f2bb,
+    lowlightColor: 0x0b132b,
+    baseColor: 0x000000,
+    blurFactor: 0.12,
+    speed: 0.3,
+    zoom: 0.9
 });
-</script>
+    particlesJS("particles-js", {
+      particles: {
+        number: { value: 70, density: { enable: true, value_area: 800 } },
+        color: { value: "#ff3333" },
+        shape: {
+          type: "circle",
+          stroke: { width: 0, color: "#000000" },
+          polygon: { nb_sides: 5 },
+        },
+        opacity: {
+          value: 0.5,
+          random: true,
+          anim: { enable: true, speed: 1, opacity_min: 0.1, sync: false }
+        },
+        size: {
+          value: 3,
+          random: true,
+          anim: { enable: false }
+        },
+        line_linked: {
+          enable: true,
+          distance: 150,
+          color: "#ff3333",
+          opacity: 0.3,
+          width: 1
+        },
+        move: {
+          enable: true,
+          speed: 1,
+          direction: "none",
+          random: true,
+          straight: false,
+          out_mode: "out",
+          bounce: false,
+          attract: { enable: false }
+        }
+      },
+      interactivity: {
+        detect_on: "canvas",
+        events: {
+          onhover: { enable: true, mode: "grab" },
+          onclick: { enable: true, mode: "push" },
+          resize: true
+        },
+        modes: {
+          grab: { distance: 200, line_linked: { opacity: 0.5 } },
+          bubble: { distance: 200, size: 6, duration: 2, opacity: 0.8 },
+          repulse: { distance: 100 },
+          push: { particles_nb: 4 },
+          remove: { particles_nb: 2 }
+        }
+      },
+      retina_detect: true
+    });
+  </script>
 
 </body>
 </html>
