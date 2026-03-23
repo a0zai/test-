@@ -3,44 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A0Z - TERMINAL 366m</title>
+    <title>A0Z - TERMINAL V3</title>
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
     <style>
         :root { --neon: #00ff41; --bg: #050505; }
         body { margin:0; font-family:'Courier New', monospace; background: var(--bg); color: var(--neon); overflow:hidden; }
-        #particles-js { position:fixed; inset:0; z-index:1; }
+        #particles-js { position:fixed; inset:0; z-index:1; pointer-events:none; }
         
+        .container { position:relative; z-index:10; display:flex; justify-content:center; align-items:center; height:100vh; }
         .box { 
-            position:relative; z-index:10; width:380px; max-width:90%; padding:20px; 
-            border: 4px double var(--neon); background: rgba(0, 20, 0, 0.9);
-            box-shadow: inset 0 0 20px rgba(0,255,65,0.2), 0 0 15px rgba(0,255,65,0.5);
-            text-align: center;
+            width:400px; max-width:92%; padding:20px; 
+            border: 4px double var(--neon); background: rgba(0, 15, 0, 0.95);
+            box-shadow: inset 0 0 20px rgba(0,255,65,0.1), 0 0 15px rgba(0,255,65,0.4);
+            text-align: center; box-sizing: border-box;
         }
 
-        h2 { text-transform: uppercase; letter-spacing: 4px; border-bottom: 2px solid var(--neon); padding-bottom: 10px; animation: pulse 2s infinite; }
+        h2 { text-transform: uppercase; letter-spacing: 3px; border-bottom: 2px solid var(--neon); padding-bottom: 10px; margin-top:0; }
         
-        #chat-screen { display:none; flex-direction:column; height:85vh; width:500px; }
+        #chat-screen { display:none; flex-direction:column; height:85vh; width:450px; }
         #chat-box { 
             flex:1; overflow-y:auto; border: 1px solid var(--neon); padding:10px; 
-            background: #000; margin-bottom:10px; text-align:left; font-size:14px;
+            background: #000; margin-bottom:10px; text-align:left; font-size:14px; line-height:1.4;
         }
 
+        #meta-header { font-size:10px; margin-bottom:8px; display:flex; justify-content:space-between; border-bottom:1px solid #004411; padding-bottom:5px; }
+        #char-count { color: var(--neon); font-size: 11px; text-align: right; margin-bottom: 5px; font-weight: bold; }
+
         input { 
-            width:100%; padding:10px; background:#000; border:1px solid var(--neon); 
-            color:var(--neon); outline:none; font-family:inherit; margin-top:5px;
+            width:100%; padding:12px; background:#000; border:1px solid var(--neon); 
+            color:var(--neon); outline:none; font-family:inherit; box-sizing: border-box;
         }
 
         button { 
             width:100%; padding:12px; background:var(--neon); color:#000; 
             border:none; font-weight:bold; cursor:pointer; margin-top:10px;
-            text-transform:uppercase; transition: 0.3s;
+            text-transform:uppercase; font-family:inherit;
         }
-        button:hover { background: #fff; box-shadow: 0 0 20px var(--neon); }
-
-        .sys-msg { color: #fff; font-size: 10px; opacity: 0.6; margin-bottom: 10px; }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+        button:hover { background: #fff; box-shadow: 0 0 15px var(--neon); }
         
-        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-thumb { background: var(--neon); }
     </style>
 </head>
@@ -48,28 +49,31 @@
 
 <div id="particles-js"></div>
 
-<div style="display:flex; justify-content:center; align-items:center; height:100vh;">
+<div class="container">
     <div id="login" class="box">
-        <h2>System Boot</h2>
-        <p class="sys-msg">Searching for device signature...</p>
-        <p id="device-info" style="font-size:12px;"></p>
-        <button id="boot-btn" onclick="bootSystem()">Connect GPS</button>
+        <h2>SYSTEM BOOT</h2>
+        <p style="font-size:11px; opacity:0.7;">IDENTIFYING DEVICE SIGNATURE...</p>
+        <p id="dev-sig" style="font-size:13px; font-weight:bold; color:#fff;"></p>
+        <button id="boot-btn" onclick="initGPS()">CONNECT TO RADAR</button>
     </div>
 
     <div id="chat-screen" class="box">
-        <div id="meta" style="font-size:10px; margin-bottom:5px;">ZONE: SCANNING...</div>
+        <div id="meta-header">
+            <span id="zone-id">ZONE: SCANNING...</span>
+            <span id="online-val">👥 0 ONLINE</span>
+        </div>
         <div id="chat-box"></div>
-        <div style="font-size:10px; text-align:right;">MAX_LEN: 99</div>
+        <div id="char-count">CHARS LEFT: 99</div>
         <div style="display:flex; gap:5px;">
-            <input id="msg" placeholder="Command..." onkeydown="if(event.key==='Enter')send()">
-            <button onclick="send()" style="width:70px; margin-top:5px;">SND</button>
+            <input id="msg-in" placeholder="ENTER MESSAGE..." onkeydown="if(event.key==='Enter')sendMsg()">
+            <button onclick="sendMsg()" style="width:80px; margin-top:0;">SND</button>
         </div>
     </div>
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-import { getDatabase, ref, push, onChildAdded, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+import { getDatabase, ref, push, onChildAdded, serverTimestamp, onValue, onDisconnect, set } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
 
 const firebaseConfig = { 
     apiKey: "AIzaSyA7Pu0DJOWmdoDYUUVP1J9aqhxh4f3wyfA", 
@@ -79,76 +83,94 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
-let deviceID = localStorage.getItem("a0z_signature");
+
+// 1. بصمة الجهاز الدائمة
+let deviceID = localStorage.getItem("a0z_v3_sig");
 if(!deviceID) {
     deviceID = 'USR-' + Math.random().toString(36).substr(2, 5).toUpperCase();
-    localStorage.setItem("a0z_signature", deviceID);
+    localStorage.setItem("a0z_v3_sig", deviceID);
 }
-document.getElementById("device-info").textContent = "ID: " + deviceID;
+document.getElementById("dev-sig").textContent = deviceID;
 
-window.bootSystem = () => {
-    const btn = document.getElementById("boot-btn");
-    btn.textContent = "LOCATING...";
+window.initGPS = () => {
+    const b = document.getElementById("boot-btn");
+    b.textContent = "LOCATING...";
+    b.disabled = true;
 
     navigator.geolocation.getCurrentPosition((p) => {
         const lat = p.coords.latitude;
         const lon = p.coords.longitude;
-        
-        // 2. نطاق 366 متر (تقسيم المنطقة لغرف دقيقة)
-        const zoneID = `Z-${(Math.round(lat / 0.0033) * 0.0033).toFixed(4)}_${(Math.round(lon / 0.0033) * 0.0033).toFixed(4)}`.replace(/\./g, '');
-        
-        runRadar(zoneID);
+        // نظام الـ 366 متر (تقريب 0.0033)
+        const zID = `Z-${(Math.round(lat / 0.0033) * 0.0033).toFixed(4)}_${(Math.round(lon / 0.0033) * 0.0033).toFixed(4)}`.replace(/\./g, '');
+        startRadar(zID);
     }, () => {
-        alert("ACCESS DENIED: GPS Signal Missing.");
+        alert("CRITICAL ERROR: GPS REQUIRED.");
         location.reload();
     }, { enableHighAccuracy: true });
 };
 
-function runRadar(zoneID) {
+function startRadar(zID) {
     document.getElementById("login").style.display = "none";
     document.getElementById("chat-screen").style.display = "flex";
-    document.getElementById("meta").textContent = `STATION: ${zoneID} | SIG: ${deviceID}`;
+    document.getElementById("zone-id").textContent = `ZONE: ${zID}`;
 
-    const chatRef = ref(db, `v3_zones/${zoneID}`);
+    const msgRef = ref(db, `v3_final/${zID}/msgs`);
+    const userRef = ref(db, `v3_final/${zID}/online/${deviceID}`);
+    const allUsersRef = ref(db, `v3_final/${zID}/online`);
 
-    window.send = () => {
-        const input = document.getElementById("msg");
-        const text = input.value.trim();
-        let today = new Date().toDateString();
-        let used = parseInt(localStorage.getItem("u_" + today) || "0");
+    // نظام التواجد (الأونلاين)
+    set(userRef, { last: serverTimestamp() });
+    onDisconnect(userRef).remove();
 
-        if(!text || (used + text.length > 99)) return;
+    // تحديث عداد المشاهدة (الأونلاين)
+    onValue(allUsersRef, (s) => {
+        const count = s.val() ? Object.keys(s.val()).length : 0;
+        document.getElementById("online-val").textContent = `👥 ${count} ONLINE`;
+    });
 
-        push(chatRef, { 
-            id: deviceID, 
-            msg: text, 
-            t: serverTimestamp() 
-        });
+    window.sendMsg = () => {
+        const input = document.getElementById("msg-in");
+        const val = input.value.trim();
+        const today = new Date().toDateString();
+        let used = parseInt(localStorage.getItem("used_" + today) || "0");
 
-        localStorage.setItem("u_" + today, used + text.length);
+        if(!val) return;
+        if(used + val.length > 99) return alert("LIMIT REACHED!");
+
+        push(msgRef, { uid: deviceID, text: val, t: serverTimestamp() });
+        
+        localStorage.setItem("used_" + today, (used + val.length).toString());
         input.value = "";
+        updateCounter();
     };
 
-    onChildAdded(chatRef, (snap) => {
+    onChildAdded(msgRef, (snap) => {
         const d = snap.val();
-        const chatBox = document.getElementById("chat-box");
-        const div = document.createElement("div");
-        div.style.padding = "2px 0";
-        div.innerHTML = `> <b style="color:#fff;">${d.id}✅</b>: ${d.msg}`;
-        chatBox.appendChild(div);
-        chatBox.scrollTop = chatBox.scrollHeight;
+        const box = document.getElementById("chat-box");
+        const line = document.createElement("div");
+        line.style.marginBottom = "8px";
+        line.innerHTML = `> <b style="color:#fff;">${d.uid}✅</b>: ${d.text}`;
+        box.appendChild(line);
+        box.scrollTop = box.scrollHeight;
     });
+
+    updateCounter();
+}
+
+function updateCounter() {
+    const today = new Date().toDateString();
+    let used = parseInt(localStorage.getItem("used_" + today) || "0");
+    document.getElementById("char-count").textContent = `CHARS LEFT: ${99 - used}`;
 }
 
 particlesJS("particles-js", {
     "particles": {
-        "number": { "value": 80 },
+        "number": { "value": 60 },
         "color": { "value": "#00ff41" },
         "shape": { "type": "edge" },
         "opacity": { "value": 0.2 },
         "size": { "value": 2 },
-        "line_linked": { "enable": true, "distance": 150, "color": "#00ff41", "opacity": 0.1, "width": 1 },
-        "move": { "enable": true, "speed": 1 }
+        "line_linked": { "enable": true, "distance": 120, "color": "#00ff41", "opacity": 0.1 }
     }
 });
 </script>
