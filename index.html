@@ -3,20 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A0Z - SECURE RADAR V4</title>
+    <title>A0Z - GHOST TERMINAL</title>
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
     <style>
-        :root { --neon: #00ff41; --bg: #050505; }
-        body { margin:0; font-family:'Courier New', monospace; background: var(--bg); color: var(--neon); overflow:hidden; }
-        #particles-js { position:fixed; inset:0; z-index:1; pointer-events:none; }
-        .container { position:relative; z-index:10; display:flex; justify-content:center; align-items:center; height:100vh; }
-        .box { width:420px; max-width:92%; padding:25px; border: 4px double var(--neon); background: rgba(0, 15, 0, 0.95); box-shadow: 0 0 20px rgba(0,255,65,0.3); text-align: center; box-sizing: border-box; }
+        :root { --neon: #00ff41; --bg: #000000; }
+        
+        body, html { margin:0; padding:0; width:100%; height:100%; background: var(--bg); font-family:'Courier New', monospace; overflow:hidden; }
+        
+        /* تأثير الشاشة القديمة */
+        body::before {
+            content: " "; display: block; position: absolute; top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 20; background-size: 100% 2px, 3px 100%; pointer-events: none;
+        }
+
+        #particles-js { position:fixed; width:100%; height:100%; background-color: #000; z-index:1; }
+        
+        .container { position:relative; z-index:30; display:flex; justify-content:center; align-items:center; height:100vh; }
+        
+        .box { 
+            width:420px; max-width:92%; padding:30px; 
+            border: 2px solid var(--neon); background: rgba(0, 10, 0, 0.9);
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.2); 
+            text-align: center; box-sizing: border-box;
+        }
+
+        h2 { text-transform: uppercase; letter-spacing: 5px; color: var(--neon); text-shadow: 0 0 10px var(--neon); margin-bottom: 20px; }
+        
         #chat-screen { display:none; flex-direction:column; height:85vh; width:480px; }
-        #chat-box { flex:1; overflow-y:auto; border: 1px solid var(--neon); padding:10px; background: #000; margin-bottom:10px; text-align:left; font-size:14px; }
-        #char-count { color: #ff0000; font-size: 11px; text-align: right; margin-bottom: 5px; font-weight: bold; }
-        input { width:100%; padding:12px; background:#000; border:1px solid var(--neon); color:var(--neon); outline:none; font-family:inherit; box-sizing: border-box; margin-bottom: 10px; }
-        button { width:100%; padding:12px; background:var(--neon); color:#000; border:none; font-weight:bold; cursor:pointer; text-transform:uppercase; }
-        #online-val { color: #fff; text-shadow: 0 0 5px var(--neon); }
+        
+        #chat-box { 
+            flex:1; overflow-y:auto; border: 1px solid var(--neon); padding:15px; 
+            background: rgba(0, 0, 0, 0.8); margin-bottom:10px; text-align:left; 
+            font-size:14px; color: var(--neon); scroll-behavior: smooth;
+        }
+
+        #char-count { color: #ff3333; font-size: 11px; text-align: right; margin-bottom: 5px; font-weight: bold; }
+
+        input { 
+            width:100%; padding:12px; background:transparent; border:1px solid var(--neon); 
+            color:var(--neon); outline:none; font-family:inherit; box-sizing: border-box; margin-bottom: 10px;
+        }
+
+        button { 
+            width:100%; padding:12px; background:var(--neon); color:#000; 
+            border:none; font-weight:bold; cursor:pointer; text-transform:uppercase;
+            transition: 0.3s;
+        }
+        button:hover { background: #fff; box-shadow: 0 0 15px var(--neon); }
+        button:disabled { background: #004411; color: #000; cursor: default; }
+
+        .sys-text { font-size: 10px; color: #fff; opacity: 0.5; margin: 10px 0; }
+        
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-thumb { background: var(--neon); }
     </style>
 </head>
 <body>
@@ -25,14 +65,14 @@
 
 <div class="container">
     <div id="login" class="box">
-        <h2>A0Z IDENTIFIER</h2>
-        <p style="font-size:11px; opacity:0.7;">UNIQUE NICKNAME (A-Z, 0-9 ONLY)</p>
+        <h2>A0Z V5</h2>
+        <p id="instruction" class="sys-text">ESTABLISHING SECURE CONNECTION...</p>
         <input id="user-input" placeholder="NICKNAME..." maxlength="12">
-        <button id="boot-btn" onclick="checkAndBoot()">INITIALIZE SYSTEM</button>
+        <button id="boot-btn" onclick="initSystem()">INITIALIZE</button>
     </div>
 
     <div id="chat-screen" class="box">
-        <div style="display:flex; justify-content:space-between; font-size:10px; border-bottom:1px solid #004411; padding-bottom:5px; margin-bottom:8px;">
+        <div style="display:flex; justify-content:space-between; font-size:10px; border-bottom:1px solid var(--neon); padding-bottom:5px; margin-bottom:8px;">
             <span id="zone-id">ZONE: SCANNING...</span>
             <span id="online-val">👥 0 ONLINE</span>
         </div>
@@ -57,50 +97,61 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
-let myNick = "";
-let currentZone = "";
 
-window.checkAndBoot = () => {
-    const input = document.getElementById("user-input");
-    const nick = input.value.trim().toUpperCase();
-    const regex = /^[A-Z0-9]+$/;
+// قفل الاسم للجهاز
+let savedNick = localStorage.getItem("a0z_v5_nick");
+if(savedNick) {
+    document.getElementById("user-input").value = savedNick;
+    document.getElementById("user-input").disabled = true;
+    document.getElementById("instruction").textContent = "ID VERIFIED. RE-LINKING...";
+    document.getElementById("boot-btn").textContent = "CONNECT";
+}
 
-    if (!nick || !regex.test(nick)) return alert("INVALID NICKNAME");
+window.initSystem = () => {
+    let nick = "";
+    if(savedNick) {
+        nick = savedNick;
+    } else {
+        nick = document.getElementById("user-input").value.trim().toUpperCase();
+        if (!/^[A-Z0-9]+$/.test(nick)) return alert("ERROR: ALPHANUMERIC ONLY.");
+        localStorage.setItem("a0z_v5_nick", nick);
+    }
 
-    document.getElementById("boot-btn").textContent = "GPS LOCKING...";
-    
+    document.getElementById("boot-btn").disabled = true;
+    document.getElementById("instruction").textContent = "LOCKING GPS COORDINATES...";
+
     navigator.geolocation.getCurrentPosition(async (p) => {
         const lat = p.coords.latitude;
         const lon = p.coords.longitude;
-        currentZone = `Z-${(Math.round(lat / 0.0033) * 0.0033).toFixed(4)}_${(Math.round(lon / 0.0033) * 0.0033).toFixed(4)}`.replace(/\./g, '');
+        // مربع 366 متر
+        const zID = `Z-${(Math.round(lat / 0.0033) * 0.0033).toFixed(4)}_${(Math.round(lon / 0.0033) * 0.0033).toFixed(4)}`.replace(/\./g, '');
         
-        myNick = nick;
-        startRadar(currentZone);
-    }, () => alert("GPS REQUIRED"), { enableHighAccuracy: true });
+        startChat(zID, nick);
+    }, () => {
+        alert("CRITICAL: GPS REQUIRED.");
+        location.reload();
+    }, { enableHighAccuracy: true });
 };
 
-function startRadar(zID) {
+function startChat(zID, nick) {
     document.getElementById("login").style.display = "none";
     document.getElementById("chat-screen").style.display = "flex";
-    document.getElementById("zone-id").textContent = `ZONE: ${zID} | ID: ${myNick}`;
+    document.getElementById("zone-id").textContent = `Z:${zID} | ID:${nick}`;
 
-    const msgRef = ref(db, `v4_zones/${zID}/msgs`);
-    const presenceRef = ref(db, `v4_zones/${zID}/online/${myNick}`);
-    const onlineListRef = ref(db, `v4_zones/${zID}/online`);
+    const msgRef = ref(db, `v5_final/${zID}/msgs`);
+    const presenceRef = ref(db, `v5_final/${zID}/online/${nick}`);
+    const onlineListRef = ref(db, `v5_final/${zID}/online`);
 
-    // 1. نظام الأونلاين (المشاهدة) - شغال 100% الآن
     set(presenceRef, { status: "online", t: serverTimestamp() });
     onDisconnect(presenceRef).remove();
 
     onValue(onlineListRef, (snapshot) => {
-        const val = snapshot.val();
-        const count = val ? Object.keys(val).length : 0;
+        const count = snapshot.val() ? Object.keys(snapshot.val()).length : 0;
         document.getElementById("online-val").textContent = `👥 ${count} ONLINE`;
     });
 
-    // 2. نظام الـ 33 حرف (تجديد يومي)
     const today = new Date().toISOString().slice(0, 10).replace(/-/g, '');
-    const usageRef = ref(db, `v4_usage/${myNick}/${today}`);
+    const usageRef = ref(db, `v5_usage/${nick}/${today}`);
 
     onValue(usageRef, (snap) => {
         let used = snap.val() || 0;
@@ -111,12 +162,10 @@ function startRadar(zID) {
         const input = document.getElementById("msg-in");
         const val = input.value.trim();
         if(!val) return;
-
         get(usageRef).then((snap) => {
             let used = snap.val() || 0;
-            if (used + val.length > 33) return alert("DAY LIMIT REACHED!");
-            
-            push(msgRef, { nick: myNick, text: val, t: serverTimestamp() });
+            if (used + val.length > 33) return alert("LIMIT EXCEEDED.");
+            push(msgRef, { nick: nick, text: val, t: serverTimestamp() });
             set(usageRef, used + val.length);
             input.value = "";
         });
@@ -125,13 +174,28 @@ function startRadar(zID) {
     onChildAdded(msgRef, (snap) => {
         const d = snap.val();
         const line = document.createElement("div");
-        line.innerHTML = `> <b style="color:#fff;">${d.nick}✅</b>: ${d.text}`;
+        line.style.borderLeft = "2px solid #00ff41";
+        line.style.paddingLeft = "5px";
+        line.style.margin = "5px 0";
+        line.innerHTML = `<span style="font-size:10px; opacity:0.5;">[${new Date(d.t).toLocaleTimeString()}]</span><br><b>${d.nick}✅</b>: ${d.text}`;
         document.getElementById("chat-box").appendChild(line);
         document.getElementById("chat-box").scrollTop = document.getElementById("chat-box").scrollHeight;
     });
 }
 
-particlesJS("particles-js", { "particles": { "number": { "value": 40 }, "color": { "value": "#00ff41" }, "shape": { "type": "edge" }, "line_linked": { "enable": true, "distance": 120, "color": "#00ff41", "opacity": 0.15 } } });
+// إعداد الجزيئات بالخلفية السوداء
+particlesJS("particles-js", {
+    "particles": {
+        "number": { "value": 50, "density": { "enable": true, "value_area": 800 } },
+        "color": { "value": "#00ff41" },
+        "shape": { "type": "edge" },
+        "opacity": { "value": 0.2 },
+        "size": { "value": 2 },
+        "line_linked": { "enable": true, "distance": 150, "color": "#00ff41", "opacity": 0.1, "width": 1 },
+        "move": { "enable": true, "speed": 1 }
+    },
+    "retina_detect": true
+});
 </script>
 </body>
 </html>
