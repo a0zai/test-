@@ -1,99 +1,26 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="nl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>A0Z Chat - Clean</title>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.fog.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-
-<style>
-body {
-    margin:0;
-    font-family:'Courier New', monospace;
-    background:#0a0a0a;
-    color:#0ff;
-    overflow:hidden;
-}
-
-#vanta-bg, #particles-js {
-    position:fixed;
-    inset:0;
-    pointer-events:none;
-    z-index:0;
-}
-#vanta-bg { opacity:0.35; }
-
-.container {
-    position:relative;
-    z-index:10;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    height:100vh;
-    padding:20px;
-}
-
-.box {
-    width:360px;
-    max-width:95%;
-    padding:25px;
-    border-radius:12px;
-    background: rgba(5, 5, 20, 0.9);
-    box-shadow: 0 0 25px rgba(0,255,0,0.5);
-    border: 1px solid #00ff66;
-    display:flex;
-    flex-direction:column;
-}
-
-h2 {
-    color:#00ff66;
-    text-align:center;
-    margin-bottom:20px;
-}
-
-input {
-    width:100%;
-    padding:10px;
-    margin-bottom:10px;
-    border-radius:6px;
-    border:1px solid #00ff66;
-    background:#000;
-    color:#00ff66;
-    box-sizing:border-box;
-}
-
-button {
-    width:100%;
-    padding:12px;
-    background:#00ff66;
-    border:none;
-    font-weight:bold;
-    cursor:pointer;
-    color:#000;
-    margin-top:5px;
-    border-radius:6px;
-    transition:0.2s;
-}
-button:hover { background:#00cc44; }
-
-#chat-screen { display:none; flex-direction:column; height:80vh; }
-#chat-box {
-    flex:1;
-    overflow-y:auto;
-    border:1px solid #00ff66;
-    padding:10px;
-    background:#01010a;
-    margin-bottom:10px;
-    color:#fff;
-    border-radius:6px;
-}
-#count { color:#00ff66; text-align:right; font-size:12px; margin-bottom:5px; }
-#room-info { font-size:12px; color:#00ff66; margin-bottom:5px; display:flex; align-items:center; gap:5px; }
-#verified { width:16px; height:16px; background:#00ff66; border-radius:50%; display:inline-block; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A0Z - GPS REALTIME</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.fog.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <style>
+        body { margin:0; font-family:'Courier New', monospace; background:#000; color:#0ff; overflow:hidden; }
+        #vanta-bg, #particles-js { position:fixed; inset:0; z-index:0; pointer-events:none; }
+        .container { position:relative; z-index:10; display:flex; justify-content:center; align-items:center; height:100vh; padding:15px; }
+        .box { width:400px; max-width:95%; padding:25px; border-radius:12px; background: rgba(5, 10, 5, 0.9); box-shadow: 0 0 20px #0f6; border: 1px solid #0f6; display:flex; flex-direction:column; }
+        h2 { color:#0f6; text-align:center; margin-bottom:15px; text-shadow: 0 0 10px #0f6; }
+        input { width:100%; padding:12px; margin-bottom:10px; border-radius:6px; border:1px solid #0f6; background:#000; color:#0f6; box-sizing:border-box; outline:none; font-size:16px; }
+        button { width:100%; padding:12px; background:#0f6; border:none; font-weight:bold; cursor:pointer; color:#000; border-radius:6px; transition:0.3s; font-size:16px; }
+        #chat-screen { display:none; flex-direction:column; height:85vh; }
+        #chat-box { flex:1; overflow-y:auto; border:1px solid #0f6; padding:12px; background:rgba(0, 5, 0, 0.85); margin-bottom:10px; border-radius:6px; color: #fff; }
+        #room-info { font-size:12px; color:#0f6; margin-bottom:8px; border-bottom: 1px solid #0f6; padding-bottom:5px; }
+        #count { color:#666; text-align:right; font-size:10px; }
+        .verified-badge { color:#0f0; font-weight:bold; text-shadow: 0 0 5px #0f0; margin-left:3px; }
+    </style>
 </head>
 <body>
 
@@ -102,19 +29,18 @@ button:hover { background:#00cc44; }
 
 <div class="container">
     <div id="login" class="box">
-        <h2>A0Z Chat 🔥</h2>
-        <input id="postcode" placeholder="Enter ID">
-        <button onclick="join()">Enter</button>
-        <p id="status" style="font-size:12px;color:#00ff66;margin-top:5px;"></p>
+        <h2>A0Z RADAR 🛰️</h2>
+        <input id="username" placeholder="Postcode (7001CB)">
+        <button id="join-btn" onclick="connectGPS()">ACTIVEREN GPS</button>
     </div>
 
     <div id="chat-screen" class="box">
-        <div id="room-info">📍 Locating... <span id="verified"></span></div>
+        <div id="room-info">📍 <span id="coords-display">Searching...</span> | 👥 <span id="online-count">0</span></div>
         <div id="chat-box"></div>
-        <div id="count">Chars left: 99</div>
-        <div style="display:flex;gap:5px;">
-            <input id="msg" placeholder="Type message..." onkeydown="if(event.key==='Enter')send()">
-            <button onclick="send()">Send</button>
+        <div id="count">Limit: 99 chars</div>
+        <div style="display:flex; gap:5px; margin-top:5px;">
+            <input id="msg" placeholder="Bericht..." style="margin-bottom:0;" onkeydown="if(event.key==='Enter')send()">
+            <button onclick="send()" style="width:60px;">SND</button>
         </div>
     </div>
 </div>
@@ -131,112 +57,84 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
+let userLocation = "Unknown";
+let myID = "";
 
-let userLoc="Unknown";
-let blocked = JSON.parse(localStorage.getItem("blocked") || "[]");
+window.connectGPS = () => {
+    myID = document.getElementById("username").value.trim().toUpperCase();
+    if(!myID) return alert("Vul Postcode in!");
 
-window.join = () => {
-    const postcode = document.getElementById("postcode").value.trim();
-    if(!postcode) return alert("Enter ID!");
-    document.getElementById("status").textContent="Requesting GPS...";
+    document.getElementById("join-btn").textContent = "GPS FIXING...";
 
-    navigator.geolocation.getCurrentPosition((p)=>{
-        startChat(postcode, p.coords.latitude, p.coords.longitude);
-    }, ()=>{
-        alert("GPS required!");
-        document.getElementById("status").textContent="GPS error.";
-    }, {timeout:10000});
+    // طلب الـ GPS الحقيقي بـ High Accuracy
+    navigator.geolocation.getCurrentPosition((position) => {
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+        userLocation = `${lat.toFixed(4)},${lon.toFixed(4)}`;
+
+        // تقريب لدرجة واحدة عشرية لعمل "غرفة منطقة" (حوالي 1كم)
+        const roomID = `geo_${lat.toFixed(2)}_${lon.toFixed(2)}`.replace(/\./g, '_');
+        
+        setupChat(roomID, lat, lon);
+    }, (err) => {
+        alert("GPS Error: " + err.message + "\nZet je locatie aan!");
+        location.reload();
+    }, { enableHighAccuracy: true, timeout: 10000 });
 };
 
-function startChat(postcode, lat, lon){
-    userLoc = `${lat.toFixed(4)},${lon.toFixed(4)}`;
-    document.getElementById("login").style.display="none";
-    document.getElementById("chat-screen").style.display="flex";
+function setupChat(roomID, lat, lon) {
+    document.getElementById("login").style.display = "none";
+    document.getElementById("chat-screen").style.display = "flex";
+    document.getElementById("coords-display").textContent = `${lat.toFixed(3)}, ${lon.toFixed(3)}`;
 
-    const roomID = `${lat.toFixed(2)}_${lon.toFixed(2)}`.replace(/\./g, '-');
-    const msgRef = ref(db, `rooms/${roomID}/messages`);
-    const usersRef = ref(db, `rooms/${roomID}/users`);
-    const myPresenceRef = ref(db, `rooms/${roomID}/users/${postcode}`);
+    const msgRef = ref(db, `realtime_rooms/${roomID}/msgs`);
+    const presenceRef = ref(db, `realtime_rooms/${roomID}/online/${myID}`);
 
-    set(myPresenceRef, { active:true, lastSeen: serverTimestamp() });
-    onDisconnect(myPresenceRef).remove();
+    // تواجد أونلاين
+    set(presenceRef, { t: serverTimestamp() });
+    onDisconnect(presenceRef).remove();
 
-    onValue(usersRef, (snap)=>{
-        const count = snap.val() ? Object.keys(snap.val()).length : 0;
-        document.getElementById("room-info").innerHTML = `📍 ${lat.toFixed(2)},${lon.toFixed(2)} | 👥 ${count} online <span id="verified"></span>`;
-        document.getElementById("verified").style.background="#00ff66"; 
+    onValue(ref(db, `realtime_rooms/${roomID}/online`), (s) => {
+        document.getElementById("online-count").textContent = s.val() ? Object.keys(s.val()).length : 0;
     });
 
-    window.send = ()=>{
+    window.send = () => {
         const input = document.getElementById("msg");
         const text = input.value.trim();
-        let today = new Date().toDateString();
-        let used = parseInt(localStorage.getItem("u_"+today)|| "0");
-
         if(!text) return;
-        if(used + text.length > 99) return alert("Char limit 99 reached!");
+        
+        let used = parseInt(localStorage.getItem("u_"+new Date().toDateString()) || "0");
+        if(used + text.length > 99) return alert("Limiet!");
 
-        push(msgRef, { sender: postcode, msg: text, loc:userLoc, t:serverTimestamp() });
-        localStorage.setItem("u_"+today, used + text.length);
-        input.value="";
-        updateCount();
+        push(msgRef, {
+            user: myID,
+            text: text,
+            gps: userLocation, // هون بنبعت الـ GPS الحقيقي مع كل رسالة
+            time: serverTimestamp()
+        });
+
+        localStorage.setItem("u_"+new Date().toDateString(), used + text.length);
+        input.value = "";
     };
 
-    onChildAdded(msgRef, (snap)=>{
+    onChildAdded(msgRef, (snap) => {
         const d = snap.val();
-        if(blocked.includes(d.sender)) return;
-
+        const isVerified = (d.gps && d.gps !== "Unknown");
+        const badge = isVerified ? "<span class='verified-badge'>✅</span>" : "";
+        
         const div = document.createElement("div");
-        div.style.padding="4px";
-        div.innerHTML = `<b style="color:#00ff66; cursor:pointer" onclick="window.blockUser('${d.sender}')">[${d.sender}]</b>: ${d.msg}`;
+        div.style.margin = "5px 0";
+        div.innerHTML = `<span style="color:#0f6; font-weight:bold;">[${d.user}${badge}]:</span> ${d.text}`;
+        
         const cb = document.getElementById("chat-box");
         cb.appendChild(div);
         cb.scrollTop = cb.scrollHeight;
     });
-
-    updateCount();
 }
 
-window.blockUser = (id)=>{
-    if(confirm("Block "+id+"?")){
-        blocked.push(id);
-        localStorage.setItem("blocked", JSON.stringify(blocked));
-        location.reload();
-    }
-};
-
-function updateCount(){
-    let used = parseInt(localStorage.getItem("u_"+new Date().toDateString())||"0");
-    document.getElementById("count").textContent = "Chars left: " + (99 - used);
-}
-
-VANTA.FOG({
-    el: "#vanta-bg",
-    mouseControls: true,
-    touchControls: true,
-    highlightColor: 0x00ffcc,
-    midtoneColor: 0x001122,
-    lowlightColor: 0x000011,
-    baseColor: 0x000000,
-    speed: 1.2
-});
-
-particlesJS("particles-js", {
-    "particles": {
-      "number": { "value": 60, "density": { "enable": true, "value_area": 800 } },
-      "color": { "value": "#00ffcc" },
-      "shape": { "type": "circle" },
-      "opacity": { "value": 0.6, "random": true },
-      "size": { "value": 3, "random": true },
-      "line_linked": { "enable": true, "distance": 120, "color": "#00ff66", "opacity":0.4, "width":1 },
-      "move": { "enable": true, "speed": 2, "direction": "none", "random": true, "straight": false }
-    },
-    "interactivity": {
-      "events": { "onhover": { "enable": true, "mode": "grab" }, "onclick": { "enable": true, "mode": "push" } }
-    },
-    "retina_detect": true
-});
+// تشغيل الخلفية
+VANTA.FOG({ el: "#vanta-bg", highlightColor: 0x00ffcc, midtoneColor: 0x001122, lowlightColor: 0x0, baseColor: 0x0, speed: 1.5 });
+particlesJS("particles-js", { "particles": { "number": { "value": 40 }, "color": { "value": "#0f6" }, "line_linked": { "enable": true, "color": "#0f6", "opacity": 0.2 }, "move": { "speed": 1 } } });
 </script>
-
 </body>
 </html>
