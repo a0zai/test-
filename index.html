@@ -3,38 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>test</title>
+    <title>Verifieerde Buurt-Chat</title>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <style>
-        body { background: #000; color: #0ff; font-family: 'Courier New', monospace; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .box { width: 420px; padding: 25px; border: 1px solid #ff3333; background: rgba(15,0,0,0.95); box-shadow: 0 0 20px rgba(255,51,51,0.4); border-radius: 8px; }
-        input { width: 100%; padding: 12px; margin: 10px 0; background: #050505; border: 1px solid #ff3333; color: #ff3333; box-sizing: border-box; font-size: 16px; outline: none; }
-        input:focus { box-shadow: 0 0 5px #ff3333; }
+        body { background: #000; color: #0ff; font-family: 'Courier New', monospace; margin: 0; overflow: hidden; }
+        
+        #particles-js { position: absolute; width: 100%; height: 100%; z-index: 1; }
+
+        .container { position: relative; z-index: 10; display: flex; justify-content: center; align-items: center; height: 100vh; width: 100%; }
+        .box { width: 420px; padding: 25px; border: 1px solid #ff3333; background: rgba(10, 0, 0, 0.9); box-shadow: 0 0 20px rgba(255, 51, 51, 0.4); border-radius: 8px; }
+        
+        input { width: 100%; padding: 12px; margin: 10px 0; background: #000; border: 1px solid #ff3333; color: #ff3333; box-sizing: border-box; font-size: 16px; outline: none; }
         button { width: 100%; padding: 12px; background: #ff3333; color: #000; border: none; font-weight: bold; cursor: pointer; font-size: 16px; transition: 0.3s; }
         button:hover { background: #cc0000; color: #fff; }
-        #chat-screen { display: none; flex-direction: column; height: 85vh; width: 550px; }
-        #chat-box { flex: 1; overflow-y: auto; border: 1px solid #ff3333; padding: 15px; margin-bottom: 12px; background: #020202; border-radius: 4px; }
-        #room-info { color: #ff3333; font-size: 13px; margin-bottom: 10px; text-transform: capitalize; border-bottom: 1px solid #300; padding-bottom: 5px; }
+
+        #chat-screen { display: none; flex-direction: column; height: 85vh; width: 90%; max-width: 550px; }
+        #chat-box { flex: 1; overflow-y: auto; border: 1px solid #ff3333; padding: 15px; margin-bottom: 5px; background: rgba(0, 0, 0, 0.8); }
+        #room-info { color: #ff3333; font-size: 12px; margin-bottom: 10px; border-bottom: 1px solid #300; }
+        #char-count { color: #666; font-size: 10px; margin-bottom: 10px; }
     </style>
 </head>
 <body>
 
-    <div id="login-screen" class="box">
-        <h2 style="color: #ff3333; text-align: center; letter-spacing: 2px;">NL.LIVE 🇳🇱</h2>
-        <p style="color: #666; font-size: 12px; text-align: center;">Maak direct verbinding met je buren.</p>
-        <input type="text" id="city" placeholder="Stad">
-        <input type="text" id="street" placeholder="Straatnaam">
-        <input type="text" id="postcode" placeholder="Postcode (Identiteit)">
-        <button onclick="joinRoom()">VERBINDEN</button>
-    </div>
+    <div id="particles-js"></div>
 
-    <div id="chat-screen" class="box">
-        <div id="room-info"></div>
-        <div id="chat-box"></div>
-        <div style="display: flex; gap: 8px;">
-            <input type="text" id="msg-input" placeholder="Typ een bericht..." onkeydown="if(event.key==='Enter') sendMessage()">
-            <button onclick="sendMessage()" style="width: 100px;">VERZEND</button>
+    <div class="container">
+        <div id="login-screen" class="box">
+            <h2 style="color: #ff3333; text-align: center;">🇳🇱</h2>
+            <input type="text" id="city" placeholder="Stad">
+            <input type="text" id="street" placeholder="Straatnaam">
+            <input type="text" id="postcode" placeholder="Postcode">
+            <button onclick="joinRoom()">VERBINDEN</button>
+        </div>
+        <div id="chat-screen" class="box">
+            <div id="room-info"></div>
+            <div id="chat-box"></div>
+            <div id="char-count">Tekens over: 99</div>
+            <div style="display: flex; gap: 8px;">
+                <input type="text" id="msg-input" placeholder="Typ bericht..." onkeydown="if(event.key==='Enter') sendMessage()">
+                <button onclick="sendMessage()" style="width: 100px;">VERZEND</button>
+            </div>
         </div>
     </div>
+
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
     import { getDatabase, ref, push, onChildAdded, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
@@ -50,97 +61,75 @@
 
     let userLocation = "Unknown";
     let deviceID = localStorage.getItem('nl_device_id') || btoa(navigator.userAgent + Math.random()).slice(0, 16);
-    localStorage.setItem('nl_device_id', deviceID); // بصمة الجهاز
+    localStorage.setItem('nl_device_id', deviceID);
 
     window.joinRoom = () => {
         const city = document.getElementById('city').value.trim().toLowerCase();
         const street = document.getElementById('street').value.trim().toLowerCase();
         const postcode = document.getElementById('postcode').value.trim().toUpperCase();
 
-        if (!city || !street || !postcode) {
-            alert("Vul a.u.b. alle velden in.");
-            return;
-        }
+        if (!city || !street || !postcode) return alert("Vul alles in.");
 
-        // إجبار طلب الموقع قبل الدخول
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((position) => {
                 userLocation = `${position.coords.latitude.toFixed(4)},${position.coords.longitude.toFixed(4)}`;
-                proceedToChat(city, street, postcode);
-            }, (error) => {
-                alert("GPS is verplicht om deel te nemen aan de buurt-chat!");
-            });
-        } else {
-            alert("Je browser ondersteunt geen GPS.");
+                startChat(city, street, postcode);
+            }, () => alert("GPS is verplicht!"));
         }
     };
 
-    function proceedToChat(city, street, postcode) {
+    function startChat(city, street, postcode) {
         localStorage.setItem('nlLiveUser', JSON.stringify({city, street, postcode}));
         const roomID = `${city}_${street}`.replace(/\s+/g, '');
-        
         document.getElementById('login-screen').style.display = 'none';
         document.getElementById('chat-screen').style.display = 'flex';
-        document.getElementById('room-info').textContent = `📍 ${street} | Stad: ${city}`;
+        document.getElementById('room-info').textContent = `📍 ${street}, ${city}`;
 
         const chatRef = ref(db, `live_chats/${roomID}`);
 
         window.sendMessage = () => {
             const input = document.getElementById('msg-input');
-            const text = input.value.trim();
-            
-            // --- نظام الـ 99 حرف (الليميت اليومي) ---
+            const text = input.value;
             let today = new Date().toDateString();
-            let usedChars = parseInt(localStorage.getItem('chars_used_' + today) || "0");
+            let used = parseInt(localStorage.getItem('used_' + today) || "0");
 
-            if (usedChars + text.length > 99) {
-                alert(`Limiet bereikt! Je hebt nog maar ${99 - usedChars} tekens over voor vandaag.`);
-                return;
-            }
-
-            if (text) {
-                push(chatRef, {
-                    sender: postcode,
-                    message: text,
-                    coords: userLocation,
-                    device: deviceID, // البصمة
-                    time: serverTimestamp()
-                });
-                
-                // تحديث العداد
-                localStorage.setItem('chars_used_' + today, (usedChars + text.length).toString());
+            if (used + text.length > 99) return alert("Limiet bereikt!");
+            
+            if (text.trim()) {
+                push(chatRef, { sender: postcode, message: text, coords: userLocation, time: serverTimestamp() });
+                localStorage.setItem('used_' + today, (used + text.length).toString());
                 input.value = '';
-                updateCharCounter();
+                updateCounter();
             }
         };
 
         onChildAdded(chatRef, (snap) => {
-            const data = snap.val();
-            const container = document.getElementById('chat-box');
-            const msgDiv = document.createElement('div');
-            msgDiv.style.margin = "12px 0";
-            const badge = (data.coords && data.coords !== "Unknown") ? " ☑️" : "";
-            msgDiv.innerHTML = `<span style="color:#ff3333; font-weight:bold;">[${data.sender}${badge}]:</span> <span style="color:#0ff;">${data.message}</span>`;
-            container.appendChild(msgDiv);
-            container.scrollTop = container.scrollHeight;
+            const d = snap.val();
+            const b = (d.coords && d.coords !== "Unknown") ? " ☑️" : "";
+            document.getElementById('chat-box').innerHTML += `<div style="margin:8px 0"><span style="color:#f33">[${d.sender}${b}]:</span> <span style="color:#0ff">${d.message}</span></div>`;
+            document.getElementById('chat-box').scrollTop = document.getElementById('chat-box').scrollHeight;
         });
-        
-        updateCharCounter();
+        updateCounter();
     }
 
-    function updateCharCounter() {
+    function updateCounter() {
         let today = new Date().toDateString();
-        let used = parseInt(localStorage.getItem('chars_used_' + today) || "0");
-        document.getElementById('char-count').textContent = `Tekens over: ${99 - used}`;
+        let used = parseInt(localStorage.getItem('used_' + today) || "0");
+        document.getElementById('char-count').textContent = `Tekens over vandaag: ${99 - used}`;
     }
 
-    // Auto-fill
-    const savedData = JSON.parse(localStorage.getItem('nlLiveUser'));
-    if(savedData) {
-        document.getElementById('city').value = savedData.city;
-        document.getElementById('street').value = savedData.street;
-        document.getElementById('postcode').value = savedData.postcode;
-    }
+    particlesJS("particles-js", {
+        "particles": {
+            "number": { "value": 80 },
+            "color": { "value": "#ff3333" },
+            "shape": { "type": "circle" },
+            "opacity": { "value": 0.5 },
+            "size": { "value": 3 },
+            "line_linked": { "enable": true, "distance": 150, "color": "#ff3333", "opacity": 0.4, "width": 1 },
+            "move": { "enable": true, "speed": 2 }
+        },
+        "interactivity": { "events": { "onhover": { "enable": true, "mode": "repulse" } } }
+    });
 </script>
 </body>
 </html>
