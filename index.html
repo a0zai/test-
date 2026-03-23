@@ -4,6 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>test</title>
+    <style>
+        body { background: #000; color: #0ff; font-family: 'Courier New', monospace; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .box { width: 420px; padding: 25px; border: 1px solid #ff3333; background: rgba(15,0,0,0.95); box-shadow: 0 0 20px rgba(255,51,51,0.4); border-radius: 8px; }
+        input { width: 100%; padding: 12px; margin: 10px 0; background: #050505; border: 1px solid #ff3333; color: #ff3333; box-sizing: border-box; font-size: 16px; outline: none; }
+        input:focus { box-shadow: 0 0 5px #ff3333; }
+        button { width: 100%; padding: 12px; background: #ff3333; color: #000; border: none; font-weight: bold; cursor: pointer; font-size: 16px; transition: 0.3s; }
+        button:hover { background: #cc0000; color: #fff; }
+        #chat-screen { display: none; flex-direction: column; height: 85vh; width: 550px; }
+        #chat-box { flex: 1; overflow-y: auto; border: 1px solid #ff3333; padding: 15px; margin-bottom: 12px; background: #020202; border-radius: 4px; }
+        #room-info { color: #ff3333; font-size: 13px; margin-bottom: 10px; text-transform: capitalize; border-bottom: 1px solid #300; padding-bottom: 5px; }
+    </style>
+</head>
+<body>
+
+    <div id="login-screen" class="box">
+        <h2 style="color: #ff3333; text-align: center; letter-spacing: 2px;">NL.LIVE 🇳🇱</h2>
+        <p style="color: #666; font-size: 12px; text-align: center;">Maak direct verbinding met je buren.</p>
+        <input type="text" id="city" placeholder="Stad">
+        <input type="text" id="street" placeholder="Straatnaam">
+        <input type="text" id="postcode" placeholder="Postcode (Identiteit)">
+        <button onclick="joinRoom()">VERBINDEN</button>
+    </div>
+
+    <div id="chat-screen" class="box">
+        <div id="room-info"></div>
+        <div id="chat-box"></div>
+        <div style="display: flex; gap: 8px;">
+            <input type="text" id="msg-input" placeholder="Typ een bericht..." onkeydown="if(event.key==='Enter') sendMessage()">
+            <button onclick="sendMessage()" style="width: 100px;">VERZEND</button>
+        </div>
+    </div>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
         import { getDatabase, ref, push, onChildAdded, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
@@ -75,37 +106,5 @@ const firebaseConfig = {
             });
         };
     </script>
-    <style>
-        body { background: #000; color: #0ff; font-family: 'Courier New', monospace; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .box { width: 420px; padding: 25px; border: 1px solid #ff3333; background: rgba(15,0,0,0.95); box-shadow: 0 0 20px rgba(255,51,51,0.4); border-radius: 8px; }
-        input { width: 100%; padding: 12px; margin: 10px 0; background: #050505; border: 1px solid #ff3333; color: #ff3333; box-sizing: border-box; font-size: 16px; outline: none; }
-        input:focus { box-shadow: 0 0 5px #ff3333; }
-        button { width: 100%; padding: 12px; background: #ff3333; color: #000; border: none; font-weight: bold; cursor: pointer; font-size: 16px; transition: 0.3s; }
-        button:hover { background: #cc0000; color: #fff; }
-        #chat-screen { display: none; flex-direction: column; height: 85vh; width: 550px; }
-        #chat-box { flex: 1; overflow-y: auto; border: 1px solid #ff3333; padding: 15px; margin-bottom: 12px; background: #020202; border-radius: 4px; }
-        #room-info { color: #ff3333; font-size: 13px; margin-bottom: 10px; text-transform: capitalize; border-bottom: 1px solid #300; padding-bottom: 5px; }
-    </style>
-</head>
-<body>
-
-    <div id="login-screen" class="box">
-        <h2 style="color: #ff3333; text-align: center; letter-spacing: 2px;">NL.LIVE 🇳🇱</h2>
-        <p style="color: #666; font-size: 12px; text-align: center;">Maak direct verbinding met je buren.</p>
-        <input type="text" id="city" placeholder="Stad">
-        <input type="text" id="street" placeholder="Straatnaam">
-        <input type="text" id="postcode" placeholder="Postcode (Identiteit)">
-        <button onclick="joinRoom()">VERBINDEN</button>
-    </div>
-
-    <div id="chat-screen" class="box">
-        <div id="room-info"></div>
-        <div id="chat-box"></div>
-        <div style="display: flex; gap: 8px;">
-            <input type="text" id="msg-input" placeholder="Typ een bericht..." onkeydown="if(event.key==='Enter') sendMessage()">
-            <button onclick="sendMessage()" style="width: 100px;">VERZEND</button>
-        </div>
-    </div>
-
 </body>
 </html>
