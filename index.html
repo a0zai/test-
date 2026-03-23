@@ -225,7 +225,7 @@ html, body {
 <!-- GLOBAL TIMER -->
 <div id="globalTimerContainer" class="fade-in-fog">
   <canvas id="globalTimerCanvas" width="260" height="260"></canvas>
-  <div id="globalTimerText">0:03</div>
+  <div id="globalTimerText">3:00</div>
   <button id="resetTimerButton"></button>
 </div>
 
@@ -260,7 +260,7 @@ html, body {
     <button id="clearButton">Clear</button>
   </div>
 </div>
-<audio id="ritualBass" src="seensee.mp3"></audio>
+<audio id="ritualBass" src="https://files.catbox.moe/0xuz1x.mp3"></audio>
 <!-- 3D RED SPHERE -->
 <script>
 const container = document.getElementById("threeSphere");
@@ -336,7 +336,7 @@ let visitorId = Math.random().toString(36).substring(2,9);
 let visitorRef = ref(db,"viewers/"+visitorId);
 let torchTrack = null;
 let interval;
-const totalDuration = 3;
+const totalDuration = 180;
 
 // ====== Viewers Handling ======
 set(visitorRef,{ name:"Guest" });
@@ -454,15 +454,8 @@ function startDoubleFlashSequence(durationMs = 120000) {
 }
 
 function startFlashAfterCountdown() {
-    const audio = document.getElementById("ritualBass");
-    if (audio) {
-        audio.play().catch(e => console.log("المتصفح طالب لمسة شاشة أولاً"));
-    }
-    if (torchTrack) {
-        flashSequence();
-    } else {
-        console.warn("Torch not ready!");
-    }
+    if (!torchTrack) return console.warn("Torch not ready!");
+    flashSequence();
     startDoubleFlashSequence();
 }
 
