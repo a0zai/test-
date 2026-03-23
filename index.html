@@ -3,60 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A0Z - GHOST TERMINAL</title>
+    <title>A0Z - FINAL RADAR</title>
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
     <style>
         :root { --neon: #00ff41; --bg: #000000; }
+        body, html { margin:0; padding:0; width:100%; height:100%; background: var(--bg); font-family:'Courier New', monospace; overflow:hidden; color: var(--neon); }
         
-        body, html { margin:0; padding:0; width:100%; height:100%; background: var(--bg); font-family:'Courier New', monospace; overflow:hidden; }
-        
-        /* تأثير الشاشة القديمة */
+        /* طبقة الشاشة القديمة */
         body::before {
-            content: " "; display: block; position: absolute; top: 0; left: 0; bottom: 0; right: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-            z-index: 20; background-size: 100% 2px, 3px 100%; pointer-events: none;
+            content: " "; display: block; position: absolute; inset: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            z-index: 100; background-size: 100% 2px, 3px 100%; pointer-events: none;
         }
 
-        #particles-js { position:fixed; width:100%; height:100%; background-color: #000; z-index:1; }
-        
-        .container { position:relative; z-index:30; display:flex; justify-content:center; align-items:center; height:100vh; }
+        #particles-js { position:fixed; inset:0; z-index:1; background: #000; }
+        .container { position:relative; z-index:10; display:flex; justify-content:center; align-items:center; height:100vh; }
         
         .box { 
-            width:420px; max-width:92%; padding:30px; 
-            border: 2px solid var(--neon); background: rgba(0, 10, 0, 0.9);
-            box-shadow: 0 0 20px rgba(0, 255, 65, 0.2); 
-            text-align: center; box-sizing: border-box;
+            width:400px; max-width:95%; height: 85vh; padding:15px; 
+            border: 2px solid var(--neon); background: rgba(0, 5, 0, 0.9);
+            display:flex; flex-direction:column; box-sizing: border-box;
         }
 
-        h2 { text-transform: uppercase; letter-spacing: 5px; color: var(--neon); text-shadow: 0 0 10px var(--neon); margin-bottom: 20px; }
-        
-        #chat-screen { display:none; flex-direction:column; height:85vh; width:480px; }
-        
         #chat-box { 
-            flex:1; overflow-y:auto; border: 1px solid var(--neon); padding:15px; 
-            background: rgba(0, 0, 0, 0.8); margin-bottom:10px; text-align:left; 
-            font-size:14px; color: var(--neon); scroll-behavior: smooth;
+            flex:1; overflow-y:auto; border: 1px solid #004411; padding:10px; 
+            background: #000; margin: 10px 0; font-size:13px; scroll-behavior: smooth;
         }
 
-        #char-count { color: #ff3333; font-size: 11px; text-align: right; margin-bottom: 5px; font-weight: bold; }
+        .header-bar { display:flex; justify-content:space-between; font-size:11px; border-bottom:1px solid var(--neon); padding-bottom:5px; }
+        #online-count { color: #fff; font-weight: bold; }
+        #char-limit { color: #ff3333; font-size: 10px; text-align: right; }
 
-        input { 
-            width:100%; padding:12px; background:transparent; border:1px solid var(--neon); 
-            color:var(--neon); outline:none; font-family:inherit; box-sizing: border-box; margin-bottom: 10px;
-        }
-
-        button { 
-            width:100%; padding:12px; background:var(--neon); color:#000; 
-            border:none; font-weight:bold; cursor:pointer; text-transform:uppercase;
-            transition: 0.3s;
-        }
-        button:hover { background: #fff; box-shadow: 0 0 15px var(--neon); }
-        button:disabled { background: #004411; color: #000; cursor: default; }
-
-        .sys-text { font-size: 10px; color: #fff; opacity: 0.5; margin: 10px 0; }
+        input { width:100%; padding:10px; background:transparent; border:1px solid var(--neon); color:var(--neon); font-family:inherit; box-sizing: border-box; }
+        button { padding:10px 20px; background:var(--neon); color:#000; border:none; font-weight:bold; cursor:pointer; }
         
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-thumb { background: var(--neon); }
+        .msg-line { margin-bottom: 8px; border-left: 2px solid var(--neon); padding-left: 5px; }
+        .timestamp { font-size: 9px; opacity: 0.5; }
     </style>
 </head>
 <body>
@@ -64,23 +46,22 @@
 <div id="particles-js"></div>
 
 <div class="container">
-    <div id="login" class="box">
-        <h2>A0Z V5</h2>
-        <p id="instruction" class="sys-text">ESTABLISHING SECURE CONNECTION...</p>
-        <input id="user-input" placeholder="NICKNAME..." maxlength="12">
-        <button id="boot-btn" onclick="initSystem()">INITIALIZE</button>
+    <div id="login-ui" class="box" style="height:auto;">
+        <h2 style="text-align:center; letter-spacing:3px;">SYSTEM BOOT</h2>
+        <input id="nick-input" placeholder="NICKNAME..." maxlength="12">
+        <button onclick="boot()">INITIALIZE</button>
     </div>
 
-    <div id="chat-screen" class="box">
-        <div style="display:flex; justify-content:space-between; font-size:10px; border-bottom:1px solid var(--neon); padding-bottom:5px; margin-bottom:8px;">
-            <span id="zone-id">ZONE: SCANNING...</span>
-            <span id="online-val">👥 0 ONLINE</span>
+    <div id="chat-ui" class="box" style="display:none;">
+        <div class="header-bar">
+            <span id="zone-display">Z: SCANNING</span>
+            <span id="online-count">👥 0 ONLINE</span>
         </div>
         <div id="chat-box"></div>
-        <div id="char-count">LIMIT: 33 LEFT</div>
+        <div id="char-limit">33 LEFT</div>
         <div style="display:flex; gap:5px;">
-            <input id="msg-in" placeholder="TYPE..." onkeydown="if(event.key==='Enter')sendMsg()" maxlength="33" style="margin-bottom:0;">
-            <button onclick="sendMsg()" style="width:70px;">SND</button>
+            <input id="msg-input" placeholder="TYPE..." maxlength="33" onkeydown="if(event.key==='Enter')send()">
+            <button onclick="send()">SND</button>
         </div>
     </div>
 </div>
@@ -89,113 +70,77 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
 import { getDatabase, ref, push, onChildAdded, serverTimestamp, onValue, onDisconnect, set, get } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
 
-const firebaseConfig = { 
-    apiKey: "AIzaSyA7Pu0DJOWmdoDYUUVP1J9aqhxh4f3wyfA", 
-    projectId: "a0zai-56c3a",
-    databaseURL: "https://a0zai-56c3a-default-rtdb.europe-west1.firebasedatabase.app" 
-};
-
+const firebaseConfig = { apiKey: "AIzaSyA7Pu0DJOWmdoDYUUVP1J9aqhxh4f3wyfA", projectId: "a0zai-56c3a", databaseURL: "https://a0zai-56c3a-default-rtdb.europe-west1.firebasedatabase.app" };
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-// قفل الاسم للجهاز
-let savedNick = localStorage.getItem("a0z_v5_nick");
-if(savedNick) {
-    document.getElementById("user-input").value = savedNick;
-    document.getElementById("user-input").disabled = true;
-    document.getElementById("instruction").textContent = "ID VERIFIED. RE-LINKING...";
-    document.getElementById("boot-btn").textContent = "CONNECT";
+let myNick = localStorage.getItem("a0z_nick_v6");
+if(myNick) {
+    document.getElementById("nick-input").value = myNick;
+    document.getElementById("nick-input").disabled = true;
 }
 
-window.initSystem = () => {
-    let nick = "";
-    if(savedNick) {
-        nick = savedNick;
-    } else {
-        nick = document.getElementById("user-input").value.trim().toUpperCase();
-        if (!/^[A-Z0-9]+$/.test(nick)) return alert("ERROR: ALPHANUMERIC ONLY.");
-        localStorage.setItem("a0z_v5_nick", nick);
-    }
+window.boot = () => {
+    const nick = document.getElementById("nick-input").value.trim().toUpperCase();
+    if(!/^[A-Z0-9]+$/.test(nick)) return alert("INVALID ID");
+    
+    localStorage.setItem("a0z_nick_v6", nick);
+    myNick = nick;
 
-    document.getElementById("boot-btn").disabled = true;
-    document.getElementById("instruction").textContent = "LOCKING GPS COORDINATES...";
-
-    navigator.geolocation.getCurrentPosition(async (p) => {
-        const lat = p.coords.latitude;
-        const lon = p.coords.longitude;
-        // مربع 366 متر
-        const zID = `Z-${(Math.round(lat / 0.0033) * 0.0033).toFixed(4)}_${(Math.round(lon / 0.0033) * 0.0033).toFixed(4)}`.replace(/\./g, '');
-        
-        startChat(zID, nick);
-    }, () => {
-        alert("CRITICAL: GPS REQUIRED.");
-        location.reload();
-    }, { enableHighAccuracy: true });
+    navigator.geolocation.getCurrentPosition((p) => {
+        const zID = `Z-${(Math.round(p.coords.latitude / 0.0033) * 0.0033).toFixed(4)}_${(Math.round(p.coords.longitude / 0.0033) * 0.0033).toFixed(4)}`.replace(/\./g, '');
+        startRadar(zID);
+    }, () => alert("GPS REQUIRED"), { enableHighAccuracy: true });
 };
 
-function startChat(zID, nick) {
-    document.getElementById("login").style.display = "none";
-    document.getElementById("chat-screen").style.display = "flex";
-    document.getElementById("zone-id").textContent = `Z:${zID} | ID:${nick}`;
+function startRadar(zID) {
+    document.getElementById("login-ui").style.display = "none";
+    document.getElementById("chat-ui").style.display = "flex";
+    document.getElementById("zone-display").textContent = `Z: ${zID}`;
 
-    const msgRef = ref(db, `v5_final/${zID}/msgs`);
-    const presenceRef = ref(db, `v5_final/${zID}/online/${nick}`);
-    const onlineListRef = ref(db, `v5_final/${zID}/online`);
+    const msgRef = ref(db, `v6/${zID}/msgs`);
+    const onlineRef = ref(db, `v6/${zID}/online/${myNick}`);
+    const onlineList = ref(db, `v6/${zID}/online`);
 
-    set(presenceRef, { status: "online", t: serverTimestamp() });
-    onDisconnect(presenceRef).remove();
-
-    onValue(onlineListRef, (snapshot) => {
-        const count = snapshot.val() ? Object.keys(snapshot.val()).length : 0;
-        document.getElementById("online-val").textContent = `👥 ${count} ONLINE`;
+    // إصلاح عداد المشاهدة
+    set(onlineRef, serverTimestamp());
+    onDisconnect(onlineRef).remove();
+    onValue(onlineList, (s) => {
+        document.getElementById("online-count").textContent = `👥 ${s.val() ? Object.keys(s.val()).length : 0} ONLINE`;
     });
 
+    // عداد الـ 33 حرف
     const today = new Date().toISOString().slice(0, 10).replace(/-/g, '');
-    const usageRef = ref(db, `v5_usage/${nick}/${today}`);
-
-    onValue(usageRef, (snap) => {
-        let used = snap.val() || 0;
-        document.getElementById("char-count").textContent = `LIMIT: ${33 - used} LEFT`;
+    const usageRef = ref(db, `v6_usage/${myNick}/${today}`);
+    onValue(usageRef, (s) => {
+        document.getElementById("char-limit").textContent = `${33 - (s.val() || 0)} LEFT`;
     });
 
-    window.sendMsg = () => {
-        const input = document.getElementById("msg-in");
-        const val = input.value.trim();
-        if(!val) return;
-        get(usageRef).then((snap) => {
-            let used = snap.val() || 0;
-            if (used + val.length > 33) return alert("LIMIT EXCEEDED.");
-            push(msgRef, { nick: nick, text: val, t: serverTimestamp() });
-            set(usageRef, used + val.length);
-            input.value = "";
+    window.send = () => {
+        const inp = document.getElementById("msg-input");
+        const txt = inp.value.trim();
+        if(!txt) return;
+
+        get(usageRef).then((s) => {
+            let used = s.val() || 0;
+            if(used + txt.length > 33) return alert("LIMIT REACHED");
+            push(msgRef, { n: myNick, m: txt, t: serverTimestamp() });
+            set(usageRef, used + txt.length);
+            inp.value = "";
         });
     };
 
-    onChildAdded(msgRef, (snap) => {
-        const d = snap.val();
-        const line = document.createElement("div");
-        line.style.borderLeft = "2px solid #00ff41";
-        line.style.paddingLeft = "5px";
-        line.style.margin = "5px 0";
-        line.innerHTML = `<span style="font-size:10px; opacity:0.5;">[${new Date(d.t).toLocaleTimeString()}]</span><br><b>${d.nick}✅</b>: ${d.text}`;
-        document.getElementById("chat-box").appendChild(line);
+    onChildAdded(msgRef, (s) => {
+        const d = s.val();
+        const div = document.createElement("div");
+        div.className = "msg-line";
+        div.innerHTML = `<span class="timestamp">[${new Date(d.t).toLocaleTimeString()}]</span><br><b>${d.n}✅</b>: ${d.m}`;
+        document.getElementById("chat-box").appendChild(div);
         document.getElementById("chat-box").scrollTop = document.getElementById("chat-box").scrollHeight;
     });
 }
 
-// إعداد الجزيئات بالخلفية السوداء
-particlesJS("particles-js", {
-    "particles": {
-        "number": { "value": 50, "density": { "enable": true, "value_area": 800 } },
-        "color": { "value": "#00ff41" },
-        "shape": { "type": "edge" },
-        "opacity": { "value": 0.2 },
-        "size": { "value": 2 },
-        "line_linked": { "enable": true, "distance": 150, "color": "#00ff41", "opacity": 0.1, "width": 1 },
-        "move": { "enable": true, "speed": 1 }
-    },
-    "retina_detect": true
-});
+particlesJS("particles-js", { "particles": { "number": { "value": 40 }, "color": { "value": "#00ff41" }, "shape": { "type": "edge" }, "opacity": 0.2, "line_linked": { "enable": true, "color": "#00ff41", "opacity": 0.1 } } });
 </script>
 </body>
 </html>
