@@ -1,140 +1,174 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>a0z</title>
-    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-    <style>
-        body { background: #000; color: #0ff; font-family: 'Courier New', monospace; margin: 0; overflow: hidden; }
-        #particles-js { position: absolute; width: 100%; height: 100%; z-index: 1; }
-        .container { position: relative; z-index: 10; display: flex; justify-content: center; align-items: center; height: 100vh; width: 100%; }
-        .box { width: 400px; padding: 25px; border: 1px solid #ff3333; background: rgba(10, 0, 0, 0.95); box-shadow: 0 0 15px #f33; border-radius: 8px; text-align: center; }
-        input { width: 100%; padding: 12px; margin: 10px 0; background: #000; border: 1px solid #ff3333; color: #ff3333; box-sizing: border-box; font-size: 16px; outline: none; }
-        button { width: 100%; padding: 12px; background: #ff3333; color: #000; border: none; font-weight: bold; cursor: pointer; font-size: 16px; }
-        #chat-screen { display: none; flex-direction: column; height: 85vh; width: 95%; max-width: 500px; }
-        #chat-box { flex: 1; overflow-y: auto; border: 1px solid #ff3333; padding: 15px; margin-bottom: 5px; background: rgba(0, 0, 0, 0.9); text-align: left; }
-        #char-count { color: #666; font-size: 11px; margin: 5px 0; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A0Z</title>
+
+<script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
+
+<style>
+body { background:#000; color:#0ff; font-family:monospace; margin:0; overflow:hidden;}
+#particles-js { position:absolute; width:100%; height:100%; z-index:1;}
+.container { position:relative; z-index:10; display:flex; justify-content:center; align-items:center; height:100vh;}
+.box { width:400px; padding:20px; border:1px solid #f33; background:#100; box-shadow:0 0 15px #f33;}
+button { width:100%; padding:12px; background:#f33; border:none; font-weight:bold; cursor:pointer;}
+#chat-screen { display:none; flex-direction:column; height:85vh;}
+#chat-box { flex:1; overflow-y:auto; border:1px solid #f33; padding:10px; background:#000;}
+input { width:100%; padding:10px; background:#000; border:1px solid #f33; color:#f33;}
+</style>
 </head>
+
 <body>
-    <div id="particles-js"></div>
-    <div class="container">
-        <div id="login-screen" class="box">
-            <h2 style="color: #ff3333;">A🇳🇱Z</h2>
-            <input type="text" id="city" placeholder="Stad">
-            <input type="text" id="street" placeholder="Straatnaam">
-            <input type="text" id="postcode" placeholder="Postcode">
-            <button id="entry-btn" onclick="joinRoom()">VERBINDEN</button>
-        </div>
-        <div id="chat-screen" class="box">
-            <div id="room-info" style="color:#f33; font-size:12px; margin-bottom:10px;"></div>
-            <div id="chat-box"></div>
-            <div id="char-count">Tekens over: 99</div>
-            <div style="display: flex; gap: 5px;">
-                <input type="text" id="msg-input" placeholder="Bericht..." onkeydown="if(event.key==='Enter') sendMessage()">
-                <button onclick="sendMessage()" style="width: 80px;">SND</button>
-            </div>
-        </div>
-    </div>
+
+<div id="particles-js"></div>
+
+<div class="container">
+<div id="login" class="box">
+<h3 style="color:#f33;">A0Z 🔥</h3>
+<input id="postcode" placeholder="Postcode">
+<button onclick="join()">ENTER</button>
+<p id="status" style="font-size:12px;color:#888;"></p>
+</div>
+
+<div id="chat-screen" class="box">
+<div id="room-info" style="color:#f33;font-size:12px;"></div>
+<div id="chat-box"></div>
+<div id="count">99</div>
+<div style="display:flex;gap:5px;">
+<input id="msg" placeholder="msg..." onkeydown="if(event.key==='Enter')send()">
+<button onclick="send()">SND</button>
+</div>
+</div>
+</div>
 
 <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-    import { getDatabase, ref, push, onChildAdded, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+import { 
+ getDatabase, ref, push, onChildAdded, serverTimestamp,
+ onDisconnect, set, onValue
+} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
 
-    const firebaseConfig = { 
-        apiKey: "AIzaSyA7Pu0DJOWmdoDYUUVP1J9aqhxh4f3wyfA", 
-        projectId: "a0zai-56c3a",
-        databaseURL: "https://a0zai-56c3a-default-rtdb.europe-west1.firebasedatabase.app" 
-    };
+const app = initializeApp({
+ apiKey:"AIzaSy...",
+ projectId:"a0zai-56c3a",
+ databaseURL:"https://a0zai-56c3a-default-rtdb.europe-west1.firebasedatabase.app"
+});
 
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-    let userLoc = "Unknown";
+const db = getDatabase(app);
 
-    window.joinRoom = () => {
-        const city = document.getElementById('city').value.trim().toLowerCase();
-        const street = document.getElementById('street').value.trim().toLowerCase();
-        const postcode = document.getElementById('postcode').value.trim().toUpperCase();
+let roomRef, userLoc="Unknown";
+let blocked = JSON.parse(localStorage.getItem("blocked") || "[]");
 
-        if (!city || !street || !postcode) return alert("Vul alles in!");
+window.join = () => {
+ const postcode = document.getElementById("postcode").value.trim();
+ if(!postcode) return alert("postcode!");
 
-        const btn = document.getElementById('entry-btn');
-        btn.textContent = "VERIFICEREN...";
-        btn.disabled = true;
+ document.getElementById("status").textContent="Getting location...";
 
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition((p) => {
-                userLoc = `${p.coords.latitude.toFixed(4)},${p.coords.longitude.toFixed(4)}`;
-                completeEntry(city, street, postcode);
-            }, () => {
-                completeEntry(city, street, postcode);
-            }, { enableHighAccuracy: true, timeout: 3000 });
-        } else {
-            completeEntry(city, street, postcode);
-        }
-    };
+ navigator.geolocation.getCurrentPosition((p)=>{
 
-    function completeEntry(city, street, postcode) {
-        localStorage.setItem('nlLiveUser', JSON.stringify({city, street, postcode}));
-        const roomID = `${city}_${street}`.replace(/\s+/g, '');
-        document.getElementById('login-screen').style.display = 'none';
-        document.getElementById('chat-screen').style.display = 'flex';
-        document.getElementById('room-info').textContent = `📍 ${street}, ${city}`;
+  const lat = p.coords.latitude;
+  const lon = p.coords.longitude;
 
-        const chatRef = ref(db, `live_chats/${roomID}`);
+  userLoc = `${lat.toFixed(4)},${lon.toFixed(4)}`;
 
-        window.sendMessage = () => {
-            const input = document.getElementById('msg-input');
-            const text = input.value.trim();
-            let today = new Date().toDateString();
-            let used = parseInt(localStorage.getItem('u_' + today) || "0");
+  startChat(postcode, lat, lon);
 
-            if (!text) return;
-            if (used + text.length > 99) return alert("Limiet 99 bereikt!");
+ }, ()=> alert("GPS error"), {timeout:10000});
+};
 
-            push(chatRef, { sender: postcode, message: text, loc: userLoc, time: serverTimestamp() });
-            localStorage.setItem('u_' + today, (used + text.length).toString());
-            input.value = '';
-            updateCount();
-        };
+function startChat(postcode, lat, lon){
 
-        onChildAdded(chatRef, (snap) => {
-            const d = snap.val();
-            const b = (d.loc && d.loc !== "Unknown") ? " <span style='color:#0f0; text-shadow: 0 0 5px #0f0;'>✅</span>" : "";
-            const chatBox = document.getElementById('chat-box');
-            const msgDiv = document.createElement('div');
-            msgDiv.style.margin = "8px 0";
-            msgDiv.innerHTML = `<span style="color:#f33; font-weight:bold;">[${d.sender}${b}]:</span> <span style="color:#0ff">${d.message}</span>`;
-            chatBox.appendChild(msgDiv);
-            chatBox.scrollTop = chatBox.scrollHeight;
-        });
-        updateCount();
-    }
+ document.getElementById("login").style.display="none";
+ document.getElementById("chat-screen").style.display="flex";
 
-    function updateCount() {
-        let today = new Date().toDateString();
-        let used = parseInt(localStorage.getItem('u_' + today) || "0");
-        const countElem = document.getElementById('char-count');
-        if (countElem) countElem.textContent = `Tekens over: ${99 - used}`;
-    }
+ const roomID = `${lat.toFixed(3)}_${lon.toFixed(3)}`;
+ roomRef = ref(db, "rooms/"+roomID);
 
-    window.addEventListener('load', () => {
-        const saved = JSON.parse(localStorage.getItem('nlLiveUser'));
-        if(saved) {
-            document.getElementById('city').value = saved.city;
-            document.getElementById('street').value = saved.street;
-            document.getElementById('postcode').value = saved.postcode;
-        }
-        particlesJS("particles-js", {
-            "particles": {
-                "number": { "value": 50 },
-                "color": { "value": "#ff3333" },
-                "line_linked": { "enable": true, "color": "#ff3333" },
-                "move": { "enable": true, "speed": 1.5 }
-            }
-        });
-    });
+ document.getElementById("room-info").textContent =
+ `📍 ${lat.toFixed(3)}, ${lon.toFixed(3)}`;
+
+ // 👥 presence
+ const userRef = ref(db, "rooms/"+roomID+"/users/"+postcode);
+
+ set(userRef, true);
+ onDisconnect(userRef).remove();
+
+ const usersRef = ref(db, "rooms/"+roomID+"/users");
+
+ onValue(usersRef, (snap)=>{
+  const count = snap.val() ? Object.keys(snap.val()).length : 0;
+  document.getElementById("room-info").textContent =
+  `📍 ${lat.toFixed(3)}, ${lon.toFixed(3)} | 👥 ${count}`;
+ });
+
+ // 💬 send
+ window.send = ()=>{
+  const input = document.getElementById("msg");
+  const text = input.value.trim();
+
+  let today = new Date().toDateString();
+  let used = parseInt(localStorage.getItem("u_"+today)||"0");
+
+  if(!text) return;
+  if(used+text.length>99) return alert("limit!");
+
+  push(roomRef,{
+   sender:postcode,
+   msg:text,
+   loc:userLoc,
+   t:serverTimestamp()
+  });
+
+  localStorage.setItem("u_"+today, used+text.length);
+  input.value="";
+  updateCount();
+ };
+
+ // 📩 receive
+ onChildAdded(roomRef,(snap)=>{
+  const d = snap.val();
+
+  if(blocked.includes(d.sender)) return;
+
+  const ok = d.loc!=="Unknown" ? "✅":"";
+
+  const div = document.createElement("div");
+  div.style.margin="5px 0";
+
+  div.innerHTML = `
+  <span style="color:#f33;cursor:pointer;" onclick="blockUser('${d.sender}')">
+  [${d.sender} ${ok}]
+  </span>: ${d.msg}
+  `;
+
+  document.getElementById("chat-box").appendChild(div);
+ });
+
+ updateCount();
+}
+
+// 🚫 block
+window.blockUser = (id)=>{
+ if(!confirm("Block "+id+" ?")) return;
+
+ blocked.push(id);
+ localStorage.setItem("blocked", JSON.stringify(blocked));
+ alert("Blocked 💀");
+};
+
+// 🔢 count
+function updateCount(){
+ let used = parseInt(localStorage.getItem("u_"+new Date().toDateString())||"0");
+ document.getElementById("count").textContent = 99-used;
+}
+
+// 🌌 particles
+particlesJS("particles-js",{
+ particles:{number:{value:40},color:{value:"#f33"},move:{speed:1}}
+});
 </script>
+
 </body>
 </html>
