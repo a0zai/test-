@@ -5,8 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>A0Z</title>
 
- <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.fog.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.fog.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 
 <style>
 body { background:#000; color:#0ff; font-family:monospace; margin:0; overflow:hidden;}
@@ -18,165 +19,150 @@ body { background:#000; color:#0ff; font-family:monospace; margin:0; overflow:hi
     filter: saturate(140%) contrast(115%);
     pointer-events: none;
 }
-    #particles-js {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      z-index: 0;
-      pointer-events: none;
-    }
+#particles-js {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
 .container { position:relative; z-index:10; display:flex; justify-content:center; align-items:center; height:100vh;}
-.box { width:400px; padding:20px; border:1px solid #f33; background:#100; box-shadow:0 0 15px #f33;}
-button { width:100%; padding:12px; background:#f33; border:none; font-weight:bold; cursor:pointer;}
+.box { width:400px; padding:20px; border:1px solid #f33; background:rgba(16, 0, 0, 0.9); box-shadow:0 0 15px #f33;}
+button { width:100%; padding:12px; background:#f33; border:none; font-weight:bold; cursor:pointer; color:#000;}
 #chat-screen { display:none; flex-direction:column; height:85vh;}
-#chat-box { flex:1; overflow-y:auto; border:1px solid #f33; padding:10px; background:#000;}
-input { width:100%; padding:10px; background:#000; border:1px solid #f33; color:#f33;}
+#chat-box { flex:1; overflow-y:auto; border:1px solid #f33; padding:10px; background:#000; margin-bottom:10px;}
+input { width:100%; padding:10px; background:#000; border:1px solid #f33; color:#f33; box-sizing: border-box;}
+#count { color: #f33; text-align: right; font-size: 12px; margin-bottom: 5px;}
 </style>
 </head>
 
 <body>
 
 <div id="vanta-bg"></div>
-  <div id="particles-js"></div>
-<div class="container">
-<div id="login" class="box">
-<h3 style="color:#f33;">A0Z 🔥</h3>
-<input id="postcode" placeholder="Postcode">
-<button onclick="join()">ENTER</button>
-<p id="status" style="font-size:12px;color:#888;"></p>
-</div>
+<div id="particles-js"></div>
 
-<div id="chat-screen" class="box">
-<div id="room-info" style="color:#f33;font-size:12px;"></div>
-<div id="chat-box"></div>
-<div id="count">99</div>
-<div style="display:flex;gap:5px;">
-<input id="msg" placeholder="msg..." onkeydown="if(event.key==='Enter')send()">
-<button onclick="send()">SND</button>
-</div>
-</div>
+<div class="container">
+    <div id="login" class="box">
+        <h3 style="color:#f33;">A0Z 🔥</h3>
+        <input id="postcode" placeholder="Postcode" style="margin-bottom:10px;">
+        <button onclick="join()">ENTER</button>
+        <p id="status" style="font-size:12px;color:#888; margin-top:10px;"></p>
+    </div>
+
+    <div id="chat-screen" class="box">
+        <div id="room-info" style="color:#f33;font-size:12px; margin-bottom:5px;"></div>
+        <div id="chat-box"></div>
+        <div id="count">99</div>
+        <div style="display:flex;gap:5px;">
+            <input id="msg" placeholder="msg..." onkeydown="if(event.key==='Enter')send()">
+            <button onclick="send()" style="width:70px;">SND</button>
+        </div>
+    </div>
 </div>
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
 import { 
  getDatabase, ref, push, onChildAdded, serverTimestamp,
  onDisconnect, set, onValue
-} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+} from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
 
- const firebaseConfig = { 
-        apiKey: "AIzaSyA7Pu0DJOWmdoDYUUVP1J9aqhxh4f3wyfA", 
-        projectId: "a0zai-56c3a",
-        databaseURL: "https://a0zai-56c3a-default-rtdb.europe-west1.firebasedatabase.app" 
-    };
+const firebaseConfig = { 
+    apiKey: "AIzaSyA7Pu0DJOWmdoDYUUVP1J9aqhxh4f3wyfA", 
+    projectId: "a0zai-56c3a",
+    databaseURL: "https://a0zai-56c3a-default-rtdb.europe-west1.firebasedatabase.app" 
+};
 
+const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 let roomRef, userLoc="Unknown";
 let blocked = JSON.parse(localStorage.getItem("blocked") || "[]");
 
 window.join = () => {
- const postcode = document.getElementById("postcode").value.trim();
- if(!postcode) return alert("postcode!");
+    const postcode = document.getElementById("postcode").value.trim();
+    if(!postcode) return alert("postcode!");
 
- document.getElementById("status").textContent="Getting location...";
+    document.getElementById("status").textContent="Getting location...";
 
- navigator.geolocation.getCurrentPosition((p)=>{
-
-  const lat = p.coords.latitude;
-  const lon = p.coords.longitude;
-
-  userLoc = `${lat.toFixed(4)},${lon.toFixed(4)}`;
-
-  startChat(postcode, lat, lon);
-
- }, ()=> alert("GPS error"), {timeout:10000});
+    navigator.geolocation.getCurrentPosition((p)=>{
+        const lat = p.coords.latitude;
+        const lon = p.coords.longitude;
+        userLoc = `${lat.toFixed(4)},${lon.toFixed(4)}`;
+        startChat(postcode, lat, lon);
+    }, ()=> {
+        alert("GPS error - Using default");
+        startChat(postcode, 0, 0);
+    }, {timeout:10000});
 };
 
 function startChat(postcode, lat, lon){
+    document.getElementById("login").style.display="none";
+    document.getElementById("chat-screen").style.display="flex";
 
- document.getElementById("login").style.display="none";
- document.getElementById("chat-screen").style.display="flex";
+    const roomID = `${lat.toFixed(1)}_${lon.toFixed(1)}`;
+    roomRef = ref(db, "rooms/"+roomID+"/messages");
 
- const roomID = `${lat.toFixed(3)}_${lon.toFixed(3)}`;
- roomRef = ref(db, "rooms/"+roomID);
+    const userRef = ref(db, "rooms/"+roomID+"/users/"+postcode);
+    set(userRef, true);
+    onDisconnect(userRef).remove();
 
- document.getElementById("room-info").textContent =
- `📍 ${lat.toFixed(3)}, ${lon.toFixed(3)}`;
+    const usersRef = ref(db, "rooms/"+roomID+"/users");
+    onValue(usersRef, (snap)=>{
+        const count = snap.val() ? Object.keys(snap.val()).length : 0;
+        document.getElementById("room-info").textContent = `📍 ${lat.toFixed(3)}, ${lon.toFixed(3)} | 👥 ${count}`;
+    });
 
- // 👥 presence
- const userRef = ref(db, "rooms/"+roomID+"/users/"+postcode);
+    window.send = ()=>{
+        const input = document.getElementById("msg");
+        const text = input.value.trim();
+        let today = new Date().toDateString();
+        let used = parseInt(localStorage.getItem("u_"+today)||"0");
 
- set(userRef, true);
- onDisconnect(userRef).remove();
+        if(!text) return;
+        if(used + text.length > 99) return alert("Daily limit reached!");
 
- const usersRef = ref(db, "rooms/"+roomID+"/users");
+        push(roomRef,{
+            sender: postcode,
+            msg: text,
+            loc: userLoc,
+            t: serverTimestamp()
+        });
 
- onValue(usersRef, (snap)=>{
-  const count = snap.val() ? Object.keys(snap.val()).length : 0;
-  document.getElementById("room-info").textContent =
-  `📍 ${lat.toFixed(3)}, ${lon.toFixed(3)} | 👥 ${count}`;
- });
+        localStorage.setItem("u_"+today, used + text.length);
+        input.value="";
+        updateCount();
+    };
 
- // 💬 send
- window.send = ()=>{
-  const input = document.getElementById("msg");
-  const text = input.value.trim();
+    onChildAdded(roomRef, (snap)=>{
+        const d = snap.val();
+        if(blocked.includes(d.sender)) return;
 
-  let today = new Date().toDateString();
-  let used = parseInt(localStorage.getItem("u_"+today)||"0");
+        const div = document.createElement("div");
+        div.style.margin="5px 0";
+        div.style.wordBreak="break-all";
+        div.innerHTML = `
+            <span style="color:#f33;cursor:pointer;" onclick="blockUser('${d.sender}')">
+            [${d.sender}]</span>: ${d.msg}
+        `;
+        const cb = document.getElementById("chat-box");
+        cb.appendChild(div);
+        cb.scrollTop = cb.scrollHeight;
+    });
 
-  if(!text) return;
-  if(used+text.length>99) return alert("limit!");
-
-  push(roomRef,{
-   sender:postcode,
-   msg:text,
-   loc:userLoc,
-   t:serverTimestamp()
-  });
-
-  localStorage.setItem("u_"+today, used+text.length);
-  input.value="";
-  updateCount();
- };
-
- // 📩 receive
- onChildAdded(roomRef,(snap)=>{
-  const d = snap.val();
-
-  if(blocked.includes(d.sender)) return;
-
-  const ok = d.loc!=="Unknown" ? "✅":"";
-
-  const div = document.createElement("div");
-  div.style.margin="5px 0";
-
-  div.innerHTML = `
-  <span style="color:#f33;cursor:pointer;" onclick="blockUser('${d.sender}')">
-  [${d.sender} ${ok}]
-  </span>: ${d.msg}
-  `;
-
-  document.getElementById("chat-box").appendChild(div);
- });
-
- updateCount();
+    updateCount();
 }
 
-// 🚫 block
 window.blockUser = (id)=>{
- if(!confirm("Block "+id+" ?")) return;
-
- blocked.push(id);
- localStorage.setItem("blocked", JSON.stringify(blocked));
- alert("Blocked 💀");
+    if(!confirm("Block "+id+" ?")) return;
+    blocked.push(id);
+    localStorage.setItem("blocked", JSON.stringify(blocked));
+    location.reload();
 };
 
-// 🔢 count
 function updateCount(){
- let used = parseInt(localStorage.getItem("u_"+new Date().toDateString())||"0");
- document.getElementById("count").textContent = 99-used;
+    let used = parseInt(localStorage.getItem("u_"+new Date().toDateString())||"0");
+    document.getElementById("count").textContent = Math.max(0, 99 - used);
 }
 
 VANTA.FOG({
@@ -194,61 +180,23 @@ VANTA.FOG({
     speed: 0.3,
     zoom: 0.9
 });
-    particlesJS("particles-js", {
-      particles: {
-        number: { value: 70, density: { enable: true, value_area: 800 } },
-        color: { value: "#ff3333" },
-        shape: {
-          type: "circle",
-          stroke: { width: 0, color: "#000000" },
-          polygon: { nb_sides: 5 },
-        },
-        opacity: {
-          value: 0.5,
-          random: true,
-          anim: { enable: true, speed: 1, opacity_min: 0.1, sync: false }
-        },
-        size: {
-          value: 3,
-          random: true,
-          anim: { enable: false }
-        },
-        line_linked: {
-          enable: true,
-          distance: 150,
-          color: "#ff3333",
-          opacity: 0.3,
-          width: 1
-        },
-        move: {
-          enable: true,
-          speed: 1,
-          direction: "none",
-          random: true,
-          straight: false,
-          out_mode: "out",
-          bounce: false,
-          attract: { enable: false }
-        }
-      },
-      interactivity: {
-        detect_on: "canvas",
-        events: {
-          onhover: { enable: true, mode: "grab" },
-          onclick: { enable: true, mode: "push" },
-          resize: true
-        },
-        modes: {
-          grab: { distance: 200, line_linked: { opacity: 0.5 } },
-          bubble: { distance: 200, size: 6, duration: 2, opacity: 0.8 },
-          repulse: { distance: 100 },
-          push: { particles_nb: 4 },
-          remove: { particles_nb: 2 }
-        }
-      },
-      retina_detect: true
-    });
-  </script>
 
+particlesJS("particles-js", {
+    particles: {
+        number: { value: 50, density: { enable: true, value_area: 800 } },
+        color: { value: "#ff3333" },
+        shape: { type: "circle" },
+        opacity: { value: 0.5, random: true },
+        size: { value: 2, random: true },
+        line_linked: { enable: true, distance: 150, color: "#ff3333", opacity: 0.3, width: 1 },
+        move: { enable: true, speed: 1, direction: "none", random: true, out_mode: "out" }
+    },
+    interactivity: {
+        detect_on: "canvas",
+        events: { onhover: { enable: true, mode: "grab" }, onclick: { enable: true, mode: "push" } }
+    },
+    retina_detect: true
+});
+</script>
 </body>
 </html>
