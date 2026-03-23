@@ -3,29 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A0Z - TERMINAL V3 FINAL</title>
+    <title>A0Z - SECURE TERMINAL</title>
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
     <style>
         :root { --neon: #00ff41; --bg: #050505; }
         body { margin:0; font-family:'Courier New', monospace; background: var(--bg); color: var(--neon); overflow:hidden; }
         #particles-js { position:fixed; inset:0; z-index:1; pointer-events:none; }
         .container { position:relative; z-index:10; display:flex; justify-content:center; align-items:center; height:100vh; }
-        .box { 
-            width:400px; max-width:92%; padding:20px; 
-            border: 4px double var(--neon); background: rgba(0, 15, 0, 0.95);
-            box-shadow: inset 0 0 20px rgba(0,255,65,0.1), 0 0 15px rgba(0,255,65,0.4);
-            text-align: center; box-sizing: border-box;
-        }
-        h2 { text-transform: uppercase; letter-spacing: 3px; border-bottom: 2px solid var(--neon); padding-bottom: 10px; margin-top:0; }
-        #chat-screen { display:none; flex-direction:column; height:85vh; width:450px; }
-        #chat-box { flex:1; overflow-y:auto; border: 1px solid var(--neon); padding:10px; background: #000; margin-bottom:10px; text-align:left; font-size:14px; line-height:1.4; }
-        #meta-header { font-size:10px; margin-bottom:8px; display:flex; justify-content:space-between; border-bottom:1px solid #004411; padding-bottom:5px; }
-        #char-count { color: var(--neon); font-size: 11px; text-align: right; margin-bottom: 5px; font-weight: bold; }
-        input { width:100%; padding:12px; background:#000; border:1px solid var(--neon); color:var(--neon); outline:none; font-family:inherit; box-sizing: border-box; }
-        button { width:100%; padding:12px; background:var(--neon); color:#000; border:none; font-weight:bold; cursor:pointer; margin-top:10px; text-transform:uppercase; font-family:inherit; }
-        button:hover { background: #fff; box-shadow: 0 0 15px var(--neon); }
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-thumb { background: var(--neon); }
+        .box { width:420px; max-width:92%; padding:25px; border: 4px double var(--neon); background: rgba(0, 15, 0, 0.95); box-shadow: 0 0 20px rgba(0,255,65,0.3); text-align: center; box-sizing: border-box; }
+        #chat-screen { display:none; flex-direction:column; height:85vh; width:480px; }
+        #chat-box { flex:1; overflow-y:auto; border: 1px solid var(--neon); padding:10px; background: #000; margin-bottom:10px; text-align:left; font-size:14px; }
+        #char-count { color: #ff0000; font-size: 11px; text-align: right; margin-bottom: 5px; font-weight: bold; }
+        input { width:100%; padding:12px; background:#000; border:1px solid var(--neon); color:var(--neon); outline:none; font-family:inherit; box-sizing: border-box; margin-bottom: 10px; }
+        button { width:100%; padding:12px; background:var(--neon); color:#000; border:none; font-weight:bold; cursor:pointer; text-transform:uppercase; }
+        .error { color: #ff4444; font-size: 12px; margin-top: 5px; display: none; }
     </style>
 </head>
 <body>
@@ -34,29 +25,30 @@
 
 <div class="container">
     <div id="login" class="box">
-        <h2>SYSTEM BOOT</h2>
-        <p style="font-size:11px; opacity:0.7;">IDENTIFYING DEVICE SIGNATURE...</p>
-        <p id="dev-sig" style="font-size:13px; font-weight:bold; color:#fff;"></p>
-        <button id="boot-btn" onclick="initGPS()">CONNECT TO RADAR</button>
+        <h2>A0Z IDENTIFIER</h2>
+        <p style="font-size:11px; opacity:0.7;">ENTER UNIQUE NICKNAME (A-Z, 0-9 ONLY)</p>
+        <input id="user-input" placeholder="NICKNAME..." maxlength="15">
+        <div id="login-err" class="error">NAME TAKEN OR INVALID</div>
+        <button id="boot-btn" onclick="checkAndBoot()">INITIALIZE</button>
     </div>
 
     <div id="chat-screen" class="box">
-        <div id="meta-header">
+        <div style="display:flex; justify-content:space-between; font-size:10px; border-bottom:1px solid #004411; padding-bottom:5px; margin-bottom:8px;">
             <span id="zone-id">ZONE: SCANNING...</span>
             <span id="online-val">👥 0 ONLINE</span>
         </div>
         <div id="chat-box"></div>
-        <div id="char-count">CHARS LEFT: 99</div>
+        <div id="char-count">LIMIT: 33 LEFT</div>
         <div style="display:flex; gap:5px;">
-            <input id="msg-in" placeholder="ENTER MESSAGE..." onkeydown="if(event.key==='Enter')sendMsg()">
-            <button onclick="sendMsg()" style="width:80px; margin-top:0;">SND</button>
+            <input id="msg-in" placeholder="TYPE..." onkeydown="if(event.key==='Enter')sendMsg()" maxlength="33" style="margin-bottom:0;">
+            <button onclick="sendMsg()" style="width:70px;">SND</button>
         </div>
     </div>
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-import { getDatabase, ref, push, onChildAdded, serverTimestamp, onValue, onDisconnect, set, runTransaction } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+import { getDatabase, ref, push, onChildAdded, serverTimestamp, onValue, onDisconnect, set, get } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
 
 const firebaseConfig = { 
     apiKey: "AIzaSyA7Pu0DJOWmdoDYUUVP1J9aqhxh4f3wyfA", 
@@ -66,102 +58,102 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
+let myNick = "";
+let currentZone = "";
 
-// 1. بصمة الجهاز الدائمة
-let deviceID = localStorage.getItem("a0z_v3_sig");
-if(!deviceID) {
-    deviceID = 'USR-' + Math.random().toString(36).substr(2, 5).toUpperCase();
-    localStorage.setItem("a0z_v3_sig", deviceID);
-}
-document.getElementById("dev-sig").textContent = deviceID;
+window.checkAndBoot = () => {
+    const input = document.getElementById("user-input");
+    const nick = input.value.trim().toUpperCase();
+    const regex = /^[A-Z0-9]+$/;
 
-window.initGPS = () => {
-    const b = document.getElementById("boot-btn");
-    b.textContent = "LOCATING...";
-    b.disabled = true;
+    if (!nick || !regex.test(nick)) {
+        showErr("INVALID: USE A-Z & 0-9 ONLY");
+        return;
+    }
 
-    navigator.geolocation.getCurrentPosition((p) => {
+    document.getElementById("boot-btn").textContent = "GPS SCANNING...";
+    
+    navigator.geolocation.getCurrentPosition(async (p) => {
         const lat = p.coords.latitude;
         const lon = p.coords.longitude;
-        const zID = `Z-${(Math.round(lat / 0.0033) * 0.0033).toFixed(4)}_${(Math.round(lon / 0.0033) * 0.0033).toFixed(4)}`.replace(/\./g, '');
-        startRadar(zID);
-    }, () => {
-        alert("CRITICAL ERROR: GPS REQUIRED.");
-        location.reload();
-    }, { enableHighAccuracy: true });
+        currentZone = `Z-${(Math.round(lat / 0.0033) * 0.0033).toFixed(4)}_${(Math.round(lon / 0.0033) * 0.0033).toFixed(4)}`.replace(/\./g, '');
+        
+        // فحص إذا الاسم مأخوذ في هاي المنطقة
+        const nickRef = ref(db, `v4_zones/${currentZone}/taken_nicks/${nick}`);
+        const snapshot = await get(nickRef);
+        
+        if (snapshot.exists()) {
+            showErr("NICKNAME ALREADY TAKEN IN THIS ZONE");
+            document.getElementById("boot-btn").textContent = "INITIALIZE";
+            return;
+        }
+
+        myNick = nick;
+        startRadar(currentZone);
+    }, () => alert("GPS REQUIRED"), { enableHighAccuracy: true });
 };
 
 function startRadar(zID) {
     document.getElementById("login").style.display = "none";
     document.getElementById("chat-screen").style.display = "flex";
-    document.getElementById("zone-id").textContent = `ZONE: ${zID}`;
+    document.getElementById("zone-id").textContent = `ZONE: ${zID} | ID: ${myNick}`;
 
-    const msgRef = ref(db, `v3_final/${zID}/msgs`);
-    const userRef = ref(db, `v3_final/${zID}/online/${deviceID}`);
-    const allUsersRef = ref(db, `v3_final/${zID}/online`);
-    
-    // تاريخ اليوم لتتبع الاستهلاك
-    const today = new Date().toISOString().slice(0, 10).replace(/-/g, '');
-    const usageRef = ref(db, `usage/${deviceID}/${today}`);
+    const msgRef = ref(db, `v4_zones/${zID}/msgs`);
+    const myRef = ref(db, `v4_zones/${zID}/taken_nicks/${myNick}`);
+    const onlineRef = ref(db, `v4_zones/${zID}/online`);
 
-    // نظام التواجد (الأونلاين)
-    set(userRef, { last: serverTimestamp() });
-    onDisconnect(userRef).remove();
+    // حجز الاسم أونلاين ومسحه عند الخروج
+    set(myRef, { active: true, t: serverTimestamp() });
+    onDisconnect(myRef).remove();
 
-    // تحديث عداد الأونلاين
-    onValue(allUsersRef, (s) => {
+    onValue(onlineRef, (s) => {
         const count = s.val() ? Object.keys(s.val()).length : 0;
         document.getElementById("online-val").textContent = `👥 ${count} ONLINE`;
-    });
-
-    // تحديث عداد الحروف من السيرفر فوراً
-    onValue(usageRef, (snap) => {
-        let used = snap.val() || 0;
-        document.getElementById("char-count").textContent = `CHARS LEFT: ${99 - used}`;
     });
 
     window.sendMsg = () => {
         const input = document.getElementById("msg-in");
         const val = input.value.trim();
+        const today = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+        const usageRef = ref(db, `v4_usage/${myNick}/${today}`);
+
         if(!val) return;
 
-        // استخدام Transaction لضمان دقة العداد ومنع الغش
-        runTransaction(usageRef, (currentUsed) => {
-            let used = currentUsed || 0;
-            if (used + val.length > 99) {
-                alert("Systeemfout: Daglimiet van 99 tekens bereikt!");
-                return; // إلغاء العملية
+        get(usageRef).then((snap) => {
+            let used = snap.val() || 0;
+            if (used + val.length > 33) {
+                alert("DAY LIMIT: 33 CHARS REACHED!");
+                return;
             }
-            // إذا الأمور تمام، نبعث الرسالة
-            push(msgRef, { uid: deviceID, text: val, t: serverTimestamp() });
-            return used + val.length;
+            push(msgRef, { nick: myNick, text: val, t: serverTimestamp() });
+            set(usageRef, used + val.length);
+            input.value = "";
+            updateCounter(used + val.length);
         });
-        
-        input.value = "";
     };
 
     onChildAdded(msgRef, (snap) => {
         const d = snap.val();
-        const box = document.getElementById("chat-box");
         const line = document.createElement("div");
-        line.style.marginBottom = "8px";
-        line.innerHTML = `> <b style="color:#fff;">${d.uid}✅</b>: ${d.text}`;
-        box.appendChild(line);
-        box.scrollTop = box.scrollHeight;
+        line.innerHTML = `> <b style="color:#fff;">${d.nick}✅</b>: ${d.text}`;
+        document.getElementById("chat-box").appendChild(line);
+        document.getElementById("chat-box").scrollTop = document.getElementById("chat-box").scrollHeight;
     });
+
+    updateCounter(0);
 }
 
-// الجزيئات
-particlesJS("particles-js", {
-    "particles": {
-        "number": { "value": 60 },
-        "color": { "value": "#00ff41" },
-        "shape": { "type": "edge" },
-        "opacity": { "value": 0.2 },
-        "size": { "value": 2 },
-        "line_linked": { "enable": true, "distance": 120, "color": "#00ff41", "opacity": 0.1 }
-    }
-});
+function updateCounter(val) {
+    document.getElementById("char-count").textContent = `LIMIT: ${33 - val} LEFT`;
+}
+
+function showErr(msg) {
+    const err = document.getElementById("login-err");
+    err.textContent = msg;
+    err.style.display = "block";
+}
+
+particlesJS("particles-js", { "particles": { "number": { "value": 50 }, "color": { "value": "#00ff41" }, "shape": { "type": "edge" }, "line_linked": { "enable": true, "distance": 120, "color": "#00ff41", "opacity": 0.1 } } });
 </script>
 </body>
 </html>
