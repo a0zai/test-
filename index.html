@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A0Z - SECURE TERMINAL</title>
+    <title>A0Z - SECURE RADAR V4</title>
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
     <style>
         :root { --neon: #00ff41; --bg: #050505; }
@@ -16,7 +16,7 @@
         #char-count { color: #ff0000; font-size: 11px; text-align: right; margin-bottom: 5px; font-weight: bold; }
         input { width:100%; padding:12px; background:#000; border:1px solid var(--neon); color:var(--neon); outline:none; font-family:inherit; box-sizing: border-box; margin-bottom: 10px; }
         button { width:100%; padding:12px; background:var(--neon); color:#000; border:none; font-weight:bold; cursor:pointer; text-transform:uppercase; }
-        .error { color: #ff4444; font-size: 12px; margin-top: 5px; display: none; }
+        #online-val { color: #fff; text-shadow: 0 0 5px var(--neon); }
     </style>
 </head>
 <body>
@@ -26,10 +26,9 @@
 <div class="container">
     <div id="login" class="box">
         <h2>A0Z IDENTIFIER</h2>
-        <p style="font-size:11px; opacity:0.7;">ENTER UNIQUE NICKNAME (A-Z, 0-9 ONLY)</p>
-        <input id="user-input" placeholder="NICKNAME..." maxlength="15">
-        <div id="login-err" class="error">NAME TAKEN OR INVALID</div>
-        <button id="boot-btn" onclick="checkAndBoot()">INITIALIZE</button>
+        <p style="font-size:11px; opacity:0.7;">UNIQUE NICKNAME (A-Z, 0-9 ONLY)</p>
+        <input id="user-input" placeholder="NICKNAME..." maxlength="12">
+        <button id="boot-btn" onclick="checkAndBoot()">INITIALIZE SYSTEM</button>
     </div>
 
     <div id="chat-screen" class="box">
@@ -66,28 +65,15 @@ window.checkAndBoot = () => {
     const nick = input.value.trim().toUpperCase();
     const regex = /^[A-Z0-9]+$/;
 
-    if (!nick || !regex.test(nick)) {
-        showErr("INVALID: USE A-Z & 0-9 ONLY");
-        return;
-    }
+    if (!nick || !regex.test(nick)) return alert("INVALID NICKNAME");
 
-    document.getElementById("boot-btn").textContent = "GPS SCANNING...";
+    document.getElementById("boot-btn").textContent = "GPS LOCKING...";
     
     navigator.geolocation.getCurrentPosition(async (p) => {
         const lat = p.coords.latitude;
         const lon = p.coords.longitude;
         currentZone = `Z-${(Math.round(lat / 0.0033) * 0.0033).toFixed(4)}_${(Math.round(lon / 0.0033) * 0.0033).toFixed(4)}`.replace(/\./g, '');
         
-        // فحص إذا الاسم مأخوذ في هاي المنطقة
-        const nickRef = ref(db, `v4_zones/${currentZone}/taken_nicks/${nick}`);
-        const snapshot = await get(nickRef);
-        
-        if (snapshot.exists()) {
-            showErr("NICKNAME ALREADY TAKEN IN THIS ZONE");
-            document.getElementById("boot-btn").textContent = "INITIALIZE";
-            return;
-        }
-
         myNick = nick;
         startRadar(currentZone);
     }, () => alert("GPS REQUIRED"), { enableHighAccuracy: true });
@@ -99,36 +85,40 @@ function startRadar(zID) {
     document.getElementById("zone-id").textContent = `ZONE: ${zID} | ID: ${myNick}`;
 
     const msgRef = ref(db, `v4_zones/${zID}/msgs`);
-    const myRef = ref(db, `v4_zones/${zID}/taken_nicks/${myNick}`);
-    const onlineRef = ref(db, `v4_zones/${zID}/online`);
+    const presenceRef = ref(db, `v4_zones/${zID}/online/${myNick}`);
+    const onlineListRef = ref(db, `v4_zones/${zID}/online`);
 
-    // حجز الاسم أونلاين ومسحه عند الخروج
-    set(myRef, { active: true, t: serverTimestamp() });
-    onDisconnect(myRef).remove();
+    // 1. نظام الأونلاين (المشاهدة) - شغال 100% الآن
+    set(presenceRef, { status: "online", t: serverTimestamp() });
+    onDisconnect(presenceRef).remove();
 
-    onValue(onlineRef, (s) => {
-        const count = s.val() ? Object.keys(s.val()).length : 0;
+    onValue(onlineListRef, (snapshot) => {
+        const val = snapshot.val();
+        const count = val ? Object.keys(val).length : 0;
         document.getElementById("online-val").textContent = `👥 ${count} ONLINE`;
+    });
+
+    // 2. نظام الـ 33 حرف (تجديد يومي)
+    const today = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+    const usageRef = ref(db, `v4_usage/${myNick}/${today}`);
+
+    onValue(usageRef, (snap) => {
+        let used = snap.val() || 0;
+        document.getElementById("char-count").textContent = `LIMIT: ${33 - used} LEFT`;
     });
 
     window.sendMsg = () => {
         const input = document.getElementById("msg-in");
         const val = input.value.trim();
-        const today = new Date().toISOString().slice(0, 10).replace(/-/g, '');
-        const usageRef = ref(db, `v4_usage/${myNick}/${today}`);
-
         if(!val) return;
 
         get(usageRef).then((snap) => {
             let used = snap.val() || 0;
-            if (used + val.length > 33) {
-                alert("DAY LIMIT: 33 CHARS REACHED!");
-                return;
-            }
+            if (used + val.length > 33) return alert("DAY LIMIT REACHED!");
+            
             push(msgRef, { nick: myNick, text: val, t: serverTimestamp() });
             set(usageRef, used + val.length);
             input.value = "";
-            updateCounter(used + val.length);
         });
     };
 
@@ -139,21 +129,9 @@ function startRadar(zID) {
         document.getElementById("chat-box").appendChild(line);
         document.getElementById("chat-box").scrollTop = document.getElementById("chat-box").scrollHeight;
     });
-
-    updateCounter(0);
 }
 
-function updateCounter(val) {
-    document.getElementById("char-count").textContent = `LIMIT: ${33 - val} LEFT`;
-}
-
-function showErr(msg) {
-    const err = document.getElementById("login-err");
-    err.textContent = msg;
-    err.style.display = "block";
-}
-
-particlesJS("particles-js", { "particles": { "number": { "value": 50 }, "color": { "value": "#00ff41" }, "shape": { "type": "edge" }, "line_linked": { "enable": true, "distance": 120, "color": "#00ff41", "opacity": 0.1 } } });
+particlesJS("particles-js", { "particles": { "number": { "value": 40 }, "color": { "value": "#00ff41" }, "shape": { "type": "edge" }, "line_linked": { "enable": true, "distance": 120, "color": "#00ff41", "opacity": 0.15 } } });
 </script>
 </body>
 </html>
