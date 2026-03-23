@@ -3,23 +3,96 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>A0Z - Fixed</title>
+<title>A0Z Chat - Clean</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.fog.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 
 <style>
-body { background:#000; color:#0ff; font-family:monospace; margin:0; overflow:hidden;}
-#vanta-bg { position: fixed; inset: 0; z-index: 0; opacity: 0.35; pointer-events: none;}
-#particles-js { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
-.container { position:relative; z-index:10; display:flex; justify-content:center; align-items:center; height:100vh;}
-.box { width:400px; padding:20px; border:1px solid #f33; background:rgba(15, 0, 0, 0.9); box-shadow:0 0 15px #f33;}
-button { width:100%; padding:12px; background:#f33; border:none; font-weight:bold; cursor:pointer; color:#000;}
-#chat-screen { display:none; flex-direction:column; height:80vh;}
-#chat-box { flex:1; overflow-y:auto; border:1px solid #f33; padding:10px; background:#000; margin-bottom:10px; color:#fff;}
-input { width:100%; padding:10px; background:#000; border:1px solid #f33; color:#f33; box-sizing: border-box; margin-bottom:5px;}
-#count { color: #f33; text-align: right; font-size: 12px;}
+body {
+    margin:0;
+    font-family:'Courier New', monospace;
+    background:#0a0a0a;
+    color:#0ff;
+    overflow:hidden;
+}
+
+#vanta-bg, #particles-js {
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:0;
+}
+#vanta-bg { opacity:0.35; }
+
+.container {
+    position:relative;
+    z-index:10;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    padding:20px;
+}
+
+.box {
+    width:360px;
+    max-width:95%;
+    padding:25px;
+    border-radius:12px;
+    background: rgba(5, 5, 20, 0.9);
+    box-shadow: 0 0 25px rgba(0,255,0,0.5);
+    border: 1px solid #00ff66;
+    display:flex;
+    flex-direction:column;
+}
+
+h2 {
+    color:#00ff66;
+    text-align:center;
+    margin-bottom:20px;
+}
+
+input {
+    width:100%;
+    padding:10px;
+    margin-bottom:10px;
+    border-radius:6px;
+    border:1px solid #00ff66;
+    background:#000;
+    color:#00ff66;
+    box-sizing:border-box;
+}
+
+button {
+    width:100%;
+    padding:12px;
+    background:#00ff66;
+    border:none;
+    font-weight:bold;
+    cursor:pointer;
+    color:#000;
+    margin-top:5px;
+    border-radius:6px;
+    transition:0.2s;
+}
+button:hover { background:#00cc44; }
+
+#chat-screen { display:none; flex-direction:column; height:80vh; }
+#chat-box {
+    flex:1;
+    overflow-y:auto;
+    border:1px solid #00ff66;
+    padding:10px;
+    background:#01010a;
+    margin-bottom:10px;
+    color:#fff;
+    border-radius:6px;
+}
+#count { color:#00ff66; text-align:right; font-size:12px; margin-bottom:5px; }
+#room-info { font-size:12px; color:#00ff66; margin-bottom:5px; display:flex; align-items:center; gap:5px; }
+#verified { width:16px; height:16px; background:#00ff66; border-radius:50%; display:inline-block; }
 </style>
 </head>
 <body>
@@ -29,19 +102,19 @@ input { width:100%; padding:10px; background:#000; border:1px solid #f33; color:
 
 <div class="container">
     <div id="login" class="box">
-        <h3 style="color:#f33;">A0Z 🔥</h3>
-        <input id="postcode" placeholder="Enter Postcode/Name">
-        <button onclick="join()">ENTER</button>
-        <p id="status" style="font-size:12px;color:#888;"></p>
+        <h2>A0Z Chat 🔥</h2>
+        <input id="postcode" placeholder="Enter ID">
+        <button onclick="join()">Enter</button>
+        <p id="status" style="font-size:12px;color:#00ff66;margin-top:5px;"></p>
     </div>
 
     <div id="chat-screen" class="box">
-        <div id="room-info" style="color:#f33;font-size:12px; margin-bottom:5px;">Connecting...</div>
+        <div id="room-info">📍 Locating... <span id="verified"></span></div>
         <div id="chat-box"></div>
-        <div id="count">Remaining: 99</div>
+        <div id="count">Chars left: 99</div>
         <div style="display:flex;gap:5px;">
             <input id="msg" placeholder="Type message..." onkeydown="if(event.key==='Enter')send()">
-            <button onclick="send()" style="width:70px;">SND</button>
+            <button onclick="send()">Send</button>
         </div>
     </div>
 </div>
@@ -56,24 +129,22 @@ const firebaseConfig = {
     databaseURL: "https://a0zai-56c3a-default-rtdb.europe-west1.firebasedatabase.app" 
 };
 
-// 1. تشغيل التطبيق أولاً
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-let roomRef, userLoc="Unknown";
+let userLoc="Unknown";
 let blocked = JSON.parse(localStorage.getItem("blocked") || "[]");
 
 window.join = () => {
     const postcode = document.getElementById("postcode").value.trim();
     if(!postcode) return alert("Enter ID!");
-
     document.getElementById("status").textContent="Requesting GPS...";
 
     navigator.geolocation.getCurrentPosition((p)=>{
         startChat(postcode, p.coords.latitude, p.coords.longitude);
-    }, ()=> {
-        alert("GPS required for room access.");
-        document.getElementById("status").textContent="GPS Error.";
+    }, ()=>{
+        alert("GPS required!");
+        document.getElementById("status").textContent="GPS error.";
     }, {timeout:10000});
 };
 
@@ -82,25 +153,20 @@ function startChat(postcode, lat, lon){
     document.getElementById("login").style.display="none";
     document.getElementById("chat-screen").style.display="flex";
 
-    // تحديد الغرفة بناءً على الموقع (تقريب الإحداثيات لجمع المستخدمين القريبين)
     const roomID = `${lat.toFixed(2)}_${lon.toFixed(2)}`.replace(/\./g, '-');
-    
-    // مسارات منفصلة للرسائل والمستخدمين
     const msgRef = ref(db, `rooms/${roomID}/messages`);
     const usersRef = ref(db, `rooms/${roomID}/users`);
     const myPresenceRef = ref(db, `rooms/${roomID}/users/${postcode}`);
 
-    // تسجيل الدخول وحذف المستخدم عند الخروج
-    set(myPresenceRef, { active: true, lastSeen: serverTimestamp() });
+    set(myPresenceRef, { active:true, lastSeen: serverTimestamp() });
     onDisconnect(myPresenceRef).remove();
 
-    // تحديث عدد المتواجدين
     onValue(usersRef, (snap)=>{
         const count = snap.val() ? Object.keys(snap.val()).length : 0;
-        document.getElementById("room-info").textContent = `📍 ${lat.toFixed(2)},${lon.toFixed(2)} | 👥 Online: ${count}`;
+        document.getElementById("room-info").innerHTML = `📍 ${lat.toFixed(2)},${lon.toFixed(2)} | 👥 ${count} online <span id="verified"></span>`;
+        document.getElementById("verified").style.background="#00ff66"; 
     });
 
-    // وظيفة الإرسال
     window.send = ()=>{
         const input = document.getElementById("msg");
         const text = input.value.trim();
@@ -108,29 +174,21 @@ function startChat(postcode, lat, lon){
         let used = parseInt(localStorage.getItem("u_"+today)|| "0");
 
         if(!text) return;
-        if(used + text.length > 99) return alert("Limit 99 chars reached!");
+        if(used + text.length > 99) return alert("Char limit 99 reached!");
 
-        push(msgRef, {
-            sender: postcode,
-            msg: text,
-            loc: userLoc,
-            t: serverTimestamp()
-        });
-
+        push(msgRef, { sender: postcode, msg: text, loc:userLoc, t:serverTimestamp() });
         localStorage.setItem("u_"+today, used + text.length);
         input.value="";
         updateCount();
     };
 
-    // وظيفة استقبال الرسائل
     onChildAdded(msgRef, (snap)=>{
         const d = snap.val();
         if(blocked.includes(d.sender)) return;
 
         const div = document.createElement("div");
-        div.style.padding = "4px";
-        div.innerHTML = `<b style="color:#f33; cursor:pointer" onclick="window.blockUser('${d.sender}')">[${d.sender}]</b>: ${d.msg}`;
-        
+        div.style.padding="4px";
+        div.innerHTML = `<b style="color:#00ff66; cursor:pointer" onclick="window.blockUser('${d.sender}')">[${d.sender}]</b>: ${d.msg}`;
         const cb = document.getElementById("chat-box");
         cb.appendChild(div);
         cb.scrollTop = cb.scrollHeight;
@@ -152,13 +210,33 @@ function updateCount(){
     document.getElementById("count").textContent = "Chars left: " + (99 - used);
 }
 
-// تأثيرات بصرية
 VANTA.FOG({
     el: "#vanta-bg",
-    mouseControls: true, touchControls: true,
-    highlightColor: 0xff3333, midtoneColor: 0x110000, lowlightColor: 0x0, baseColor: 0x0,
-    speed: 1.5
+    mouseControls: true,
+    touchControls: true,
+    highlightColor: 0x00ffcc,
+    midtoneColor: 0x001122,
+    lowlightColor: 0x000011,
+    baseColor: 0x000000,
+    speed: 1.2
+});
+
+particlesJS("particles-js", {
+    "particles": {
+      "number": { "value": 60, "density": { "enable": true, "value_area": 800 } },
+      "color": { "value": "#00ffcc" },
+      "shape": { "type": "circle" },
+      "opacity": { "value": 0.6, "random": true },
+      "size": { "value": 3, "random": true },
+      "line_linked": { "enable": true, "distance": 120, "color": "#00ff66", "opacity":0.4, "width":1 },
+      "move": { "enable": true, "speed": 2, "direction": "none", "random": true, "straight": false }
+    },
+    "interactivity": {
+      "events": { "onhover": { "enable": true, "mode": "grab" }, "onclick": { "enable": true, "mode": "push" } }
+    },
+    "retina_detect": true
 });
 </script>
+
 </body>
 </html>
