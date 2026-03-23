@@ -1,176 +1,92 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="nl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A∞Z | The Voice Swapper</title>
-    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <title>B</title>
     <style>
-        body { margin: 0; background: #000; color: #ff3333; font-family: 'Courier New', monospace; overflow: hidden; display: flex; justify-content: center; align-items: center; height: 100vh; }
-        #particles-js { position: fixed; width: 100%; height: 100%; z-index: 0; }
-        #ui-wrapper { z-index: 10; background: rgba(0,0,0,0.9); padding: 30px; border: 2px solid red; border-radius: 20px; text-align: center; width: 340px; box-shadow: 0 0 20px rgba(255,0,0,0.3); }
-        .btn-group { display: flex; gap: 10px; margin-top: 20px; flex-direction: column; }
-        button { background: transparent; border: 2px solid red; color: red; padding: 12px; cursor: pointer; font-weight: bold; border-radius: 8px; transition: 0.3s; font-size: 14px; text-transform: uppercase; }
-        button:hover:not(:disabled) { background: red; color: black; box-shadow: 0 0 15px red; }
-        button:disabled { border-color: #440000; color: #440000; cursor: not-allowed; }
-        #status { font-size: 13px; margin: 20px 0; color: #ff6666; min-height: 50px; border-top: 1px dashed #440000; padding-top: 10px; }
-        .trigger-btn { display: none; margin-top: 10px; border-color: #00ff00; color: #00ff00; }
-        .trigger-btn:hover { background: #00ff00 !important; }
-        .identity-tag { color: #880000; font-size: 11px; margin-bottom: 10px; }
+        body {
+            background-color: #0d1117;
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        .municipality-logo {
+            width: 140px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 8px;
+            color: #58a6ff;
+        }
+
+        p {
+            font-size: 1.1rem;
+            color: #8b949e;
+            margin: 4px 0;
+        }
+
+        .loader-bar {
+            width: 180px;
+            height: 3px;
+            background: #30363d;
+            margin-top: 30px;
+            border-radius: 5px;
+            overflow: hidden;
+            display: inline-block;
+        }
+
+        .loader-progress {
+            width: 0%;
+            height: 100%;
+            background: #238636;
+            animation: load 4s linear forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes load {
+            to { width: 100%; }
+        }
     </style>
 </head>
 <body>
 
-<div id="particles-js"></div>
+    <div class="container">
+        <img src="https://cuatro.sim-cdn.nl/doetinchem/uploads/2023-11/gemeente-doetinchem.svg" alt="Gemeente Doetinchem" class="municipality-logo">
 
-<div id="ui-wrapper">
-    <div class="identity-tag" id="nodeId">INITIALIZING NODE...</div>
-    <h2 style="margin:0; letter-spacing:5px;">A∞Z SWAP</h2>
-    
-    <div id="status">Detecting device system...</div>
-
-    <div class="btn-group" id="setupArea">
-        <button id="recordBtn">1. RECORD MY VOICE 🎤</button>
+        <h1>Bedankt voor uw inzet</h1>
+        <p>Ter waardering van uw werk voor <strong>N</strong>.</p>
+        <p>U wordt doorverwezen naar LinkedIn...</p>
+        
+        <div class="loader-bar">
+            <div class="loader-progress"></div>
+        </div>
     </div>
 
-    <div class="btn-group" id="controlArea" style="display:none;">
-        <button id="triggerSiri" class="trigger-btn" style="display:block;">WAKE MY SIRI 🔴</button>
-        <button id="triggerBixby" class="trigger-btn" style="display:block; border-color: #008cff; color: #008cff;">WAKE MY BIXBY 🔵</button>
-    </div>
-</div>
+    <script>
+        const linkedInURL = "https://www.linkedin.com/in/a0zai?utm_source=share_via&utm_content=profile&utm_medium=member_ios";
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-import { getDatabase, ref, set, onValue, onDisconnect, remove, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
-import { getStorage, ref as sRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-storage.js";
-
-// ====== FIREBASE CONFIG ======
-const firebaseConfig = {
-    apiKey: "AIzaSyBUb10JpH6iTD1sqSN7xz_lYDZUNSVennQ",
-    authDomain: "testing-9b30c.firebaseapp.com",
-    databaseURL: "https://testing-9b30c-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId: "testing-9b30c",
-    storageBucket: "testing-9b30c.appspot.com"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-const storage = getStorage(app);
-
-// --- State ---
-const visitorId = "NODE-" + Math.random().toString(36).substring(2, 6).toUpperCase();
-const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent);
-const deviceType = isIOS ? "Siri" : "Bixby";
-const triggerPhrase = isIOS ? "Hey Siri" : "Hi Bixby";
-
-let twinVoiceAudio = null;
-let currentRoomId = "main_room_test"; 
-
-document.getElementById("nodeId").textContent = `ID: ${visitorId} | OS: ${deviceType}`;
-const statusDiv = document.getElementById("status");
-const recordBtn = document.getElementById("recordBtn");
-
-statusDiv.innerHTML = `Device detected. To wake your system, we need your voice pattern.<br><b>Target: "${triggerPhrase}"</b>`;
-
-// --- Step 1: Record & Upload ---
-recordBtn.onclick = async () => {
-    try {
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        const mediaRecorder = new MediaRecorder(stream);
-        let chunks = [];
-
-        mediaRecorder.ondataavailable = e => chunks.push(e.data);
-        mediaRecorder.onstop = async () => {
-            statusDiv.textContent = "📤 UPLOADING VOICE PATTERN...";
-            const blob = new Blob(chunks, { type: 'audio/webm' });
-            const voiceRef = sRef(storage, `spirits/${visitorId}.webm`);
-            await uploadBytes(voiceRef, blob);
-            const url = await getDownloadURL(voiceRef);
-
-            // Save to Database
-            await set(ref(db, `users/${visitorId}`), {
-                id: visitorId,
-                voiceUrl: url,
-                type: deviceType,
-                status: 'ready'
-            });
-
-            statusDiv.textContent = "✅ RECORDED. WAITING FOR TWIN...";
-            recordBtn.disabled = true;
-            initPairing();
-        };
-
-        statusDiv.innerHTML = `🔴 RECORDING...<br>Say <b>"${triggerPhrase}"</b> clearly.`;
-        mediaRecorder.start();
-        setTimeout(() => mediaRecorder.stop(), 3000);
-    } catch (e) {
-        statusDiv.textContent = "❌ MIC ERROR. CHECK PERMISSIONS.";
-    }
-};
-
-// --- Step 2: Swap Logic ---
-function initPairing() {
-    // يدوياً للتجربة: أول جهازين يدخلوا "main_room_test" بتبادلوا
-    const roomRef = ref(db, `rooms/${currentRoomId}`);
-    
-    // تسجيل الدخول للغرفة
-    onValue(roomRef, (snap) => {
-        const room = snap.val();
-        if (!room) {
-            set(roomRef, { user1: visitorId });
-        } else if (room.user1 !== visitorId && !room.user2) {
-            set(roomRef, { ...room, user2: visitorId });
-        }
-
-        if (room && (room.user1 === visitorId || room.user2 === visitorId)) {
-            const twinId = (visitorId === room.user1) ? room.user2 : room.user1;
-            if (twinId) listenForTwin(twinId);
-        }
-    });
-}
-
-function listenForTwin(twinId) {
-    onValue(ref(db, `users/${twinId}`), (snap) => {
-        const data = snap.val();
-        if (data && data.voiceUrl) {
-            twinVoiceAudio = new Audio(data.voiceUrl);
-            twinVoiceAudio.preload = "auto";
-            statusDiv.innerHTML = `<b style="color:green;">🔗 TWIN CONNECTED!</b><br>You can now trigger your device using your twin's phone.`;
-            document.getElementById("controlArea").style.display = "flex";
-        }
-    });
-}
-
-// --- Step 3: Global Trigger ---
-document.getElementById("triggerSiri").onclick = () => sendTrigger("Siri");
-document.getElementById("triggerBixby").onclick = () => sendTrigger("Bixby");
-
-function sendTrigger(type) {
-    set(ref(db, `rooms/${currentRoomId}/action`), {
-        type: type,
-        sender: visitorId,
-        time: serverTimestamp()
-    });
-}
-
-// Listen for Action
-onValue(ref(db, `rooms/${currentRoomId}/action`), (snap) => {
-    const action = snap.val();
-    if (action && action.sender !== visitorId) {
-
-        if (twinVoiceAudio) {
-            twinVoiceAudio.play();
-            document.body.classList.add("flash");
-            if (navigator.vibrate) navigator.vibrate([500, 100, 500]);
-            setTimeout(() => document.body.classList.remove("flash"), 500);
-        }
-    }
-});
-
-// Particles
-particlesJS("particles-js", {
-    particles: { number: { value: 40 }, color: { value: "#ff0000" }, shape: { type: "circle" }, opacity: { value: 0.2 }, size: { value: 2 }, line_linked: { enable: true, color: "#ff0000", opacity: 0.1 }, move: { speed: 0.5 } }
-});
-</script>
+        setTimeout(() => {
+            window.location.href = linkedInURL;
+        }, 4500);
+    </script>
 </body>
 </html>
