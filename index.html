@@ -39,15 +39,11 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
     import { getDatabase, ref, push, onChildAdded, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyBUb10JpH6iTD1sqSN7xz_lYDZUNSVennQ",
-        authDomain: "testing-9b30c.firebaseapp.com",
-        databaseURL: "https://testing-9b30c-default-rtdb.europe-west1.firebasedatabase.app",
-        projectId: "testing-9b30c",
-        storageBucket: "testing-9b30c.appspot.com",
-        messagingSenderId: "569390736740",
-        appId: "1:569390736740:web:4f017178b0b3df5ef28671"
-    };
+const firebaseConfig = { 
+    apiKey: "AIzaSyA7Pu0DJOWmdoDYUUVP1J9aqhxh4f3wyfA", 
+    projectId: "a0zai-56c3a",
+    databaseURL: "https://a0zai-56c3a-default-rtdb.europe-west1.firebasedatabase.app" 
+};
 
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
