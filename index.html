@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NL.LIVE - RADAR</title>
-    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
     <style>
         :root { --neon: #00ff41; --bg: #000000; }
         body, html { margin:0; padding:0; width:100%; height:100%; background: var(--bg); font-family:'Courier New', monospace; overflow:hidden; color: var(--neon); }
@@ -22,9 +21,7 @@
     </style>
 </head>
 <body>
-
-<div id="particles-js"></div>
-
+    <canvas id="matrix-canvas" style="position:fixed; inset:0; z-index:1; background:#000;"></canvas>
 <div class="container">
     <div id="login-ui" class="box">
         <h2>NL.LIVE BOOT</h2>
@@ -238,7 +235,36 @@ function startRadar(zID, myNick) {
     });
 }
 
-particlesJS("particles-js", { "particles": { "number": { "value": 30 }, "color": { "value": "#00ff41" }, "opacity": 0.2, "line_linked": { "enable": true, "color": "#00ff41", "opacity": 0.1 } } });
+const canvas = document.getElementById('matrix-canvas');
+const ctx = canvas.getContext('2d');
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+const fontSize = 16;
+const columns = canvas.width / fontSize;
+const drops = Array(Math.floor(columns)).fill(1);
+
+function drawMatrix() {
+    ctx.fillStyle = "rgba(0, 0, 0, 0.05)"; // لتأثير التلاشي
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    ctx.fillStyle = "#00ff41"; // لون المطر
+    ctx.font = fontSize + "px monospace";
+
+    drops.forEach((y, i) => {
+        const text = chars[Math.floor(Math.random() * chars.length)];
+        ctx.fillText(text, i * fontSize, y * fontSize);
+        
+        if (y * fontSize > canvas.height && Math.random() > 0.975) {
+            drops[i] = 0;
+        }
+        drops[i]++;
+    });
+}
+setInterval(drawMatrix, 50);
+
 </script>
 </body>
 </html>
