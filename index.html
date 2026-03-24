@@ -6,228 +6,436 @@
     <title>NL.LIVE - nl</title>
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
     <style>
-        :root {
-            --neon: #00ff41;
-            --bg: #000000;
-            --sense-blue: #4a9bbf;
-            --sense-red: #9b5050;
-            --sense-green: #00ff88;
-        }
-
-        body, html { 
-            margin:0; padding:0; width:100%; height:100%; 
-            background: var(--bg); font-family:'Courier New', monospace; 
-            overflow:hidden; color: var(--neon); 
-        }
-
-        /* Scanline effect */
-        body::before { 
-            content: " "; display: block; position: absolute; inset: 0; 
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), 
-                        linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03)); 
-            z-index: 100; background-size: 100% 2px, 3px 100%; pointer-events: none; 
-        }
-
+:root {
+    --neon: #00ff41;
+    --bg: #000000;
+    --sense-green: #b2f2bb;
+    --sense-blue: #4a9bbf;
+    --sense-red: #9b5050;
+}
+   body, html { margin:0; padding:0; width:100%; height:100%; background: var(--bg); font-family:'Courier New', monospace; overflow:hidden; color: var(--neon); }
+        body::before { content: " "; display: block; position: absolute; inset: 0; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03)); z-index: 100; background-size: 100% 2px, 3px 100%; pointer-events: none; }
         #particles-js { position:fixed; inset:0; z-index:1; background: #000; }
+.container { 
+    position:relative; 
+    z-index:10; 
+    display:flex; 
+    flex-direction: column; 
+    justify-content: center; 
+    align-items: center; 
+    min-height: 100vh; 
+}
+    .clock-container {
+    transform-style: preserve-3d;
+    transform: translateZ(20px);
+    transition: transform 0.15s ease-out;
+    will-change: transform;
+    position: relative;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    border: 2px solid var(--sense-green);
+}
+.glass-cover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translateZ(30px);
+}
+.clock-container::after {
+    content: '1•N';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+    letter-spacing: 3px;
+    color: #000;
+    text-shadow: 0 0 7px #00ff88;
+}
+.brand-name {
+    position: absolute;
+    top: 63%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--sense-green);
+    font-size: 9px;
+    letter-spacing: 7px;
+    opacity: 0.6;
+    text-transform: uppercase;
+}
 
-        .container { 
-            position:relative; z-index:10; 
-            display:flex; flex-direction: column; 
-            align-items: center; height: 100vh; 
-            overflow-y: auto; padding: 10px 0;
-        }
+@keyframes pulse {
+    0%,100% { transform: translate(-50%, -50%) scale(1); opacity: 0.9; }
+    50% { transform: translate(-50%, -50%) scale(1.7); opacity: 0.4; }
+}
+.number {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    font-size: 22px;
+    font-weight: bold;
+    padding: 20px;
+    box-sizing: border-box;
+    color: #cccccc;
+}
+.n1  { transform: rotate(0deg); }    .n1 div  { transform: rotate(0deg); }
+.n2  { transform: rotate(30deg); }   .n2 div  { transform: rotate(-30deg); }
+.n3  { transform: rotate(60deg); }   .n3 div  { transform: rotate(-60deg); }
+.n4  { transform: rotate(90deg); }   .n4 div  { transform: rotate(-90deg); }
+.n5  { transform: rotate(120deg); }  .n5 div  { transform: rotate(-120deg); }
+.n6  { transform: rotate(150deg); }  .n6 div  { transform: rotate(-150deg); }
+.n7  { transform: rotate(180deg); }  .n7 div  { transform: rotate(-180deg); }
+.n8  { transform: rotate(210deg); }  .n8 div  { transform: rotate(-210deg); }
+.n9  { transform: rotate(240deg); }  .n9 div  { transform: rotate(-240deg); }
+.n10 { transform: rotate(270deg); }  .n10 div { transform: rotate(-270deg); }
+.n11 { transform: rotate(300deg); }  .n11 div { transform: rotate(-300deg); }
+.n12 { transform: rotate(330deg); }  .n12 div { transform: rotate(-330deg); }
+.hand {
+    position: absolute;
+    bottom: 50%;
+    left: 50%;
+    transform-origin: bottom;
+    border-radius: 10px;
+    transform: translateZ(20px);
+}
+.n1 {
+    position: absolute;
+    bottom: 100%; 
+    left: 50%;
+    transform: translateX(-50%) rotate(0deg); 
+    font-size: 22px;
+    color: #f1f5f9;
+    white-space: nowrap;
+    transition: opacity 0.3s ease;
+}
+.hour {
+    width: 4px;
+    height: 60px;
+    background: rgba(241,245,249,0.25);
+    box-shadow: 0 0 10px rgba(241,245,249,0.3); 
+}
+.minute {
+    width: 3.5px;
+    height: 69px;
+    background: var(--sense-red);
+    box-shadow: 0 0 11px var(--sense-red); 
+}
+.second {
+    width: 2.5px;
+    height: 72px;
+    background: var(--sense-blue);
+    box-shadow: 0 0 12px var(--sense-blue);
+}
 
-        /* Scene for 3D Clock ONLY */
-        .scene {
-            width: 100%;
-            height: 260px; /* تحديد طول ثابت للساعة عشان ما تاخد الشاشة كلها */
-            display: flex; justify-content: center; align-items: center;
-            perspective: 1000px;
-            flex-shrink: 0;
-        }
-
-        .clock-container {
-            transform-style: preserve-3d;
-            position: relative;
-            width: 200px; height: 200px;
-            border-radius: 50%;
-            border: 1px solid rgba(0, 255, 65, 0.2);
-        }
-
-        .clock-container::after {
-            content: '1•N'; position: absolute; top: 50%; left: 50%;
-            transform: translate(-50%, -50%); font-size: 20px;
-            color: #000; text-shadow: 0 0 7px var(--sense-green); z-index: 5;
-        }
-
-        .number {
-            position: absolute; width: 100%; height: 100%;
-            text-align: center; font-size: 18px; font-weight: bold;
-            padding: 15px; box-sizing: border-box; color: #cccccc;
-        }
-
-        /* Numbers Rotation Logic */
-        .n2  { transform: rotate(30deg); }   .n2 div  { transform: rotate(-30deg); }
-        .n3  { transform: rotate(60deg); }   .n3 div  { transform: rotate(-60deg); }
-        .n4  { transform: rotate(90deg); }   .n4 div  { transform: rotate(-90deg); }
-        .n5  { transform: rotate(120deg); }  .n5 div  { transform: rotate(-120deg); }
-        .n6  { transform: rotate(150deg); }  .n6 div  { transform: rotate(-150deg); }
-        .n7  { transform: rotate(180deg); }  .n7 div  { transform: rotate(-180deg); }
-        .n8  { transform: rotate(210deg); }  .n8 div  { transform: rotate(-210deg); }
-        .n9  { transform: rotate(240deg); }  .n9 div  { transform: rotate(-240deg); }
-        .n10 { transform: rotate(270deg); }  .n10 div { transform: rotate(-270deg); }
-        .n11 { transform: rotate(300deg); }  .n11 div { transform: rotate(-300deg); }
-        .n12 { transform: rotate(330deg); }  .n12 div { transform: rotate(-330deg); }
-
-        .hand {
-            position: absolute; bottom: 50%; left: 50%;
-            transform-origin: bottom; border-radius: 10px;
-        }
-        .hour { width: 4px; height: 50px; background: rgba(241,245,249,0.3); }
-        .minute { width: 3px; height: 65px; background: var(--sense-red); }
-        .second { width: 2px; height: 70px; background: var(--sense-blue); }
-
-        .n1 {
-            position: absolute; bottom: 100%; left: 50%;
-            transform: translateX(-50%); font-size: 22px; color: #f1f5f9;
-        }
-
-        /* UI Box Styling */
-        .box {
-            width: 90%; max-width: 350px;
-            background: rgba(0,0,0,0.8);
-            border: 1px solid var(--neon);
-            padding: 20px; box-sizing: border-box;
-            box-shadow: 0 0 15px rgba(0, 255, 65, 0.2);
-            z-index: 20;
-        }
-
-        input, select { 
-            width:100%; padding:12px; background:black; 
-            border:1px solid var(--neon); color:var(--neon); 
-            font-family:inherit; margin-bottom: 15px; outline: none; 
-            box-sizing: border-box;
-        }
-
-        button { 
-            padding:12px; background:var(--neon); color:#000; 
-            border:none; font-weight:bold; cursor:pointer; width: 100%; 
-        }
-
-        #chat-box { height: 50vh; overflow-y:auto; border: 1px solid #004411; padding:10px; margin-bottom: 10px; }
-        .msg-line { margin-bottom: 8px; border-left: 2px solid var(--neon); padding-left: 5px; font-size: 12px; }
+@media (max-width:600px){
+    .clock-container { width:260px; height:260px; }
+    .title { font-size:24px; letter-spacing:8px; }
+    .number { font-size:16px; }
+}
+        #chat-box { height: 60vh; overflow-y:auto; border: 1px solid #004411; padding:10px; background: #000; margin: 10px 0; font-size:13px; scroll-behavior: smooth; }
+        input, select { width:100%; padding:10px; background:black; border:1px solid var(--neon); color:var(--neon); font-family:inherit; margin-bottom: 10px; outline: none; }
+        button { padding:10px; background:var(--neon); color:#000; border:none; font-weight:bold; cursor:pointer; width: 100%; }
+        button:active { background: #fff; }
+        .msg-line { margin-bottom: 8px; border-left: 2px solid var(--neon); padding-left: 5px; word-break: break-all; }
         .timestamp { font-size: 9px; opacity: 0.5; }
+        h2 { text-align:center; text-shadow: 0 0 10px var(--neon); }
+        #nick-input {
+    width: 60%; 
+    display: block; 
+    margin-left: auto;
+    margin-right: auto;
+}
+
     </style>
 </head>
 <body>
-
 <div id="particles-js"></div>
-
 <div class="container">
-    <h2>🇳🇱NL.LIVE✨</h2>
-    
-    <div class="scene">
-        <div class="clock-container">
-            <div class="number n2"><div>12</div></div>
-            <div class="number n3"><div>11</div></div>
-            <div class="number n4"><div>10</div></div>
-            <div class="number n5"><div>9</div></div>
-            <div class="number n6"><div>8</div></div>
-            <div class="number n7"><div>Ƶ</div></div>
-            <div class="number n8"><div>6</div></div>
-            <div class="number n9"><div>5</div></div>
-            <div class="number n10"><div>4</div></div>
-            <div class="number n11"><div>3</div></div>
-            <div class="number n12"><div>2</div></div>
-            <div class="hand hour" id="hour"><div class="n1">∞</div></div>
-            <div class="hand minute" id="minute"></div>
-            <div class="hand second" id="second"></div>
+            <h2>🇳🇱NL live✨</h2>
+    <div class="clock-container">
+        <div class="glass-cover"></div>
+        <div class="brand-name">nl</div>
+        <div class="number n2"><div>12</div></div>
+        <div class="number n3"><div>11</div></div>
+        <div class="number n4"><div>10</div></div>
+        <div class="number n5"><div>9</div></div>
+        <div class="number n6"><div>8</div></div>
+        <div class="number n7"><div>Ƶ</div></div>
+        <div class="number n8"><div>6</div></div>
+        <div class="number n9"><div>5</div></div>
+        <div class="number n10"><div>4</div></div>
+        <div class="number n11"><div>3</div></div>
+        <div class="number n12"><div>2</div></div>
+        <div class="hand hour" id="hour">
+        <div class="n1">∞</div>
         </div>
+        <div class="hand minute" id="minute"></div>
+        <div class="hand second" id="second"></div>
     </div>
-
     <div id="login-ui" class="box">
+        <h2>🇳🇱NL✨</h2>
         <input id="nick-input" placeholder="NICKNAME..." maxlength="12">
         <select id="city-select">
             <option value="">-- SELECT CITY --</option>
         </select>
         <button onclick="boot()">INITIALIZE SYSTEM</button>
     </div>
-
-    <div id="chat-ui" class="box" style="display:none;">
-        <div style="display:flex; justify-content:space-between; font-size:11px; margin-bottom:5px;">
+    <div id="chat-ui" class="box" style="display:none; height: 85vh;">
+        <div style="display:flex; justify-content:space-between; font-size:11px; border-bottom: 1px solid var(--neon); padding-bottom: 5px;">
             <span id="zone-display">Z: SCANNING</span>
             <span id="online-count">👥 0 ONLINE</span>
         </div>
         <div id="chat-box"></div>
+        <div id="char-limit" style="color:#ff3333; font-size:10px; text-align:right;">33 LEFT</div>
         <div style="display:flex; gap:5px;">
-            <input id="msg-input" placeholder="TYPE..." maxlength="33">
+            <input id="msg-input" placeholder="TYPE..." maxlength="33" onkeydown="if(event.key==='Enter') window.send()">
             <button onclick="window.send()" style="width:auto;">SND</button>
         </div>
     </div>
 </div>
-
 <script>
-    // Clock Logic
-    const hour = document.getElementById('hour');
-    const minute = document.getElementById('minute'); 
-    const second = document.getElementById('second');
-    
-    function updateClock() {
-        const now = new Date();
-        const s = now.getSeconds() + now.getMilliseconds() / 1000;
-        const m = now.getMinutes() + s / 60;
-        const h = (now.getHours() % 12) + m / 60;
-        
-        hour.style.transform = `translateX(-50%) rotate(${-h*30 + 30}deg)`;
-        second.style.transform = `translateX(-50%) rotate(${-s*6}deg)`;
-        minute.style.transform = `translateX(-50%) rotate(${-m*6}deg)`;
-        requestAnimationFrame(updateClock);
+const hour = document.getElementById('hour');
+const minute = document.getElementById('minute'); 
+const second = document.getElementById('second');
+const n1 = hour.querySelector('.n1'); 
+function updateClock() {
+    const now = new Date();
+    const ms = now.getMilliseconds();
+    const s = now.getSeconds() + ms / 1000;
+    const m = now.getMinutes() + s / 60;
+    const h = (now.getHours() % 12) + m / 60;
+    hour.style.transform = `translateX(-50%) rotate(${-h*30 + 30}deg)`;
+    if (n1) {
+        n1.style.transform = `translateX(-50%) rotate(${h*30 - 30}deg)`;
+        n1.innerText = "∞";
+        n1.style.fontWeight = '600';
+        n1.style.letterSpacing = '2px';
+        n1.style.fontSize = '18px';
+        n1.style.color = '#f1f5f9'; 
     }
-    updateClock();
-
-    // 3D Tilt Logic
-    const clock = document.querySelector('.clock-container');
-    const scene = document.querySelector('.scene');
-    scene.addEventListener('mousemove', (e) => {
-        const rect = scene.getBoundingClientRect();
-        const x = (e.clientX - rect.left) / rect.width - 0.5;
-        const y = (e.clientY - rect.top) / rect.height - 0.5;
-        clock.style.transform = `rotateY(${x * 20}deg) rotateX(${-y * 20}deg)`;
-    });
+    second.style.transform = `translateX(-50%) rotate(${-s*6 + 0}deg)`;
+    minute.style.transform = `translateX(-50%) rotate(${-m*6 + 0}deg)`;
+    requestAnimationFrame(updateClock);
+}
+updateClock();
 </script>
-
 <script type="module">
-    // Firebase Logic (نفس الكود الخاص بك مع إضافة المدن)
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-    import { getDatabase, ref, push, onChildAdded, serverTimestamp, onValue, onDisconnect, set, get } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
-    
-    const firebaseConfig = { 
-        apiKey: "AIzaSyA7Pu0DJOWmdoDYUUVP1J9aqhxh4f3wyfA", 
-        projectId: "a0zai-56c3a", 
-        databaseURL: "https://a0zai-56c3a-default-rtdb.europe-west1.firebasedatabase.app" 
-    };
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+import { getDatabase, ref, push, onChildAdded, serverTimestamp, onValue, onDisconnect, set, get } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+const firebaseConfig = { 
+    apiKey: "AIzaSyA7Pu0DJOWmdoDYUUVP1J9aqhxh4f3wyfA", 
+    projectId: "a0zai-56c3a", 
+    databaseURL: "https://a0zai-56c3a-default-rtdb.europe-west1.firebasedatabase.app" 
+};
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const nlCities = [
+  { name: "Doetinchem", province: "Gelderland" }, { name: "Aalten", province: "Gelderland" },
+  { name: "Apeldoorn", province: "Gelderland" }, { name: "Arnhem", province: "Gelderland" },
+  { name: "Barneveld", province: "Gelderland" }, { name: "Berg en Dal", province: "Gelderland" },
+  { name: "Buren", province: "Gelderland" }, { name: "Culemborg", province: "Gelderland" },
+  { name: "Doesburg", province: "Gelderland" }, { name: "Druten", province: "Gelderland" },
+  { name: "Duiven", province: "Gelderland" }, { name: "Ede", province: "Gelderland" },
+  { name: "Elburg", province: "Gelderland" }, { name: "Epe", province: "Gelderland" },
+  { name: "Ermelo", province: "Gelderland" }, { name: "Harderwijk", province: "Gelderland" },
+  { name: "Hattem", province: "Gelderland" }, { name: "Heerde", province: "Gelderland" },
+  { name: "Lochem", province: "Gelderland" }, { name: "Maasdriel", province: "Gelderland" },
+  { name: "Neder-Betuwe", province: "Gelderland" }, { name: "Nijkerk", province: "Gelderland" },
+  { name: "Nijmegen", province: "Gelderland" }, { name: "Oldebroek", province: "Gelderland" },
+  { name: "Oost Gelre", province: "Gelderland" }, { name: "Overbetuwe", province: "Gelderland" },
+  { name: "Putten", province: "Gelderland" }, { name: "Renkum", province: "Gelderland" },
+  { name: "Rheden", province: "Gelderland" }, { name: "Rozendaal", province: "Gelderland" },
+  { name: "Scherpenzeel", province: "Gelderland" }, { name: "Tiel", province: "Gelderland" },
+  { name: "Voorst", province: "Gelderland" }, { name: "Wageningen", province: "Gelderland" },
+  { name: "West Betuwe", province: "Gelderland" }, { name: "West Maas en Waal", province: "Gelderland" },
+  { name: "Wijchen", province: "Gelderland" }, { name: "Winterswijk", province: "Gelderland" },
+  { name: "Zaltbommel", province: "Gelderland" }, { name: "Zevenaar", province: "Gelderland" },
+  { name: "Zutphen", province: "Gelderland" }, { name: "Amsterdam", province: "Noord-Holland" },
+  { name: "Aalsmeer", province: "Noord-Holland" }, { name: "Alkmaar", province: "Noord-Holland" },
+  { name: "Amstelveen", province: "Noord-Holland" }, { name: "Bergen", province: "Noord-Holland" },
+  { name: "Beverwijk", province: "Noord-Holland" }, { name: "Bloemendaal", province: "Noord-Holland" },
+  { name: "Castricum", province: "Noord-Holland" }, { name: "Den Helder", province: "Noord-Holland" },
+  { name: "Diemen", province: "Noord-Holland" }, { name: "Edam-Volendam", province: "Noord-Holland" },
+  { name: "Enkhuizen", province: "Noord-Holland" }, { name: "Haarlem", province: "Noord-Holland" },
+  { name: "Haarlemmermeer", province: "Noord-Holland" }, { name: "Heemskerk", province: "Noord-Holland" },
+  { name: "Heemstede", province: "Noord-Holland" }, { name: "Heerhugowaard", province: "Noord-Holland" },
+  { name: "Hilversum", province: "Noord-Holland" }, { name: "Hoorn", province: "Noord-Holland" },
+  { name: "Huizen", province: "Noord-Holland" }, { name: "Koggenland", province: "Noord-Holland" },
+  { name: "Landsmeer", province: "Noord-Holland" }, { name: "Laren", province: "Noord-Holland" },
+  { name: "Medemblik", province: "Noord-Holland" }, { name: "Naarden", province: "Noord-Holland" },
+  { name: "Oostzaan", province: "Noord-Holland" }, { name: "Opmeer", province: "Noord-Holland" },
+  { name: "Ouder-Amstel", province: "Noord-Holland" }, { name: "Purmerend", province: "Noord-Holland" },
+  { name: "Schagen", province: "Noord-Holland" }, { name: "Stede Broec", province: "Noord-Holland" },
+  { name: "Texel", province: "Noord-Holland" }, { name: "Uitgeest", province: "Noord-Holland" },
+  { name: "Uithoorn", province: "Noord-Holland" }, { name: "Velsen", province: "Noord-Holland" },
+  { name: "Waterland", province: "Noord-Holland" }, { name: "Weesp", province: "Noord-Holland" },
+  { name: "Wijdemeren", province: "Noord-Holland" }, { name: "Zaanstad", province: "Noord-Holland" },
+  { name: "Zandvoort", province: "Noord-Holland" }, { name: "Rotterdam", province: "Zuid-Holland" },
+  { name: "The Hague", province: "Zuid-Holland" }, { name: "Alphen aan den Rijn", province: "Zuid-Holland" },
+  { name: "Barendrecht", province: "Zuid-Holland" }, { name: "Capelle aan den IJssel", province: "Zuid-Holland" },
+  { name: "Delft", province: "Zuid-Holland" }, { name: "Dordrecht", province: "Zuid-Holland" },
+  { name: "Gouda", province: "Zuid-Holland" }, { name: "Katwijk", province: "Zuid-Holland" },
+  { name: "Leiden", province: "Zuid-Holland" }, { name: "Leidschendam-Voorburg", province: "Zuid-Holland" },
+  { name: "Maassluis", province: "Zuid-Holland" }, { name: "Midden-Delfland", province: "Zuid-Holland" },
+  { name: "Nieuwkoop", province: "Zuid-Holland" }, { name: "Nissewaard", province: "Zuid-Holland" },
+  { name: "Noordwijk", province: "Zuid-Holland" }, { name: "Oegstgeest", province: "Zuid-Holland" },
+  { name: "Papendrecht", province: "Zuid-Holland" }, { name: "Pijnacker-Nootdorp", province: "Zuid-Holland" },
+  { name: "Ridderkerk", province: "Zuid-Holland" }, { name: "Rijswijk", province: "Zuid-Holland" },
+  { name: "Schiedam", province: "Zuid-Holland" }, { name: "Sliedrecht", province: "Zuid-Holland" },
+  { name: "Vlaardingen", province: "Zuid-Holland" }, { name: "Voorschoten", province: "Zuid-Holland" },
+  { name: "Waddinxveen", province: "Zuid-Holland" }, { name: "Zoetermeer", province: "Zuid-Holland" },
+  { name: "Zoeterwoude", province: "Zuid-Holland" }, { name: "Utrecht", province: "Utrecht" },
+  { name: "Amersfoort", province: "Utrecht" }, { name: "Baarn", province: "Utrecht" },
+  { name: "Bunnik", province: "Utrecht" }, { name: "De Bilt", province: "Utrecht" },
+  { name: "Houten", province: "Utrecht" }, { name: "Nieuwegein", province: "Utrecht" },
+  { name: "Soest", province: "Utrecht" }, { name: "Veenendaal", province: "Utrecht" },
+  { name: "Zeist", province: "Utrecht" }, { name: "Eindhoven", province: "Noord-Brabant" },
+  { name: "Tilburg", province: "Noord-Brabant" }, { name: "Breda", province: "Noord-Brabant" },
+  { name: "Den Bosch", province: "Noord-Brabant" }, { name: "Helmond", province: "Noord-Brabant" },
+  { name: "Groningen", province: "Groningen" }, { name: "Almere", province: "Flevoland" },
+  { name: "Lelystad", province: "Flevoland" }, { name: "Maastricht", province: "Limburg" },
+  { name: "Zwolle", province: "Overijssel" }, { name: "Leeuwarden", province: "Friesland" },
+  { name: "Middelburg", province: "Zeeland" }, { name: "Oss", province: "Noord-Brabant" },
+  { name: "Roosendaal", province: "Noord-Brabant" }, { name: "Bergen op Zoom", province: "Noord-Brabant" },
+  { name: "Waalwijk", province: "Noord-Brabant" }, { name: "Uden", province: "Noord-Brabant" },
+  { name: "Veghel", province: "Noord-Brabant" }, { name: "Best", province: "Noord-Brabant" },
+  { name: "Oosterhout", province: "Noord-Brabant" }, { name: "Etten-Leur", province: "Noord-Brabant" },
+  { name: "Gilze en Rijen", province: "Noord-Brabant" }, { name: "Goirle", province: "Noord-Brabant" },
+  { name: "Loon op Zand", province: "Noord-Brabant" }, { name: "Vught", province: "Noord-Brabant" },
+  { name: "Sint-Michielsgestel", province: "Noord-Brabant" }, { name: "Enschede", province: "Overijssel" },
+  { name: "Hengelo", province: "Overijssel" }, { name: "Deventer", province: "Overijssel" },
+  { name: "Almelo", province: "Overijssel" }, { name: "Hardenberg", province: "Overijssel" },
+  { name: "Kampen", province: "Overijssel" }, { name: "Oldenzaal", province: "Overijssel" },
+  { name: "Raalte", province: "Overijssel" }, { name: "Dalfsen", province: "Overijssel" },
+  { name: "Olst-Wijhe", province: "Overijssel" }, { name: "Tubbergen", province: "Overijssel" },
+  { name: "Twenterand", province: "Overijssel" }, { name: "Wierden", province: "Overijssel" },
+  { name: "Zwartewaterland", province: "Overijssel" }, { name: "Heerlen", province: "Limburg" },
+  { name: "Venlo", province: "Limburg" }, { name: "Roermond", province: "Limburg" },
+  { name: "Sittard-Geleen", province: "Limburg" }, { name: "Weert", province: "Limburg" },
+  { name: "Kerkrade", province: "Limburg" }, { name: "Venray", province: "Limburg" },
+  { name: "Landgraaf", province: "Limburg" }, { name: "Brunssum", province: "Limburg" },
+  { name: "Beek", province: "Limburg" }, { name: "Echt-Susteren", province: "Limburg" },
+  { name: "Maasgouw", province: "Limburg" }, { name: "Assen", province: "Drenthe" },
+  { name: "Emmen", province: "Drenthe" }, { name: "Hoogeveen", province: "Drenthe" },
+  { name: "Meppel", province: "Drenthe" }, { name: "Coevorden", province: "Drenthe" },
+  { name: "Midden-Drenthe", province: "Drenthe" }, { name: "Drachten", province: "Friesland" },
+  { name: "Sneek", province: "Friesland" }, { name: "Heerenveen", province: "Friesland" },
+  { name: "Harlingen", province: "Friesland" }, { name: "Smallingerland", province: "Friesland" },
+  { name: "Súdwest-Fryslân", province: "Friesland" }, { name: "Terneuzen", province: "Zeeland" },
+  { name: "Hulst", province: "Zeeland" }, { name: "Schouwen-Duiveland", province: "Zeeland" },
+  { name: "Tholen", province: "Zeeland" }, { name: "Veere", province: "Zeeland" },
+  { name: "Noordoostpolder", province: "Flevoland" }, { name: "Urk", province: "Flevoland" },
+  { name: "Dronten", province: "Flevoland" }, { name: "Zeewolde", province: "Flevoland" },
+  { name: "Het Hogeland", province: "Groningen" }, { name: "Westerkwartier", province: "Groningen" },
+  { name: "Midden-Groningen", province: "Groningen" }, { name: "Oldambt", province: "Groningen" },
+  { name: "Stadskanaal", province: "Groningen" }, { name: "Veendam", province: "Groningen" },
+  { name: "Gorinchem", province: "Zuid-Holland" }, { name: "Hardinxveld-Giessendam", province: "Zuid-Holland" },
+  { name: "Krimpenerwaard", province: "Zuid-Holland" }, { name: "Westland", province: "Zuid-Holland" },
+  { name: "Woerden", province: "Utrecht" }, { name: "Montfoort", province: "Utrecht" },
+  { name: "Oudewater", province: "Utrecht" }
+];
 
-    // قائمة المدن (اختصار للمثال)
-    const cities = ["Amsterdam", "Rotterdam", "Utrecht", "Eindhoven", "Groningen"]; 
-    const select = document.getElementById("city-select");
-    cities.forEach(c => {
-        let opt = document.createElement("option");
-        opt.value = c; opt.textContent = c.toUpperCase();
-        select.appendChild(opt);
+const select = document.getElementById("city-select");
+nlCities.sort((a, b) => a.name.localeCompare(b.name));
+nlCities.forEach(city => {
+    let opt = document.createElement("option");
+    opt.value = city.name.replace(/\s+/g, '_');
+    opt.textContent = `${city.name.toUpperCase()} (${city.province})`;
+    select.appendChild(opt);
+});
+
+let savedNick = localStorage.getItem("a0z_nick_v6");
+if(savedNick) document.getElementById("nick-input").value = savedNick;
+
+window.boot = () => {
+    const nick = document.getElementById("nick-input").value.trim().toUpperCase();
+    const city = document.getElementById("city-select").value;
+
+    if(!/^[A-Z0-9]+$/.test(nick)) return alert("INVALID ID (Use A-Z, 0-9)");
+    if(!city) return alert("SELECT CITY");
+    
+    localStorage.setItem("a0z_nick_v6", nick);
+    
+    navigator.geolocation.getCurrentPosition((p) => {
+        startRadar(city, nick);
+    }, () => alert("GPS REQUIRED FOR AUTHENTICATION"), { enableHighAccuracy: true });
+};
+
+function startRadar(zID, myNick) {
+    document.getElementById("login-ui").style.display = "none";
+    document.getElementById("chat-ui").style.display = "flex";
+    document.getElementById("zone-display").textContent = `Z: ${zID.replace(/_/g, ' ')}`;
+
+    const msgRef = ref(db, `v6/${zID}/msgs`);
+    const onlineRef = ref(db, `v6/${zID}/online/${myNick}`);
+    const onlineList = ref(db, `v6/${zID}/online`);
+
+    set(onlineRef, serverTimestamp());
+    onDisconnect(onlineRef).remove();
+    onValue(onlineList, (s) => {
+        document.getElementById("online-count").textContent = `👥 ${s.val() ? Object.keys(s.val()).length : 0} ONLINE`;
     });
 
-    window.boot = () => {
-        const nick = document.getElementById("nick-input").value.trim().toUpperCase();
-        const city = document.getElementById("city-select").value;
-        if(!nick || !city) return alert("COMPLETE DATA");
-        
-        document.getElementById("login-ui").style.display = "none";
-        document.getElementById("chat-ui").style.display = "block";
-        document.getElementById("zone-display").textContent = `Z: ${city}`;
-    };
-</script>
+    const today = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+    const usageRef = ref(db, `v6_usage/${myNick}/${today}`);
+    onValue(usageRef, (s) => {
+        document.getElementById("char-limit").textContent = `${33 - (s.val() || 0)} LEFT`;
+    });
 
+    window.send = () => {
+        const inp = document.getElementById("msg-input");
+        const txt = inp.value.trim();
+        if(!txt) return;
+
+        get(usageRef).then((s) => {
+            let used = s.val() || 0;
+            if(used + txt.length > 33) return alert("LIMIT REACHED FOR TODAY");
+            push(msgRef, { n: myNick, m: txt, t: serverTimestamp() });
+            set(usageRef, used + txt.length);
+            inp.value = "";
+        });
+    };
+
+    onChildAdded(msgRef, (s) => {
+        const d = s.val();
+        const div = document.createElement("div");
+        div.className = "msg-line";
+        div.innerHTML = `<span class="timestamp">[${new Date(d.t).toLocaleTimeString()}]</span><br><b>${d.n}✅</b>: ${d.m}`;
+        document.getElementById("chat-box").appendChild(div);
+        document.getElementById("chat-box").scrollTop = document.getElementById("chat-box").scrollHeight;
+    });
+}
+
+particlesJS("particles-js", {
+  "particles": {
+    "number": { "value": 40, "density": { "enable": true, "value_area": 800 } },
+    "color": { "value": "#00ff41" },
+    "shape": { "type": "circle" },
+    "opacity": { "value": 0.5, "random": false },
+    "size": { "value": 1, "random": true },
+    "line_linked": { "enable": true, "distance": 150, "color": "#00ff41", "opacity": 0.2, "width": 1 },
+    "move": { "enable": true, "speed": 0.7, "direction": "none", "random": false, "straight": false, "out_mode": "out", "bounce": false }
+  },
+  "interactivity": {
+    "detect_on": "window", 
+    "events": {
+      "onhover": { "enable": true, "mode": "grab" },
+      "onclick": { "enable": true, "mode": "push" }, // وضع الإضافة عند الكبس
+      "resize": true
+    },
+    "modes": {
+      "grab": { "distance": 140, "line_linked": { "opacity": 1 } },
+      "push": { "particles_nb": 12 }
+    }
+  },
+  "retina_detect": true
+});
+</script>
 </body>
 </html>
