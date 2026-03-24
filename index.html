@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NL.LIVE - RADAR</title>
+    <title>NL.LIVE - nl</title>
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
     <style>
         :root { --neon: #00ff41; --bg: #000000; }
@@ -18,22 +18,26 @@
         .msg-line { margin-bottom: 8px; border-left: 2px solid var(--neon); padding-left: 5px; word-break: break-all; }
         .timestamp { font-size: 9px; opacity: 0.5; }
         h2 { text-align:center; text-shadow: 0 0 10px var(--neon); }
+        #nick-input {
+    width: 60%; 
+    display: block; 
+    margin-left: auto;
+    margin-right: auto;
+}
+
     </style>
 </head>
 <body>
-
 <div id="particles-js"></div>
-
 <div class="container">
     <div id="login-ui" class="box">
-        <h2>NL.LIVE BOOT</h2>
+        <h2>🇳🇱NL✨</h2>
         <input id="nick-input" placeholder="NICKNAME..." maxlength="12">
         <select id="city-select">
             <option value="">-- SELECT CITY --</option>
         </select>
         <button onclick="boot()">INITIALIZE SYSTEM</button>
     </div>
-
     <div id="chat-ui" class="box" style="display:none; height: 85vh;">
         <div style="display:flex; justify-content:space-between; font-size:11px; border-bottom: 1px solid var(--neon); padding-bottom: 5px;">
             <span id="zone-display">Z: SCANNING</span>
@@ -47,11 +51,9 @@
         </div>
     </div>
 </div>
-
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
 import { getDatabase, ref, push, onChildAdded, serverTimestamp, onValue, onDisconnect, set, get } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
-
 const firebaseConfig = { 
     apiKey: "AIzaSyA7Pu0DJOWmdoDYUUVP1J9aqhxh4f3wyfA", 
     projectId: "a0zai-56c3a", 
@@ -174,7 +176,6 @@ nlCities.forEach(city => {
     select.appendChild(opt);
 });
 
-// استرجاع الاسم من الذاكرة
 let savedNick = localStorage.getItem("a0z_nick_v6");
 if(savedNick) document.getElementById("nick-input").value = savedNick;
 
@@ -245,23 +246,22 @@ particlesJS("particles-js", {
     "opacity": { "value": 0.5, "random": false },
     "size": { "value": 3, "random": true },
     "line_linked": { "enable": true, "distance": 150, "color": "#00ff41", "opacity": 0.2, "width": 1 },
-    "move": { "enable": true, "speed": 2, "direction": "none", "random": false, "straight": false, "out_mode": "out", "bounce": false }
+    "move": { "enable": true, "speed": 3, "direction": "none", "random": false, "straight": false, "out_mode": "out", "bounce": false }
   },
   "interactivity": {
-    "detect_on": "canvas",
+    "detect_on": "window", 
     "events": {
-      "onhover": { "enable": true, "mode": "grab" }, // بيسحب الخيوط لعند الماوس
-      "onclick": { "enable": true, "mode": "push" }, // هون التناثر وقت الكبس
+      "onhover": { "enable": true, "mode": "grab" },
+      "onclick": { "enable": true, "mode": "push" }, // وضع الإضافة عند الكبس
       "resize": true
     },
     "modes": {
       "grab": { "distance": 140, "line_linked": { "opacity": 1 } },
-      "push": { "particles_nb": 4 } // عدد الجزيئات اللي بتطلع مع كل كبسة
+      "push": { "particles_nb": 12 }
     }
   },
   "retina_detect": true
 });
-
 </script>
 </body>
 </html>
