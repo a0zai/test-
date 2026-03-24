@@ -150,6 +150,7 @@
     margin-left: auto;
     margin-right: auto;
 }
+.hidden { display: none !important; }
 
     </style>
 </head>
@@ -157,7 +158,7 @@
 <div id="particles-js"></div>
 <div class="container">
         <h2>🇳🇱NL live✨</h2>
-    <div class="clock-container">
+<div class="clock-container" id="main-clock">
         <div class="glass-cover"></div>
         <div class="brand-name">nl</div>
         <div class="number n2"><div>12</div></div>
@@ -366,10 +367,12 @@ window.boot = () => {
 };
 
 function startRadar(zID, myNick) {
+    const clock = document.getElementById("main-clock");
+    const title = document.querySelector("h2");
+    if(clock) clock.classList.add("hidden");
+    if(title) title.classList.add("hidden");
     document.getElementById("login-ui").style.display = "none";
     document.getElementById("chat-ui").style.display = "flex";
-    document.getElementById("zone-display").textContent = `Z: ${zID.replace(/_/g, ' ')}`;
-
     const msgRef = ref(db, `v6/${zID}/msgs`);
     const onlineRef = ref(db, `v6/${zID}/online/${myNick}`);
     const onlineList = ref(db, `v6/${zID}/online`);
