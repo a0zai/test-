@@ -9,7 +9,6 @@
 :root {
     --neon: #00ff41;
     --bg: #000000;
-    --sense-green: #b2f2bb;
     --sense-blue: #4a9bbf;
     --sense-red: #9b5050;
 }
@@ -24,6 +23,9 @@
     justify-content: center; 
     align-items: center; 
     min-height: 100vh; 
+}
+.scene {
+    perspective: 1448px;
 }
     .clock-container {
     transform-style: preserve-3d;
@@ -157,6 +159,7 @@
 <body>
 <div id="particles-js"></div>
 <div class="container">
+   <div class="scene">
     <div class="clock-container">
         <div class="glass-cover"></div>
         <div class="brand-name">nl</div>
@@ -434,6 +437,62 @@ particlesJS("particles-js", {
     }
   },
   "retina_detect": true
+});
+</script>
+<script>
+function toggleAbout() {
+    const overlay = document.getElementById('about-overlay');
+    overlay.classList.toggle('active');
+}
+window.onclick = function(event) {
+    const overlay = document.getElementById('about-overlay');
+    if (event.target === overlay) {
+        overlay.classList.remove('active');
+    }
+}
+
+const clock = document.querySelector('.clock-container');
+const scene = document.querySelector('.scene');
+let currentX = 0, currentY = 0, targetX = 0, targetY = 0;
+
+scene.addEventListener('mousemove', (e) => {
+    const rect = scene.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    targetY = (x - centerX) / centerX * 5; 
+    targetX = -(y - centerY) / centerY * 6; 
+});
+
+scene.addEventListener('mouseleave', () => {
+    targetX = 0;
+    targetY = 0;
+});
+
+function animate3D() {
+    currentX += (targetX - currentX) * 0.17;
+    currentY += (targetY - currentY) * 0.14;
+
+    clock.style.transform = `rotateX(${currentX}deg) rotateY(${currentY}deg)`;
+    clock.style.filter = `drop-shadow(${currentY}px ${currentX*2}px 60px rgba(0,0,0,0.6))`;
+    requestAnimationFrame(animate3D);
+}
+animate3D();
+let touchX = 0, touchY = 0;
+scene.addEventListener('touchstart', e => {
+    touchX = e.touches[0].clientX;
+    touchY = e.touches[0].clientY;
+}, { passive: true });
+scene.addEventListener('touchmove', e => {
+    const dx = e.touches[0].clientX - touchX;
+    const dy = e.touches[0].clientY - touchY;
+    targetY = dx * 0.45;
+    targetX = -dy * 0.45;
+    if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {
+        if (e.cancelable) e.preventDefault();
+    }
+}, { passive: false 
 });
 </script>
 </body>
