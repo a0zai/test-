@@ -25,6 +25,11 @@
     min-height: 100vh; 
 }
 .scene {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     perspective: 1448px;
 }
     .clock-container {
@@ -158,6 +163,7 @@
 <body>
 <div id="particles-js"></div>
 <div class="container">
+    <h2>🇳🇱NL✨</h2>
    <div class="scene">
     <div class="clock-container">
         <div class="glass-cover"></div>
@@ -180,7 +186,6 @@
         <div class="hand second" id="second"></div>
     </div>
     <div id="login-ui" class="box">
-        <h2>🇳🇱NL✨</h2>
         <input id="nick-input" placeholder="NICKNAME..." maxlength="12">
         <select id="city-select">
             <option value="">-- SELECT CITY --</option>
