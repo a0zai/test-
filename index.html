@@ -12,19 +12,12 @@
         #particles-js { position:fixed; inset:0; z-index:1; background: #000; }
         .container { position:relative; z-index:10; display:flex; justify-content:center; align-items:center; height:100vh; }
         #chat-box { height: 60vh; overflow-y:auto; border: 1px solid #004411; padding:10px; background: #000; margin: 10px 0; font-size:13px; scroll-behavior: smooth; }
-        input, select { width:100%; padding:10px; background:black; border:1px solid var(--neon); color:var(--neon); font-family:inherit; margin-bottom: 10px; outline: none; }
+        input, select { width:75%; padding:10px; background:black; border:1px solid var(--neon); color:var(--neon); font-family:inherit; margin-bottom: 10px; outline: none; }
         button { padding:10px; background:var(--neon); color:#000; border:none; font-weight:bold; cursor:pointer; width: 100%; }
         button:active { background: #fff; }
         .msg-line { margin-bottom: 8px; border-left: 2px solid var(--neon); padding-left: 5px; word-break: break-all; }
         .timestamp { font-size: 9px; opacity: 0.5; }
         h2 { text-align:center; text-shadow: 0 0 10px var(--neon); }
-        #nick-input {
-    width: 60%; 
-    display: block; 
-    margin-left: auto;
-    margin-right: auto;
-}
-
     </style>
 </head>
 <body>
@@ -33,12 +26,12 @@
 
 <div class="container">
     <div id="login-ui" class="box">
-        <h2>🇳🇱NL.LIVE✨</h2>
-        <input id="nick-input" placeholder="Naam..." maxlength="12">
+        <h2>NL.LIVE ✨</h2>
+        <input id="nick-input" placeholder="NICKNAME..." maxlength="12">
         <select id="city-select">
-            <option value="">-- Keis je Stad --</option>
+            <option value="">-- SELECT CITY --</option>
         </select>
-        <button onclick="boot()">Klik te Chat</button>
+        <button onclick="boot()">INITIALIZE SYSTEM</button>
     </div>
 
     <div id="chat-ui" class="box" style="display:none; height: 85vh;">
@@ -255,19 +248,20 @@ particlesJS("particles-js", {
     "move": { "enable": true, "speed": 0.4, "direction": "none", "random": false, "straight": false, "out_mode": "out", "bounce": false }
   },
   "interactivity": {
-    "detect_on": "window",
+    "detect_on": "window", // خليناها نافذة كاملة عشان الاستجابة تكون أسرع
     "events": {
       "onhover": { "enable": true, "mode": "grab" },
-      "onclick": { "enable": true, "mode": "push" }, 
+      "onclick": { "enable": true, "mode": "push" }, // وضع الإضافة عند الكبس
       "resize": true
     },
     "modes": {
       "grab": { "distance": 140, "line_linked": { "opacity": 1 } },
-      "push": { "particles_nb": 12 }
+      "push": { "particles_nb": 12 } // جربت لك 12 جزيء مع كل كبسة.. هيك بصير العدد يزيد بسرعة!
     }
   },
   "retina_detect": true
 });
+
 </script>
 </body>
 </html>
