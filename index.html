@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A0Z - FINAL RADAR</title>
+    <title>A0Z</title>
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
     <style>
-        :root { --neon: #00ff41; --bg: #000000; }
+        :root { --neon: #00ff41; --bg: #000000; --orange: #ff3300; }
         body, html { margin:0; padding:0; width:100%; height:100%; background: var(--bg); font-family:'Courier New', monospace; overflow:hidden; color: var(--neon); }
         
-        /* طبقة الشاشة القديمة */
         body::before {
             content: " "; display: block; position: absolute; inset: 0;
             background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
@@ -34,11 +33,13 @@
         #online-count { color: #fff; font-weight: bold; }
         #char-limit { color: #ff3333; font-size: 10px; text-align: right; }
 
-        input { width:100%; padding:10px; background:transparent; border:1px solid var(--neon); color:var(--neon); font-family:inherit; box-sizing: border-box; }
-        button { padding:10px 20px; background:var(--neon); color:#000; border:none; font-weight:bold; cursor:pointer; }
+        input, select { width:100%; padding:10px; background:black; border:1px solid var(--neon); color:var(--neon); font-family:inherit; box-sizing: border-box; margin-bottom: 10px; }
+        button { padding:10px 20px; background:var(--neon); color:#000; border:none; font-weight:bold; cursor:pointer; width: 100%; }
+        button:hover { background: #fff; }
         
         .msg-line { margin-bottom: 8px; border-left: 2px solid var(--neon); padding-left: 5px; }
         .timestamp { font-size: 9px; opacity: 0.5; }
+        h2 { text-align:center; letter-spacing:3px; color: var(--neon); text-shadow: 0 0 5px var(--neon); }
     </style>
 </head>
 <body>
@@ -47,9 +48,12 @@
 
 <div class="container">
     <div id="login-ui" class="box" style="height:auto;">
-        <h2 style="text-align:center; letter-spacing:3px;">SYSTEM BOOT</h2>
+        <h2>NL.LIVE BOOT</h2>
         <input id="nick-input" placeholder="NICKNAME..." maxlength="12">
-        <button onclick="boot()">INITIALIZE</button>
+        <select id="city-select">
+            <option value="">-- SELECT CITY --</option>
+            </select>
+        <button onclick="boot()">INITIALIZE SYSTEM</button>
     </div>
 
     <div id="chat-ui" class="box" style="display:none;">
@@ -61,55 +65,369 @@
         <div id="char-limit">33 LEFT</div>
         <div style="display:flex; gap:5px;">
             <input id="msg-input" placeholder="TYPE..." maxlength="33" onkeydown="if(event.key==='Enter')send()">
-            <button onclick="send()">SND</button>
+            <button onclick="send()" style="width:auto;">SND</button>
         </div>
     </div>
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-import { getDatabase, ref, push, onChildAdded, serverTimestamp, onValue, onDisconnect, set, get } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
+import { getDatabase, ref, push, onChildAdded, serverTimestamp, onValue, onDisconnect, set, get } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.app/https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
 
 const firebaseConfig = { apiKey: "AIzaSyA7Pu0DJOWmdoDYUUVP1J9aqhxh4f3wyfA", projectId: "a0zai-56c3a", databaseURL: "https://a0zai-56c3a-default-rtdb.europe-west1.firebasedatabase.app" };
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
+Const nlCities = [
+  { name: "Doetinchem", province: "Gelderland" },
+  { name: "Aalten", province: "Gelderland" },
+  { name: "Apeldoorn", province: "Gelderland" },
+  { name: "Arnhem", province: "Gelderland" },
+  { name: "Barneveld", province: "Gelderland" },
+  { name: "Berg en Dal", province: "Gelderland" },
+  { name: "Buren", province: "Gelderland" },
+  { name: "Culemborg", province: "Gelderland" },
+  { name: "Doesburg", province: "Gelderland" },
+  { name: "Druten", province: "Gelderland" },
+  { name: "Duiven", province: "Gelderland" },
+  { name: "Ede", province: "Gelderland" },
+  { name: "Elburg", province: "Gelderland" },
+  { name: "Epe", province: "Gelderland" },
+  { name: "Ermelo", province: "Gelderland" },
+  { name: "Harderwijk", province: "Gelderland" },
+  { name: "Hattem", province: "Gelderland" },
+  { name: "Heerde", province: "Gelderland" },
+  { name: "Lochem", province: "Gelderland" },
+  { name: "Maasdriel", province: "Gelderland" },
+  { name: "Neder-Betuwe", province: "Gelderland" },
+  { name: "Nijkerk", province: "Gelderland" },
+  { name: "Nijmegen", province: "Gelderland" },
+  { name: "Oldebroek", province: "Gelderland" },
+  { name: "Oost Gelre", province: "Gelderland" },
+  { name: "Overbetuwe", province: "Gelderland" },
+  { name: "Putten", province: "Gelderland" },
+  { name: "Renkum", province: "Gelderland" },
+  { name: "Rheden", province: "Gelderland" },
+  { name: "Rozendaal", province: "Gelderland" },
+  { name: "Scherpenzeel", province: "Gelderland" },
+  { name: "Tiel", province: "Gelderland" },
+  { name: "Voorst", province: "Gelderland" },
+  { name: "Wageningen", province: "Gelderland" },
+  { name: "West Betuwe", province: "Gelderland" },
+  { name: "West Maas en Waal", province: "Gelderland" },
+  { name: "Wijchen", province: "Gelderland" },
+  { name: "Winterswijk", province: "Gelderland" },
+  { name: "Zaltbommel", province: "Gelderland" },
+  { name: "Zevenaar", province: "Gelderland" },
+  { name: "Zutphen", province: "Gelderland" },
+  { name: "Amsterdam", province: "Noord-Holland" },
+  { name: "Aalsmeer", province: "Noord-Holland" },
+  { name: "Alkmaar", province: "Noord-Holland" },
+  { name: "Amstelveen", province: "Noord-Holland" },
+  { name: "Bergen", province: "Noord-Holland" },
+  { name: "Beverwijk", province: "Noord-Holland" },
+  { name: "Bloemendaal", province: "Noord-Holland" },
+  { name: "Castricum", province: "Noord-Holland" },
+  { name: "Den Helder", province: "Noord-Holland" },
+  { name: "Diemen", province: "Noord-Holland" },
+  { name: "Edam-Volendam", province: "Noord-Holland" },
+  { name: "Enkhuizen", province: "Noord-Holland" },
+  { name: "Haarlem", province: "Noord-Holland" },
+  { name: "Haarlemmermeer", province: "Noord-Holland" },
+  { name: "Heemskerk", province: "Noord-Holland" },
+  { name: "Heemstede", province: "Noord-Holland" },
+  { name: "Heerhugowaard", province: "Noord-Holland" },
+  { name: "Hilversum", province: "Noord-Holland" },
+  { name: "Hoorn", province: "Noord-Holland" },
+  { name: "Huizen", province: "Noord-Holland" },
+  { name: "Koggenland", province: "Noord-Holland" },
+  { name: "Landsmeer", province: "Noord-Holland" },
+  { name: "Laren", province: "Noord-Holland" },
+  { name: "Medemblik", province: "Noord-Holland" },
+  { name: "Naarden", province: "Noord-Holland" },
+  { name: "Oostzaan", province: "Noord-Holland" },
+  { name: "Opmeer", province: "Noord-Holland" },
+  { name: "Ouder-Amstel", province: "Noord-Holland" },
+  { name: "Purmerend", province: "Noord-Holland" },
+  { name: "Schagen", province: "Noord-Holland" },
+  { name: "Stede Broec", province: "Noord-Holland" },
+  { name: "Texel", province: "Noord-Holland" },
+  { name: "Uitgeest", province: "Noord-Holland" },
+  { name: "Uithoorn", province: "Noord-Holland" },
+  { name: "Velsen", province: "Noord-Holland" },
+  { name: "Waterland", province: "Noord-Holland" },
+  { name: "Weesp", province: "Noord-Holland" },
+  { name: "Wijdemeren", province: "Noord-Holland" },
+  { name: "Zaanstad", province: "Noord-Holland" },
+  { name: "Zandvoort", province: "Noord-Holland" },
+  { name: "Rotterdam", province: "Zuid-Holland" },
+  { name: "The Hague", province: "Zuid-Holland" },
+  { name: "Alphen aan den Rijn", province: "Zuid-Holland" },
+  { name: "Barendrecht", province: "Zuid-Holland" },
+  { name: "Capelle aan den IJssel", province: "Zuid-Holland" },
+  { name: "Delft", province: "Zuid-Holland" },
+  { name: "Dordrecht", province: "Zuid-Holland" },
+  { name: "Gouda", province: "Zuid-Holland" },
+  { name: "Katwijk", province: "Zuid-Holland" },
+  { name: "Leiden", province: "Zuid-Holland" },
+  { name: "Leidschendam-Voorburg", province: "Zuid-Holland" },
+  { name: "Maassluis", province: "Zuid-Holland" },
+  { name: "Midden-Delfland", province: "Zuid-Holland" },
+  { name: "Nieuwkoop", province: "Zuid-Holland" },
+  { name: "Nissewaard", province: "Zuid-Holland" },
+  { name: "Noordwijk", province: "Zuid-Holland" },
+  { name: "Oegstgeest", province: "Zuid-Holland" },
+  { name: "Papendrecht", province: "Zuid-Holland" },
+  { name: "Pijnacker-Nootdorp", province: "Zuid-Holland" },
+  { name: "Ridderkerk", province: "Zuid-Holland" },
+  { name: "Rijswijk", province: "Zuid-Holland" },
+  { name: "Schiedam", province: "Zuid-Holland" },
+  { name: "Sliedrecht", province: "Zuid-Holland" },
+  { name: "Vlaardingen", province: "Zuid-Holland" },
+  { name: "Voorschoten", province: "Zuid-Holland" },
+  { name: "Waddinxveen", province: "Zuid-Holland" },
+  { name: "Zoetermeer", province: "Zuid-Holland" },
+  { name: "Zoeterwoude", province: "Zuid-Holland" },
+  { name: "Utrecht", province: "Utrecht" },
+  { name: "Amersfoort", province: "Utrecht" },
+  { name: "Baarn", province: "Utrecht" },
+  { name: "Bunnik", province: "Utrecht" },
+  { name: "De Bilt", province: "Utrecht" },
+  { name: "Houten", province: "Utrecht" },
+  { name: "Nieuwegein", province: "Utrecht" },
+  { name: "Soest", province: "Utrecht" },
+  { name: "Veenendaal", province: "Utrecht" },
+  { name: "Zeist", province: "Utrecht" },
+  { name: "Eindhoven", province: "Noord-Brabant" },
+  { name: "Tilburg", province: "Noord-Brabant" },
+  { name: "Breda", province: "Noord-Brabant" },
+  { name: "Den Bosch", province: "Noord-Brabant" },
+  { name: "Helmond", province: "Noord-Brabant" },
+  { name: "Groningen", province: "Groningen" },
+  { name: "Almere", province: "Flevoland" },
+  { name: "Lelystad", province: "Flevoland" },
+  { name: "Maastricht", province: "Limburg" },
+  { name: "Zwolle", province: "Overijssel" },
+  { name: "Leeuwarden", province: "Friesland" },
+  { name: "Middelburg", province: "Zeeland" }
+  { name: "Oss", province: "Noord-Brabant" },
+  { name: "Roosendaal", province: "Noord-Brabant" },
+  { name: "Bergen op Zoom", province: "Noord-Brabant" },
+  { name: "Waalwijk", province: "Noord-Brabant" },
+  { name: "Uden", province: "Noord-Brabant" },
+  { name: "Veghel", province: "Noord-Brabant" },
+  { name: "Best", province: "Noord-Brabant" },
+  { name: "Oosterhout", province: "Noord-Brabant" },
+  { name: "Etten-Leur", province: "Noord-Brabant" },
+  { name: "Gilze en Rijen", province: "Noord-Brabant" },
+  { name: "Goirle", province: "Noord-Brabant" },
+  { name: "Loon op Zand", province: "Noord-Brabant" },
+  { name: "Vught", province: "Noord-Brabant" },
+  { name: "Sint-Michielsgestel", province: "Noord-Brabant" },
+  { name: "Enschede", province: "Overijssel" },
+  { name: "Hengelo", province: "Overijssel" },
+  { name: "Deventer", province: "Overijssel" },
+  { name: "Almelo", province: "Overijssel" },
+  { name: "Hardenberg", province: "Overijssel" },
+  { name: "Kampen", province: "Overijssel" },
+  { name: "Oldenzaal", province: "Overijssel" },
+  { name: "Raalte", province: "Overijssel" },
+  { name: "Dalfsen", province: "Overijssel" },
+  { name: "Olst-Wijhe", province: "Overijssel" },
+  { name: "Tubbergen", province: "Overijssel" },
+  { name: "Twenterand", province: "Overijssel" },
+  { name: "Wierden", province: "Overijssel" },
+  { name: "Zwartewaterland", province: "Overijssel" },
+  { name: "Heerlen", province: "Limburg" },
+  { name: "Venlo", province: "Limburg" },
+  { name: "Roermond", province: "Limburg" },
+  { name: "Sittard-Geleen", province: "Limburg" },
+  { name: "Weert", province: "Limburg" },
+  { name: "Kerkrade", province: "Limburg" },
+  { name: "Venray", province: "Limburg" },
+  { name: "Landgraaf", province: "Limburg" },
+  { name: "Brunssum", province: "Limburg" },
+  { name: "Beek", province: "Limburg" },
+  { name: "Echt-Susteren", province: "Limburg" },
+  { name: "Maasgouw", province: "Limburg" },
+  { name: "Assen", province: "Drenthe" },
+  { name: "Emmen", province: "Drenthe" },
+  { name: "Hoogeveen", province: "Drenthe" },
+  { name: "Meppel", province: "Drenthe" },
+  { name: "Coevorden", province: "Drenthe" },
+  { name: "Midden-Drenthe", province: "Drenthe" },
+  { name: "Drachten", province: "Friesland" },
+  { name: "Sneek", province: "Friesland" },
+  { name: "Heerenveen", province: "Friesland" },
+  { name: "Harlingen", province: "Friesland" },
+  { name: "Smallingerland", province: "Friesland" },
+  { name: "Súdwest-Fryslân", province: "Friesland" },
+  { name: "Terneuzen", province: "Zeeland" },
+  { name: "Hulst", province: "Zeeland" },
+  { name: "Schouwen-Duiveland", province: "Zeeland" },
+  { name: "Tholen", province: "Zeeland" },
+  { name: "Veere", province: "Zeeland" },
+  { name: "Noordoostpolder", province: "Flevoland" },
+  { name: "Urk", province: "Flevoland" },
+  { name: "Dronten", province: "Flevoland" },
+  { name: "Zeewolde", province: "Flevoland" },
+  { name: "Het Hogeland", province: "Groningen" },
+  { name: "Westerkwartier", province: "Groningen" },
+  { name: "Midden-Groningen", province: "Groningen" },
+  { name: "Oldambt", province: "Groningen" },
+  { name: "Stadskanaal", province: "Groningen" },
+  { name: "Veendam", province: "Groningen" },
+  { name: "Gorinchem", province: "Zuid-Holland" },
+  { name: "Hardinxveld-Giessendam", province: "Zuid-Holland" },
+  { name: "Krimpenerwaard", province: "Zuid-Holland" },
+  { name: "Westland", province: "Zuid-Holland" },
+  { name: "Woerden", province: "Utrecht" },
+  { name: "Montfoort", province: "Utrecht" },
+  { name: "Oudewater", province: "Utrecht" },
+  { name: "Altena", province: "Noord-Brabant" },
+  { name: "Asten", province: "Noord-Brabant" },
+  { name: "Bernheze", province: "Noord-Brabant" },
+  { name: "Bladel", province: "Noord-Brabant" },
+  { name: "Boekel", province: "Noord-Brabant" },
+  { name: "Boxmeer", province: "Noord-Brabant" },
+  { name: "Boxtel", province: "Noord-Brabant" },
+  { name: "Cranendonck", province: "Noord-Brabant" },
+  { name: "Deurne", province: "Noord-Brabant" },
+  { name: "Dongen", province: "Noord-Brabant" },
+  { name: "Drimmelen", province: "Noord-Brabant" },
+  { name: "Geertruidenberg", province: "Noord-Brabant" },
+  { name: "Halderberge", province: "Noord-Brabant" },
+  { name: "Heeze-Leende", province: "Noord-Brabant" },
+  { name: "Hilvarenbeek", province: "Noord-Brabant" },
+  { name: "Land van Cuijk", province: "Noord-Brabant" },
+  { name: "Meierijstad", province: "Noord-Brabant" },
+  { name: "Moerdijk", province: "Noord-Brabant" },
+  { name: "Reusel-De Mierden", province: "Noord-Brabant" },
+  { name: "Rucphen", province: "Noord-Brabant" },
+  { name: "Someren", province: "Noord-Brabant" },
+  { name: "Son en Breugel", province: "Noord-Brabant" },
+  { name: "Steenbergen", province: "Noord-Brabant" },
+  { name: "Woensdrecht", province: "Noord-Brabant" },
+  { name: "Zundert", province: "Noord-Brabant" },
+  { name: "Aa en Hunze", province: "Drenthe" },
+  { name: "Borger-Odoorn", province: "Drenthe" },
+  { name: "De Wolden", province: "Drenthe" },
+  { name: "Noordenveld", province: "Drenthe" },
+  { name: "Tynaarlo", province: "Drenthe" },
+  { name: "Westerveld", province: "Drenthe" },
+  { name: "Achtkarspelen", province: "Friesland" },
+  { name: "Ameland", province: "Friesland" },
+  { name: "Dantumadiel", province: "Friesland" },
+  { name: "De Fryske Marren", province: "Friesland" },
+  { name: "Noardeast-Fryslân", province: "Friesland" },
+  { name: "Ooststellingwerf", province: "Friesland" },
+  { name: "Opsterland", province: "Friesland" },
+  { name: "Schiermonnikoog", province: "Friesland" },
+  { name: "Terschelling", province: "Friesland" },
+  { name: "Tytsjerksteradiel", province: "Friesland" },
+  { name: "Vlieland", province: "Friesland" },
+  { name: "Weststellingwerf", province: "Friesland" },
+  { name: "Borsele", province: "Zeeland" },
+  { name: "Kapelle", province: "Zeeland" },
+  { name: "Reimerswaal", province: "Zeeland" },
+  { name: "Beuningen", province: "Gelderland" },
+  { name: "Bronckhorst", province: "Gelderland" },
+  { name: "Brummen", province: "Gelderland" },
+  { name: "Heumen", province: "Gelderland" },
+  { name: "Montferland", province: "Gelderland" },
+  { name: "Oude IJsselstreek", province: "Gelderland" },
+  { name: "Albrandswaard", province: "Zuid-Holland" },
+  { name: "Brielle", province: "Zuid-Holland" },
+  { name: "Goeree-Overflakkee", province: "Zuid-Holland" },
+  { name: "Hellevoetsluis", province: "Zuid-Holland" },
+  { name: "Hillegom", province: "Zuid-Holland" },
+  { name: "Kaag en Braassem", province: "Zuid-Holland" },
+  { name: "Lansingerland", province: "Zuid-Holland" },
+  { name: "Lisse", province: "Zuid-Holland" },
+  { name: "Molenlanden", province: "Zuid-Holland" },
+  { name: "Teylingen", province: "Zuid-Holland" },
+  { name: "Zwijndrecht", province: "Zuid-Holland" },
+  { name: "Eemnes", province: "Utrecht" },
+  { name: "IJsselstein", province: "Utrecht" },
+  { name: "Leusden", province: "Utrecht" },
+  { name: "Lopik", province: "Utrecht" },
+  { name: "Renswoude", province: "Utrecht" },
+  { name: "Rhenen", province: "Utrecht" },
+  { name: "Stichtse Vecht", province: "Utrecht" },
+  { name: "Wijk bij Duurstede", province: "Utrecht" },
+  { name: "Bellingwedde", province: "Groningen" },
+  { name: "Eemsdelta", province: "Groningen" },
+  { name: "Pekela", province: "Groningen" },
+  { name: "Westerwolde", province: "Groningen" },
+  { name: "Dinkelland", province: "Overijssel" },
+  { name: "Hellendoorn", province: "Overijssel" },
+  { name: "Hof van Twente", province: "Overijssel" },
+  { name: "Losser", province: "Overijssel" },
+  { name: "Ommen", province: "Overijssel" },
+  { name: "Rijssen-Holten", province: "Overijssel" },
+  { name: "Staphorst", province: "Overijssel" },
+  { name: "Steenwijkerland", province: "Overijssel" },
+  { name: "Beesel", province: "Limburg" },
+  { name: "Bergen (L)", province: "Limburg" },
+  { name: "Eijsden-Margraten", province: "Limburg" },
+  { name: "Gennep", province: "Limburg" },
+  { name: "Gulpen-Wittem", province: "Limburg" },
+  { name: "Horst aan de Maas", province: "Limburg" },
+  { name: "Leudal", province: "Limburg" },
+  { name: "Maastricht", province: "Limburg" },
+  { name: "Mook en Middelaar", province: "Limburg" },
+  { name: "Nederweert", province: "Limburg" },
+  { name: "Peel en Maas", province: "Limburg" },
+  { name: "Roerdalen", province: "Limburg" },
+  { name: "Simpelveld", province: "Limburg" },
+  { name: "Stein", province: "Limburg" },
+  { name: "Vaals", province: "Limburg" },
+  { name: "Valkenburg aan de Geul", province: "Limburg" },
+  { name: "Voerendaal", province: "Limburg" }
+}.sort();
+
+const select = document.getElementById("city-select");
+nlCities.forEach(city => {
+    let opt = document.createElement("option");
+    opt.value = city.replace(/\s+/g, '_');
+    opt.textContent = city.toUpperCase();
+    select.appendChild(opt);
+});
 
 let myNick = localStorage.getItem("a0z_nick_v6");
-if(myNick) {
-    document.getElementById("nick-input").value = myNick;
-    document.getElementById("nick-input").disabled = true;
-}
+if(myNick) document.getElementById("nick-input").value = myNick;
 
 window.boot = () => {
     const nick = document.getElementById("nick-input").value.trim().toUpperCase();
-    if(!/^[A-Z0-9]+$/.test(nick)) return alert("INVALID ID");
+    const city = document.getElementById("city-select").value;
+
+    if(!/^[A-Z0-9]+$/.test(nick)) return alert("INVALID NICKNAME");
+    if(!city) return alert("SELECT YOUR CITY");
     
     localStorage.setItem("a0z_nick_v6", nick);
     myNick = nick;
-
     navigator.geolocation.getCurrentPosition((p) => {
-        const zID = `Z-${(Math.round(p.coords.latitude / 0.0033) * 0.0033).toFixed(4)}_${(Math.round(p.coords.longitude / 0.0033) * 0.0033).toFixed(4)}`.replace(/\./g, '');
-        startRadar(zID);
-    }, () => alert("GPS REQUIRED"), { enableHighAccuracy: true });
+        const lat = p.coords.latitude;
+        if(lat < 50 || lat > 54) return alert("ACCESS DENIED: ONLY FOR NETHERLANDS");
+        
+        startRadar(city);
+    }, () => alert("GPS REQUIRED FOR TRUST"), { enableHighAccuracy: true });
 };
 
 function startRadar(zID) {
     document.getElementById("login-ui").style.display = "none";
     document.getElementById("chat-ui").style.display = "flex";
-    document.getElementById("zone-display").textContent = `Z: ${zID}`;
+    document.getElementById("zone-display").textContent = `CITY: ${zID.replace(/_/g, ' ')}`;
 
     const msgRef = ref(db, `v6/${zID}/msgs`);
     const onlineRef = ref(db, `v6/${zID}/online/${myNick}`);
     const onlineList = ref(db, `v6/${zID}/online`);
 
-    // إصلاح عداد المشاهدة
     set(onlineRef, serverTimestamp());
     onDisconnect(onlineRef).remove();
     onValue(onlineList, (s) => {
         document.getElementById("online-count").textContent = `👥 ${s.val() ? Object.keys(s.val()).length : 0} ONLINE`;
     });
 
-    // عداد الـ 33 حرف
     const today = new Date().toISOString().slice(0, 10).replace(/-/g, '');
     const usageRef = ref(db, `v6_usage/${myNick}/${today}`);
     onValue(usageRef, (s) => {
