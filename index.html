@@ -18,7 +18,6 @@ body, html {
     height: 100%;
     background: var(--bg);
     font-family: 'Courier New', monospace;
-    overflow: hidden;
     color: var(--neon);
 }
 
@@ -48,30 +47,36 @@ body::before {
     position: relative;
     z-index: 10;
     display: flex;
-    justify-content: center;
-    align-items: flex-end;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
     height: 100vh;
     width: 100%;
-    padding-bottom: 0;
+    padding: 20px;
     box-sizing: border-box;
+    overflow: hidden;
 }
 
 .box {
-    width: 100%;
+    width: 90%;
     max-width: 400px;
-    padding: 15px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    background: rgba(0,0,0,0.5); /* شفافية أفضل */
+    background: rgba(0,0,0,0.5);
     border-radius: 8px;
     box-shadow: 0 0 20px rgba(0,255,65,0.5);
+    padding: 15px;
     box-sizing: border-box;
 }
 
+#chat-ui {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
 #chat-box {
-    width: 100%;
-    height: 45vh;
+    flex: 1;
     overflow-y: auto;
     border: 1px solid var(--neon);
     padding: 10px;
@@ -79,6 +84,7 @@ body::before {
     font-size: 13px;
     scroll-behavior: smooth;
     box-sizing: border-box;
+    margin-bottom: 10px;
 }
 
 input, select {
@@ -105,7 +111,6 @@ button {
     border: none;
     font-weight: bold;
     cursor: pointer;
-    width: 100%;
     transition: 0.2s;
 }
 
@@ -115,6 +120,18 @@ button:hover {
 
 button:active {
     background: #fff;
+}
+
+.input-row {
+    display: flex;
+    gap: 5px;
+    width: 100%;
+    flex-shrink: 0;
+}
+
+.input-row input {
+    flex: 1;
+    margin-bottom: 0;
 }
 
 .msg-line {
@@ -368,13 +385,13 @@ function resizeCanvas() {
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 
-const chars = "0101010101010101"; // خليتها أرقام عشان تعطي هيبة للرادار
+const chars = "0101010101010101";
 const fontSize = 16;
 const columns = canvas.width / fontSize;
 const drops = Array(Math.floor(columns)).fill(1);
 
 function drawMatrix() {
-    ctx.fillStyle = "rgba(0, 0, 0, 0.1)"; // زيادة الشفافية شوي عشان المطر يطول بالاختفاء
+    ctx.fillStyle = "rgba(0, 0, 0, 0.1)"; 
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     
     ctx.fillStyle = "#00ff41";
@@ -387,9 +404,7 @@ function drawMatrix() {
         drops[i]++;
     });
 }
-setInterval(drawMatrix, 60); // إبطاء السرعة شوي عشان ما توجع العين
-
-window.boot = boot; // ضروري جداً
+setInterval(drawMatrix, 60);
 
 </script>
 </body>
