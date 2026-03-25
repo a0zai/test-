@@ -4,14 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NL.LIVE - nl</title>
+
 <style>
     :root { --neon: #00ff41; --bg: #000000; }
     body, html { margin:0; padding:0; width:100%; height:100%; background: var(--bg); font-family:'Courier New', monospace; overflow:hidden; color: var(--neon); }
+    #matrix-canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1; /* رقم صغير ليبقى في الخلف */
+        background: #000;
+    }
+
     body::before { content: " "; display: block; position: absolute; inset: 0; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03)); z-index: 100; background-size: 100% 2px, 3px 100%; pointer-events: none; }
 
     .container { 
         position: relative; 
-        z-index: 10; 
+        z-index: 10; /* رقم أكبر ليظهر فوق المطر */
         display: flex; 
         justify-content: center; 
         align-items: flex-end; 
