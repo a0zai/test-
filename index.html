@@ -178,16 +178,12 @@ h2 {
         </select>
         <button onclick="boot()">Klik Chat</button>
     </div>
-
     <div id="chat-ui" class="box" style="display:none;"> <div style="display:flex; justify-content:space-between; font-size:11px; border-bottom: 1px solid var(--neon); padding-bottom: 5px; width: 100%;">
             <span id="zone-display">Z: SCANNING</span>
             <span id="online-count">nl 0 live</span>
         </div>
-        
         <div id="chat-box"></div>
-        
         <div id="char-limit">33 LEFT</div>
-        
         <div style="display:flex; gap:5px; width: 100%;">
             <input id="msg-input" placeholder="TYPE..." maxlength="33" onkeydown="if(event.key==='Enter') window.send()" style="margin-bottom:0;"> <button onclick="window.send()" style="width:auto; white-space: nowrap;">SND</button>
         </div>
@@ -205,8 +201,8 @@ const firebaseConfig = {
 };
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
-const radarBeep = new Audio('https://fsa.zapsplat.com/p_audio/zapsplat_multimedia_beep_short_high_pitched_004_102073.mp3');
-radarBeep.volume = 1.0; 
+const beep = new Audio('https://www.soundjay.com/buttons/beep-01a.mp3');
+beep.play();
 const nlCities = [
   { name: "Doetinchem", province: "Gelderland" }, { name: "Aalten", province: "Gelderland" },
   { name: "Apeldoorn", province: "Gelderland" }, { name: "Arnhem", province: "Gelderland" },
@@ -375,8 +371,6 @@ function startRadar(zID, myNick) {
     };
 onChildAdded(msgRef, (s) => {
     const d = s.val();
-
-    // تشغيل الصوت بأعلى مستوى
     const radarBeep = new Audio('https://fsa.zapsplat.com/p_audio/zapsplat_multimedia_beep_short_high_pitched_004_102073.mp3');
     radarBeep.volume = 1.0; 
     radarBeep.play().catch(() => {
@@ -397,7 +391,7 @@ onChildAdded(msgRef, (s) => {
     chatBox.appendChild(div);
     chatBox.scrollTop = chatBox.scrollHeight;
 });
-
+}
 
 const canvas = document.getElementById('matrix-canvas');
 const ctx = canvas.getContext('2d');
