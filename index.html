@@ -42,12 +42,7 @@ body::before {
     background-size: 100% 2px, 3px 100%;
     pointer-events: none;
 }
-.top-gif {
-    width: 100%;
-    max-width: 400px;
-    height: auto;
-    margin-bottom: 15px;
-}
+
 .container {
     position: relative;
     z-index: 10;
@@ -67,7 +62,7 @@ body::before {
     max-width: 400px;
     display: flex;
     flex-direction: column;
-    background: rgba(0,0,0,0.5);
+    background: url('121.GIF') center/cover no-repeat;
     border-radius: 8px;
     box-shadow: 0 0 20px rgba(0,255,65,0.5);
     padding: 15px;
@@ -167,7 +162,6 @@ h2 {
 </head>
 <body>
 <canvas id="matrix-canvas"></canvas> <div class="container">
-      <img src="121.GIF" class="top-gif"
     <div id="login-ui" class="box">
        <input id="nick-input" placeholder="Naam..." maxlength="12">
         <select id="city-select">
