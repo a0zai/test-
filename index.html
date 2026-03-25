@@ -81,26 +81,26 @@
 </style>
 </head>
 <body>
-    <canvas id="matrix-canvas" style="position:fixed; inset:0; z-index:1; background:#000;"></canvas>
-<div class="container">
+<canvas id="matrix-canvas"></canvas> <div class="container">
     <div id="login-ui" class="box">
-        <input id="nick-input" placeholder="Naam..." maxlength="12">
+        <h2>NL.LIVE</h2> <input id="nick-input" placeholder="Naam..." maxlength="12">
         <select id="city-select">
             <option value="">-- Kies Stad --</option>
         </select>
         <button onclick="boot()">Klik Chat</button>
     </div>
 
-    <div id="chat-ui" class="box" style="display:none; height: 85vh;">
-        <div style="display:flex; justify-content:space-between; font-size:11px; border-bottom: 1px solid var(--neon); padding-bottom: 5px;">
+    <div id="chat-ui" class="box" style="display:none;"> <div style="display:flex; justify-content:space-between; font-size:11px; border-bottom: 1px solid var(--neon); padding-bottom: 5px; width: 100%;">
             <span id="zone-display">Z: SCANNING</span>
             <span id="online-count">👀 0 ONLINE</span>
         </div>
+        
         <div id="chat-box"></div>
-        <div id="char-limit" style="color:#ff3333; font-size:10px; text-align:right;">33 LEFT</div>
-        <div style="display:flex; gap:5px;">
-            <input id="msg-input" placeholder="TYPE..." maxlength="33" onkeydown="if(event.key==='Enter') window.send()">
-            <button onclick="window.send()" style="width:auto;">SND</button>
+        
+        <div id="char-limit">33 LEFT</div>
+        
+        <div style="display:flex; gap:5px; width: 100%;">
+            <input id="msg-input" placeholder="TYPE..." maxlength="33" onkeydown="if(event.key==='Enter') window.send()" style="margin-bottom:0;"> <button onclick="window.send()" style="width:auto; white-space: nowrap;">SND</button>
         </div>
     </div>
 </div>
@@ -297,33 +297,36 @@ function startRadar(zID, myNick) {
 const canvas = document.getElementById('matrix-canvas');
 const ctx = canvas.getContext('2d');
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
 
-const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+const chars = "0101010101010101"; // خليتها أرقام عشان تعطي هيبة للرادار
 const fontSize = 16;
 const columns = canvas.width / fontSize;
 const drops = Array(Math.floor(columns)).fill(1);
 
 function drawMatrix() {
-    ctx.fillStyle = "rgba(0, 0, 0, 0.05)"; // لتأثير التلاشي
+    ctx.fillStyle = "rgba(0, 0, 0, 0.1)"; // زيادة الشفافية شوي عشان المطر يطول بالاختفاء
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     
-    ctx.fillStyle = "#00ff41"; // لون المطر
+    ctx.fillStyle = "#00ff41";
     ctx.font = fontSize + "px monospace";
 
     drops.forEach((y, i) => {
         const text = chars[Math.floor(Math.random() * chars.length)];
         ctx.fillText(text, i * fontSize, y * fontSize);
-        
-        if (y * fontSize > canvas.height && Math.random() > 0.975) {
-            drops[i] = 0;
-        }
+        if (y * fontSize > canvas.height && Math.random() > 0.98) drops[i] = 0;
         drops[i]++;
     });
 }
-setInterval(drawMatrix, 50);
-window.boot = boot; 
+setInterval(drawMatrix, 60); // إبطاء السرعة شوي عشان ما توجع العين
+
+window.boot = boot; // ضروري جداً
+
 </script>
 </body>
 </html>
