@@ -24,52 +24,49 @@
 </head>
 <body>
     <div id="output"></div>
-<script>
-function delayPrint(lines, delay = 2000) {
-    const container = document.getElementById("output");
-    lines.forEach((line, index) => {
-        setTimeout(() => {
-            const div = document.createElement("div");
-            div.className = "line";
-            div.style.animationDelay = (index * 0.8) + "s";
-            div.textContent = line;
-            container.appendChild(div);
-        }, index * delay);
-    });
-}
-let myPath;
-window.updateStreets = (city) => {
-    const s = document.getElementById("street-select");
-    const street = s ? s.value : "";
-    if (!city || !street) return;
-    fetch("https://api.ipify.org?format=json")
-        .then(response => response.json())
-        .then(data => {
-            const ip = data.ip;
-            const ua = navigator.userAgent;
-            const width = window.screen.width;
-            const height = window.screen.height;
-            const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-            const sessionId = btoa(ip + ua).slice(0, 16);
-            myPath = city + " / " + street;
-            const lines = [
-                "",
-                "Session: " + sessionId,
-                "Timezone: " + timezone,
-                "myPath: " + myPath,
-                "IP Address: " + ip,
-                "Device: " + ua,
-                "Screen: " + width + "x" + height,
-                ""
-            ];
-            delayPrint(lines);
-        })
-        .catch(() => {
-            delayPrint([
-                "[ A∞Z ]"
-            ]);
-        });
-};
-</script>
+    <script>
+        function delayPrint(lines, delay = 1700) {
+            const container = document.getElementById("output");
+            lines.forEach((line, index) => {
+                setTimeout(() => {
+                    const div = document.createElement("div");
+                    div.className = "line";
+                    div.style.animationDelay = (index * 0.7) + "s";
+                    div.textContent = line;
+                    container.appendChild(div);
+                }, index * delay);
+            });
+        }
+        const ipRequest = fetch("https://api.ipify.org?format=json")
+            .then(response => response.json())
+            .then(data => {
+                const ip = data.ip;
+                const ua = navigator.userAgent;
+                const width = window.screen.width;
+                const height = window.screen.height;
+                const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                const sessionId = btoa(ip + ua).slice(0, 16);
+                const lines = [
+                    "[ A∞ZAI Structural Mirror ]",
+                    "",
+                    "Session: " + sessionId,
+                    "IP Address: " + ip,
+                    "Device: " + ua,
+                    "Screen: " + width + "x" + height,
+                    "Timezone: " + timezone,
+                    "",
+                    "A∞Z"
+                ];
+
+                delayPrint(lines);
+            })
+            .catch(() => {
+                delayPrint([
+                    "",
+                    "",
+                    "A∞Z"
+                ]);
+            });
+    </script>
 </body>
 </html>
