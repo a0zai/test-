@@ -1,429 +1,75 @@
 <!DOCTYPE html>
-<html lang="nl">
+<html lang="en">
 <head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NL.LIVE - nl</title>
-<style>
-:root {
-    --neon: #00ff41;
-    --bg: #000000;
-    --neon-shadow: 0 0 10px #00ff41, 0 0 20px #00ff41, 0 0 30px #00ff41;
-}
-
-body, html {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    background: var(--bg);
-    font-family: 'Courier New', monospace;
-    color: var(--neon);
-}
-
-#matrix-canvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-    background: #000;
-}
-
-body::before {
-    content: " ";
-    display: block;
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(rgba(18,16,16,0) 50%, rgba(0,0,0,0.1) 50%),
-                linear-gradient(90deg, rgba(255,0,0,0.03), rgba(0,255,0,0.01), rgba(0,0,255,0.03));
-    z-index: 100;
-    background-size: 100% 2px, 3px 100%;
-    pointer-events: none;
-}
-
-.container {
-    position: relative;
-    z-index: 10;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end; 
-    align-items: center;
-    height: 100vh;
-    width: 100%;
-    padding: 0 20px 78px 20px; 
-    box-sizing: border-box;
-    overflow: hidden;
-}
-
-.box {
-    width: 90%;
-    max-width: 400px;
-    display: flex;
-    flex-direction: column;
-    border-radius: 8px;
-    box-shadow: 0 0 20px rgba(0,255,65,0.5);
-    padding: 15px;
-    box-sizing: border-box;
-}
-
-#chat-ui {
-    position: relative;
-    background: url('121.GIF') center/cover no-repeat;
-}
-#chat-ui::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-}
-
-#chat-ui > * {
-    position: relative;
-    z-index: 1;
-}
-
-#chat-box {
-    flex: 1;
-    overflow-y: auto;
-    border: 1px solid var(--neon);
-    padding: 10px;
-    background: rgba(0,0,0,0.85);
-    font-size: 11px;
-    scroll-behavior: smooth;
-    box-sizing: border-box;
-    margin-bottom: 10px;
-}
-
-input, select {
-    width: 100%;
-    padding: 12px;
-    background: rgba(0,0,0,0.9);
-    font-family: inherit;
-    outline: none;
-    box-sizing: border-box;
-    transition: 0.3s;
-}
-
-input:focus, select:focus {
-    box-shadow: var(--neon-shadow);
-    border-color: var(--neon);
-}
-
-button {
-    padding: 12px;
-    background: var(--neon);
-    color: #000;
-    border: none;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-button:hover {
-    filter: brightness(1.2);
-}
-
-button:active {
-    background: #fff;
-}
-
-.input-row {
-    display: flex;
-    gap: 5px;
-    width: 100%;
-    flex-shrink: 0;
-}
-
-.input-row input {
-    flex: 1;
-    margin-bottom: 0;
-}
-
-.msg-line {
-    margin-bottom: 10px;
-    border-left: 2px solid var(--neon);
-    padding-left: 8px;
-    word-break: break-all;
-    text-shadow: var(--neon-shadow);
-}
-
-.timestamp {
-    font-size: 10px;
-    opacity: 0.6;
-}
-
-h2 {
-    text-align: center;
-    text-shadow: var(--neon-shadow);
-    margin-bottom: 10px;
-    font-size: 1.5rem;
-}
-
-#char-limit {
-    color: #ff3333;
-    font-size: 10px;
-    text-align: right;
-    margin-bottom: 5px;
-}
-</style>
+    <title>A∞Z</title>
+    <style>
+        body {
+            background-color: black;
+            color: #00ffcc;
+            font-family: "Courier New", Courier, monospace;
+            padding: 2em;
+            overflow: hidden;
+        }
+        .line {
+            margin-bottom: 1em;
+            opacity: 0;
+            animation: fadeIn 1s forwards;
+        }
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+    </style>
 </head>
 <body>
-<canvas id="matrix-canvas"></canvas> <div class="container">
-    <div id="login-ui" class="box">
-       <input id="nick-input" placeholder="Naam..." maxlength="12">
-        <select id="city-select">
-            <option value="">-- Kies Stad --</option>
-        </select>
-        <button onclick="boot()">Klik Chat</button>
-    </div>
-    <div id="chat-ui" class="box" style="display:none;"> <div style="display:flex; justify-content:space-between; font-size:11px; border-bottom: 1px solid var(--neon); padding-bottom: 5px; width: 100%;">
-            <span id="zone-display">Z: SCANNING</span>
-            <span id="online-count">nl 0 live</span>
-        </div>
-        <div id="chat-box"></div>
-        <div id="char-limit">33 LEFT</div>
-        <div style="display:flex; gap:5px; width: 100%;">
-            <input id="msg-input" placeholder="TYPE..." maxlength="33" onkeydown="if(event.key==='Enter') window.send()" style="margin-bottom:0;"> <button onclick="window.send()" style="width:auto; white-space: nowrap;">SND</button>
-        </div>
-    </div>
-</div>
-
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-import { getDatabase, ref, push, onChildAdded, serverTimestamp, onValue, onDisconnect, set, get } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-database.js";
-
-const firebaseConfig = { 
-    apiKey: "AIzaSyA7Pu0DJOWmdoDYUUVP1J9aqhxh4f3wyfA", 
-    projectId: "a0zai-56c3a", 
-    databaseURL: "https://a0zai-56c3a-default-rtdb.europe-west1.firebasedatabase.app" 
-};
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-const beep = new Audio('https://www.soundjay.com/buttons/beep-01a.mp3');
-beep.play();
-const nlCities = [
-  { name: "Doetinchem", province: "Gelderland" }, { name: "Aalten", province: "Gelderland" },
-  { name: "Apeldoorn", province: "Gelderland" }, { name: "Arnhem", province: "Gelderland" },
-  { name: "Barneveld", province: "Gelderland" }, { name: "Berg en Dal", province: "Gelderland" },
-  { name: "Buren", province: "Gelderland" }, { name: "Culemborg", province: "Gelderland" },
-  { name: "Doesburg", province: "Gelderland" }, { name: "Druten", province: "Gelderland" },
-  { name: "Duiven", province: "Gelderland" }, { name: "Ede", province: "Gelderland" },
-  { name: "Elburg", province: "Gelderland" }, { name: "Epe", province: "Gelderland" },
-  { name: "Ermelo", province: "Gelderland" }, { name: "Harderwijk", province: "Gelderland" },
-  { name: "Hattem", province: "Gelderland" }, { name: "Heerde", province: "Gelderland" },
-  { name: "Lochem", province: "Gelderland" }, { name: "Maasdriel", province: "Gelderland" },
-  { name: "Neder-Betuwe", province: "Gelderland" }, { name: "Nijkerk", province: "Gelderland" },
-  { name: "Nijmegen", province: "Gelderland" }, { name: "Oldebroek", province: "Gelderland" },
-  { name: "Oost Gelre", province: "Gelderland" }, { name: "Overbetuwe", province: "Gelderland" },
-  { name: "Putten", province: "Gelderland" }, { name: "Renkum", province: "Gelderland" },
-  { name: "Rheden", province: "Gelderland" }, { name: "Rozendaal", province: "Gelderland" },
-  { name: "Scherpenzeel", province: "Gelderland" }, { name: "Tiel", province: "Gelderland" },
-  { name: "Voorst", province: "Gelderland" }, { name: "Wageningen", province: "Gelderland" },
-  { name: "West Betuwe", province: "Gelderland" }, { name: "West Maas en Waal", province: "Gelderland" },
-  { name: "Wijchen", province: "Gelderland" }, { name: "Winterswijk", province: "Gelderland" },
-  { name: "Zaltbommel", province: "Gelderland" }, { name: "Zevenaar", province: "Gelderland" },
-  { name: "Zutphen", province: "Gelderland" }, { name: "Amsterdam", province: "Noord-Holland" },
-  { name: "Aalsmeer", province: "Noord-Holland" }, { name: "Alkmaar", province: "Noord-Holland" },
-  { name: "Amstelveen", province: "Noord-Holland" }, { name: "Bergen", province: "Noord-Holland" },
-  { name: "Beverwijk", province: "Noord-Holland" }, { name: "Bloemendaal", province: "Noord-Holland" },
-  { name: "Castricum", province: "Noord-Holland" }, { name: "Den Helder", province: "Noord-Holland" },
-  { name: "Diemen", province: "Noord-Holland" }, { name: "Edam-Volendam", province: "Noord-Holland" },
-  { name: "Enkhuizen", province: "Noord-Holland" }, { name: "Haarlem", province: "Noord-Holland" },
-  { name: "Haarlemmermeer", province: "Noord-Holland" }, { name: "Heemskerk", province: "Noord-Holland" },
-  { name: "Heemstede", province: "Noord-Holland" }, { name: "Heerhugowaard", province: "Noord-Holland" },
-  { name: "Hilversum", province: "Noord-Holland" }, { name: "Hoorn", province: "Noord-Holland" },
-  { name: "Huizen", province: "Noord-Holland" }, { name: "Koggenland", province: "Noord-Holland" },
-  { name: "Landsmeer", province: "Noord-Holland" }, { name: "Laren", province: "Noord-Holland" },
-  { name: "Medemblik", province: "Noord-Holland" }, { name: "Naarden", province: "Noord-Holland" },
-  { name: "Oostzaan", province: "Noord-Holland" }, { name: "Opmeer", province: "Noord-Holland" },
-  { name: "Ouder-Amstel", province: "Noord-Holland" }, { name: "Purmerend", province: "Noord-Holland" },
-  { name: "Schagen", province: "Noord-Holland" }, { name: "Stede Broec", province: "Noord-Holland" },
-  { name: "Texel", province: "Noord-Holland" }, { name: "Uitgeest", province: "Noord-Holland" },
-  { name: "Uithoorn", province: "Noord-Holland" }, { name: "Velsen", province: "Noord-Holland" },
-  { name: "Waterland", province: "Noord-Holland" }, { name: "Weesp", province: "Noord-Holland" },
-  { name: "Wijdemeren", province: "Noord-Holland" }, { name: "Zaanstad", province: "Noord-Holland" },
-  { name: "Zandvoort", province: "Noord-Holland" }, { name: "Rotterdam", province: "Zuid-Holland" },
-  { name: "The Hague", province: "Zuid-Holland" }, { name: "Alphen aan den Rijn", province: "Zuid-Holland" },
-  { name: "Barendrecht", province: "Zuid-Holland" }, { name: "Capelle aan den IJssel", province: "Zuid-Holland" },
-  { name: "Delft", province: "Zuid-Holland" }, { name: "Dordrecht", province: "Zuid-Holland" },
-  { name: "Gouda", province: "Zuid-Holland" }, { name: "Katwijk", province: "Zuid-Holland" },
-  { name: "Leiden", province: "Zuid-Holland" }, { name: "Leidschendam-Voorburg", province: "Zuid-Holland" },
-  { name: "Maassluis", province: "Zuid-Holland" }, { name: "Midden-Delfland", province: "Zuid-Holland" },
-  { name: "Nieuwkoop", province: "Zuid-Holland" }, { name: "Nissewaard", province: "Zuid-Holland" },
-  { name: "Noordwijk", province: "Zuid-Holland" }, { name: "Oegstgeest", province: "Zuid-Holland" },
-  { name: "Papendrecht", province: "Zuid-Holland" }, { name: "Pijnacker-Nootdorp", province: "Zuid-Holland" },
-  { name: "Ridderkerk", province: "Zuid-Holland" }, { name: "Rijswijk", province: "Zuid-Holland" },
-  { name: "Schiedam", province: "Zuid-Holland" }, { name: "Sliedrecht", province: "Zuid-Holland" },
-  { name: "Vlaardingen", province: "Zuid-Holland" }, { name: "Voorschoten", province: "Zuid-Holland" },
-  { name: "Waddinxveen", province: "Zuid-Holland" }, { name: "Zoetermeer", province: "Zuid-Holland" },
-  { name: "Zoeterwoude", province: "Zuid-Holland" }, { name: "Utrecht", province: "Utrecht" },
-  { name: "Amersfoort", province: "Utrecht" }, { name: "Baarn", province: "Utrecht" },
-  { name: "Bunnik", province: "Utrecht" }, { name: "De Bilt", province: "Utrecht" },
-  { name: "Houten", province: "Utrecht" }, { name: "Nieuwegein", province: "Utrecht" },
-  { name: "Soest", province: "Utrecht" }, { name: "Veenendaal", province: "Utrecht" },
-  { name: "Zeist", province: "Utrecht" }, { name: "Eindhoven", province: "Noord-Brabant" },
-  { name: "Tilburg", province: "Noord-Brabant" }, { name: "Breda", province: "Noord-Brabant" },
-  { name: "Den Bosch", province: "Noord-Brabant" }, { name: "Helmond", province: "Noord-Brabant" },
-  { name: "Groningen", province: "Groningen" }, { name: "Almere", province: "Flevoland" },
-  { name: "Lelystad", province: "Flevoland" }, { name: "Maastricht", province: "Limburg" },
-  { name: "Zwolle", province: "Overijssel" }, { name: "Leeuwarden", province: "Friesland" },
-  { name: "Middelburg", province: "Zeeland" }, { name: "Oss", province: "Noord-Brabant" },
-  { name: "Roosendaal", province: "Noord-Brabant" }, { name: "Bergen op Zoom", province: "Noord-Brabant" },
-  { name: "Waalwijk", province: "Noord-Brabant" }, { name: "Uden", province: "Noord-Brabant" },
-  { name: "Veghel", province: "Noord-Brabant" }, { name: "Best", province: "Noord-Brabant" },
-  { name: "Oosterhout", province: "Noord-Brabant" }, { name: "Etten-Leur", province: "Noord-Brabant" },
-  { name: "Gilze en Rijen", province: "Noord-Brabant" }, { name: "Goirle", province: "Noord-Brabant" },
-  { name: "Loon op Zand", province: "Noord-Brabant" }, { name: "Vught", province: "Noord-Brabant" },
-  { name: "Sint-Michielsgestel", province: "Noord-Brabant" }, { name: "Enschede", province: "Overijssel" },
-  { name: "Hengelo", province: "Overijssel" }, { name: "Deventer", province: "Overijssel" },
-  { name: "Almelo", province: "Overijssel" }, { name: "Hardenberg", province: "Overijssel" },
-  { name: "Kampen", province: "Overijssel" }, { name: "Oldenzaal", province: "Overijssel" },
-  { name: "Raalte", province: "Overijssel" }, { name: "Dalfsen", province: "Overijssel" },
-  { name: "Olst-Wijhe", province: "Overijssel" }, { name: "Tubbergen", province: "Overijssel" },
-  { name: "Twenterand", province: "Overijssel" }, { name: "Wierden", province: "Overijssel" },
-  { name: "Zwartewaterland", province: "Overijssel" }, { name: "Heerlen", province: "Limburg" },
-  { name: "Venlo", province: "Limburg" }, { name: "Roermond", province: "Limburg" },
-  { name: "Sittard-Geleen", province: "Limburg" }, { name: "Weert", province: "Limburg" },
-  { name: "Kerkrade", province: "Limburg" }, { name: "Venray", province: "Limburg" },
-  { name: "Landgraaf", province: "Limburg" }, { name: "Brunssum", province: "Limburg" },
-  { name: "Beek", province: "Limburg" }, { name: "Echt-Susteren", province: "Limburg" },
-  { name: "Maasgouw", province: "Limburg" }, { name: "Assen", province: "Drenthe" },
-  { name: "Emmen", province: "Drenthe" }, { name: "Hoogeveen", province: "Drenthe" },
-  { name: "Meppel", province: "Drenthe" }, { name: "Coevorden", province: "Drenthe" },
-  { name: "Midden-Drenthe", province: "Drenthe" }, { name: "Drachten", province: "Friesland" },
-  { name: "Sneek", province: "Friesland" }, { name: "Heerenveen", province: "Friesland" },
-  { name: "Harlingen", province: "Friesland" }, { name: "Smallingerland", province: "Friesland" },
-  { name: "Súdwest-Fryslân", province: "Friesland" }, { name: "Terneuzen", province: "Zeeland" },
-  { name: "Hulst", province: "Zeeland" }, { name: "Schouwen-Duiveland", province: "Zeeland" },
-  { name: "Tholen", province: "Zeeland" }, { name: "Veere", province: "Zeeland" },
-  { name: "Noordoostpolder", province: "Flevoland" }, { name: "Urk", province: "Flevoland" },
-  { name: "Dronten", province: "Flevoland" }, { name: "Zeewolde", province: "Flevoland" },
-  { name: "Het Hogeland", province: "Groningen" }, { name: "Westerkwartier", province: "Groningen" },
-  { name: "Midden-Groningen", province: "Groningen" }, { name: "Oldambt", province: "Groningen" },
-  { name: "Stadskanaal", province: "Groningen" }, { name: "Veendam", province: "Groningen" },
-  { name: "Gorinchem", province: "Zuid-Holland" }, { name: "Hardinxveld-Giessendam", province: "Zuid-Holland" },
-  { name: "Krimpenerwaard", province: "Zuid-Holland" }, { name: "Westland", province: "Zuid-Holland" },
-  { name: "Woerden", province: "Utrecht" }, { name: "Montfoort", province: "Utrecht" },
-  { name: "Oudewater", province: "Utrecht" }
-];
-
-const select = document.getElementById("city-select");
-nlCities.sort((a, b) => a.name.localeCompare(b.name));
-nlCities.forEach(city => {
-    let opt = document.createElement("option");
-    opt.value = city.name.replace(/\s+/g, '_');
-    opt.textContent = `${city.name.toUpperCase()} (${city.province})`;
-    select.appendChild(opt);
-});
-
-let savedNick = localStorage.getItem("a0z_nick_v6");
-if(savedNick) document.getElementById("nick-input").value = savedNick;
-
-window.boot = () => {
-    const nick = document.getElementById("nick-input").value.trim().toUpperCase();
-    const city = document.getElementById("city-select").value;
-
-    if(!/^[A-Z0-9]+$/.test(nick)) return alert("INVALID ID (Use A-Z, 0-9)");
-    if(!city) return alert("SELECT CITY");
-    
-    localStorage.setItem("a0z_nick_v6", nick);
-    
-    navigator.geolocation.getCurrentPosition((p) => {
-        startRadar(city, nick);
-    }, () => alert("GPS REQUIRED FOR AUTHENTICATION"), { enableHighAccuracy: true });
-};
-
-function startRadar(zID, myNick) {
-    document.getElementById("login-ui").style.display = "none";
-    document.getElementById("chat-ui").style.display = "flex";
-    document.getElementById("zone-display").textContent = `Z: ${zID.replace(/_/g, ' ')}`;
-
-    const msgRef = ref(db, `v6/${zID}/msgs`);
-    const onlineRef = ref(db, `v6/${zID}/online/${myNick}`);
-    const onlineList = ref(db, `v6/${zID}/online`);
-
-    set(onlineRef, serverTimestamp());
-    onDisconnect(onlineRef).remove();
-    onValue(onlineList, (s) => {
-        document.getElementById("online-count").textContent = `👥 ${s.val() ? Object.keys(s.val()).length : 0} ONLINE`;
+    <div id="output"></div>
+<script>
+function delayPrint(lines, delay = 2000) {
+    const container = document.getElementById("output");
+    lines.forEach((line, index) => {
+        setTimeout(() => {
+            const div = document.createElement("div");
+            div.className = "line";
+            div.style.animationDelay = (index * 0.8) + "s";
+            div.textContent = line;
+            container.appendChild(div);
+        }, index * delay);
     });
-
-    const today = new Date().toISOString().slice(0, 10).replace(/-/g, '');
-    const usageRef = ref(db, `v6_usage/${myNick}/${today}`);
-    onValue(usageRef, (s) => {
-        document.getElementById("char-limit").textContent = `${33 - (s.val() || 0)} LEFT`;
-    });
-
-    window.send = () => {
-        const inp = document.getElementById("msg-input");
-        const txt = inp.value.trim();
-        if(!txt) return;
-
-        get(usageRef).then((s) => {
-            let used = s.val() || 0;
-            if(used + txt.length > 33) return alert("LIMIT REACHED FOR TODAY");
-            push(msgRef, { n: myNick, m: txt, t: serverTimestamp() });
-            set(usageRef, used + txt.length);
-            inp.value = "";
+}
+let myPath;
+window.updateStreets = (city) => {
+    const s = document.getElementById("street-select");
+    const street = s ? s.value : "";
+    if (!city || !street) return;
+    fetch("https://api.ipify.org?format=json")
+        .then(response => response.json())
+        .then(data => {
+            const ip = data.ip;
+            const ua = navigator.userAgent;
+            const width = window.screen.width;
+            const height = window.screen.height;
+            const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            const sessionId = btoa(ip + ua).slice(0, 16);
+            myPath = city + " / " + street;
+            const lines = [
+                "",
+                "Session: " + sessionId,
+                "Timezone: " + timezone,
+                "myPath: " + myPath,
+                "IP Address: " + ip,
+                "Device: " + ua,
+                "Screen: " + width + "x" + height,
+                ""
+            ];
+            delayPrint(lines);
+        })
+        .catch(() => {
+            delayPrint([
+                "[ A∞Z ]"
+            ]);
         });
-    };
-onChildAdded(msgRef, (s) => {
-    const d = s.val();
-    const radarBeep = new Audio('https://fsa.zapsplat.com/p_audio/zapsplat_multimedia_beep_short_high_pitched_004_102073.mp3');
-    radarBeep.volume = 1.0; 
-    radarBeep.play().catch(() => {
-        console.warn("Touch screen once to enable louder audio.");
-    });
-
-    const chatBox = document.getElementById("chat-box");
-    chatBox.style.borderColor = "#fff";
-    chatBox.style.boxShadow = "0 0 20px var(--neon)";
-    setTimeout(() => {
-        chatBox.style.borderColor = "var(--neon)";
-        chatBox.style.boxShadow = "none";
-    }, 150);
-    const div = document.createElement("div");
-    div.className = "msg-line";
-    div.innerHTML = `<span class="timestamp">[${new Date(d.t).toLocaleTimeString()}]</span><br><b>${d.n}✅</b>: ${d.m}`;
-    
-    chatBox.appendChild(div);
-    chatBox.scrollTop = chatBox.scrollHeight;
-});
-}
-
-const canvas = document.getElementById('matrix-canvas');
-const ctx = canvas.getContext('2d');
-
-function resizeCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-}
-window.addEventListener('resize', resizeCanvas);
-resizeCanvas();
-
-const chars = "0101010101010101";
-const fontSize = 16;
-const columns = canvas.width / fontSize;
-const drops = Array(Math.floor(columns)).fill(1);
-
-function drawMatrix() {
-    ctx.fillStyle = "rgba(0, 0, 0, 0.1)"; 
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    
-    ctx.fillStyle = "#00ff41";
-    ctx.font = fontSize + "px monospace";
-
-    drops.forEach((y, i) => {
-        const text = chars[Math.floor(Math.random() * chars.length)];
-        ctx.fillText(text, i * fontSize, y * fontSize);
-        if (y * fontSize > canvas.height && Math.random() > 0.98) drops[i] = 0;
-        drops[i]++;
-    });
-}
-setInterval(drawMatrix, 60);
-
+};
 </script>
 </body>
 </html>
