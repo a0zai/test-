@@ -11,66 +11,104 @@
             font-family: "Courier New", Courier, monospace;
             padding: 2em;
             overflow: hidden;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            cursor: pointer;
+        }
+        #start-hint {
+            font-size: 1.2em;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            animation: blink 1.5s infinite;
+        }
+        @keyframes blink {
+            0% { opacity: 0.2; }
+            50% { opacity: 1; }
+            100% { opacity: 0.2; }
+        }
+        #v-preview {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            min-width: 100%;
+            min-height: 100%;
+            z-index: -1;
+            object-fit: cover;
+            filter: grayscale(100%) brightness(40%);
+            transform: scaleX(-1);
+            display: none; 
+        }
+        #output {
+            position: absolute;
+            top: 2em;
+            left: 2em;
+            width: 90%;
         }
         .line {
             margin-bottom: 1em;
             opacity: 0;
             animation: fadeIn 1s forwards;
+            text-shadow: 0 0 5px #000;
         }
         @keyframes fadeIn {
             to { opacity: 1; }
         }
     </style>
 </head>
-<body>
+<body onclick="initSystem()">
+    <div id="start-hint"></div>
+    <video id="v-preview" autoplay playsinline></video>
     <div id="output"></div>
     <script>
-        function delayPrint(lines, delay = 1700) {
+        let isInitialized = false;
+        async function initSystem() {
+            if (isInitialized) return; 
+            isInitialized = true;
+            document.getElementById("start-hint").style.display = "none";
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
+                const video = document.getElementById("v-preview");
+                video.srcObject = stream;
+                video.style.display = "block";
+            } catch (e) {
+                console.log("Camera access denied");
+            }
+            fetchDataAndPrint();
+        }
+
+        function fetchDataAndPrint() {
+            fetch("https://ipapi.co/json/")
+                .then(response => response.json())
+                .then(data => {
+                    const lines = [
+                        "[ ACCESSING CORE... ]",
+                        "",
+                        "Session: " + btoa(data.ip).slice(0, 10),
+                        "IP Address: " + data.ip,
+                        "Location: " + (data.city || "Unknown") + ", " + (data.country_name || ""),
+                        "Status: SYSTEM ONLINE",
+                        "",
+                        "A∞Z MIRROR ACTIVE"
+                    ];
+                    delayPrint(lines);
+                })
+                .catch(() => delayPrint(["CONNECTION ERROR", "A∞Z"]));
+        }
+
+        function delayPrint(lines, delay = 1500) {
             const container = document.getElementById("output");
             lines.forEach((line, index) => {
                 setTimeout(() => {
                     const div = document.createElement("div");
                     div.className = "line";
-                    div.style.animationDelay = (index * 0.7) + "s";
                     div.textContent = line;
                     container.appendChild(div);
                 }, index * delay);
             });
         }
-
-        fetch("https://ipapi.co/json/")
-            .then(response => response.json())
-            .then(data => {
-                const ip = data.ip;
-                const city = data.city || "Unknown";
-                const country = data.country_name || "";
-                const ua = navigator.userAgent;
-                const width = window.screen.width;
-                const height = window.screen.height;
-                const sessionId = btoa(ip + ua).slice(0, 16);
-
-                const lines = [
-                    "[ A∞ZAI Structural Mirror ]",
-                    "",
-                    "Session: " + sessionId,
-                    "IP Address: " + ip,
-                    "Location: " + city + ", " + country,
-                    "Device: " + ua,
-                    "Screen: " + width + "x" + height,
-                    "",
-                    "A∞Z"
-                ];
-
-                delayPrint(lines);
-            })
-            .catch(() => {
-                delayPrint([
-                    "",
-                    "CONNECTION ERROR",
-                    "",
-                    "A∞Z"
-                ]);
-            });
     </script>
 </body>
 </html>
