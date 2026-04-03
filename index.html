@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
     <title>A∞Z</title>
     <style>
@@ -37,23 +37,26 @@
                 }, index * delay);
             });
         }
-        const ipRequest = fetch("https://api.ipify.org?format=json")
+
+        fetch("https://ipapi.co/json/")
             .then(response => response.json())
             .then(data => {
                 const ip = data.ip;
+                const city = data.city || "Unknown";
+                const country = data.country_name || "";
                 const ua = navigator.userAgent;
                 const width = window.screen.width;
                 const height = window.screen.height;
-                const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
                 const sessionId = btoa(ip + ua).slice(0, 16);
+
                 const lines = [
                     "[ A∞ZAI Structural Mirror ]",
                     "",
                     "Session: " + sessionId,
                     "IP Address: " + ip,
+                    "Location: " + city + ", " + country,
                     "Device: " + ua,
                     "Screen: " + width + "x" + height,
-                    "Timezone: " + timezone,
                     "",
                     "A∞Z"
                 ];
@@ -63,6 +66,7 @@
             .catch(() => {
                 delayPrint([
                     "",
+                    "CONNECTION ERROR",
                     "",
                     "A∞Z"
                 ]);
