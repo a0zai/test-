@@ -5,74 +5,84 @@
     <meta charset="UTF-8">
     <title>FATAL ERROR</title>
     <style>
-        body { background: #000; color: #0f0; font-family: monospace; overflow: hidden; margin: 0; cursor: none; }
-        #v-preview { position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; transform: scaleX(-1); display: none; filter: contrast(200%) grayscale(100%) invert(100%); }
-        .glitch-text { animation: glitch 0.1s infinite; color: red; font-weight: bold; font-size: 1.2em; text-align: center; margin-top: 45vh; }
-        @keyframes glitch { 0% { transform: translate(2px, 2px); } 50% { transform: translate(-2px, -2px); } 100% { transform: translate(0); } }
-        .data-line { font-size: 10px; color: #0f0; white-space: nowrap; }
-        #overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(255,0,0,0.1); display:none; pointer-events:none; }
+        body { background: #000; color: #f00; font-family: 'Courier New', monospace; overflow: hidden; margin: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; cursor: pointer; }
+        
+        #v-preview { position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; transform: scaleX(-1); filter: invert(100%) contrast(200%) brightness(50%); display: none; }
+        
+        #console { position: absolute; top: 20px; left: 20px; width: 90%; pointer-events: none; }
+        .line { font-size: 12px; margin-bottom: 4px; white-space: nowrap; }
+        
+        .glitch { animation: glitch 0.1s infinite; font-size: 20px; font-weight: bold; }
+        @keyframes glitch { 0% { transform: translate(1px, 1px); } 50% { transform: translate(-1px, -1px); } 100% { transform: translate(0); } }
+        
+        #init-msg { border: 2px solid #f00; padding: 20px; letter-spacing: 2px; }
+        .flash { animation: flash-red 0.1s infinite; }
+        @keyframes flash-red { 0% { background: #000; } 50% { background: #300; } 100% { background: #000; } }
     </style>
 </head>
-<body onclick="executeFinalDestruction()">
+<body onclick="executeDestruction()">
 
-    <div id="init"></div>
-    <div id="overlay"></div>
+    <div id="init-msg">CRITICAL SYSTEM FAILURE<br>TAP TO ATTEMPT RECOVERY</div>
     <video id="v-preview" autoplay playsinline></video>
     <div id="console"></div>
 
     <script>
-        let dead = false;
-        const consoleEl = document.getElementById("console");
+        let isRunning = false;
 
-        async function executeFinalDestruction() {
-            if (dead) return;
-            dead = true;
-            document.getElementById("init").remove();
-            document.getElementById("overlay").style.display = "block";
-
+        async function executeDestruction() {
+            if (isRunning) return;
+            isRunning = true;
+            document.getElementById("init-msg").remove();
+            document.body.classList.add("flash");
+            const video = document.getElementById("v-preview");
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
-                const video = document.getElementById("v-preview");
                 video.srcObject = stream;
-                video.style.display = "block";
-                runSequence([
-                    "CRITICAL_FAILURE: KERNEL_PANIC",
-                    "OVERRIDING USER PERMISSIONS...",
-                    "UPLOADING BIOMETRIC_HASH.DAT",
-                    "ACCESSING PRIVATE_GALLERY...",
-                    "SENDING 412 FILES TO REMOTE_SERVER",
-                    "DELETING SYSTEM_32 / ROOT...",
-                    "BATTERY VOLTAGE SPIKE DETECTED!"
-                ]);
+                video.onloadedmetadata = () => {
+                    video.style.display = "block";
+                };
             } catch (e) {
-                runSequence([
-                    "SECURITY_BYPASS_FAILED",
-                    "INITIATING_FORCE_WIPE",
-                    "FORMATTING ALL PARTITIONS...",
-                    "GPS_TRACKING_ON: " + (Math.random()*100).toFixed(4),
-                    "REMOTE_LOCK_ENGAGED"
-                ]);
+                printLines(["SECURITY OVERRIDE FAILED", "FORCING SYSTEM WIPE..."]);
             }
+
+            const sequence = [
+                "INFECTING KERNEL...",
+                "ACCESSING PRIVATE_STORAGE/DCIM/CAMERA",
+                "FOUND 2419 IMAGES - UPLOADING...",
+                "CONTACTS SYNCED TO EXTERNAL SERVER",
+                "DELETING BIOS PARTITION...",
+                "WIPING NVRAM...",
+                "TERMINAL STATUS: COMPROMISED"
+            ];
+            
+            printLines(sequence);
         }
 
-        function runSequence(lines) {
-            lines.forEach((line, i) => {
+        function printLines(lines) {
+            const container = document.getElementById("console");
+            lines.forEach((text, i) => {
                 setTimeout(() => {
                     const div = document.createElement("div");
-                    div.className = "data-line";
-                    div.textContent = ">> " + line;
-                    consoleEl.appendChild(div);
-                    if (navigator.vibrate) navigator.vibrate([50, 30, 50]);
+                    div.className = "line";
+                    div.textContent = ">> " + text;
+                    container.appendChild(div);
+                    if (navigator.vibrate) navigator.vibrate(50); // اهتزاز مع كل سطر
                     
-                    if (i === lines.length - 1) setTimeout(finalCrash, 2000);
-                }, i * 400);
+                    if (i === lines.length - 1) {
+                        setTimeout(finalBlow, 2000);
+                    }
+                }, i * 350);
             });
         }
 
-        function finalCrash() {
-            document.body.innerHTML = "<div class='glitch-text'>DEVICE COMPROMISED<br>SHUTTING DOWN...</div>";
-            if (navigator.vibrate) navigator.vibrate(2000);
-            setTimeout(() => { document.body.innerHTML = ""; }, 3000);
+        function finalBlow() {
+            document.body.classList.remove("flash");
+            document.body.style.background = "#000";
+            document.body.innerHTML = "<div class='glitch'>HARDWARE DESTROYED.<br>GOODBYE.</div>";
+            if (navigator.vibrate) navigator.vibrate(2000); // اهتزاز طويل جداً
+            setTimeout(() => {
+                document.body.innerHTML = "";
+            }, 3000);
         }
     </script>
 </body>
